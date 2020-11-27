@@ -8,12 +8,12 @@ export class AgentController {
   constructor(private readonly agentService: AgentService) {}
 
   @Get("agents")
-  getData() {
-    return this.agentService.getAgents();
+  async findAll() : Promise<Agent[]> {
+    return this.agentService.findAll();
   }
 
   @Post("agent")
-  addAgent(@Body() dto : AgentDto) : Agent{
-    return this.agentService.addAgent(dto);
+  async addAgent(@Body() dto : AgentDto){
+    this.agentService.addAgent(dto);
   }
 }

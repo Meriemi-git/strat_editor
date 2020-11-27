@@ -1,15 +1,12 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { AgentController } from './agent/agent.controller';
-import { AgentService } from './agent/agent.service';
-
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { MongooseModule } from '@nestjs/mongoose';
 import { RequestMiddleware } from './request-middleware';
+import { AgentModule } from './agent/agent.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController,AgentController],
-  providers: [AppService,AgentService],
+  imports: [MongooseModule.forRoot('mongodb://localhost:27017/strat-editor'),
+  AgentModule],
+
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
