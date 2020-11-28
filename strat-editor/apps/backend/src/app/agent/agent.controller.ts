@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { Agent, AgentDto } from '@strat-editor/data';
+import { Agent } from '@strat-editor/data';
 import { AgentService } from './agent.service';
 
 @Controller()
@@ -12,7 +12,7 @@ export class AgentController {
   }
 
   @Post("agent")
-  async addAgent(@Body() dto : AgentDto){
-    this.agentService.addAgent(dto);
+  async addAgent(@Body() agent : Agent){
+    this.agentService.addAgent(agent);
   }
 }

@@ -25,15 +25,27 @@
               "apps/frontend/src/favicon.ico",
               "apps/frontend/src/assets"
             ],
-            "styles": ["apps/frontend/src/styles.scss"],
+            "styles": ["apps/frontend/src/styles.scss","node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css"],
             "scripts": []
           },
           "configurations": {
+            "default": {
+              "fileReplacements": [
+                {
+                  "replace": "libs/data/src/lib/decorators-nest.ts",
+                  "with": "libs/data/src/lib/decorators-angular.ts"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
                   "replace": "apps/frontend/src/environments/environment.ts",
                   "with": "apps/frontend/src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "libs/data/src/lib/decorators-nest.ts",
+                  "with": "libs/data/src/lib/decorators-angular.ts"
                 }
               ],
               "optimization": true,
@@ -62,7 +74,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "frontend:build",
+            "browserTarget": "frontend:build:default",
             "proxyConfig": "apps/frontend/proxy.conf.json"
           },
           "configurations": {
@@ -113,6 +125,14 @@
             "assets": ["apps/backend/src/assets"]
           },
           "configurations": {
+            "default": {
+              "fileReplacements": [
+                {
+                  "replace": "libs/data/src/lib/decorators-nest.ts",
+                  "with": "libs/data/src/lib/decorators-angular.ts"
+                }
+              ]
+            },
             "production": {
               "optimization": true,
               "extractLicenses": true,
@@ -121,6 +141,10 @@
                 {
                   "replace": "apps/backend/src/environments/environment.ts",
                   "with": "apps/backend/src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "libs/data/src/lib/decorators-nest.ts",
+                  "with": "libs/data/src/lib/decorators-angular.ts"
                 }
               ]
             }

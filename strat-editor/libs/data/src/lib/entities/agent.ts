@@ -1,14 +1,15 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import * as mongoose from 'mongoose';
+//import { Document } from 'mongoose'
+export type AgentDocument = Agent & mongoose.Document;
 
-export type AgentDocument = Agent & Document;
 
-@Schema()
-export class  Agent{
-  @Prop()
-  name : string
-  @Prop()
-  imgUrl : string;
+export interface Agent {
+  name : string,
+  imgUrl : string,
 }
 
-export const AgentSchema = SchemaFactory.createForClass(Agent);
+export const AgentSchema =  new mongoose.Schema({
+  name : String,
+  imgUrl : String,
+})
+

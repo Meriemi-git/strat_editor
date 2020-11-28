@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Agent, AgentDocument, AgentDto } from '@strat-editor/data';
+import { Agent, AgentDocument } from '@strat-editor/data';
 
 import { Model } from 'mongoose';
 
 @Injectable()
 export class AgentService {
-  constructor(@InjectModel(Agent.name) private agentModel: Model<AgentDocument>) {}
+  constructor(@InjectModel("Agent") private agentModel: Model<AgentDocument>) {}
 
-  async addAgent(createCatDto: AgentDto): Promise<Agent> {
-    const createdAgent = new this.agentModel(createCatDto);
+  async addAgent(agent: Agent): Promise<Agent> {
+    const createdAgent = new this.agentModel(agent);
     return createdAgent.save();
   }
 

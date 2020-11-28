@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AgentController } from './agent.controller';
 import { AgentService } from './agent.service';
-import { Agent, AgentSchema } from '@strat-editor/data';
+import { AgentSchema } from '@strat-editor/data';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Agent.name, schema: AgentSchema }])],
+  imports: [MongooseModule.forFeature([{ name: "Agent", schema: AgentSchema }])],
   controllers: [AgentController],
   providers: [AgentService],
 })
