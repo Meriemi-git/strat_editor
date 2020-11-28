@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { RequestMiddleware } from './request-middleware';
+import { RequestMiddleware } from './request.middleware';
 import { AgentModule } from './agent/agent.module';
 
 @Module({
@@ -12,6 +12,6 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(RequestMiddleware)
-      .forRoutes('/api');
+      .forRoutes('*');
   }
 }
