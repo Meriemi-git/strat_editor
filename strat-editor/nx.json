@@ -4,7 +4,7 @@
     "defaultBase": "master"
   },
   "implicitDependencies": {
-    "angular.json": "*",
+    "workspace.json": "*",
     "package.json": {
       "dependencies": "*",
       "devDependencies": "*"
@@ -22,19 +22,5 @@
       }
     }
   },
-  "projects": {
-    "front": {
-      "tags": []
-    },
-    "front-e2e": {
-      "tags": [],
-      "implicitDependencies": ["front"]
-    },
-    "back": {
-      "tags": []
-    },
-    "models": {
-      "tags": []
-    }
-  }
+  "projects": {}
 }
