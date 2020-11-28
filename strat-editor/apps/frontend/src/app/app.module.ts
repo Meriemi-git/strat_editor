@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {TopBarModule} from '../app/components/atoms/top-bar/top-bar.module'
+import { TopBarModule } from '../app/components/atoms/top-bar/top-bar.module'
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
@@ -11,7 +11,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 
-//import {TypesModule} from '@strat-editor/types'
 @NgModule({
   declarations: [AppComponent],
  imports: [
@@ -20,7 +19,6 @@ import { AppRoutingModule } from './app-routing.module';
   BrowserAnimationsModule,
   HttpClientModule,
   AppRoutingModule,
-  //TypesModule,
   StoreModule.forRoot(reducers),
   StoreDevtoolsModule.instrument({
     maxAge: 25, // Retains last 25 states

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { TestImport } from '@strat-editor/types';
+import { Agent } from '@strat-editor/data';
 
 @Component({
   selector: 'strat-editor-agents-grid',
@@ -7,6 +7,5 @@ import { TestImport } from '@strat-editor/types';
   styleUrls: ['./agents-grid.component.scss']
 })
 export class AgentsGridComponent {
-  @Input() test : TestImport;
-
+  //@Input() agent : Agent
 }

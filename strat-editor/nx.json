@@ -24,19 +24,14 @@
   },
   "projects": {
     "frontend": {
-      "tags": []
-    },
-    "frontend-e2e": {
       "tags": [],
-      "implicitDependencies": ["frontend"]
+      "implicitDependencies": ["data"]
     },
     "backend": {
-      "tags": []
+      "tags": [],
+      "implicitDependencies": ["data"]
     },
     "data": {
-      "tags": []
-    },
-    "types": {
       "tags": []
     }
   }
