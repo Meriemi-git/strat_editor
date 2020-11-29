@@ -1,9 +1,10 @@
 .double-arrow-icon-left{
+  position: inherit;
   top: 50%;
-  float: left;
+  left: 0%;
+  z-index: 20;
 }
 .double-arrow-icon-right{
-  // transform: rotate(180deg);
   top: 50%;
   float: right;
 }
@@ -18,3 +19,16 @@
   background-color: bisque;
 }
 
+.left-sidenav-content{
+  padding: 5px;
+  text-align: center;
+}
+
+.mat-h2{
+margin: 0;
+}
+
+.btn-sidenav{
+  display: block;
+  margin: 10px;
+}

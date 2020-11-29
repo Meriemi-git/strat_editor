@@ -1,22 +1,43 @@
 <mat-sidenav-container class="double-sidenav">
-  <mat-sidenav #rightSidenav
-  mode="side"
-  [(opened)]="leftIsOpened">
-    Sidenav content
-  </mat-sidenav>
-  <strat-editor-agents-grid></strat-editor-agents-grid>
+
   <mat-sidenav #leftSidenav
+  mode="side"
+  [(opened)]="leftIsOpened" class="left-sidenav-content">
+  <h1 class="mat-h2">Agents</h1>
+  <mat-tab-group mat-align-tabs="center">
+    <mat-tab label="Attaquants">
+      <strat-editor-agents-grid [agents]="$agents | async">
+      </strat-editor-agents-grid>
+    </mat-tab>
+    <mat-tab label="Defenseurs">
+      <strat-editor-agents-grid [agents]="$agents | async">
+      </strat-editor-agents-grid>
+    </mat-tab>
+  </mat-tab-group>
+
+
+  </mat-sidenav>
+
+  <mat-sidenav #rightSidenav
   mode="side"
   [(opened)]="rightIsOpened"
   position="end">
-    Sidenav content
+    Right Sidenav content
   </mat-sidenav>
   <mat-sidenav-content class="container">
-      <button mat-icon-button class="double-arrow-icon-left" (click)="toggleLeftSidenav()" [ngStyle]="{'transform': leftIsOpened ? 'rotate(180deg)' : 'rotate(0deg)'}">
-        <mat-icon>double_arrow</mat-icon>
+    <div class="double-arrow-icon-left">
+      <button mat-icon-button color="primary" class="btn-sidenav" (click)="toggleLeftSidenav()">
+        Agents
+        <mat-icon  [ngStyle]="{'transform': leftIsOpened ? 'rotate(180deg)' : 'rotate(0deg)'}">double_arrow</mat-icon>
       </button>
-      <button mat-icon-button class="double-arrow-icon-right" (click)="toggleRightSidenav()" [ngStyle]="{'transform': rightIsOpened ? 'rotate(0deg)' : 'rotate(180deg)'}">
-        <mat-icon>double_arrow</mat-icon>
+      <button mat-icon-button color="primary" class="btn-sidenav" (click)="toggleLeftSidenav()">
+        Gadgets
+        <mat-icon  [ngStyle]="{'transform': leftIsOpened ? 'rotate(180deg)' : 'rotate(0deg)'}">double_arrow</mat-icon>
       </button>
+    </div>
+      <button mat-icon-button class="double-arrow-icon-right" (click)="toggleRightSidenav()" >
+        <mat-icon [ngStyle]="{'transform': rightIsOpened ? 'rotate(0deg)' : 'rotate(180deg)'}">double_arrow</mat-icon>
+      </button>
+      Editor component
   </mat-sidenav-content>
 </mat-sidenav-container>

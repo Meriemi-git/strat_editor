@@ -7,5 +7,5 @@ import { Agent } from '@strat-editor/data';
   styleUrls: ['./agents-grid.component.scss']
 })
 export class AgentsGridComponent {
-  @Input() agent: Agent;
+  @Input() agents: Agent[];
 }

@@ -81,6 +81,7 @@
     "@ngrx/store-devtools": "^10.0.1",
     "mongoose": "^5.10.17",
     "reflect-metadata": "^0.1.13",
+    "roboto-fontface": "^0.10.0",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "^0.10.2"
