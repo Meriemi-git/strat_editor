@@ -6,10 +6,11 @@ import {MatIconModule} from '@angular/material/icon'
 import {MatButtonModule} from '@angular/material/button'
 import { AgentsGridModule } from '../agents-grid/agents-grid.module';
 import {MatTabsModule} from '@angular/material/tabs';
+import { FilterPipe } from '../../../helpers/filter-pipe';
 
 
 @NgModule({
-  declarations: [DoubleSidenavComponent],
+  declarations: [DoubleSidenavComponent,FilterPipe],
   imports: [
     CommonModule,
     MatSidenavModule,

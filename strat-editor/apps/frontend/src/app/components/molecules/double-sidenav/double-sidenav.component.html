@@ -5,12 +5,12 @@
   [(opened)]="leftIsOpened" class="left-sidenav-content">
   <h1 class="mat-h2">Agents</h1>
   <mat-tab-group mat-align-tabs="center">
-    <mat-tab label="Attaquants">
-      <strat-editor-agents-grid [agents]="$agents | async">
+    <mat-tab label="Attackers">
+      <strat-editor-agents-grid [agents]="($agents | async ) | filter : 'ATTACKER' : 'side'">
       </strat-editor-agents-grid>
     </mat-tab>
-    <mat-tab label="Defenseurs">
-      <strat-editor-agents-grid [agents]="$agents | async">
+    <mat-tab label="Defenders">
+      <strat-editor-agents-grid [agents]="($agents | async ) | filter : 'DEFENDER' : 'side'">
       </strat-editor-agents-grid>
     </mat-tab>
   </mat-tab-group>
