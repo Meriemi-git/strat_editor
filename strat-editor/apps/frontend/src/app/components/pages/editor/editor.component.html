@@ -1,2 +1,29 @@
-
-<strat-editor-double-sidenav></strat-editor-double-sidenav>
+<mat-sidenav-container class="double-sidenav">
+  <mat-sidenav #leftSidenav
+  mode="side"
+  [(opened)]="leftIsOpened" class="left-sidenav-content">
+    <strat-editor-sidenav-left-content [agents]="($agents | async)"></strat-editor-sidenav-left-content>
+  </mat-sidenav>
+  <mat-sidenav #rightSidenav
+  mode="side"
+  [(opened)]="rightIsOpened"
+  position="end">
+    Right Sidenav content
+  </mat-sidenav>
+  <mat-sidenav-content class="container">
+    <div class="double-arrow-icon-left">
+      <button mat-icon-button color="primary" class="btn-sidenav" (click)="toggleLeftSidenav()">
+        Agents
+        <mat-icon  [ngStyle]="{'transform': leftIsOpened ? 'rotate(180deg)' : 'rotate(0deg)'}">double_arrow</mat-icon>
+      </button>
+      <button mat-icon-button color="primary" class="btn-sidenav" (click)="toggleLeftSidenav()">
+        Gadgets
+        <mat-icon  [ngStyle]="{'transform': leftIsOpened ? 'rotate(180deg)' : 'rotate(0deg)'}">double_arrow</mat-icon>
+      </button>
+    </div>
+      <button mat-icon-button class="double-arrow-icon-right" (click)="toggleRightSidenav()" >
+        <mat-icon [ngStyle]="{'transform': rightIsOpened ? 'rotate(0deg)' : 'rotate(180deg)'}">double_arrow</mat-icon>
+      </button>
+      <strat-editor-map></strat-editor-map>
+  </mat-sidenav-content>
+</mat-sidenav-container>

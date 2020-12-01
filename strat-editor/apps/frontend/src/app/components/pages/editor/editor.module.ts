@@ -5,7 +5,10 @@ import { EditorComponent } from './editor.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon'
 import { MatButtonModule } from '@angular/material/button'
-import { DoubleSidenavModule } from '../../molecules/double-sidenav/double-sidenav.module'
+import { SidenavLeftContentModule } from "../../molecules/sidenav-left-content/sidenav-left-content.module"
+import { MapModule } from "../../molecules/map/map.module"
+
+
 @NgModule({
   declarations: [EditorComponent],
   imports: [
@@ -14,7 +17,8 @@ import { DoubleSidenavModule } from '../../molecules/double-sidenav/double-siden
     MatSidenavModule,
     MatIconModule,
     MatButtonModule,
-    DoubleSidenavModule
+    MapModule,
+    SidenavLeftContentModule
   ],
   exports: [EditorComponent]
 })

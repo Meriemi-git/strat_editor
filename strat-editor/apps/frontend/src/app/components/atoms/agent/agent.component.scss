@@ -1,25 +1,14 @@
-.agent-pane{
-  background: rgba(0,0,0,0.1);
-  border: 1px white solid;
-  width: 80px;
-  height: 80px;
-}
-
-.mat-card{
-  padding: 0px;
-  border: none;
-}
-
-.mat-card-header{
-  text-align: center;
-  margin: 0 auto;
-}
-
 .title{
   text-align: center;
 }
+.container{
+  cursor: -webkit-grab; /* Chrome 1-21, Safari 4+ */
+  cursor:    -moz-grab; /* Firefox 1.5-26 */
+  cursor:         grab;
+}
 
-.mat-title{
-  margin:0px;
-  font-size: 15px;
+.container:active {
+  cursor: -webkit-grabbing;
+  cursor:    -moz-grabbing;
+  cursor:         grabbing;
 }

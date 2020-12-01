@@ -1,0 +1,41 @@
+.double-arrow-icon-left{
+  position: inherit;
+  top: 50%;
+  left: 0%;
+  z-index: 20;
+}
+.double-arrow-icon-right{
+  top: 50%;
+  float: right;
+}
+.container{
+  height: 100%;
+  margin: 0 auto;
+}
+
+.double-sidenav{
+  height: 94vh;
+  margin: 0 auto;
+}
+
+.left-sidenav-content{
+  padding: 5px;
+  text-align: center;
+  width: 25%;
+}
+
+.mat-h2{
+margin: 0;
+}
+
+.btn-sidenav{
+  display: block;
+  margin: 10px;
+}
+
+::ng-deep .mat-drawer-inner-container{
+  overflow-x: hidden!important;
+  overflow-y: scroll!important;
+  direction: rtl;
+  scrollbar-width: thin;
+}
