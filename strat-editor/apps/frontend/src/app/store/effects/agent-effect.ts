@@ -16,8 +16,8 @@ export class AgentEffect {
       ofType(actions.FetchAgents.type),
       mergeMap(() => this.agentService.getAllAgents()
         .pipe(
-          map(agents => actions.FetchAgentsSuccess({ payload : agents })),
-          catchError((err : HttpErrorResponse) => of(actions.FetchAgentsError({payload: err.message})))
+          map(agents => actions.FetchAgentsSuccess({ agents : agents })),
+          catchError((err : HttpErrorResponse) => of(actions.FetchAgentsError({error: err.message})))
         ))
       )
     );

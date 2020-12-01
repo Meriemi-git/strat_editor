@@ -6,6 +6,7 @@ export type AgentDocument = Agent & mongoose.Document;
 
 
 export interface Agent {
+  _id : number
   name : string;
   year : number;
   season : number;
@@ -28,4 +29,3 @@ export const AgentSchema =  new mongoose.Schema({
     type: String
   }]
 })
-

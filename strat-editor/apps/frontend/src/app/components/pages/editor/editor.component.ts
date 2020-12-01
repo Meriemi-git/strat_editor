@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Agent } from '@strat-editor/data';
 import { Observable } from 'rxjs';
-import { StratEditorState } from '../../../store/reducers';
 import * as SidenavSelectors from '../../../store/selectors/sidenav.selector';
 import * as SidenavActions from '../../../store/actions/sidenav.action';
 import * as AgentActions from '../../../store/actions/agent.action';
 import * as AgentSelectors from '../../../store/selectors/agent.selector';
+import { AgentState } from '../../../store/reducers/agent.reducer';
 
 @Component({
   selector: 'strat-editor-editor',
@@ -20,7 +20,7 @@ export class EditorComponent implements OnInit {
   rightIsOpened: boolean;
   $agents : Observable<Agent[]>
 
-  constructor(private store : Store<StratEditorState>){}
+  constructor(private store : Store<AgentState>){}
 
   ngOnInit(): void {
     this.store.select(SidenavSelectors.isLeftSidenavOpened).subscribe(isOpened => {
@@ -29,7 +29,7 @@ export class EditorComponent implements OnInit {
     this.store.select(SidenavSelectors.isRightSidenavOpened).subscribe(isOpened => {
       this.rightIsOpened = isOpened
     })
-    this.$agents = this.store.select(AgentSelectors.selectAgents)
+    this.$agents = this.store.select(AgentSelectors.selectAll);
     this.store.dispatch(AgentActions.FetchAgents());
   }
 

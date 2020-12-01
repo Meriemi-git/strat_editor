@@ -5,7 +5,7 @@ import { MapService } from './map.service';
 import { MapSchema } from '@strat-editor/data';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: "map", schema: MapSchema }])],
+  imports: [MongooseModule.forFeature([{ name: "Map", schema: MapSchema }])],
   controllers: [MapController],
   providers: [MapService],
 })

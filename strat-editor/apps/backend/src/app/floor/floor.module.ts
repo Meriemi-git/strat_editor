@@ -5,7 +5,7 @@ import { FloorService } from './floor.service';
 import { FloorSchema } from '@strat-editor/data';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: "floor", schema: FloorSchema }])],
+  imports: [MongooseModule.forFeature([{ name: "Floor", schema: FloorSchema }])],
   controllers: [FloorController],
   providers: [FloorService],
 })

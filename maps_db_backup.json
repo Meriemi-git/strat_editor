@@ -1,0 +1,833 @@
+[{
+  "_id": {
+    "$oid": "5fc6afe14fb9b133bcee02c5"
+  },
+  "name": "Bank",
+  "year": 0,
+  "season": 0,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6afe14fb9b133bcee02c6"
+      },
+      "name": "Basement",
+      "level": -1,
+      "image": "bank_basement"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6afe14fb9b133bcee02c7"
+      },
+      "name": "Ground",
+      "level": 0,
+      "image": "bank_ground"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6afe14fb9b133bcee02c8"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "bank_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6afe14fb9b133bcee02c9"
+      },
+      "name": "Roof",
+      "level": 2,
+      "image": "bank_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b0494fb9b133bcee02ca"
+  },
+  "name": "Border",
+  "year": 1,
+  "season": 2,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b0494fb9b133bcee02cb"
+      },
+      "name": "Ground",
+      "level": 0,
+      "image": "border_ground"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b0494fb9b133bcee02cc"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "border_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b0494fb9b133bcee02cd"
+      },
+      "name": "Roof",
+      "level": 2,
+      "image": "border_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b0934fb9b133bcee02ce"
+  },
+  "name": "Chalet",
+  "year": 0,
+  "season": 0,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b0934fb9b133bcee02cf"
+      },
+      "name": "Basement",
+      "level": -1,
+      "image": "chalet_basement"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b0934fb9b133bcee02d0"
+      },
+      "name": "Ground",
+      "level": 0,
+      "image": "chalet_ground"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b0934fb9b133bcee02d1"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "chalet_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b0934fb9b133bcee02d2"
+      },
+      "name": "Roof",
+      "level": 2,
+      "image": "chalet_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b0ea4fb9b133bcee02d3"
+  },
+  "name": "Club House",
+  "year": 0,
+  "season": 0,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b0ea4fb9b133bcee02d4"
+      },
+      "name": "Basement",
+      "level": -1,
+      "image": "club-house_basement"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b0ea4fb9b133bcee02d5"
+      },
+      "name": "Ground",
+      "level": 0,
+      "image": "club-house_ground"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b0ea4fb9b133bcee02d6"
+      },
+      "name": "2nd floor",
+      "level": 1,
+      "image": "club-house_second_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b0ea4fb9b133bcee02d7"
+      },
+      "name": "Roof",
+      "level": 2,
+      "image": "club-house_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b2334fb9b133bcee02db"
+  },
+  "name": "Coastline",
+  "year": 2,
+  "season": 1,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b2334fb9b133bcee02dc"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "coastline_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b2334fb9b133bcee02dd"
+      },
+      "name": "2nd floor",
+      "level": 2,
+      "image": "coastline_second_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b2334fb9b133bcee02de"
+      },
+      "name": "Roof",
+      "level": 3,
+      "image": "coastline_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b2cc4fb9b133bcee02df"
+  },
+  "name": "Consulate",
+  "year": 0,
+  "season": 0,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b2cc4fb9b133bcee02e0"
+      },
+      "name": "Basement",
+      "level": -1,
+      "image": "consulate_basement"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b2cc4fb9b133bcee02e1"
+      },
+      "name": "Ground",
+      "level": 0,
+      "image": "consulate_ground"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b2cc4fb9b133bcee02e2"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "consulate_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b2cc4fb9b133bcee02e3"
+      },
+      "name": "Roof",
+      "level": 2,
+      "image": "consulate_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b3414fb9b133bcee02e4"
+  },
+  "name": "Favela",
+  "year": 1,
+  "season": 3,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b3414fb9b133bcee02e5"
+      },
+      "name": "Basement",
+      "level": -1,
+      "image": "favela_basement"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b3414fb9b133bcee02e6"
+      },
+      "name": "Ground",
+      "level": 0,
+      "image": "favela_ground"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b3414fb9b133bcee02e7"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "favela_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b3414fb9b133bcee02e8"
+      },
+      "name": "2nd floor",
+      "level": 2,
+      "image": "favela_second_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b3414fb9b133bcee02e9"
+      },
+      "name": "Roof",
+      "level": 3,
+      "image": "favela_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b3a94fb9b133bcee02ea"
+  },
+  "name": "Fortress",
+  "year": 3,
+  "season": 4,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b3a94fb9b133bcee02eb"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "fortress_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b3a94fb9b133bcee02ec"
+      },
+      "name": "2nd floor",
+      "level": 2,
+      "image": "fortress_second_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b3a94fb9b133bcee02ed"
+      },
+      "name": "Roof",
+      "level": 3,
+      "image": "fortress_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b42a4fb9b133bcee02ee"
+  },
+  "name": "Hereford Base",
+  "year": 0,
+  "season": 0,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b42a4fb9b133bcee02ef"
+      },
+      "name": "Basement",
+      "level": -1,
+      "image": "hereford-base_basement"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b42a4fb9b133bcee02f0"
+      },
+      "name": "Ground",
+      "level": 0,
+      "image": "hereford-base_ground"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b42a4fb9b133bcee02f1"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "hereford-base_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b42a4fb9b133bcee02f2"
+      },
+      "name": "2nd floor",
+      "level": 2,
+      "image": "hereford-base_second_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b42a4fb9b133bcee02f3"
+      },
+      "name": "3rd floor",
+      "level": 2,
+      "image": "hereford-base_third_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b42a4fb9b133bcee02f4"
+      },
+      "name": "Roof",
+      "level": 3,
+      "image": "hereford-base_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b46c4fb9b133bcee02f5"
+  },
+  "name": "House",
+  "year": 0,
+  "season": 0,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b46c4fb9b133bcee02f6"
+      },
+      "name": "Basement",
+      "level": -1,
+      "image": "house_basement"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b46c4fb9b133bcee02f7"
+      },
+      "name": "Ground",
+      "level": 0,
+      "image": "house_ground"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b46c4fb9b133bcee02f8"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "house_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b46c4fb9b133bcee02f9"
+      },
+      "name": "Roof",
+      "level": 2,
+      "image": "house_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b4b04fb9b133bcee02fa"
+  },
+  "name": "Kafe Dostoyevsky",
+  "year": 0,
+  "season": 0,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b4b04fb9b133bcee02fb"
+      },
+      "name": "Basement",
+      "level": -1,
+      "image": "kafe-dostoyevsky_basement"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b4b04fb9b133bcee02fc"
+      },
+      "name": "Ground",
+      "level": 0,
+      "image": "kafe-dostoyevsky_ground"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b4b04fb9b133bcee02fd"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "kafe-dostoyevsky_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b4b04fb9b133bcee02fe"
+      },
+      "name": "Roof",
+      "level": 2,
+      "image": "kafe-dostoyevsky_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b52d4fb9b133bcee02ff"
+  },
+  "name": "Kanal",
+  "year": 0,
+  "season": 0,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b52d4fb9b133bcee0300"
+      },
+      "name": "Ground",
+      "level": -1,
+      "image": "kanal_ground"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b52d4fb9b133bcee0301"
+      },
+      "name": "Ground 2",
+      "level": 0,
+      "image": "kanal_ground"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b52d4fb9b133bcee0302"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "kanal_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b52d4fb9b133bcee0303"
+      },
+      "name": "2nd floor",
+      "level": 2,
+      "image": "kanal_second_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b52d4fb9b133bcee0304"
+      },
+      "name": "Roof",
+      "level": 3,
+      "image": "kanal_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b5654fb9b133bcee0305"
+  },
+  "name": "Oregon",
+  "year": 0,
+  "season": 0,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b5654fb9b133bcee0306"
+      },
+      "name": "Basement",
+      "level": -1,
+      "image": "oregon_basement"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b5654fb9b133bcee0307"
+      },
+      "name": "Ground",
+      "level": 0,
+      "image": "oregon_ground"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b5654fb9b133bcee0308"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "oregon_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b5654fb9b133bcee0309"
+      },
+      "name": "2nd floor",
+      "level": 2,
+      "image": "oregon_second_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b5654fb9b133bcee030a"
+      },
+      "name": "Roof",
+      "level": 3,
+      "image": "oregon_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b5a54fb9b133bcee030b"
+  },
+  "name": "Outback",
+  "year": 4,
+  "season": 1,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b5a54fb9b133bcee030c"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "outback_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b5a54fb9b133bcee030d"
+      },
+      "name": "2nd floor",
+      "level": 2,
+      "image": "outback_second_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b5a54fb9b133bcee030e"
+      },
+      "name": "Roof",
+      "level": 3,
+      "image": "outback_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b5fe4fb9b133bcee030f"
+  },
+  "name": "Plane",
+  "year": 0,
+  "season": 0,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b5fe4fb9b133bcee0310"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "plane_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b5fe4fb9b133bcee0311"
+      },
+      "name": "2nd floor",
+      "level": 2,
+      "image": "plane_second_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b5fe4fb9b133bcee0312"
+      },
+      "name": "3rd floor",
+      "level": 3,
+      "image": "plane_third_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b5fe4fb9b133bcee0313"
+      },
+      "name": "Roof",
+      "level": 4,
+      "image": "plane_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b6864fb9b133bcee0314"
+  },
+  "name": "Theme Park",
+  "year": 2,
+  "season": 3,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b6864fb9b133bcee0315"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "theme-park_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b6864fb9b133bcee0316"
+      },
+      "name": "2nd floor",
+      "level": 2,
+      "image": "theme-park_second_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b6864fb9b133bcee0317"
+      },
+      "name": "Roof",
+      "level": 3,
+      "image": "theme-park_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b73e4fb9b133bcee0318"
+  },
+  "name": "Tower",
+  "year": 2,
+  "season": 4,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b73e4fb9b133bcee0319"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "tower_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b73e4fb9b133bcee031a"
+      },
+      "name": "2nd floor",
+      "level": 2,
+      "image": "tower_second_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b73e4fb9b133bcee031b"
+      },
+      "name": "Roof",
+      "level": 4,
+      "image": "tower_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b77d4fb9b133bcee031c"
+  },
+  "name": "Villa",
+  "year": 3,
+  "season": 2,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b77d4fb9b133bcee031d"
+      },
+      "name": "Basement",
+      "level": 0,
+      "image": "villa_basement"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b77d4fb9b133bcee031e"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "villa_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b77d4fb9b133bcee031f"
+      },
+      "name": "2nd floor",
+      "level": 2,
+      "image": "villa_second_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b77d4fb9b133bcee0320"
+      },
+      "name": "Roof",
+      "level": 3,
+      "image": "villa_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b7b84fb9b133bcee0321"
+  },
+  "name": "Yacht",
+  "year": 1,
+  "season": 1,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b7b84fb9b133bcee0322"
+      },
+      "name": "Basement",
+      "level": -1,
+      "image": "yacht_basement"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b7b84fb9b133bcee0323"
+      },
+      "name": "Ground",
+      "level": 0,
+      "image": "yacht_ground"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b7b84fb9b133bcee0324"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "yacht_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b7b84fb9b133bcee0325"
+      },
+      "name": "2nd floor",
+      "level": 2,
+      "image": "yacht_second_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b7b84fb9b133bcee0326"
+      },
+      "name": "Roof",
+      "level": 3,
+      "image": "yacht_roof"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc6b81a4fb9b133bcee0327"
+  },
+  "name": "Sky Scraper",
+  "year": 1,
+  "season": 4,
+  "floors": [
+    {
+      "_id": {
+        "$oid": "5fc6b81a4fb9b133bcee0328"
+      },
+      "name": "1st floor",
+      "level": 1,
+      "image": "sky-scraper_first_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b81a4fb9b133bcee0329"
+      },
+      "name": "2nd floor",
+      "level": 2,
+      "image": "sky-scraper_second_floor"
+    },
+    {
+      "_id": {
+        "$oid": "5fc6b81a4fb9b133bcee032a"
+      },
+      "name": "Roof",
+      "level": 3,
+      "image": "sky-scraper_roof"
+    }
+  ],
+  "__v": 0
+}]

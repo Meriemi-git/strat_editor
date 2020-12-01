@@ -20,7 +20,7 @@ export const MapSchema =  new mongoose.Schema({
   season : Number,
   imageId : String,
   floors : [{
-    type: FloorSchema
+    type: FloorSchema, ref : 'Floor'
   }]
 })
 

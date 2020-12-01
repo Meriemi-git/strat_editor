@@ -7,11 +7,11 @@ export const FetchAgents = createAction(
 
 export const FetchAgentsSuccess = createAction(
   '[Agent] Fetch Agents Success',
-  props<{ agents: Agent[] }>()
+  props<{ payload: Agent[] }>()
 );
 
 export const FetchAgentsError = createAction(
   '[Agent] Fetch Agents Error',
-  props<{ error: string }>()
+  props<{ payload: string }>()
 );
 
