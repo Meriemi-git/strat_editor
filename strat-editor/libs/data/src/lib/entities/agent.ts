@@ -24,6 +24,8 @@ export const AgentSchema =  new mongoose.Schema({
   side : String,
   portrait : String,
   description : String,
-  roles : [String]
+  roles : [{
+    type: String
+  }]
 })
 

@@ -3,6 +3,5 @@ module.exports = {
     '<rootDir>/apps/frontend',
     '<rootDir>/apps/backend',
     '<rootDir>/libs/data',
-    '<rootDir>/libs/types',
   ],
 };

@@ -1,23 +1,9 @@
 <mat-sidenav-container class="double-sidenav">
-
   <mat-sidenav #leftSidenav
   mode="side"
   [(opened)]="leftIsOpened" class="left-sidenav-content">
-  <h1 class="mat-h2">Agents</h1>
-  <mat-tab-group mat-align-tabs="center">
-    <mat-tab label="Attackers">
-      <strat-editor-agents-grid [agents]="($agents | async ) | filter : 'ATTACKER' : 'side' | sortBy:'asc':'name'">
-      </strat-editor-agents-grid>
-    </mat-tab>
-    <mat-tab label="Defenders">
-      <strat-editor-agents-grid [agents]="($agents | async ) | filter : 'DEFENDER' : 'side' | sortBy:'asc':'name'">
-      </strat-editor-agents-grid>
-    </mat-tab>
-  </mat-tab-group>
-
-
+    <strat-editor-sidenav-left-content [agents]="($agents | async)"></strat-editor-sidenav-left-content>
   </mat-sidenav>
-
   <mat-sidenav #rightSidenav
   mode="side"
   [(opened)]="rightIsOpened"

@@ -32,3 +32,10 @@ margin: 0;
   display: block;
   margin: 10px;
 }
+
+::ng-deep .mat-drawer-inner-container{
+  overflow-x: hidden!important;
+  overflow-y: scroll!important;
+  direction: rtl;
+  scrollbar-width: thin;
+}

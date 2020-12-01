@@ -4,7 +4,7 @@
     "defaultBase": "master"
   },
   "implicitDependencies": {
-    "workspace.json": "*",
+    "angular.json": "*",
     "package.json": {
       "dependencies": "*",
       "devDependencies": "*"
@@ -24,12 +24,10 @@
   },
   "projects": {
     "frontend": {
-      "tags": [],
-      "implicitDependencies": ["data"]
+      "tags": []
     },
     "backend": {
-      "tags": [],
-      "implicitDependencies": ["data"]
+      "tags": []
     },
     "data": {
       "tags": []
