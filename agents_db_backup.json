@@ -1,0 +1,957 @@
+[{
+  "_id": {
+    "$oid": "5fc405575e009643003cd6dc"
+  },
+  "name": "Ash",
+  "year": 1,
+  "season": 1,
+  "badge": "ash_badge",
+  "portrait": "ash_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0,
+  "roles": [
+    "Disable",
+    "Flank",
+    "Front Line",
+    "Soft Breach"
+  ]
+},{
+  "_id": {
+    "$oid": "5fc4c18dc6555c004c7bc026"
+  },
+  "name": "Ace",
+  "year": 5,
+  "season": 2,
+  "badge": "ace_badge",
+  "portrait": "ace_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0,
+  "roles": [
+    "Front Line",
+    "Hard Breach"
+  ]
+},{
+  "_id": {
+    "$oid": "5fc4c1c2c6555c004c7bc027"
+  },
+  "name": "Melusi",
+  "year": 5,
+  "season": 2,
+  "badge": "melusi_badge",
+  "portrait": "melusi_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0,
+  "roles": [
+    "Hard Breach",
+    "Intel Gatherer",
+    "Secure"
+  ]
+},{
+  "_id": {
+    "$oid": "5fc552405c6c4d22a8f5c70d"
+  },
+  "roles": [
+    "Flank",
+    "Frontline"
+  ],
+  "name": "Amaru",
+  "year": 4,
+  "season": 3,
+  "badge": "amaru_badge",
+  "portrait": "amaru_portrait",
+  "side": "ATTAKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc5535a5c6c4d22a8f5c70e"
+  },
+  "roles": [
+    "Intel Denier",
+    "Intel Gatherer",
+    "Roamer",
+    "Trapper"
+  ],
+  "name": "Alibi",
+  "year": 3,
+  "season": 2,
+  "badge": "alibi_badge",
+  "portrait": "alibi_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc554025c6c4d22a8f5c70f"
+  },
+  "roles": [
+    "Anti Hard Breach",
+    "Roamer",
+    "Securer"
+  ],
+  "name": "Bandit",
+  "year": 0,
+  "season": 0,
+  "badge": "bandit_badge",
+  "portrait": "bandit_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc5544f5c6c4d22a8f5c710"
+  },
+  "roles": [
+    "Back Line",
+    "Covering Fire",
+    "Shield"
+  ],
+  "name": "Blackbeard",
+  "year": 1,
+  "season": 2,
+  "badge": "blackbeard_badge",
+  "portrait": "blackbeard_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc554a05c6c4d22a8f5c711"
+  },
+  "roles": [
+    "Anti Roam",
+    "Crowd Control",
+    "Front Line",
+    "Shield"
+  ],
+  "name": "Blitz",
+  "year": 0,
+  "season": 0,
+  "badge": "blitz_badge",
+  "portrait": "blitz_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc554ea5c6c4d22a8f5c712"
+  },
+  "roles": [
+    "Flank",
+    "Soft Breach"
+  ],
+  "name": "Buck",
+  "year": 1,
+  "season": 1,
+  "badge": "buck_badge",
+  "portrait": "buck_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc555325c6c4d22a8f5c713"
+  },
+  "roles": [
+    "Area Denial",
+    "Flank",
+    "Front Line"
+  ],
+  "name": "Capitao",
+  "year": 1,
+  "season": 3,
+  "badge": "capitao_badge",
+  "portrait": "capitao_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc555765c6c4d22a8f5c714"
+  },
+  "roles": [
+    "Anchor",
+    "Secure"
+  ],
+  "name": "Castle",
+  "year": 0,
+  "season": 0,
+  "badge": "castle_badge",
+  "portrait": "castle_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc555c55c6c4d22a8f5c715"
+  },
+  "roles": [
+    "Intel Denier",
+    "Intel Gatherer",
+    "Roamer"
+  ],
+  "name": "Caveira",
+  "year": 1,
+  "season": 3,
+  "badge": "caveira_badge",
+  "portrait": "caveira_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc5563a5c6c4d22a8f5c716"
+  },
+  "roles": [
+    "Crowd Control",
+    "Intel Gatherer",
+    "Secure",
+    "Shield"
+  ],
+  "name": "Clash",
+  "year": 3,
+  "season": 3,
+  "badge": "clash_badge",
+  "portrait": "clash_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc556ea5c6c4d22a8f5c717"
+  },
+  "roles": [
+    "Anti Roam",
+    "Flank",
+    "Intel Denier",
+    "Intel Gatherer"
+  ],
+  "name": "Dokkaebi",
+  "year": 2,
+  "season": 4,
+  "badge": "dokkaebi_badge",
+  "portrait": "dokkaebi_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc556f55c6c4d22a8f5c718"
+  },
+  "roles": [
+    "Anchor",
+    "Buff"
+  ],
+  "name": "Doc",
+  "year": 0,
+  "season": 0,
+  "badge": "doc_badge",
+  "portrait": "doc_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc557445c6c4d22a8f5c719"
+  },
+  "roles": [
+    "Anchor",
+    "Crowd Control",
+    "Intel Gatherer",
+    "Secure"
+  ],
+  "name": "Echo",
+  "year": 1,
+  "season": 4,
+  "badge": "echo_badge",
+  "portrait": "echo_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc557cf5c6c4d22a8f5c71a"
+  },
+  "roles": [
+    "Crowd Control",
+    "Roamer",
+    "Trapper"
+  ],
+  "name": "Ela",
+  "year": 0,
+  "season": 0,
+  "badge": "ela_badge",
+  "portrait": "ela_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc558125c6c4d22a8f5c71b"
+  },
+  "roles": [
+    "Back Line",
+    "Buff"
+  ],
+  "name": "Finka",
+  "year": 3,
+  "season": 1,
+  "badge": "finka_badge",
+  "portrait": "finka_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc558535c6c4d22a8f5c71c"
+  },
+  "roles": [
+    "Crowd Control",
+    "Trap"
+  ],
+  "name": "Frost",
+  "year": 1,
+  "season": 1,
+  "badge": "frost_badge",
+  "portrait": "frost_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc5589e5c6c4d22a8f5c71d"
+  },
+  "roles": [
+    "Area Denial",
+    "Disable",
+    "Flank"
+  ],
+  "name": "Fuze",
+  "year": 0,
+  "season": 0,
+  "badge": "fuze_badge",
+  "portrait": "fuze_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc558d85c6c4d22a8f5c71e"
+  },
+  "roles": [
+    "Back Line",
+    "Covering Fire",
+    "Soft Breach"
+  ],
+  "name": "Glaz",
+  "year": 0,
+  "season": 0,
+  "badge": "glaz_badge",
+  "portrait": "glaz_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc559205c6c4d22a8f5c71f"
+  },
+  "roles": [
+    "Area Denial",
+    "Secure"
+  ],
+  "name": "Goyo",
+  "year": 4,
+  "season": 3,
+  "badge": "goyo_badge",
+  "portrait": "goyo_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc5596d5c6c4d22a8f5c720"
+  },
+  "roles": [
+    "Anti Roam",
+    "Area Denial",
+    "Crowd Control"
+  ],
+  "name": "Gridlock",
+  "year": 4,
+  "season": 1,
+  "badge": "gridlock_badge",
+  "portrait": "gridlock_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc559b75c6c4d22a8f5c721"
+  },
+  "roles": [
+    "Back Line",
+    "Front Line",
+    "Hard Breach"
+  ],
+  "name": "Hibana",
+  "year": 1,
+  "season": 4,
+  "badge": "hibana_badge",
+  "portrait": "hibana_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc559fb5c6c4d22a8f5c722"
+  },
+  "roles": [
+    "Disable",
+    "Flank",
+    "Front Line",
+    "Intel Gatherer"
+  ],
+  "name": "IQ",
+  "year": 0,
+  "season": 0,
+  "badge": "iq_badge",
+  "portrait": "iq_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc55a4a5c6c4d22a8f5c723"
+  },
+  "roles": [
+    "Anti Roam",
+    "Intel Gatherer"
+  ],
+  "name": "Jackal",
+  "year": 2,
+  "season": 1,
+  "badge": "jackal_badge",
+  "portrait": "jackal_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc55a8d5c6c4d22a8f5c724"
+  },
+  "roles": [
+    "Roamer",
+    "Secure"
+  ],
+  "name": "Jager",
+  "year": 0,
+  "season": 0,
+  "badge": "jager_badge",
+  "portrait": "jager_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc55ad05c6c4d22a8f5c725"
+  },
+  "roles": [
+    "Anchor",
+    "Anti Hard Breach",
+    "Secure"
+  ],
+  "name": "Kaid",
+  "year": 3,
+  "season": 4,
+  "badge": "kaid_badge",
+  "portrait": "kaid_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc55b235c6c4d22a8f5c726"
+  },
+  "roles": [
+    "Back Line",
+    "Covering Fire",
+    "Disable"
+  ],
+  "name": "Kali",
+  "year": 4,
+  "season": 4,
+  "badge": "kali_badge",
+  "portrait": "kali_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc55b595c6c4d22a8f5c727"
+  },
+  "roles": [
+    "Trapper"
+  ],
+  "name": "Kapkan",
+  "year": 0,
+  "season": 0,
+  "badge": "kapkan_badge",
+  "portrait": "kapkan_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc55bb55c6c4d22a8f5c728"
+  },
+  "roles": [
+    "Anchor",
+    "Crowd Control",
+    "Intel Gatherer",
+    "Roamer"
+  ],
+  "name": "Lesion",
+  "year": 2,
+  "season": 3,
+  "badge": "lesion_badge",
+  "portrait": "lesion_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc55bfc5c6c4d22a8f5c729"
+  },
+  "roles": [
+    "Anti Roam",
+    "Back Line",
+    "Crowd Control",
+    "Intel Gatherer"
+  ],
+  "name": "Lion",
+  "year": 3,
+  "season": 1,
+  "badge": "lion_badge",
+  "portrait": "lion_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc55c615c6c4d22a8f5c72a"
+  },
+  "roles": [
+    "Anchor",
+    "Area Denial",
+    "Intel Gatherer",
+    "Secure"
+  ],
+  "name": "Maestro",
+  "year": 3,
+  "season": 2,
+  "badge": "maestro_badge",
+  "portrait": "maestro_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc55ca75c6c4d22a8f5c72b"
+  },
+  "roles": [
+    "Back Line",
+    "Disable",
+    "Flank",
+    "Hard Breach"
+  ],
+  "name": "Maverick",
+  "year": 3,
+  "season": 3,
+  "badge": "maverick_badge",
+  "portrait": "maverick_portrait",
+  "side": "ATTAKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc55ceb5c6c4d22a8f5c72c"
+  },
+  "roles": [
+    "Anchor",
+    "Intel Gatherer",
+    "Secure"
+  ],
+  "name": "Mira",
+  "year": 2,
+  "season": 1,
+  "badge": "mira_badge",
+  "portrait": "mira_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc55d425c6c4d22a8f5c72d"
+  },
+  "roles": [
+    "Shield"
+  ],
+  "name": "Montagne",
+  "year": 0,
+  "season": 0,
+  "badge": "montagne_badge",
+  "portrait": "montagne_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc55f395c6c4d22a8f5c72e"
+  },
+  "roles": [
+    "Anti Hard Breach",
+    "Intel Denier",
+    "Secure"
+  ],
+  "name": "Mute",
+  "year": 0,
+  "season": 0,
+  "badge": "mute_badge",
+  "portrait": "mute_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc55f7f5c6c4d22a8f5c72f"
+  },
+  "roles": [
+    "Flank",
+    "Intel Denier"
+  ],
+  "name": "Nokk",
+  "year": 4,
+  "season": 2,
+  "badge": "nokk_badge",
+  "portrait": "nokk_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc55fc55c6c4d22a8f5c730"
+  },
+  "roles": [
+    "Anti Roam",
+    "Crowd Control",
+    "Trapper"
+  ],
+  "name": "Nomad",
+  "year": 3,
+  "season": 4,
+  "badge": "nomad_badge",
+  "portrait": "nomad_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc560005c6c4d22a8f5c731"
+  },
+  "roles": [
+    "Intel Gatherer",
+    "Roamer"
+  ],
+  "name": "Pulse",
+  "year": 0,
+  "season": 0,
+  "badge": "pulse_badge",
+  "portrait": "pulse_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc560885c6c4d22a8f5c732"
+  },
+  "roles": [
+    "Anchor",
+    "Buff"
+  ],
+  "name": "Rook",
+  "year": 0,
+  "season": 0,
+  "badge": "rook_badge",
+  "portrait": "rook_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc560ba5c6c4d22a8f5c733"
+  },
+  "roles": [
+    "Flank",
+    "Soft Breach"
+  ],
+  "name": "Sledge",
+  "year": 0,
+  "season": 0,
+  "badge": "sledge_badge",
+  "portrait": "sledge_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc560f15c6c4d22a8f5c734"
+  },
+  "roles": [
+    "Anchor",
+    "Area Denial",
+    "Secure"
+  ],
+  "name": "Smoke",
+  "year": 0,
+  "season": 0,
+  "badge": "smoke_badge",
+  "portrait": "smoke_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc5615b5c6c4d22a8f5c735"
+  },
+  "roles": [
+    "Anchor",
+    "Area Denial",
+    "Covering Fire",
+    "Soft Breacher"
+  ],
+  "name": "Tachanka",
+  "year": 0,
+  "season": 0,
+  "badge": "tachanka_badge",
+  "portrait": "tachanka_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc561a85c6c4d22a8f5c736"
+  },
+  "roles": [
+    "Back Line",
+    "Disable"
+  ],
+  "name": "Thatcher",
+  "year": 0,
+  "season": 0,
+  "badge": "thatcher_badge",
+  "portrait": "thatcher_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc561d35c6c4d22a8f5c737"
+  },
+  "roles": [
+    "Back Line",
+    "Hard Breach"
+  ],
+  "name": "Thermite",
+  "year": 0,
+  "season": 0,
+  "badge": "thermite_badge",
+  "portrait": "thermite_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc562125c6c4d22a8f5c738"
+  },
+  "roles": [
+    "Back Line",
+    "Disable",
+    "Front Line",
+    "Intel Gatherer"
+  ],
+  "name": "Twitch",
+  "year": 0,
+  "season": 0,
+  "badge": "twitch_badge",
+  "portrait": "twitch_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc562925c6c4d22a8f5c739"
+  },
+  "roles": [
+    "Intel Gatherer",
+    "Roamer"
+  ],
+  "name": "Valkyrie",
+  "year": 1,
+  "season": 2,
+  "badge": "valkyrie_badge",
+  "portrait": "valkyrie_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc562ca5c6c4d22a8f5c73a"
+  },
+  "roles": [
+    "Intel Denier",
+    "Roamer"
+  ],
+  "name": "Vigil",
+  "year": 2,
+  "season": 4,
+  "badge": "vigil_badge",
+  "portrait": "vigil_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc563315c6c4d22a8f5c73b"
+  },
+  "roles": [
+    "Anchor",
+    "Secure"
+  ],
+  "name": "Wamai",
+  "year": 4,
+  "season": 4,
+  "badge": "wamai_badge",
+  "portrait": "wamai_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc563745c6c4d22a8f5c73c"
+  },
+  "roles": [
+    "Anchor",
+    "Intel Denier"
+  ],
+  "name": "Warden",
+  "year": 4,
+  "season": 2,
+  "badge": "warden_badge",
+  "portrait": "warden_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc563c95c6c4d22a8f5c73d"
+  },
+  "roles": [
+    "Crowd Control",
+    "Front Line"
+  ],
+  "name": "Ying",
+  "year": 2,
+  "season": 3,
+  "badge": "ying_badge",
+  "portrait": "ying_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc5647848ef2047fcd1414b"
+  },
+  "roles": [
+    "Anti Roam",
+    "Crowd Control",
+    "Disable",
+    "Flank",
+    "Soft Breach"
+  ],
+  "name": "Zofia",
+  "year": 0,
+  "season": 0,
+  "badge": "zofia_badge",
+  "portrait": "zofia_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc564bb48ef2047fcd1414c"
+  },
+  "roles": [
+    "Intel Denier",
+    "Intel Gatherer"
+  ],
+  "name": "Iana",
+  "year": 5,
+  "season": 1,
+  "badge": "iana_badge",
+  "portrait": "iana_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc564f048ef2047fcd1414d"
+  },
+  "roles": [
+    "Roamer",
+    "Soft Breach"
+  ],
+  "name": "Oryx",
+  "year": 5,
+  "season": 1,
+  "badge": "oryx_badge",
+  "portrait": "oryx_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc5654948ef2047fcd1414e"
+  },
+  "roles": [
+    "Secure",
+    "Intel Gatherer",
+    "Anchor"
+  ],
+  "name": "Aruni",
+  "year": 5,
+  "season": 4,
+  "badge": "aruni_badge",
+  "portrait": "aruni_portrait",
+  "side": "DEFENDER",
+  "description": "",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fc565a848ef2047fcd1414f"
+  },
+  "roles": [
+    "Intel Denier",
+    "Intel Gatherer"
+  ],
+  "name": "Zero",
+  "year": 5,
+  "season": 3,
+  "badge": "zero_badge",
+  "portrait": "zero_portrait",
+  "side": "ATTACKER",
+  "description": "",
+  "__v": 0
+}]

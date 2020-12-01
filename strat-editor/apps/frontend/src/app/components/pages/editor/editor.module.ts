@@ -19,7 +19,5 @@ import { DoubleSidenavModule } from '../../molecules/double-sidenav/double-siden
   exports: [EditorComponent]
 })
 export class EditorModule {
-  leftIsOpened: boolean;
-  rightIsOpened: boolean;
 
 }

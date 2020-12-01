@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import { Side } from '../enums/side';
-//import { Document } from 'mongoose'
+
+
 export type AgentDocument = Agent & mongoose.Document;
 
 
@@ -12,7 +13,7 @@ export interface Agent {
   portrait : string;
   side: Side;
   description: string;
-  role: string;
+  roles: string[];
 }
 
 export const AgentSchema =  new mongoose.Schema({
@@ -23,6 +24,6 @@ export const AgentSchema =  new mongoose.Schema({
   side : String,
   portrait : String,
   description : String,
-  role : String
+  roles : [String]
 })
 

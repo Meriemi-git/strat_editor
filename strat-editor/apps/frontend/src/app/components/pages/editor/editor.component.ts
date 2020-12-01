@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 
-
 @Component({
   selector: 'strat-editor-editor',
   templateUrl: './editor.component.html',

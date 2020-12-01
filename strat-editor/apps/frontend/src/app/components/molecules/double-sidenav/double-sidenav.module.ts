@@ -7,10 +7,10 @@ import {MatButtonModule} from '@angular/material/button'
 import { AgentsGridModule } from '../agents-grid/agents-grid.module';
 import {MatTabsModule} from '@angular/material/tabs';
 import { FilterPipe } from '../../../helpers/filter-pipe';
-
+import { SortPipe } from '../../../helpers/sort-pipe';
 
 @NgModule({
-  declarations: [DoubleSidenavComponent,FilterPipe],
+  declarations: [DoubleSidenavComponent,FilterPipe,SortPipe],
   imports: [
     CommonModule,
     MatSidenavModule,
