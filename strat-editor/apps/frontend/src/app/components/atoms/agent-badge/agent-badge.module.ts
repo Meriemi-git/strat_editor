@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { AgentComponent } from './agent.component';
+import { AgentBadgeComponent } from './agent-badge.component';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
-  declarations: [AgentComponent],
+  declarations: [AgentBadgeComponent],
   imports: [
     CommonModule,
     MatCardModule
   ],
-  exports:[AgentComponent]
+  exports:[AgentBadgeComponent]
 })
-export class AgentModule { }
+export class AgentBadgeModule { }

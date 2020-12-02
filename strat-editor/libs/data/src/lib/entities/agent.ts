@@ -6,7 +6,7 @@ export type AgentDocument = Agent & mongoose.Document;
 
 
 export interface Agent {
-  _id : number
+  _id : string
   name : string;
   year : number;
   season : number;

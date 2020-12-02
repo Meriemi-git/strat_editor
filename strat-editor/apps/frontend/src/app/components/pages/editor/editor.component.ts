@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Agent } from '@strat-editor/data';
+import { Agent, Map } from '@strat-editor/data';
 import { Observable } from 'rxjs';
 import * as SidenavSelectors from '../../../store/selectors/sidenav.selector';
 import * as SidenavActions from '../../../store/actions/sidenav.action';
 import * as AgentActions from '../../../store/actions/agent.action';
 import * as AgentSelectors from '../../../store/selectors/agent.selector';
-import { AgentState } from '../../../store/reducers/agent.reducer';
+import * as MapActions from '../../../store/actions/map.action';
+import * as MapSelectors from '../../../store/selectors/map.selector';
+import { StratEditorState } from '../../../store/reducers';
 
 @Component({
   selector: 'strat-editor-editor',
@@ -19,8 +21,9 @@ export class EditorComponent implements OnInit {
   right2IsOpened: boolean;
   rightIsOpened: boolean;
   $agents : Observable<Agent[]>
+  $maps : Observable<Map[]>
 
-  constructor(private store : Store<AgentState>){}
+  constructor(private store : Store<StratEditorState>){}
 
   ngOnInit(): void {
     this.store.select(SidenavSelectors.isLeftSidenavOpened).subscribe(isOpened => {
@@ -30,7 +33,9 @@ export class EditorComponent implements OnInit {
       this.rightIsOpened = isOpened
     })
     this.$agents = this.store.select(AgentSelectors.selectAll);
+    this.$maps = this.store.select(MapSelectors.selectAll);
     this.store.dispatch(AgentActions.FetchAgents());
+    this.store.dispatch(MapActions.FetchMaps());
   }
 
   toggleLeftSidenav(){
@@ -39,5 +44,9 @@ export class EditorComponent implements OnInit {
 
   toggleRightSidenav(){
     this.store.dispatch(SidenavActions.toggleRight())
+  }
+
+  onSelectMap(map : Map){
+    this.store.dispatch(MapActions.SelectMap({selectedMap : map}));
   }
 }

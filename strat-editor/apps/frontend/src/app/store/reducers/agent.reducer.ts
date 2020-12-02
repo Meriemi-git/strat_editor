@@ -4,7 +4,7 @@ import { createReducer, on, Action } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from "@ngrx/entity"
 
 export interface AgentState extends EntityState<Agent>{
-  loading: boolean;
+  loaded: boolean;
   error: string;
 }
 
@@ -19,25 +19,21 @@ export function sortByName(a: Agent, b: Agent): number {
 }
 
 export const initialstate: AgentState = adapter.getInitialState({
-  ids : [],
   error : null,
-  loading : false
+  loaded : false
 });
 
 const agentReducer = createReducer(
   initialstate,
   on(actions.FetchAgents, state => ({
-    ...state,
-    loading: true
+    ...state
   })),
   on(actions.FetchAgentsSuccess, (state, { agents }) => {
-    const truc = adapter.addMany(agents, { ...state, loading:false,error:null });
-   return truc;
+    return adapter.addMany(agents, { ...state, loading: false, error: null });
   }),
   on(actions.FetchAgentsError, (state, { error }) => ({
     ...state,
-    loading : false,
-    isLoaded : false,
+    loaded : false,
     error: error
   })),
 )
@@ -50,7 +46,7 @@ export const {
   selectAll,
   selectEntities,
   selectIds,
-  selectTotal
+  selectTotal,
 
 } = adapter.getSelectors();
 

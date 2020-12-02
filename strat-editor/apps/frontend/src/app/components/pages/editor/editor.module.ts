@@ -6,7 +6,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon'
 import { MatButtonModule } from '@angular/material/button'
 import { SidenavLeftContentModule } from "../../molecules/sidenav-left-content/sidenav-left-content.module"
-import { MapModule } from "../../molecules/map/map.module"
+import { MapEditorModule } from "../../molecules/map-editor/map-editor.module"
 
 
 @NgModule({
@@ -17,7 +17,7 @@ import { MapModule } from "../../molecules/map/map.module"
     MatSidenavModule,
     MatIconModule,
     MatButtonModule,
-    MapModule,
+    MapEditorModule,
     SidenavLeftContentModule
   ],
   exports: [EditorComponent]

@@ -6,6 +6,7 @@ export type MapDocument = Map & mongoose.Document;
 
 
 export interface Map {
+  _id : string;
   name : string;
   year : number;
   season : number;

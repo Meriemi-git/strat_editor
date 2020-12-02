@@ -1,11 +1,10 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-
+import { Request } from 'express';
 
 @Injectable()
 export class RequestMiddleware implements NestMiddleware {
-  // eslint-disable-next-line @typescript-eslint/ban-types
   use(req: Request, res: Response, next: Function) {
-    console.log('Request...');
+    console.log(`Request ${req.originalUrl}`);
     next();
   }
 }

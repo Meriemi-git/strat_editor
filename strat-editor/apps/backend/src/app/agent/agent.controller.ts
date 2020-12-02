@@ -15,8 +15,6 @@ export class AgentController {
   @Get("badge/:imageName")
   async getAgentBadge(@Param("imageName") imageName : string, @Res() res) {
     const imgPath = this.getImgPath(imageName);
-    console.log(imgPath)
-
     return res.sendFile(imgPath, { root: "assets" });
   }
 

@@ -3,9 +3,9 @@ import { Agent } from '@strat-editor/data';
 
 @Component({
   selector: 'strat-editor-agent',
-  templateUrl: './agent.component.html',
-  styleUrls: ['./agent.component.scss']
+  templateUrl: './agent-badge.component.html',
+  styleUrls: ['./agent-badge.component.scss']
 })
-export class AgentComponent {
+export class AgentBadgeComponent {
   @Input() agent : Agent;
 }

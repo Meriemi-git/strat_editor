@@ -1,17 +1,22 @@
 import { createAction, props } from '@ngrx/store';
-import { Agent } from '@strat-editor/data';
+import { Map } from '@strat-editor/data';
 
-export const FetchAgents = createAction(
-  '[Agent] Fetch Agents'
+export const FetchMaps = createAction(
+  '[Map] Fetch Maps'
 );
 
-export const FetchAgentsSuccess = createAction(
-  '[Agent] Fetch Agents Success',
-  props<{ payload: Agent[] }>()
+export const FetchMapsSuccess = createAction(
+  '[Map] Fetch Maps Success',
+  props<{ maps: Map[] }>()
 );
 
-export const FetchAgentsError = createAction(
-  '[Agent] Fetch Agents Error',
-  props<{ payload: string }>()
+export const FetchMapsError = createAction(
+  '[Map] Fetch Maps Error',
+  props<{ error: string }>()
+);
+
+export const SelectMap = createAction(
+  '[Map] Select Map',
+  props<{ selectedMap: Map }>()
 );
 

@@ -24,6 +24,6 @@
       <button mat-icon-button class="double-arrow-icon-right" (click)="toggleRightSidenav()" >
         <mat-icon [ngStyle]="{'transform': rightIsOpened ? 'rotate(0deg)' : 'rotate(180deg)'}">double_arrow</mat-icon>
       </button>
-      <strat-editor-map></strat-editor-map>
+      <strat-editor-map-editor [maps]="($maps | async)"></strat-editor-map-editor>
   </mat-sidenav-content>
 </mat-sidenav-container>
