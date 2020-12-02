@@ -46,7 +46,7 @@ export class EditorComponent implements OnInit {
     this.store.dispatch(SidenavActions.toggleRight())
   }
 
-  onSelectMap(map : Map){
+  onMapSelected(map : Map){
     this.store.dispatch(MapActions.SelectMap({selectedMap : map}));
   }
 }

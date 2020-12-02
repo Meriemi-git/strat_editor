@@ -5,6 +5,7 @@
   "name": "Bank",
   "year": 0,
   "season": 0,
+  "image":"bank",
   "floors": [
     {
       "_id": {
@@ -47,6 +48,7 @@
   "name": "Border",
   "year": 1,
   "season": 2,
+  "image":"border",
   "floors": [
     {
       "_id": {
@@ -81,6 +83,7 @@
   "name": "Chalet",
   "year": 0,
   "season": 0,
+  "image":"chalet",
   "floors": [
     {
       "_id": {
@@ -123,6 +126,7 @@
   "name": "Club House",
   "year": 0,
   "season": 0,
+  "image":"club-house",
   "floors": [
     {
       "_id": {
@@ -165,6 +169,7 @@
   "name": "Coastline",
   "year": 2,
   "season": 1,
+  "image":"coastline",
   "floors": [
     {
       "_id": {
@@ -199,6 +204,7 @@
   "name": "Consulate",
   "year": 0,
   "season": 0,
+  "image":"consulate",
   "floors": [
     {
       "_id": {
@@ -241,6 +247,7 @@
   "name": "Favela",
   "year": 1,
   "season": 3,
+  "image":"favela",
   "floors": [
     {
       "_id": {
@@ -291,6 +298,7 @@
   "name": "Fortress",
   "year": 3,
   "season": 4,
+  "image":"fortress",
   "floors": [
     {
       "_id": {
@@ -325,6 +333,7 @@
   "name": "Hereford Base",
   "year": 0,
   "season": 0,
+  "image":"hereford-base",
   "floors": [
     {
       "_id": {
@@ -383,6 +392,7 @@
   "name": "House",
   "year": 0,
   "season": 0,
+  "image":"house",
   "floors": [
     {
       "_id": {
@@ -425,6 +435,7 @@
   "name": "Kafe Dostoyevsky",
   "year": 0,
   "season": 0,
+  "image":"kafe-dostoyevsky",
   "floors": [
     {
       "_id": {
@@ -467,6 +478,7 @@
   "name": "Kanal",
   "year": 0,
   "season": 0,
+  "image":"kanal",
   "floors": [
     {
       "_id": {
@@ -517,6 +529,7 @@
   "name": "Oregon",
   "year": 0,
   "season": 0,
+  "image":"oregon",
   "floors": [
     {
       "_id": {
@@ -567,6 +580,7 @@
   "name": "Outback",
   "year": 4,
   "season": 1,
+  "image":"outback",
   "floors": [
     {
       "_id": {
@@ -601,6 +615,7 @@
   "name": "Plane",
   "year": 0,
   "season": 0,
+  "image":"plane",
   "floors": [
     {
       "_id": {
@@ -643,6 +658,7 @@
   "name": "Theme Park",
   "year": 2,
   "season": 3,
+  "image":"theme-park",
   "floors": [
     {
       "_id": {
@@ -677,6 +693,7 @@
   "name": "Tower",
   "year": 2,
   "season": 4,
+  "image":"tower",
   "floors": [
     {
       "_id": {
@@ -711,6 +728,7 @@
   "name": "Villa",
   "year": 3,
   "season": 2,
+  "image":"villa",
   "floors": [
     {
       "_id": {
@@ -753,6 +771,7 @@
   "name": "Yacht",
   "year": 1,
   "season": 1,
+  "image":"yacht",
   "floors": [
     {
       "_id": {
@@ -803,6 +822,7 @@
   "name": "Sky Scraper",
   "year": 1,
   "season": 4,
+  "image":"sky-scraper",
   "floors": [
     {
       "_id": {

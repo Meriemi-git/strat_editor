@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MapGridComponent } from './map-grid.component';
 import { MapPanelModule } from '../../atoms/map-panel/map-panel.module';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 
 
@@ -9,8 +10,10 @@ import { MapPanelModule } from '../../atoms/map-panel/map-panel.module';
   declarations: [MapGridComponent],
   imports: [
     CommonModule,
-    MapPanelModule
+    MapPanelModule,
+    MatPaginatorModule
   ],
   exports : [MapGridComponent]
 })
-export class MapGridModule { }
+export class MapGridModule {
+}

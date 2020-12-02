@@ -1,16 +1,25 @@
 .double-arrow-icon-left{
-  position: inherit;
-  top: 50%;
-  left: 0%;
+  position: sticky;
+  top: 40vh;
+  height: 0px;
+  width: 0px;
   z-index: 20;
+  left: 3vw;
+  height: 0px;
 }
 .double-arrow-icon-right{
+  position: fixed;
+  top: 40vh;
+  height: 0px;
+  width: 0px;
+  z-index: 20;
   top: 50%;
-  float: right;
+  left: 90vw;
 }
 .container{
   height: 100%;
-  margin: 0 auto;
+  width: 100vw!important;
+  margin: 10px auto;
 }
 
 .double-sidenav{
@@ -19,7 +28,7 @@
 }
 
 .left-sidenav-content{
-  padding: 5px;
+  padding: 10px;
   text-align: center;
   width: 25%;
 }
@@ -30,7 +39,10 @@ margin: 0;
 
 .btn-sidenav{
   display: block;
-  margin: 10px;
+  margin-bottom : 20px;
+  opacity: 0.85;
+  width: 7vw;
+  text-align: left;
 }
 
 ::ng-deep .mat-drawer-inner-container{
@@ -39,3 +51,4 @@ margin: 0;
   direction: rtl;
   scrollbar-width: thin;
 }
+

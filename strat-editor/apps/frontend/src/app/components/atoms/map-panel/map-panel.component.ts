@@ -1,5 +1,5 @@
-import { Input } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { Map } from '@strat-editor/data'
 @Component({
   selector: 'strat-editor-map-panel',
@@ -8,4 +8,5 @@ import { Map } from '@strat-editor/data'
 })
 export class MapPanelComponent {
  @Input() map : Map
+ @Output() selectMap = new EventEmitter<Map>();
 }

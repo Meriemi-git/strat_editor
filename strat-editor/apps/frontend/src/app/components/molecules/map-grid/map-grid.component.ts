@@ -1,15 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Map } from '@strat-editor/data'
 @Component({
   selector: 'strat-editor-map-grid',
   templateUrl: './map-grid.component.html',
   styleUrls: ['./map-grid.component.scss']
 })
-export class MapGridComponent implements OnInit {
+export class MapGridComponent {
   @Input() maps : Map[]
+  @Output() selectMap = new EventEmitter<Map>();
   constructor() { }
 
-  ngOnInit(): void {
+  onSelectMap(map : Map){
+    this.selectMap.emit(map);
   }
 
 }

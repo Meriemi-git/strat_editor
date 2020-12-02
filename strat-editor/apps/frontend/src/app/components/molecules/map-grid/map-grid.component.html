@@ -1,6 +1,8 @@
 <div class="container">
   <div class="grid">
-    <strat-editor-map-panel *ngFor="let map of maps" [map]="map">
-    </strat-editor-map-panel>
+    <div fxFlex="25%" *ngFor="let map of maps" (click)="onSelectMap(map)">
+      <strat-editor-map-panel  [map]="map">
+      </strat-editor-map-panel>
+    </div>
   </div>
 </div>

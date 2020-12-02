@@ -8,4 +8,5 @@ import { Agent } from '@strat-editor/data';
 })
 export class AgentsGridComponent {
   @Input() agents: Agent[];
+
 }

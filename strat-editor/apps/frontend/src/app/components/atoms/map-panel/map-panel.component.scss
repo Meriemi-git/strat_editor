@@ -1,0 +1,18 @@
+.map{
+  position: relative;
+  text-align: center;
+  margin: 0 auto;
+  cursor: pointer;
+}
+.centered{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.map-title{
+  color: white;
+  font-size: 39.96px;
+  line-height: 33.29987px;
+  font-weight: bold;
+}
