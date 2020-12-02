@@ -98,8 +98,11 @@ export class DrawingEditor {
   public setBackgroundImageFromUrl(imageUrl : string) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this
-    fabric.Image.fromURL(imageUrl, function(oImg) {
-      that.canvas.add(oImg);
+    fabric.Image.fromURL(imageUrl, function(img) {
+      that.canvas.setBackgroundImage(img, that.canvas.renderAll.bind(that.canvas), {
+        scaleX:  that.canvas.width / img.width,
+        scaleY:  that.canvas.height / img.height
+     });
     });
   }
 }
