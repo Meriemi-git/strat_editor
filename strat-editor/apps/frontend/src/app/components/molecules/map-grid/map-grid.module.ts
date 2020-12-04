@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MapGridComponent } from './map-grid.component';
-import { MapPanelModule } from '../../atoms/map-panel/map-panel.module';
+import { MapPanelModule } from '../../atoms/map-item/map-item.module';
 import {MatPaginatorModule} from '@angular/material/paginator';
 
 

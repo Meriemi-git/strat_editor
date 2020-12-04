@@ -2,9 +2,11 @@ import { fabric } from 'fabric';
 import { LineDrawer } from "./line-drawer";
 import { ObjectDrawer } from "./object-drawer";
 import { DrawingMode } from './drawing-mode';
-import * as $ from "jquery";
+import { CursorMode } from './cursor-mode';
 
 export class DrawingEditor {
+
+  private cursorMode: CursorMode;
 
   private canvas: fabric.Canvas;
 
@@ -19,18 +21,16 @@ export class DrawingEditor {
   private isDown: boolean; //Is user dragging the mouse?
 
   constructor(private readonly selector: string, canvasWidth: number, canvasHeight: number) {
-
-      //$(`#${selector}`).replaceWith(`<canvas id="${selector}" height=${canvasHeight} width=${canvasWidth}> </canvas>`);
-
-      this.isDown = false; //To start, user is NOT dragging the mouse
-
+      // To start,
+      // user is NOT dragging the mouse
+      this.isDown = false;
+      // user is drawing
+      this.cursorMode = CursorMode.Draw;
       // Create the Fabric canvas
       this.canvas = new fabric.Canvas(selector, {selection : false});
       this.canvas.setWidth(canvasWidth);
       this.canvas.setHeight(canvasHeight);
-      console.log(this.canvas);
-      this.canvas.add(new fabric.IText('Hello World !'));
-      //Create a collection of all possible "drawer" classes
+
       this.drawers = [
           new LineDrawer(),
       ];
@@ -51,24 +51,40 @@ export class DrawingEditor {
   }
 
   private initializeCanvasEvents() {
+
     this.canvas.on('mouse:down', (o) => {
-        console.log('mouse:down');
         const pointer = this.canvas.getPointer(o.e);
         this.mouseDown(pointer.x, pointer.y);
     });
+
     this.canvas.on('mouse:move', (o) => {
-      console.log('mouse:move');
       const pointer = this.canvas.getPointer(o.e);
       this.mouseMove(pointer.x, pointer.y);
     });
+
     this.canvas.on('mouse:up', () => {
-      console.log('mouse:up');
       this.isDown = false;
    });
+
+   this.canvas.on('selection:created', (o) => {
+     console.log("selected");
+    this.cursorMode = CursorMode.Select;
+    // sets currently selected object
+    this.object = o.target;
+  });
+
+  this.canvas.on('selection:cleared', () => {
+    console.log("stop selected");
+      this.cursorMode = CursorMode.Draw;
+  });
 }
 
   private async mouseDown(x: number, y: number): Promise<void> {
     this.isDown = true; //The mouse is being clicked
+
+    if (this.cursorMode !== CursorMode.Draw) {
+      return;
+    }
 
     // Create an object at the point (x,y)
     this.object = await this.make(x, y);
@@ -81,11 +97,10 @@ export class DrawingEditor {
   }
 
   private mouseMove(x: number, y: number): void {
-    if (!this.isDown) {
-        return; // If the user isn't holding the mouse button, do nothing
+    if (!(this.cursorMode === CursorMode.Draw && this.isDown)) {
+      console.log("I'm drawing")
+        return;
     }
-
-    // Use the Resize method from the IObjectDrawer interface
     this.drawer.resize(this.object, x, y);
     this.canvas.renderAll();
   }
@@ -99,10 +114,33 @@ export class DrawingEditor {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this
     fabric.Image.fromURL(imageUrl, function(img) {
-      that.canvas.setBackgroundImage(img, that.canvas.renderAll.bind(that.canvas), {
-        scaleX:  that.canvas.width / img.width,
-        scaleY:  that.canvas.height / img.height
-     });
+
+      if(that.canvas.width < that.canvas.height ){
+        const scaleX =  that.canvas.width / img.width
+        that.canvas.setBackgroundImage(img, that.canvas.renderAll.bind(that.canvas), {
+          scaleX:  scaleX,
+          scaleY:  scaleX,
+          top: that.canvas.getCenter().top,
+          left:  that.canvas.getCenter().left,
+          originX: 'center',
+          originY: 'center'
+       });
+      } else {
+        const scaleY =  that.canvas.height / img.height
+        that.canvas.setBackgroundImage(img, that.canvas.renderAll.bind(that.canvas), {
+          scaleX:  scaleY,
+          scaleY:  scaleY,
+          top: that.canvas.getCenter().top,
+          left:  that.canvas.getCenter().left,
+          originX: 'center',
+          originY: 'center'
+       });
+      }
     });
+  }
+
+  resize(screenWidth: number, canvasHeight: number) {
+    this.canvas.setWidth(screenWidth);
+    this.canvas.setHeight(canvasHeight);
   }
 }

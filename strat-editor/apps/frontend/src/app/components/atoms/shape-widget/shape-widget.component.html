@@ -1,0 +1,9 @@
+<mat-form-field >
+  <mat-label>Shapes</mat-label>
+  <mat-select [formControl]="shapeSelector">
+    <mat-option *ngFor="let shape of shapetypes" [value]="shape">
+      {{shape}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+

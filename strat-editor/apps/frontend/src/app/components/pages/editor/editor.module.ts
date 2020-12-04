@@ -5,9 +5,9 @@ import { EditorComponent } from './editor.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon'
 import { MatButtonModule } from '@angular/material/button'
-import { SidenavLeftContentModule } from "../../molecules/sidenav-left-content/sidenav-left-content.module"
-import { MapEditorModule } from "../../molecules/map-editor/map-editor.module"
-
+import { SidenavLeftContentModule } from "../../molecules/assets-panel/assets-panel.module"
+import { MapEditorModule } from "../../molecules/map-panel/map-panel.module"
+import { DrawingPanelModule } from '../../molecules/drawing-panel/drawing-panel.module'
 
 @NgModule({
   declarations: [EditorComponent],
@@ -18,7 +18,8 @@ import { MapEditorModule } from "../../molecules/map-editor/map-editor.module"
     MatIconModule,
     MatButtonModule,
     MapEditorModule,
-    SidenavLeftContentModule
+    SidenavLeftContentModule,
+    DrawingPanelModule
   ],
   exports: [EditorComponent]
 })

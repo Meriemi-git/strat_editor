@@ -1,17 +1,18 @@
 <mat-sidenav-container class="double-sidenav">
   <mat-sidenav #leftSidenav
   mode="over"
-  [(opened)]="leftIsOpened" class="left-sidenav-content">
-    <strat-editor-sidenav-left-content [agents]="($agents | async)"></strat-editor-sidenav-left-content>
+  [(opened)]="leftIsOpened" class="left-sidenav-content" (closedStart)="onCloseLeftSidenav()">
+    <strat-editor-assets-panel [agents]="($agents | async)"></strat-editor-assets-panel>
   </mat-sidenav>
   <mat-sidenav #rightSidenav
   mode="over"
   [(opened)]="rightIsOpened"
-  position="end">
-    Right Sidenav content
+  position="end"
+  (closedStart)="onCloseRightSidenav()">
+    <strat-editor-drawing-panel></strat-editor-drawing-panel>
   </mat-sidenav>
   <mat-sidenav-content class="container">
-    <div class="double-arrow-icon-left">
+    <div class="double-arrow-icon-left" *ngIf="isMapSelected">
       <button mat-raised-button color="primary" class="btn-sidenav" (click)="toggleLeftSidenav()">
         <span>Agents</span>
         <mat-icon  [ngStyle]="{'transform': leftIsOpened ? 'rotate(180deg)' : 'rotate(0deg)'}">double_arrow</mat-icon>
@@ -21,7 +22,7 @@
         <mat-icon  [ngStyle]="{'transform': leftIsOpened ? 'rotate(180deg)' : 'rotate(0deg)'}">double_arrow</mat-icon>
       </button>
     </div>
-    <div class="double-arrow-icon-right">
+    <div class="double-arrow-icon-right" *ngIf="isMapSelected">
       <button mat-raised-button color="primary" class="btn-sidenav" (click)="toggleRightSidenav()" >
         <mat-icon [ngStyle]="{'transform': rightIsOpened ? 'rotate(0deg)' : 'rotate(180deg)'}">double_arrow</mat-icon>
         <span>Drawing</span>
@@ -30,7 +31,7 @@
         <mat-icon [ngStyle]="{'transform': rightIsOpened ? 'rotate(0deg)' : 'rotate(180deg)'}">double_arrow</mat-icon>
         <span>Colors</span>
       </button>
-  </div>
-      <strat-editor-map-editor [maps]="($maps | async)" (selectMap)="onMapSelected($event)"></strat-editor-map-editor>
+    </div>
+  <strat-editor-map-panel [maps]="($maps | async)" (selectMap)="onMapSelected($event)"></strat-editor-map-panel>
   </mat-sidenav-content>
 </mat-sidenav-container>

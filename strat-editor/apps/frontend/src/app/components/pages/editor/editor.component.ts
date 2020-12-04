@@ -17,11 +17,10 @@ import { StratEditorState } from '../../../store/reducers';
 })
 export class EditorComponent implements OnInit {
   leftIsOpened: boolean;
-  left2IsOpened: boolean;
-  right2IsOpened: boolean;
   rightIsOpened: boolean;
   $agents : Observable<Agent[]>
   $maps : Observable<Map[]>
+  isMapSelected : boolean;
 
   constructor(private store : Store<StratEditorState>){}
 
@@ -48,5 +47,14 @@ export class EditorComponent implements OnInit {
 
   onMapSelected(map : Map){
     this.store.dispatch(MapActions.SelectMap({selectedMap : map}));
+    this.isMapSelected = true;
+  }
+
+  onCloseLeftSidenav(){
+    this.store.dispatch(SidenavActions.toggleLeft())
+  }
+
+  onCloseRightSidenav(){
+    this.store.dispatch(SidenavActions.toggleRight())
   }
 }

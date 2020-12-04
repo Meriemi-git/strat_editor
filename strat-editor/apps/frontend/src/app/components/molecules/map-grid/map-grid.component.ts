@@ -8,7 +8,6 @@ import { Map } from '@strat-editor/data'
 export class MapGridComponent {
   @Input() maps : Map[]
   @Output() selectMap = new EventEmitter<Map>();
-  constructor() { }
 
   onSelectMap(map : Map){
     this.selectMap.emit(map);
