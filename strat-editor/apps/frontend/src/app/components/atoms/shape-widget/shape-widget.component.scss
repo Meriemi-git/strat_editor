@@ -1,0 +1,10 @@
+.icons{
+  display:flex;
+  flex-wrap: wrap;
+  flex-direction: row-reverse;
+  justify-content: space-evenly
+}
+
+.mat-icon{
+  display: block;
+}

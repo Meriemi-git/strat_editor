@@ -1,9 +1,35 @@
-<mat-form-field >
-  <mat-label>Shapes</mat-label>
-  <mat-select [formControl]="shapeSelector">
-    <mat-option *ngFor="let shape of shapetypes" [value]="shape">
-      {{shape}}
-    </mat-option>
-  </mat-select>
+<h2 class="mat-title">Shapes</h2>
+<div class="icons">
+  <strat-editor-icon [iconName]="'line'"></strat-editor-icon>
+  <strat-editor-icon [iconName]="'arrow'"></strat-editor-icon>
+  <strat-editor-icon [iconName]="'curve'"></strat-editor-icon>
+  <strat-editor-icon [iconName]="'triangle'"></strat-editor-icon>
+  <strat-editor-icon [iconName]="'square'"></strat-editor-icon>
+  <strat-editor-icon [iconName]="'elipse'"></strat-editor-icon>
+  <strat-editor-icon [iconName]="'circle'"></strat-editor-icon>
+</div>
+<hr />
+<h2 class="mat-title">Colors</h2>
+<mat-form-field>
+  <input matInput [ngxMatColorPicker]="picker" [formControl]="colorCtr">
+  <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
+  <ngx-mat-color-picker #picker [color]="color"></ngx-mat-color-picker>
 </mat-form-field>
+<hr />
+<h2 class="mat-title">Forms</h2>
+<div class="icons">
+  <strat-editor-icon [iconName]="'star'"></strat-editor-icon>
+  <strat-editor-icon [iconName]="'location'"></strat-editor-icon>
+  <strat-editor-icon [iconName]="'time'"></strat-editor-icon>
+</div>
 
+<hr />
+<h2 class="mat-title">Tools</h2>
+<div class="icons">
+  <strat-editor-icon [iconName]="'picture'"></strat-editor-icon>
+  <strat-editor-icon [iconName]="'eraser'"></strat-editor-icon>
+  <strat-editor-icon [iconName]="'text'"></strat-editor-icon>
+  <strat-editor-icon [iconName]="'group'"></strat-editor-icon>
+  <strat-editor-icon [iconName]="'ungroup'"></strat-editor-icon>
+</div>
+<hr />

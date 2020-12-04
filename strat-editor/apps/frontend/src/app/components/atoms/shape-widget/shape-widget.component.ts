@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { AbstractControl, FormControl } from '@angular/forms';
+import { ThemePalette } from '@angular/material/core';
+
 
 @Component({
   selector: 'strat-editor-shape-widget',
@@ -8,6 +10,7 @@ import { FormControl } from '@angular/forms';
 })
 export class ShapeWidgetComponent {
   shapeSelector = new FormControl();
+  colorCtr: AbstractControl = new FormControl(null);
+  public color: ThemePalette = 'primary';
 
-  shapetypes: string[] = ['Line', 'Triangle', 'Rectangle', 'Polygon'];
 }
