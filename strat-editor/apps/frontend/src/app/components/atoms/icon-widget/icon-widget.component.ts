@@ -5,12 +5,14 @@ import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: 'strat-editor-icon',
-  templateUrl: './icon-action-widget.component.html',
-  styleUrls: ['./icon-action-widget.component.scss']
+  templateUrl: './icon-widget.component.html',
+  styleUrls: ['./icon-widget.component.scss']
 })
 export class IconWidgetComponent implements OnInit{
   @Input() iconName : string;
-  @Output() iconClicked = new EventEmitter<string>()
+  @Input() iconUrl : string;
+
+  @Output() iconClicked = new EventEmitter<void>()
 
   constructor(
     private matIconRegistry: MatIconRegistry,
@@ -18,13 +20,14 @@ export class IconWidgetComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    console.log("iconName",this.iconName),
+    console.log("iconUrl",this.iconUrl),
     this.matIconRegistry.addSvgIcon(
       this.iconName,
-      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/icons/" +  this.iconName + ".svg"))
+      this.domSanitizer.bypassSecurityTrustResourceUrl(this.iconUrl))
   }
 
   onClick(){
-    this.iconClicked.emit(this.iconName);
-
+    this.iconClicked.emit();
   }
 }

@@ -1,4 +1,8 @@
-export interface DrawingAction{
+import { environment } from '../../../environments/environment';
+
+export abstract class DrawingAction{
   name : string;
-  act() : void;
+  public getIconUrl() : string{
+    return `${environment.iconActionUrl}/${this.name}.svg`
+  }
 }

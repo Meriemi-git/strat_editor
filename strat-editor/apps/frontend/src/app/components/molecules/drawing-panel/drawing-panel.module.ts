@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MAT_COLOR_FORMATS, NgxMatColorPickerModule, NGX_MAT_COLOR_FORMATS } from '@angular-material-components/color-picker';
 import { MatInputModule } from '@angular/material/input';
-import { IconWidgetModule } from '../../atoms/icon-action-widget/icon-action-widget.module'
+import { DrawingActionModule } from '../../atoms/drawing-action/drawing-action.module';
 
 @NgModule({
   declarations: [DrawingPanelComponent],
@@ -15,8 +15,8 @@ import { IconWidgetModule } from '../../atoms/icon-action-widget/icon-action-wid
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    IconWidgetModule,
-    NgxMatColorPickerModule
+    NgxMatColorPickerModule,
+    DrawingActionModule
   ],
   providers: [
     { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS }

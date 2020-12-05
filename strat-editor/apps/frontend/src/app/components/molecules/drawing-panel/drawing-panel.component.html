@@ -1,13 +1,7 @@
 <div class="container">
   <h2 class="mat-title">Shapes</h2>
   <div class="icons">
-    <strat-editor-icon [iconName]="'line'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
-    <strat-editor-icon [iconName]="'arrow'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
-    <strat-editor-icon [iconName]="'curve'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
-    <strat-editor-icon [iconName]="'triangle'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
-    <strat-editor-icon [iconName]="'square'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
-    <strat-editor-icon [iconName]="'elipse'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
-    <strat-editor-icon [iconName]="'circle'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+    <strat-editor-drawing-action *ngFor="let action of shapeActions" [action]="action" (actionClicked)="OnActionClicked($event)"></strat-editor-drawing-action>
   </div>
   <hr />
   <h2 class="mat-title">Colors</h2>
@@ -19,19 +13,13 @@
   <hr />
   <h2 class="mat-title">Forms</h2>
   <div class="icons">
-    <strat-editor-icon [iconName]="'star'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
-    <strat-editor-icon [iconName]="'location'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
-    <strat-editor-icon [iconName]="'time'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+    <strat-editor-drawing-action *ngFor="let action of formActions" [action]="action" (actionClicked)="OnActionClicked($event)"></strat-editor-drawing-action>
   </div>
 
   <hr />
   <h2 class="mat-title">Tools</h2>
   <div class="icons">
-    <strat-editor-icon [iconName]="'picture'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
-    <strat-editor-icon [iconName]="'eraser'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
-    <strat-editor-icon [iconName]="'text'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
-    <strat-editor-icon [iconName]="'group'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
-    <strat-editor-icon [iconName]="'ungroup'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+    <strat-editor-drawing-action *ngFor="let action of toolActions" [action]="action" (actionClicked)="OnActionClicked($event)"></strat-editor-drawing-action>
   </div>
   <hr />
 </div>

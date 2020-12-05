@@ -1,9 +1,5 @@
 import { DrawingAction } from './drawing-action';
 
-export class LineAction implements DrawingAction{
+export class LineAction extends DrawingAction{
   name = "line"
-  act(): void {
-    throw new Error('Method not implemented.');
-  }
-
 }
