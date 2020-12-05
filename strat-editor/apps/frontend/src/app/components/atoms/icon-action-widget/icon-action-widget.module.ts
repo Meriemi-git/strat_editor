@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IconWidgetComponent } from './icon-widget.component';
+import { IconWidgetComponent } from './icon-action-widget.component';
 import { MatIconModule } from '@angular/material/icon';
-
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [IconWidgetComponent],
   imports: [
     CommonModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule
   ],
   exports : [IconWidgetComponent]
 })

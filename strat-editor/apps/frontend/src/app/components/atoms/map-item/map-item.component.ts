@@ -6,7 +6,9 @@ import { Map } from '@strat-editor/data'
   templateUrl: './map-item.component.html',
   styleUrls: ['./map-item.component.scss']
 })
-export class MapPanelComponent {
+export class MapItemComponent {
+
  @Input() map : Map
  @Output() selectMap = new EventEmitter<Map>();
+
 }

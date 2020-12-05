@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Agent, Map } from '@strat-editor/data';
 import { Observable } from 'rxjs';
@@ -9,6 +9,7 @@ import * as AgentSelectors from '../../../store/selectors/agent.selector';
 import * as MapActions from '../../../store/actions/map.action';
 import * as MapSelectors from '../../../store/selectors/map.selector';
 import { StratEditorState } from '../../../store/reducers';
+import { MapPanelComponent } from '../../molecules/map-panel/map-panel.component';
 
 @Component({
   selector: 'strat-editor-editor',
@@ -22,7 +23,9 @@ export class EditorComponent implements OnInit {
   $maps : Observable<Map[]>
   isMapSelected : boolean;
 
-  constructor(private store : Store<StratEditorState>){}
+  @ViewChild("mapPanel") mapPanel : MapPanelComponent;
+
+  constructor(private store : Store<StratEditorState>,private renderer : Renderer2){}
 
   ngOnInit(): void {
     this.store.select(SidenavSelectors.isLeftSidenavOpened).subscribe(isOpened => {
@@ -56,5 +59,10 @@ export class EditorComponent implements OnInit {
 
   onCloseRightSidenav(){
     this.store.dispatch(SidenavActions.toggleRight())
+  }
+
+  onDrawingActionCalled(actionName : string){
+    console.log("DrawingActionCalled : " + actionName);
+    this.mapPanel.updatePointerIcon(actionName);
   }
 }

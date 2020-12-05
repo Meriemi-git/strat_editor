@@ -1,4 +1,37 @@
 <div class="container">
-  <strat-editor-shape-widget></strat-editor-shape-widget>
+  <h2 class="mat-title">Shapes</h2>
+  <div class="icons">
+    <strat-editor-icon [iconName]="'line'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+    <strat-editor-icon [iconName]="'arrow'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+    <strat-editor-icon [iconName]="'curve'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+    <strat-editor-icon [iconName]="'triangle'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+    <strat-editor-icon [iconName]="'square'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+    <strat-editor-icon [iconName]="'elipse'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+    <strat-editor-icon [iconName]="'circle'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+  </div>
+  <hr />
+  <h2 class="mat-title">Colors</h2>
+  <mat-form-field>
+    <input matInput [ngxMatColorPicker]="picker" [formControl]="colorCtr">
+    <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
+    <ngx-mat-color-picker #picker [color]="color"></ngx-mat-color-picker>
+  </mat-form-field>
+  <hr />
+  <h2 class="mat-title">Forms</h2>
+  <div class="icons">
+    <strat-editor-icon [iconName]="'star'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+    <strat-editor-icon [iconName]="'location'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+    <strat-editor-icon [iconName]="'time'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+  </div>
 
+  <hr />
+  <h2 class="mat-title">Tools</h2>
+  <div class="icons">
+    <strat-editor-icon [iconName]="'picture'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+    <strat-editor-icon [iconName]="'eraser'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+    <strat-editor-icon [iconName]="'text'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+    <strat-editor-icon [iconName]="'group'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+    <strat-editor-icon [iconName]="'ungroup'" (iconClicked)="OnIconClicked($event)"></strat-editor-icon>
+  </div>
+  <hr />
 </div>

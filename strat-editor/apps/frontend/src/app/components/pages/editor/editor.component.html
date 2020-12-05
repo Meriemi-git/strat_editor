@@ -9,7 +9,7 @@
   [(opened)]="rightIsOpened"
   position="end"
   (closedStart)="onCloseRightSidenav()">
-    <strat-editor-drawing-panel></strat-editor-drawing-panel>
+    <strat-editor-drawing-panel (actionCalled)="onDrawingActionCalled($event)"></strat-editor-drawing-panel>
   </mat-sidenav>
   <mat-sidenav-content class="container">
     <div class="double-arrow-icon-left" *ngIf="isMapSelected">
@@ -32,6 +32,6 @@
         <span>Colors</span>
       </button>
     </div>
-  <strat-editor-map-panel [maps]="($maps | async)" (selectMap)="onMapSelected($event)"></strat-editor-map-panel>
+    <strat-editor-map-panel #mapPanel [maps]="($maps | async)" (selectMap)="onMapSelected($event)"></strat-editor-map-panel>
   </mat-sidenav-content>
 </mat-sidenav-container>

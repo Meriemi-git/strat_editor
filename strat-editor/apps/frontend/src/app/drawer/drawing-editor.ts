@@ -67,14 +67,12 @@ export class DrawingEditor {
    });
 
    this.canvas.on('selection:created', (o) => {
-     console.log("selected");
     this.cursorMode = CursorMode.Select;
     // sets currently selected object
     this.object = o.target;
   });
 
   this.canvas.on('selection:cleared', () => {
-    console.log("stop selected");
       this.cursorMode = CursorMode.Draw;
   });
 }
@@ -98,7 +96,6 @@ export class DrawingEditor {
 
   private mouseMove(x: number, y: number): void {
     if (!(this.cursorMode === CursorMode.Draw && this.isDown)) {
-      console.log("I'm drawing")
         return;
     }
     this.drawer.resize(this.object, x, y);
@@ -142,5 +139,9 @@ export class DrawingEditor {
   resize(screenWidth: number, canvasHeight: number) {
     this.canvas.setWidth(screenWidth);
     this.canvas.setHeight(canvasHeight);
+  }
+
+  updatePointerIcon(actionName: string) {
+    // TODO change mouse cursor
   }
 }

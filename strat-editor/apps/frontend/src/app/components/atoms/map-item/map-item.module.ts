@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MapPanelComponent } from './map-item.component';
+import { MapItemComponent } from './map-item.component';
 
 @NgModule({
-  declarations: [MapPanelComponent],
+  declarations: [MapItemComponent],
   imports: [
     CommonModule
   ],
-  exports : [MapPanelComponent]
+  exports : [MapItemComponent]
 })
 export class MapPanelModule { }
