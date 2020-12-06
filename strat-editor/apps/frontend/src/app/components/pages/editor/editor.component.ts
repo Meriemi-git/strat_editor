@@ -6,7 +6,8 @@ import * as Actions from '../../../store/actions';
 import * as Selectors from '../../../store/selectors';
 import { StratEditorState } from '../../../store/reducers';
 import { MapPanelComponent } from '../../molecules/map-panel/map-panel.component';
-import { DrawingAction } from '../../../drawer/actions';
+import { DrawingAction } from '@strat-editor/drawer';
+//import { DrawingAction } from '../../../drawer/actions';
 import { take } from 'rxjs/operators';
 import { KEY_CODE } from '../../../helpers/key_code'
 
@@ -65,7 +66,6 @@ export class EditorComponent implements OnInit {
   }
 
   onDrawingActionSelected(action : DrawingAction){
-    console.log("action selected")
     this.store.dispatch(Actions.SelectDrawingAction({action}));
     this.store.dispatch(Actions.toggleRight());
     //this.mapPanel.updatePointerIcon(action.getIconUrl());
@@ -75,6 +75,7 @@ export class EditorComponent implements OnInit {
     this.actionSubscription = this.store.select(Selectors.getSelectedAction).pipe(take(1)).subscribe(selected => {
       if(selected){
         this.store.dispatch(Actions.PerformSelectedDrawingAction({action:selected}));
+        this.mapPanel.setDrawer(selected.drawer);
       }
     });
   }

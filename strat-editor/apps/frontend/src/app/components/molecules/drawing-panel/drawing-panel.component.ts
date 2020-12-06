@@ -1,8 +1,45 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, AbstractControl } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
-import { LineAction } from '../../../drawer/actions/line-action';
-import { RectangleAction,DrawingAction, CircleAction, TriangleAction, CurveAction, EraserAction, GroupAction, LocationAction, PictureAction, SelectionAction, StarAction, ElipseAction, TextAction, TimeAction, UngroupAction } from '../../../drawer/actions';
+
+import {
+  RectangleAction,
+  DrawingAction,
+  CircleAction,
+  TriangleAction,
+  CurveAction,
+  EraserAction,
+  GroupAction,
+  LocationAction,
+  PictureAction,
+  SelectionAction,
+  StarAction,
+  ElipseAction,
+  TextAction,
+  TimeAction,
+  UngroupAction,
+  LineAction
+} from '@strat-editor/drawer';
+
+
+// import {
+//     RectangleAction,
+//     DrawingAction,
+//     CircleAction,
+//     TriangleAction,
+//     CurveAction,
+//     EraserAction,
+//     GroupAction,
+//     LocationAction,
+//     PictureAction,
+//     SelectionAction,
+//     StarAction,
+//     ElipseAction,
+//     TextAction,
+//     TimeAction,
+//     LineAction,
+//     UngroupAction
+//   } from '../../../drawer/actions';
 
 @Component({
   selector: 'strat-editor-drawing-panel',

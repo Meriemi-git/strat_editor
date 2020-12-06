@@ -24,13 +24,17 @@
   },
   "projects": {
     "frontend": {
-      "tags": []
+      "tags": ["scope:front"]
+
     },
     "backend": {
-      "tags": []
+      "tags": ["scope:back"]
     },
     "data": {
-      "tags": []
+      "tags": ["scope:shared"]
+    },
+    "drawer": {
+      "tags": ["scope:front"]
     }
   }
 }

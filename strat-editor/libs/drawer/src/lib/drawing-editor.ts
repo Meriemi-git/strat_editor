@@ -120,6 +120,14 @@ export class DrawingEditor {
 
   // Method which allows any drawer to Promise their make() function
   private async make(x: number, y: number): Promise<fabric.Object> {
+    Object.defineProperty(this.drawer, 'origX', {
+      value: x,
+      writable: true
+    });
+    Object.defineProperty(this.drawer, 'origY', {
+      value: y,
+      writable: true
+    });
     return await this.drawer.make(x, y, this.drawerOptions);
   }
 

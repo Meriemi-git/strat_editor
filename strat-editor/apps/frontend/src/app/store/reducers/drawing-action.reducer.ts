@@ -1,6 +1,7 @@
 import * as actions from '../actions/drawing-action.action';
 import { createReducer, on, Action } from '@ngrx/store';
-import { DrawingAction } from '../../drawer/actions';
+import { DrawingAction } from '@strat-editor/drawer';
+//import { DrawingAction } from '../../drawer/actions';
 
 export interface DrawingActionState{
   selected: DrawingAction;

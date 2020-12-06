@@ -1,5 +1,6 @@
 import { createAction, props, union } from '@ngrx/store';
-import { DrawingAction } from '../../drawer/actions';
+import { DrawingAction } from '@strat-editor/drawer';
+//import { DrawingAction } from '../../drawer/actions';
 
 export const SelectDrawingAction = createAction(
   '[DrawingAction] Select DrawingAction',

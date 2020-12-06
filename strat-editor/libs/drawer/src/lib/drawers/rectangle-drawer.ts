@@ -4,8 +4,12 @@ import { ObjectDrawer } from './object-drawer';
 
 export class RectangleDrawer implements ObjectDrawer {
 
+
   drawingMode: DrawingMode = DrawingMode.Rectangle;
 
+  constructor(){
+    this.make.bind(this);
+  }
   origX: number;
   origY: number;
 
