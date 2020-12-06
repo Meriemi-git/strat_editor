@@ -25,7 +25,6 @@
   "projects": {
     "frontend": {
       "tags": ["scope:front"]
-
     },
     "backend": {
       "tags": ["scope:back"]
@@ -33,7 +32,7 @@
     "data": {
       "tags": ["scope:shared"]
     },
-    "drawer": {
+    "drawing-editor": {
       "tags": ["scope:front"]
     }
   }

@@ -4,5 +4,7 @@ module.exports = {
     '<rootDir>/apps/backend',
     '<rootDir>/libs/data',
     '<rootDir>/libs/drawer',
+    '<rootDir>/libs/test',
+    '<rootDir>/libs/drawing-editor',
   ],
 };

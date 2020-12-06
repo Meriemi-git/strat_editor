@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Agent, Map } from '@strat-editor/data';
 import { Observable, Subscription } from 'rxjs';
@@ -6,8 +6,7 @@ import * as Actions from '../../../store/actions';
 import * as Selectors from '../../../store/selectors';
 import { StratEditorState } from '../../../store/reducers';
 import { MapPanelComponent } from '../../molecules/map-panel/map-panel.component';
-import { DrawingAction } from '@strat-editor/drawer';
-//import { DrawingAction } from '../../../drawer/actions';
+import { DrawingAction } from '@strat-editor/drawing-editor';
 import { take } from 'rxjs/operators';
 import { KEY_CODE } from '../../../helpers/key_code'
 
@@ -16,7 +15,7 @@ import { KEY_CODE } from '../../../helpers/key_code'
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, AfterViewInit {
   leftIsOpened: boolean;
   rightIsOpened: boolean;
   $agents : Observable<Agent[]>
@@ -39,6 +38,12 @@ export class EditorComponent implements OnInit {
     this.$maps = this.store.select(Selectors.selectAllMaps);
     this.store.dispatch(Actions.FetchAgents());
     this.store.dispatch(Actions.FetchMaps());
+  }
+
+  ngAfterViewInit(): void {
+    this.store.select(Selectors.getSelectedAction).subscribe(selected => {
+      this.mapPanel.setDrawerByName(selected?.name);
+    })
   }
 
   toggleLeftSidenav(){
@@ -66,18 +71,10 @@ export class EditorComponent implements OnInit {
   }
 
   onDrawingActionSelected(action : DrawingAction){
-    this.store.dispatch(Actions.SelectDrawingAction({action}));
+    this.store.dispatch(Actions.PerformDrawingAction({action}));
     this.store.dispatch(Actions.toggleRight());
+    this.mapPanel.setDrawerByName(action.name);
     //this.mapPanel.updatePointerIcon(action.getIconUrl());
-  }
-
-  onCanvasClicked(){
-    this.actionSubscription = this.store.select(Selectors.getSelectedAction).pipe(take(1)).subscribe(selected => {
-      if(selected){
-        this.store.dispatch(Actions.PerformSelectedDrawingAction({action:selected}));
-        this.mapPanel.setDrawer(selected.drawer);
-      }
-    });
   }
 
   @HostListener('window:keyup', ['$event'])

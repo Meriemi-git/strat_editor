@@ -17,7 +17,9 @@
     "baseUrl": ".",
     "paths": {
       "@strat-editor/data": ["libs/data/src/index.ts"],
-      "@strat-editor/drawer": ["libs/drawer/src/index.ts"]
+      "@strat-editor/drawer": ["libs/drawer/src/index.ts"],
+      "@strat-editor/test": ["libs/test/src/index.ts"],
+      "@strat-editor/drawing-editor": ["libs/drawing-editor/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

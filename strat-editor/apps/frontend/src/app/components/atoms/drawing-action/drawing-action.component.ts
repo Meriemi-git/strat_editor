@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { DrawingAction } from '@strat-editor/drawer';
-//import { DrawingAction } from '../../../drawer/actions';
+import { DrawingAction } from '@strat-editor/drawing-editor';
 
 @Component({
   selector: 'strat-editor-drawing-action',

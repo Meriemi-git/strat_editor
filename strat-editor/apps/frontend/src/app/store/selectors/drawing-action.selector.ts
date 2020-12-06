@@ -1,6 +1,6 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { StratEditorState } from '../reducers';
-import { DrawingActionState } from '../reducers/drawing-action.reducer';
+import { DrawingActionState } from '../reducers/drawer.reducer';
 
 const drawingActionFeature = createFeatureSelector<StratEditorState,DrawingActionState>('DrawingActionState');
 export const selectDAState = createSelector(drawingActionFeature,(state: DrawingActionState) => state);

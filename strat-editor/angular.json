@@ -153,34 +153,32 @@
           "options": {
             "lintFilePatterns": ["libs/data/**/*.ts"]
           }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/data/jest.config.js",
-            "passWithNoTests": true
-          }
         }
       }
     },
-    "drawer": {
-      "root": "libs/drawer",
-      "sourceRoot": "libs/drawer/src",
+    "drawing-editor": {
       "projectType": "library",
-      "schematics": {},
+      "root": "libs/drawing-editor",
+      "sourceRoot": "libs/drawing-editor/src",
+      "prefix": "strat-editor",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/drawer/**/*.ts"]
+            "lintFilePatterns": ["libs/drawing-editor/src/**/*.ts"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/drawer/jest.config.js",
+            "jestConfig": "libs/drawing-editor/jest.config.js",
             "passWithNoTests": true
           }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
         }
       }
     }
@@ -205,7 +203,8 @@
       "e2eTestRunner": "cypress"
     },
     "@nrwl/angular:library": {
-      "unitTestRunner": "jest"
+      "unitTestRunner": "jest",
+      "strict": true
     }
   },
   "defaultProject": "frontend"

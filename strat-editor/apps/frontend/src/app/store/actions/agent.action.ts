@@ -15,7 +15,7 @@ export const FetchAgentsError = createAction(
   props<{ error: string }>()
 );
 
-export const actions = union({
+const actions = union({
   FetchAgents,
   FetchAgentsSuccess,
   FetchAgentsError
