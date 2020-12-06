@@ -1,6 +1,6 @@
 import {fabric} from 'fabric';
-import { ObjectDrawer } from './object-drawer';
-import { DrawingMode } from './drawing-mode';
+import { ObjectDrawer } from '../object-drawer';
+import { DrawingMode } from '../drawing-mode';
 
 
 export class LineDrawer implements ObjectDrawer {

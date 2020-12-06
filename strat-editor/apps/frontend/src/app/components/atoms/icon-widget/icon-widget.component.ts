@@ -20,8 +20,6 @@ export class IconWidgetComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    console.log("iconName",this.iconName),
-    console.log("iconUrl",this.iconUrl),
     this.matIconRegistry.addSvgIcon(
       this.iconName,
       this.domSanitizer.bypassSecurityTrustResourceUrl(this.iconUrl))

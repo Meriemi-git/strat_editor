@@ -2,5 +2,7 @@
   <div class="map-selector" *ngIf="!selectedMap">
     <strat-editor-map-grid [maps]="maps" (selectMap)="onMapSelected($event)"></strat-editor-map-grid>
   </div>
+  <div (click)="onCanvasClicked()">
     <canvas #canvas id="canvas"></canvas>
+  </div>
 </div>

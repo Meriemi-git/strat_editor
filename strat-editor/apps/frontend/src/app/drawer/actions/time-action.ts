@@ -1,5 +1,10 @@
+import { LineDrawer } from '../drawers/line-drawer';
 import { DrawingAction } from './drawing-action';
 
 export class TimeAction extends DrawingAction{
-  name = "time"
+  constructor(){
+    super();
+    this.name = "time";
+    this.drawer = new LineDrawer();
+  }
 }

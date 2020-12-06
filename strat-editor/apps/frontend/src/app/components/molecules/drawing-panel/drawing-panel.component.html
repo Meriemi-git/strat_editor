@@ -1,7 +1,7 @@
 <div class="container">
   <h2 class="mat-title">Shapes</h2>
   <div class="icons">
-    <strat-editor-drawing-action *ngFor="let action of shapeActions" [action]="action" (actionClicked)="OnActionClicked($event)"></strat-editor-drawing-action>
+    <strat-editor-drawing-action *ngFor="let action of shapeActions" [action]="action" (actionSelected)="OnActionSelected($event)"></strat-editor-drawing-action>
   </div>
   <hr />
   <h2 class="mat-title">Colors</h2>
@@ -13,13 +13,13 @@
   <hr />
   <h2 class="mat-title">Forms</h2>
   <div class="icons">
-    <strat-editor-drawing-action *ngFor="let action of formActions" [action]="action" (actionClicked)="OnActionClicked($event)"></strat-editor-drawing-action>
+    <strat-editor-drawing-action *ngFor="let action of formActions" [action]="action" (actionSelected)="OnActionSelected($event)"></strat-editor-drawing-action>
   </div>
 
   <hr />
   <h2 class="mat-title">Tools</h2>
   <div class="icons">
-    <strat-editor-drawing-action *ngFor="let action of toolActions" [action]="action" (actionClicked)="OnActionClicked($event)"></strat-editor-drawing-action>
+    <strat-editor-drawing-action *ngFor="let action of toolActions" [action]="action" (actionSelected)="OnActionSelected($event)"></strat-editor-drawing-action>
   </div>
   <hr />
 </div>

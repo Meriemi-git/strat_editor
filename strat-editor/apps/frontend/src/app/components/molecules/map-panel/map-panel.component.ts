@@ -14,6 +14,7 @@ export class MapPanelComponent {
   @Input() maps : Map[]
 
   @Output() selectMap = new EventEmitter<Map>();
+  @Output() canvasClicked = new EventEmitter<void>();
 
   @ViewChild("container") container : ElementRef;
   @ViewChild("canvas") canvas : ElementRef;
@@ -49,7 +50,11 @@ export class MapPanelComponent {
     this.editor.setBackgroundImageFromUrl("api/floor/image/" + this.selectedFloor.image)
   }
 
-  updatePointerIcon(actionName: string) {
-    this.editor.updatePointerIcon(actionName);
+  updatePointerIcon(iconUrl: string) {
+    this.editor.updatePointerIcon(iconUrl);
+  }
+
+  onCanvasClicked(){
+    this.canvasClicked.emit();
   }
 }

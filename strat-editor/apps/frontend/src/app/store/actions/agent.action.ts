@@ -1,4 +1,4 @@
-import { createAction, props } from '@ngrx/store';
+import { createAction, props, union } from '@ngrx/store';
 import { Agent } from '@strat-editor/data';
 
 export const FetchAgents = createAction(
@@ -14,4 +14,13 @@ export const FetchAgentsError = createAction(
   '[Agent] Fetch Agents Error',
   props<{ error: string }>()
 );
+
+export const actions = union({
+  FetchAgents,
+  FetchAgentsSuccess,
+  FetchAgentsError
+});
+
+
+export type AgentActions = typeof actions;
 

@@ -1,4 +1,4 @@
-import { createAction, props } from '@ngrx/store';
+import { createAction, props, union } from '@ngrx/store';
 import { Map } from '@strat-editor/data';
 
 export const FetchMaps = createAction(
@@ -20,3 +20,12 @@ export const SelectMap = createAction(
   props<{ selectedMap: Map }>()
 );
 
+const actions = union({
+  FetchMaps,
+  FetchMapsSuccess,
+  FetchMapsError,
+  SelectMap
+});
+
+
+export type MapActions = typeof actions;

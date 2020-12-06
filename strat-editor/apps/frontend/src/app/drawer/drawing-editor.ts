@@ -1,5 +1,5 @@
 import { fabric } from 'fabric';
-import { LineDrawer } from "./line-drawer";
+import { LineDrawer } from "./drawers/line-drawer";
 import { ObjectDrawer } from "./object-drawer";
 import { DrawingMode } from './drawing-mode';
 import { CursorMode } from './cursor-mode';
@@ -20,6 +20,10 @@ export class DrawingEditor {
 
   private isDown: boolean; //Is user dragging the mouse?
 
+  private cursorSvg : fabric.Image;
+
+  private mouseIsIn : boolean;
+
   constructor(private readonly selector: string, canvasWidth: number, canvasHeight: number) {
       // To start,
       // user is NOT dragging the mouse
@@ -27,7 +31,13 @@ export class DrawingEditor {
       // user is drawing
       this.cursorMode = CursorMode.Draw;
       // Create the Fabric canvas
-      this.canvas = new fabric.Canvas(selector, {selection : false});
+      this.canvas = new fabric.Canvas(selector,
+        {
+          selection : false,
+          // isDrawingMode: true,
+          // freeDrawingCursor: 'none'
+        }
+      );
       this.canvas.setWidth(canvasWidth);
       this.canvas.setHeight(canvasHeight);
 
@@ -52,6 +62,11 @@ export class DrawingEditor {
 
   private initializeCanvasEvents() {
 
+    this.canvas.on('mouse:out', (o) => {
+      const pointer = this.canvas.getPointer(o.e);
+      this.mouseOut(pointer.x, pointer.y);
+    });
+
     this.canvas.on('mouse:down', (o) => {
         const pointer = this.canvas.getPointer(o.e);
         this.mouseDown(pointer.x, pointer.y);
@@ -64,18 +79,23 @@ export class DrawingEditor {
 
     this.canvas.on('mouse:up', () => {
       this.isDown = false;
-   });
+    });
 
-   this.canvas.on('selection:created', (o) => {
-    this.cursorMode = CursorMode.Select;
-    // sets currently selected object
-    this.object = o.target;
-  });
+    this.canvas.on('selection:created', (o) => {
+      this.cursorMode = CursorMode.Select;
+      // sets currently selected object
+      this.object = o.target;
+    });
 
-  this.canvas.on('selection:cleared', () => {
-      this.cursorMode = CursorMode.Draw;
-  });
-}
+    this.canvas.on('selection:cleared', () => {
+        this.cursorMode = CursorMode.Draw;
+    });
+  }
+
+  private async mouseOut(x: number, y: number) {
+    this.canvas.remove(this.cursorSvg);
+    this.mouseIsIn = false;
+  }
 
   private async mouseDown(x: number, y: number): Promise<void> {
     this.isDown = true; //The mouse is being clicked
@@ -95,11 +115,21 @@ export class DrawingEditor {
   }
 
   private mouseMove(x: number, y: number): void {
+    // If there is a custom cursor
+    if(this.cursorSvg){
+      this.cursorSvg.top = x;
+      this.cursorSvg.left = y;
+      if(!this.mouseIsIn){
+        this.canvas.add(this.cursorSvg)
+      }
+    }
+
     if (!(this.cursorMode === CursorMode.Draw && this.isDown)) {
         return;
     }
     this.drawer.resize(this.object, x, y);
     this.canvas.renderAll();
+    this.mouseIsIn = true;
   }
 
   // Method which allows any drawer to Promise their make() function
@@ -141,7 +171,16 @@ export class DrawingEditor {
     this.canvas.setHeight(canvasHeight);
   }
 
-  updatePointerIcon(actionName: string) {
-    // TODO change mouse cursor
+  updatePointerIcon(iconUrl: string) {
+    console.log("updatePointerIcon : ", iconUrl)
+    // this.canvas.freeDrawingCursor = "pointer";
+    // this.canvas.hoverCursor = `url('/${iconUrl}') x y, auto`;
+     // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const that = this;
+    fabric.Image.fromURL(iconUrl, function(image) {
+      image.scaleToWidth(15,false);
+      that.canvas.add(image);
+    }, {crossOrigin: "anonymous"});
+
   }
 }

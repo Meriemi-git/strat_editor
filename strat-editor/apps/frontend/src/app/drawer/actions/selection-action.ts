@@ -1,5 +1,10 @@
+import { LineDrawer } from '../drawers/line-drawer';
 import { DrawingAction } from './drawing-action';
 
 export class SelectionAction extends DrawingAction{
-  name = "selection"
+  constructor(){
+    super();
+    this.name = "selection";
+    this.drawer = new LineDrawer();
+  }
 }

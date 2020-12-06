@@ -11,7 +11,7 @@ import { RectangleAction,DrawingAction, CircleAction, TriangleAction, CurveActio
 })
 export class DrawingPanelComponent {
 
-  @Output() actionCalled = new EventEmitter<string>();
+  @Output() actionSelected = new EventEmitter<DrawingAction>();
   shapeActions : DrawingAction[] = [];
   formActions : DrawingAction[] = [];
   toolActions : DrawingAction[] = [];
@@ -22,12 +22,11 @@ export class DrawingPanelComponent {
 
   constructor(){
     this.shapeActions.push(new LineAction());
+    this.shapeActions.push(new TriangleAction());
     this.shapeActions.push(new RectangleAction());
     this.shapeActions.push(new CircleAction());
-    this.shapeActions.push(new TriangleAction());
     this.shapeActions.push(new ElipseAction());
-    this.shapeActions.push(new TriangleAction());
-    this.shapeActions.push(new RectangleAction());
+    this.shapeActions.push(new CurveAction());
 
     this.formActions.push(new StarAction());
     this.formActions.push(new TimeAction());
@@ -42,8 +41,8 @@ export class DrawingPanelComponent {
 
   }
 
-  OnActionClicked(iconName : string){
-    this.actionCalled.emit(iconName);
+  OnActionSelected(action : DrawingAction){
+    this.actionSelected.emit(action);
   }
 
 }

@@ -10,6 +10,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
+import { environment } from '../environments/environment';
 
 
 @NgModule({
@@ -22,9 +23,10 @@ import { AppRoutingModule } from './app-routing.module';
   AppRoutingModule,
   StoreModule.forRoot(reducers),
   StoreDevtoolsModule.instrument({
-    maxAge: 25, // Retains last 25 states
+    maxAge: 40, // Retains last 25 states
   }),
   EffectsModule.forRoot(effects),
+  StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
 ],
   providers: [],
   bootstrap: [AppComponent],

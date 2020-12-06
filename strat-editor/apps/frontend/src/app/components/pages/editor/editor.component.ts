@@ -1,15 +1,14 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Agent, Map } from '@strat-editor/data';
-import { Observable } from 'rxjs';
-import * as SidenavSelectors from '../../../store/selectors/sidenav.selector';
-import * as SidenavActions from '../../../store/actions/sidenav.action';
-import * as AgentActions from '../../../store/actions/agent.action';
-import * as AgentSelectors from '../../../store/selectors/agent.selector';
-import * as MapActions from '../../../store/actions/map.action';
-import * as MapSelectors from '../../../store/selectors/map.selector';
+import { Observable, Subscription } from 'rxjs';
+import * as Actions from '../../../store/actions';
+import * as Selectors from '../../../store/selectors';
 import { StratEditorState } from '../../../store/reducers';
 import { MapPanelComponent } from '../../molecules/map-panel/map-panel.component';
+import { DrawingAction } from '../../../drawer/actions';
+import { take } from 'rxjs/operators';
+import { KEY_CODE } from '../../../helpers/key_code'
 
 @Component({
   selector: 'strat-editor-editor',
@@ -22,47 +21,78 @@ export class EditorComponent implements OnInit {
   $agents : Observable<Agent[]>
   $maps : Observable<Map[]>
   isMapSelected : boolean;
+  actionSubscription : Subscription;
 
   @ViewChild("mapPanel") mapPanel : MapPanelComponent;
 
   constructor(private store : Store<StratEditorState>,private renderer : Renderer2){}
 
   ngOnInit(): void {
-    this.store.select(SidenavSelectors.isLeftSidenavOpened).subscribe(isOpened => {
+    this.store.select(Selectors.isLeftSidenavOpened).subscribe(isOpened => {
       this.leftIsOpened = isOpened
     })
-    this.store.select(SidenavSelectors.isRightSidenavOpened).subscribe(isOpened => {
+    this.store.select(Selectors.isRightSidenavOpened).subscribe(isOpened => {
       this.rightIsOpened = isOpened
     })
-    this.$agents = this.store.select(AgentSelectors.selectAll);
-    this.$maps = this.store.select(MapSelectors.selectAll);
-    this.store.dispatch(AgentActions.FetchAgents());
-    this.store.dispatch(MapActions.FetchMaps());
+    this.$agents = this.store.select(Selectors.selectAllAgents);
+    this.$maps = this.store.select(Selectors.selectAllMaps);
+    this.store.dispatch(Actions.FetchAgents());
+    this.store.dispatch(Actions.FetchMaps());
   }
 
   toggleLeftSidenav(){
-    this.store.dispatch(SidenavActions.toggleLeft())
+    this.store.dispatch(Actions.toggleLeft())
   }
 
   toggleRightSidenav(){
-    this.store.dispatch(SidenavActions.toggleRight())
+    this.store.dispatch(Actions.toggleRight())
   }
 
   onMapSelected(map : Map){
-    this.store.dispatch(MapActions.SelectMap({selectedMap : map}));
+    this.store.dispatch(Actions.SelectMap({selectedMap : map}));
     this.isMapSelected = true;
   }
 
   onCloseLeftSidenav(){
-    this.store.dispatch(SidenavActions.toggleLeft())
+    this.store.dispatch(Actions.toggleLeft())
   }
 
   onCloseRightSidenav(){
-    this.store.dispatch(SidenavActions.toggleRight())
+    this.store.select(Selectors.isRightSidenavOpened).pipe(take(1)).subscribe(isOpen => {
+      if(isOpen){
+        this.store.dispatch(Actions.toggleRight())
+      }})
   }
 
-  onDrawingActionCalled(actionName : string){
-    console.log("DrawingActionCalled : " + actionName);
-    this.mapPanel.updatePointerIcon(actionName);
+  onDrawingActionSelected(action : DrawingAction){
+    console.log("action selected")
+    this.store.dispatch(Actions.SelectDrawingAction({action}));
+    this.store.dispatch(Actions.toggleRight());
+    //this.mapPanel.updatePointerIcon(action.getIconUrl());
+  }
+
+  onCanvasClicked(){
+    this.actionSubscription = this.store.select(Selectors.getSelectedAction).pipe(take(1)).subscribe(selected => {
+      if(selected){
+        this.store.dispatch(Actions.PerformSelectedDrawingAction({action:selected}));
+      }
+    });
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    console.log(event);
+
+    if (event.key === KEY_CODE.RIGHT_ARROW) {
+      this.store.dispatch(Actions.RedoDrawingAction());
+    }
+
+    if (event.key === KEY_CODE.LEFT_ARROW) {
+      this.store.dispatch(Actions.UndoDrawingAction());
+    }
+
+    if (event.key === KEY_CODE.ESCAPE) {
+      this.store.dispatch(Actions.UnSelectDrawingAction());
+    }
   }
 }

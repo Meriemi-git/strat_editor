@@ -1,5 +1,10 @@
+import { LineDrawer } from '../drawers/line-drawer';
 import { DrawingAction } from './drawing-action';
 
 export class EraserAction extends DrawingAction{
-  name = "eraser"
+  constructor(){
+    super();
+    this.name = "eraser";
+    this.drawer = new LineDrawer();
+  }
 }
