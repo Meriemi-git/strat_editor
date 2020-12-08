@@ -10,47 +10,69 @@ export class ArrowDrawer implements ObjectDrawer {
   private previousX: number;
   drawingMode: DrawingMode = DrawingMode.Line;
 
-  make(x: number, y: number, options: fabric.IObjectOptions, x2?: number, y2?: number): Promise<fabric.Group> {
+  make(x: number, y: number, options: fabric.IObjectOptions, x2?: number, y2?: number): Promise<fabric.Polyline> {
     this.origX = x;
     this.origY = y;
     this.previousY =0;
     this.previousX =0;
       // Return a Promise that will draw a line
-      return new Promise<fabric.Group>(resolve => {
+      return new Promise<fabric.Polyline>(resolve => {
           // Inside the Promise, draw the actual line from (x,y) to (x2,y2)
           resolve(this.createArrow(x,y,options,x2,y2));
       });
   }
 
-  createArrow(x: number, y: number, options: fabric.IObjectOptions, x2?: number, y2?: number): fabric.Group {
+  createArrow(x: number, y: number, options: fabric.IObjectOptions, x2?: number, y2?: number): fabric.Polyline {
 
-    const line = new fabric.Line([x, y, x, y+50], {
-      ...options,
-      originX: 'center',
-      originY: 'center',
-      strokeUniform: true
-    });
-    line.name="line";
-    const triangle = new fabric.Triangle({
-      ...options,
-      left: x,
-      top: y,
-      width: 20,
-      height: 20,
+    var angle = Math.atan2(x -  this.origY, y - this.origX);
+
+    var headlen = 15;  // arrow head size
+
+    // bring the line end back some to account for arrow head.
+    x = x - (headlen) * Math.cos(angle);
+    y = x - (headlen) * Math.sin(angle);
+
+    var points = [
+      {
+        x: this.origX,  // start point
+        y: this.origY
+      }, {
+        x: this.origX - (headlen / 4) * Math.cos(angle - Math.PI / 2),
+        y: this.origY - (headlen / 4) * Math.sin(angle - Math.PI / 2)
+      },{
+        x: x - (headlen / 4) * Math.cos(angle - Math.PI / 2),
+        y: y - (headlen / 4) * Math.sin(angle - Math.PI / 2)
+      }, {
+        x: x - (headlen) * Math.cos(angle - Math.PI / 2),
+        y: y - (headlen) * Math.sin(angle - Math.PI / 2)
+      },{
+        x: x + (headlen) * Math.cos(angle),  // tip
+        y: y + (headlen) * Math.sin(angle)
+      }, {
+        x: x - (headlen) * Math.cos(angle + Math.PI / 2),
+        y: y - (headlen) * Math.sin(angle + Math.PI / 2)
+      }, {
+        x: x - (headlen / 4) * Math.cos(angle + Math.PI / 2),
+        y: y - (headlen / 4) * Math.sin(angle + Math.PI / 2)
+      }, {
+        x: this.origX - (headlen / 4) * Math.cos(angle + Math.PI / 2),
+        y: this.origY - (headlen / 4) * Math.sin(angle + Math.PI / 2)
+      },{
+        x: this.origX,
+        y: this.origY
+      }
+    ];
+
+    var pline = new fabric.Polyline(points, {
       fill: 'white',
-      name:"tri",
-      originX: 'center',
-      originY: 'center',
-      strokeUniform: true
+      stroke: 'black',
+      opacity: 1,
+      strokeWidth: 2,
+      originX: 'left',
+      originY: 'top',
+      selectable: true
     });
-    triangle.name="tri";
-    let arrow = new fabric.Group([line,triangle],{
-      objectCaching: false,
-      hasControls: true,
-      hasBorders: true,
-    });
-    console.log("Arrow",arrow)
-    return arrow;
+    return pline;
   }
 
 
