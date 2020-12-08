@@ -1,8 +1,8 @@
 import { DrawingAction } from './drawing-action';
 
-export class ElipseAction extends DrawingAction{
+export class OvalAction extends DrawingAction{
   constructor(){
     super();
-    this.name = "elipse";
+    this.name = "oval";
   }
 }

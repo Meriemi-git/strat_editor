@@ -1,5 +1,6 @@
 export enum DrawingMode {
   Line,
+  Triangle,
   Rectangle,
   Oval,
   Text,

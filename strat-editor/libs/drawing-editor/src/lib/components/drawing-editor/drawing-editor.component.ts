@@ -2,6 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import {fabric} from 'fabric';
 import { CursorMode } from '../../cursor-mode';
 import { ObjectDrawer, LineDrawer, RectangleDrawer } from '../../drawers';
+import { ArrowDrawer } from '../../drawers/arrow-drawer';
+import { OvalDrawer } from '../../drawers/oval-drawer';
+import { TextDrawer } from '../../drawers/text-drawer';
+import { TriangleDrawer } from '../../drawers/triangle-drawer';
 
 @Component({
   selector: 'strat-editor-drawing-editor',
@@ -50,14 +54,14 @@ export class DrawingEditorComponent implements OnInit {
 
     // Set the default options for the "drawer" class, including stroke color, width, and style
     this.drawerOptions = {
-        stroke: 'black',
-        strokeWidth: 1,
+        name: "line",
+        stroke: 'white',
+        strokeWidth: 10,
         selectable: true,
         strokeUniform: true
     };
 
     this.addAvalaibleDrawers();
-    this.setBackgroundImageFromUrl = this.setBackgroundImageFromUrl.bind(this);
     this.initializeCanvasEvents();
   }
 
@@ -66,7 +70,11 @@ export class DrawingEditorComponent implements OnInit {
   addAvalaibleDrawers() {
     this.avalaibleDrawers = new Map<string,ObjectDrawer>();
     this.avalaibleDrawers.set("line",new LineDrawer())
+    this.avalaibleDrawers.set("arrow",new ArrowDrawer())
+    this.avalaibleDrawers.set("triangle",new TriangleDrawer())
     this.avalaibleDrawers.set("rectangle",new RectangleDrawer())
+    this.avalaibleDrawers.set("oval",new OvalDrawer())
+    this.avalaibleDrawers.set("text",new TextDrawer())
   }
 
   public setDrawerByName(name : string){
@@ -82,7 +90,6 @@ export class DrawingEditorComponent implements OnInit {
     });
 
     this.canvas.on('mouse:down', (o) => {
-      console.log("mouse down in editor");
         const pointer = this.canvas.getPointer(o.e);
         this.mouseDown(pointer.x, pointer.y);
     });
@@ -121,6 +128,10 @@ export class DrawingEditorComponent implements OnInit {
     this.object = await this.make(x, y);
     // Add the object to the canvas
     this.canvas.add(this.object);
+    // var selection = new fabric.ActiveSelection([  this.object], {
+    //   canvas: this.canvas
+    // });
+    // this.canvas.setActiveObject(selection);
     // Renders all objects to the canvas
     this.canvas.renderAll();
   }

@@ -14,11 +14,12 @@ import {
     PictureAction,
     SelectionAction,
     StarAction,
-    ElipseAction,
+    OvalAction,
     TextAction,
     TimeAction,
     LineAction,
-    UngroupAction
+    UngroupAction,
+    ArrowAction
   } from '@strat-editor/drawing-editor';
 
 @Component({
@@ -39,10 +40,11 @@ export class DrawingPanelComponent {
 
   constructor(){
     this.shapeActions.push(new LineAction());
+    this.shapeActions.push(new ArrowAction());
     this.shapeActions.push(new TriangleAction());
     this.shapeActions.push(new RectangleAction());
     this.shapeActions.push(new CircleAction());
-    this.shapeActions.push(new ElipseAction());
+    this.shapeActions.push(new OvalAction());
     this.shapeActions.push(new CurveAction());
 
     this.formActions.push(new StarAction());
