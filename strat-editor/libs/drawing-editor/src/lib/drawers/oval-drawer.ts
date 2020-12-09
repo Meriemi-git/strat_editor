@@ -23,7 +23,7 @@ export class OvalDrawer implements ObjectDrawer {
       });
   }
 
-  resize(object: fabric.Ellipse, x: number, y: number): Promise<fabric.Object> {
+  resize(object: fabric.Ellipse,event : fabric.IEvent, x: number, y: number): Promise<fabric.Object> {
       object.set({
           originX: this.origX > x ? 'right' : 'left',
           originY: this.origY > y ? 'bottom' : 'top',
@@ -34,5 +34,11 @@ export class OvalDrawer implements ObjectDrawer {
       return new Promise<fabric.Object>(resolve => {
           resolve(object);
       });
+  }
+
+  scale = (event: fabric.IEvent) : Promise<fabric.Object> => {
+    return new Promise<fabric.Object>(resolve => {
+      resolve(event.target);
+    });
   }
 }

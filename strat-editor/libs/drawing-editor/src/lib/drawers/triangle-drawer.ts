@@ -1,4 +1,4 @@
-import { fabric } from 'fabric';
+import {fabric} from 'fabric';
 import { ObjectDrawer, DrawingMode } from '.';
 
 export class TriangleDrawer implements ObjectDrawer {
@@ -23,7 +23,7 @@ export class TriangleDrawer implements ObjectDrawer {
       });
   }
 
-  resize(object: fabric.Triangle, x: number, y: number): Promise<fabric.Object> {
+  resize(object: fabric.Triangle,o : fabric.IEvent, x: number, y: number): Promise<fabric.Object> {
       object.set({
           originX: this.origX > x ? 'right' : 'left',
           originY: this.origY > y ? 'bottom' : 'top',
@@ -34,5 +34,12 @@ export class TriangleDrawer implements ObjectDrawer {
       return new Promise<fabric.Object>(resolve => {
           resolve(object);
       });
+  }
+
+
+  scale = (event: fabric.IEvent) : Promise<fabric.Object> => {
+    return new Promise<fabric.Object>(resolve => {
+      resolve(event.target);
+    });
   }
 }

@@ -14,7 +14,7 @@ export class LineDrawer implements ObjectDrawer {
       });
   }
 
-  resize(object: fabric.Line, x: number, y: number): Promise<fabric.Object> {
+  resize(object: fabric.Line,o : fabric.IEvent, x: number, y: number): Promise<fabric.Object> {
       // Change the secondary point (x2, y2) of the object
       // This resizes the object between starting point (x,y)
       // and secondary point (x2,y2), where x2 and y2 have new values.
@@ -27,5 +27,11 @@ export class LineDrawer implements ObjectDrawer {
       return new Promise<fabric.Object>(resolve => {
           resolve(object);
       });
+  }
+
+  scale = (event: fabric.IEvent) : Promise<fabric.Object> => {
+    return new Promise<fabric.Object>(resolve => {
+      resolve(event.target);
+    });
   }
 }
