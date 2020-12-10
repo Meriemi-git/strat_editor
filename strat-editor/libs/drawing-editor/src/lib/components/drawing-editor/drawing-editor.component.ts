@@ -4,9 +4,11 @@ import { CursorMode } from '../../cursor-mode';
 import { ObjectDrawer, LineDrawer, RectangleDrawer } from '../../drawers';
 import { ArrowDrawer } from '../../drawers/arrow-drawer';
 import { OvalDrawer } from '../../drawers/oval-drawer';
+import { SvgDrawer } from '../../drawers/svg-drawer';
 import { TextDrawer } from '../../drawers/text-drawer';
 import { TriangleDrawer } from '../../drawers/triangle-drawer';
 import { LineArrow } from '../../fabricjs/line-arrow';
+import { IconHelperService } from '../../services/icon-helper.service';
 
 @Component({
   selector: 'strat-editor-drawing-editor',
@@ -35,8 +37,9 @@ export class DrawingEditorComponent implements OnInit {
 
   private mouseIsIn: boolean;
 
-  constructor() {
+  constructor(private ihs: IconHelperService) {
     this.setBackgroundImageFromUrl.bind(this);
+    this.addAvalaibleDrawers();
   }
 
   ngOnInit(): void {
@@ -59,7 +62,6 @@ export class DrawingEditorComponent implements OnInit {
       strokeUniform: true,
     };
 
-    this.addAvalaibleDrawers();
     this.initializeCanvasEvents();
   }
 
@@ -71,6 +73,9 @@ export class DrawingEditorComponent implements OnInit {
     this.avalaibleDrawers.set('rectangle', new RectangleDrawer());
     this.avalaibleDrawers.set('oval', new OvalDrawer());
     this.avalaibleDrawers.set('text', new TextDrawer());
+    this.avalaibleDrawers.set('star', new SvgDrawer('star', this.ihs));
+    this.avalaibleDrawers.set('time', new SvgDrawer('time', this.ihs));
+    this.avalaibleDrawers.set('location', new SvgDrawer('location', this.ihs));
   }
 
   public setDrawerByName(name: string) {
@@ -91,7 +96,7 @@ export class DrawingEditorComponent implements OnInit {
 
     this.canvas.on('mouse:move', (event: fabric.IEvent) => {
       const pointer = this.canvas.getPointer(event.e);
-      this.mouseMove(event, pointer.x, pointer.y);
+      this.mouseMove(pointer.x, pointer.y);
     });
 
     this.canvas.on('mouse:up', (event: fabric.IEvent) => {
@@ -139,7 +144,6 @@ export class DrawingEditorComponent implements OnInit {
     }
     // Create an object at the point (x,y)
     this.object = await this.make(x, y);
-    console.log(this.object);
     if (this.object instanceof LineArrow && this.object.triangle) {
       this.canvas.add(this.object.triangle);
     }
@@ -150,11 +154,11 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.renderAll();
   }
 
-  private mouseMove(event: fabric.IEvent, x: number, y: number): void {
+  private mouseMove(x: number, y: number): void {
     if (!(this.cursorMode === CursorMode.Draw && this.isDown)) {
       return;
     }
-    this.drawer.resize(this.object, event, x, y);
+    this.drawer.resize(this.object, x, y);
     this.canvas.renderAll();
     this.mouseIsIn = true;
   }
@@ -208,7 +212,6 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   updatePointerIcon(iconUrl: string) {
-    console.log('updatePointerIcon : ', iconUrl);
     // this.canvas.freeDrawingCursor = "pointer";
     // this.canvas.hoverCursor = `url('/${iconUrl}') x y, auto`;
     // eslint-disable-next-line @typescript-eslint/no-this-alias

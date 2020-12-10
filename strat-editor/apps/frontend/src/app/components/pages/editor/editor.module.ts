@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { EditorRoutingModule } from './editor-routing.module';
 import { EditorComponent } from './editor.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatIconModule } from '@angular/material/icon'
-import { MatButtonModule } from '@angular/material/button'
-import { SidenavLeftContentModule } from "../../molecules/assets-panel/assets-panel.module"
-import { MapEditorModule } from "../../molecules/map-panel/map-panel.module"
-import { DrawingPanelModule } from '../../molecules/drawing-panel/drawing-panel.module'
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { SidenavLeftContentModule } from '../../molecules/assets-panel/assets-panel.module';
+import { MapEditorModule } from '../../molecules/map-panel/map-panel.module';
+import { DrawingPanelModule } from '../../molecules/drawing-panel/drawing-panel.module';
+import { IconHelperService } from '@strat-editor/drawing-editor';
 
 @NgModule({
   declarations: [EditorComponent],
@@ -19,10 +20,9 @@ import { DrawingPanelModule } from '../../molecules/drawing-panel/drawing-panel.
     MatButtonModule,
     MapEditorModule,
     SidenavLeftContentModule,
-    DrawingPanelModule
+    DrawingPanelModule,
   ],
-  exports: [EditorComponent]
+  providers: [IconHelperService],
+  exports: [EditorComponent],
 })
-export class EditorModule {
-
-}
+export class EditorModule {}

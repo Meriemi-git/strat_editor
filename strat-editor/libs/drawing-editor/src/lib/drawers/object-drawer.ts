@@ -1,34 +1,23 @@
-import { fabric } from 'fabric'
+import { fabric } from 'fabric';
 import { DrawingMode } from './drawing-mode';
 
 export class ObjectDrawer {
-
-
   drawingMode: DrawingMode;
   // Makes the current object
-  readonly make :
-  (
+  readonly make: (
     x: number, // Horizontal starting point
     y: number, // Vertical starting point
     options: fabric.IObjectOptions,
     x2?: number, // Horizontal ending point
-    y2?: number
-  ) // Vertical ending point
-  => Promise<fabric.Object>
+    y2?: number // Vertical ending point
+  ) => Promise<fabric.Object>;
 
   // Resizes the object (used during the mouseOver event below)
-  readonly resize :
-  (
+  readonly resize: (
     object: fabric.Object,
-    event : fabric.IEvent,
     x: number,
     y: number
-  )
-  => Promise<fabric.Object>
+  ) => Promise<fabric.Object>;
 
-  readonly scale :
-  (
-    event: fabric.IEvent
-  )
-  => Promise<fabric.Object>;
+  readonly scale: (event: fabric.IEvent) => Promise<fabric.Object>;
 }

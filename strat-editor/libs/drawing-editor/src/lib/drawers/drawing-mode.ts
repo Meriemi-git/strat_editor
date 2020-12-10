@@ -5,5 +5,6 @@ export enum DrawingMode {
   Oval,
   Text,
   Polyline,
-  Path
+  Path,
+  Svg,
 }

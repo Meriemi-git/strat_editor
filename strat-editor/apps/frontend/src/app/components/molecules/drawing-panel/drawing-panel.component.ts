@@ -3,47 +3,45 @@ import { FormControl, AbstractControl } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 
 import {
-    RectangleAction,
-    DrawingAction,
-    CircleAction,
-    TriangleAction,
-    CurveAction,
-    EraserAction,
-    GroupAction,
-    LocationAction,
-    PictureAction,
-    SelectionAction,
-    StarAction,
-    OvalAction,
-    TextAction,
-    TimeAction,
-    LineAction,
-    UngroupAction,
-    ArrowAction
-  } from '@strat-editor/drawing-editor';
+  RectangleAction,
+  DrawingAction,
+  CircleAction,
+  TriangleAction,
+  CurveAction,
+  EraserAction,
+  GroupAction,
+  LocationAction,
+  PictureAction,
+  SelectionAction,
+  StarAction,
+  OvalAction,
+  TextAction,
+  TimeAction,
+  LineAction,
+  UngroupAction,
+  ArrowAction,
+} from '@strat-editor/drawing-editor';
 
 @Component({
   selector: 'strat-editor-drawing-panel',
   templateUrl: './drawing-panel.component.html',
-  styleUrls: ['./drawing-panel.component.scss']
+  styleUrls: ['./drawing-panel.component.scss'],
 })
 export class DrawingPanelComponent {
-
   @Output() actionSelected = new EventEmitter<DrawingAction>();
-  shapeActions : DrawingAction[] = [];
-  formActions : DrawingAction[] = [];
-  toolActions : DrawingAction[] = [];
+  shapeActions: DrawingAction[] = [];
+  formActions: DrawingAction[] = [];
+  toolActions: DrawingAction[] = [];
 
   shapeSelector = new FormControl();
   colorCtr: AbstractControl = new FormControl(null);
   public color: ThemePalette = 'primary';
 
-  constructor(){
+  constructor() {
     this.shapeActions.push(new LineAction());
     this.shapeActions.push(new ArrowAction());
     this.shapeActions.push(new TriangleAction());
     this.shapeActions.push(new RectangleAction());
-    this.shapeActions.push(new CircleAction());
     this.shapeActions.push(new OvalAction());
     this.shapeActions.push(new CurveAction());
 
@@ -57,11 +55,9 @@ export class DrawingPanelComponent {
     this.toolActions.push(new PictureAction());
     this.toolActions.push(new TextAction());
     this.toolActions.push(new SelectionAction());
-
   }
 
-  OnActionSelected(action : DrawingAction){
+  OnActionSelected(action: DrawingAction) {
     this.actionSelected.emit(action);
   }
-
 }

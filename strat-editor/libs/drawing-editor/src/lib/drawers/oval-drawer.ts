@@ -1,5 +1,5 @@
-import {fabric} from 'fabric';
-import { ObjectDrawer, DrawingMode } from ".";
+import { fabric } from 'fabric';
+import { ObjectDrawer, DrawingMode } from '.';
 
 export class OvalDrawer implements ObjectDrawer {
   private origX: number;
@@ -7,38 +7,48 @@ export class OvalDrawer implements ObjectDrawer {
 
   drawingMode: DrawingMode = DrawingMode.Oval;
 
-  make(x: number, y: number, options: fabric.IObjectOptions, rx?: number, ry?: number): Promise<fabric.Object> {
-      this.origX = x;
-      this.origY = y;
+  make(
+    x: number,
+    y: number,
+    options: fabric.IObjectOptions,
+    rx?: number,
+    ry?: number
+  ): Promise<fabric.Object> {
+    this.origX = x;
+    this.origY = y;
 
-      return new Promise<fabric.Object>(resolve => {
-          resolve(new fabric.Ellipse({
-              left: x,
-              top: y,
-              rx: rx,
-              ry: ry,
-              fill: 'transparent',
-              ...options
-          }));
-      });
-  }
-
-  resize(object: fabric.Ellipse,event : fabric.IEvent, x: number, y: number): Promise<fabric.Object> {
-      object.set({
-          originX: this.origX > x ? 'right' : 'left',
-          originY: this.origY > y ? 'bottom' : 'top',
-          rx: Math.abs(x - object.left) / 2,
-          ry: Math.abs(y - object.top) / 2
-      }).setCoords();
-
-      return new Promise<fabric.Object>(resolve => {
-          resolve(object);
-      });
-  }
-
-  scale = (event: fabric.IEvent) : Promise<fabric.Object> => {
-    return new Promise<fabric.Object>(resolve => {
-      resolve(event.target);
+    return new Promise<fabric.Object>((resolve) => {
+      resolve(
+        new fabric.Ellipse({
+          left: x,
+          top: y,
+          rx: rx,
+          ry: ry,
+          fill: 'transparent',
+          ...options,
+        })
+      );
     });
   }
+
+  resize(object: fabric.Ellipse, x: number, y: number): Promise<fabric.Object> {
+    object
+      .set({
+        originX: this.origX > x ? 'right' : 'left',
+        originY: this.origY > y ? 'bottom' : 'top',
+        rx: Math.abs(x - object.left) / 2,
+        ry: Math.abs(y - object.top) / 2,
+      })
+      .setCoords();
+
+    return new Promise<fabric.Object>((resolve) => {
+      resolve(object);
+    });
+  }
+
+  scale = (event: fabric.IEvent): Promise<fabric.Object> => {
+    return new Promise<fabric.Object>((resolve) => {
+      resolve(event.target);
+    });
+  };
 }

@@ -1,3 +1,4 @@
 <button mat-icon-button (click)="onClick()">
-  <mat-icon class="icon" svgIcon="{{iconName}}"></mat-icon>
+  <!-- <mat-icon class="icon" svgIcon="{{iconName}}"></mat-icon> -->
+  <img mat-image src='{{ "api/icon/image/" + iconName }}'  alt="{{iconName}} image" [width]="24" />
 </button>

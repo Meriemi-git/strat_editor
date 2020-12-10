@@ -63,12 +63,7 @@ export class ArrowDrawer implements ObjectDrawer {
     return line;
   }
 
-  resize(
-    arrow: LineArrow,
-    event: fabric.IEvent,
-    x: number,
-    y: number
-  ): Promise<LineArrow> {
+  resize(arrow: LineArrow, x: number, y: number): Promise<LineArrow> {
     const angle = this.calcArrowAngle(this.originX, this.originY, x, y) - 90;
     arrow.triangle.set({
       angle: angle,
