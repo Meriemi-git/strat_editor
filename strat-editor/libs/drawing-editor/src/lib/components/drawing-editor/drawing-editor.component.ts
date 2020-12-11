@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { fabric } from 'fabric';
-import { DrawingAction } from '../../actions';
+import { DrawerAction } from '../../actions';
 import { CursorMode } from '../../cursor-mode';
 import { ObjectDrawer, LineDrawer, RectangleDrawer } from '../../drawers';
 import { ArrowDrawer } from '../../drawers/arrow-drawer';
@@ -9,6 +9,7 @@ import { SvgDrawer } from '../../drawers/svg-drawer';
 import { TextDrawer } from '../../drawers/text-drawer';
 import { TriangleDrawer } from '../../drawers/triangle-drawer';
 import { LineArrow } from '../../fabricjs/line-arrow';
+import { Color } from '../../models/color';
 import { IconHelperService } from '../../services/icon-helper.service';
 
 @Component({
@@ -77,7 +78,11 @@ export class DrawingEditorComponent implements OnInit {
     this.avalaibleDrawers.set('location', new SvgDrawer('location', this.ihs));
   }
 
-  public setDrawerByAction(action: DrawingAction) {
+  setColor(color: Color) {
+    this.drawerOptions.stroke = `#${color.hex}`;
+  }
+
+  public setDrawerByAction(action: DrawerAction) {
     if (action) {
       this.cursorMode = CursorMode.Draw;
       this.drawer = this.avalaibleDrawers.get(action.name);
@@ -88,10 +93,7 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   private initializeCanvasEvents() {
-    this.canvas.on('mouse:out', (o) => {
-      const pointer = this.canvas.getPointer(o.e);
-      this.mouseOut(pointer.x, pointer.y);
-    });
+    this.canvas.on('mouse:out', (o) => {});
 
     this.canvas.on('mouse:down', (o) => {
       const pointer = this.canvas.getPointer(o.e);
@@ -130,11 +132,6 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.on('object:scaling', (event: fabric.IEvent) => {
       this.cursorMode = CursorMode.Select;
     });
-  }
-
-  private async mouseOut(x: number, y: number) {
-    //this.canvas.remove(this.cursorSvg);
-    //this.mouseIsIn = false;
   }
 
   private async mouseDown(x: number, y: number): Promise<void> {

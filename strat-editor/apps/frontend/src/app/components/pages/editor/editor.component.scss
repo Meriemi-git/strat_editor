@@ -1,4 +1,4 @@
-.double-arrow-icon-left{
+.double-arrow-icon-left {
   position: sticky;
   top: 40vh;
   height: 0px;
@@ -7,7 +7,7 @@
   left: 3vw;
   height: 0px;
 }
-.double-arrow-icon-right{
+.double-arrow-icon-right {
   position: fixed;
   top: 40vh;
   height: 0px;
@@ -16,48 +16,54 @@
   top: 50%;
   left: 90vw;
 }
-.container{
+.container {
   height: 100%;
-  width: 100vw!important;
+  width: 100vw !important;
 }
 
-.double-sidenav{
+.double-sidenav {
   height: 94vh;
   margin: 0 auto;
 }
 
-.left-sidenav-content{
+.left-sidenav-content {
   padding: 10px;
   text-align: center;
   width: 25%;
 }
 
-.mat-h2{
-margin: 0;
+.mat-h2 {
+  margin: 0;
 }
 
-.btn-sidenav{
+.btn-sidenav {
   display: block;
-  margin-bottom : 20px;
+  margin-bottom: 20px;
   opacity: 0.85;
   width: 7vw;
   text-align: left;
 }
 
-::ng-deep .mat-drawer-inner-container{
-  overflow-x: hidden!important;
-  overflow-y: scroll!important;
+::ng-deep .mat-drawer-inner-container {
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
   direction: rtl;
   scrollbar-width: thin;
 }
 
-.mat-sidenav{
+.mat-sidenav {
   width: 25%;
   margin: 0 auto;
   text-align: center;
 }
 
-.map-panel{
+.map-panel {
   cursor: grab;
 }
 
+.map-container {
+  width: 100%;
+  height: 100%;
+  display: block;
+  margin: 0 auto;
+}

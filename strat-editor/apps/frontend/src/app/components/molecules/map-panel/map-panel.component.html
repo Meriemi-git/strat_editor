@@ -1,6 +1,0 @@
-<div #container class="map-container">
-  <div class="map-selector" *ngIf="!selectedMap">
-    <strat-editor-map-grid [maps]="maps" (selectMap)="onMapSelected($event)"></strat-editor-map-grid>
-  </div>
-    <strat-editor-drawing-editor #drawerEditor [canvasWidth]="width" [canvasHeight]="height"></strat-editor-drawing-editor>
-</div>

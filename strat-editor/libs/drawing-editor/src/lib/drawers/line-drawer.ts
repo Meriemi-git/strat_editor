@@ -1,10 +1,8 @@
 import { fabric } from 'fabric';
 import { ObjectDrawer } from './object-drawer';
 import { DrawingMode } from './drawing-mode';
-import { DrawingAction } from '../actions';
 
 export class LineDrawer implements ObjectDrawer {
-  action: DrawingAction;
   drawingMode: DrawingMode = DrawingMode.Line;
   make(
     x: number,

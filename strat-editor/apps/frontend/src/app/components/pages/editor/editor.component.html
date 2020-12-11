@@ -15,7 +15,7 @@
     </strat-editor-drawing-panel>
   </mat-sidenav>
   <mat-sidenav-content class="container">
-    <div class="double-arrow-icon-left" *ngIf="isMapSelected">
+    <div class="double-arrow-icon-left" *ngIf="selectedMap">
       <button mat-raised-button color="primary" class="btn-sidenav" (click)="toggleLeftSidenav()">
         <span>Agents</span>
         <mat-icon  [ngStyle]="{'transform': leftIsOpened ? 'rotate(180deg)' : 'rotate(0deg)'}">double_arrow</mat-icon>
@@ -25,7 +25,7 @@
         <mat-icon  [ngStyle]="{'transform': leftIsOpened ? 'rotate(180deg)' : 'rotate(0deg)'}">double_arrow</mat-icon>
       </button>
     </div>
-    <div class="double-arrow-icon-right" *ngIf="isMapSelected">
+    <div class="double-arrow-icon-right" *ngIf="selectedMap">
       <button mat-raised-button color="primary" class="btn-sidenav" (click)="toggleRightSidenav()" >
         <mat-icon [ngStyle]="{'transform': rightIsOpened ? 'rotate(0deg)' : 'rotate(180deg)'}">double_arrow</mat-icon>
         <span>Drawing</span>
@@ -35,6 +35,13 @@
         <span>Colors</span>
       </button>
     </div>
-    <strat-editor-map-panel #mapPanel [maps]="($maps | async)" (selectMap)="onMapSelected($event)"></strat-editor-map-panel>
+
+    <!-- <strat-editor-map-panel #mapPanel [maps]="($maps | async)" (selectMap)="onMapSelected($event)"></strat-editor-map-panel> -->
+    <div #container class="map-container">
+      <div class="map-selector" *ngIf="!selectedMap">
+        <strat-editor-map-grid [maps]="$maps | async" (selectMap)="onMapSelected($event)"></strat-editor-map-grid>
+      </div>
+        <strat-editor-drawing-editor #drawerEditor [canvasWidth]="width" [canvasHeight]="height"></strat-editor-drawing-editor>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

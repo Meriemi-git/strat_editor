@@ -1,8 +1,8 @@
-import { DrawingAction } from './drawing-action';
+import { DrawerAction } from './drawer-action';
 
-export class CurveAction extends DrawingAction{
-  constructor(){
+export class CurveAction extends DrawerAction {
+  constructor() {
     super();
-    this.name = "curve";
+    this.name = 'curve';
   }
 }

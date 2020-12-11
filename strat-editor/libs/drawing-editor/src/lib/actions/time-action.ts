@@ -1,8 +1,8 @@
-import { DrawingAction } from './drawing-action';
+import { DrawerAction } from './drawer-action';
 
-export class TimeAction extends DrawingAction{
-  constructor(){
+export class TimeAction extends DrawerAction {
+  constructor() {
     super();
-    this.name = "time";
+    this.name = 'time';
   }
 }

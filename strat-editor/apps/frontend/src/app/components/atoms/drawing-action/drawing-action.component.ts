@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { DrawingAction } from '@strat-editor/drawing-editor';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { DrawerAction } from '@strat-editor/drawing-editor';
 import { IconHelperService } from '@strat-editor/drawing-editor';
 @Component({
   selector: 'strat-editor-drawing-action',
@@ -7,8 +7,8 @@ import { IconHelperService } from '@strat-editor/drawing-editor';
   styleUrls: ['./drawing-action.component.scss'],
 })
 export class DrawingActionComponent {
-  @Input() action: DrawingAction;
-  @Output() actionSelected = new EventEmitter<DrawingAction>();
+  @Input() action: DrawerAction;
+  @Output() actionSelected = new EventEmitter<DrawerAction>();
   constructor(public ihs: IconHelperService) {}
 
   onIconClicked() {

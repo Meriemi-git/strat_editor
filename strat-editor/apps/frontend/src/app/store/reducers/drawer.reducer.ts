@@ -1,45 +1,57 @@
 import * as actions from '../actions/drawer.action';
 import { createReducer, on, Action } from '@ngrx/store';
-import { DrawingAction } from '@strat-editor/drawing-editor';
+import { Color, DrawerAction } from '@strat-editor/drawing-editor';
 
-export interface DrawingActionState{
-  selected: DrawingAction;
-  history: DrawingAction[];
-  historyIndex : number;
+export interface DrawingActionState {
+  color: Color;
+  selected: DrawerAction;
+  history: DrawerAction[];
+  historyIndex: number;
 }
 
-
 export const initialstate: DrawingActionState = {
-  selected : null,
-  history : [],
-  historyIndex : 0
+  color: new Color(),
+  selected: null,
+  history: [],
+  historyIndex: 0,
 };
 
 const drawingActionReducer = createReducer(
   initialstate,
-  on(actions.PerformDrawingAction,(state, { action }) => ({
+  on(actions.PerformDrawerAction, (state, { action }) => ({
     ...state,
-    selected : action,
-    historyIndex : state.historyIndex + 1,
-    history: [...state.history.slice(0,state.historyIndex),action]
+    selected: action,
+    historyIndex: state.historyIndex + 1,
+    history: [...state.history.slice(0, state.historyIndex), action],
   })),
-  on(actions.UndoDrawingAction, (state) => ({
+  on(actions.UndoDrawerAction, (state) => ({
     ...state,
-    selected : null
+    selected: null,
   })),
-  on(actions.UndoDrawingAction, (state) => ({
+  on(actions.UndoDrawerAction, (state) => ({
     ...state,
-    historyIndex : state.historyIndex >= 0 ? state.historyIndex - 1 : state.historyIndex,
-    selected : state.historyIndex >= 0 && state.history.length >= 0 ? state.history[state.historyIndex -1] : null,
+    historyIndex:
+      state.historyIndex >= 0 ? state.historyIndex - 1 : state.historyIndex,
+    selected:
+      state.historyIndex >= 0 && state.history.length >= 0
+        ? state.history[state.historyIndex - 1]
+        : null,
   })),
-  on(actions.RedoDrawingAction, (state) => ({
+  on(actions.RedoDrawerAction, (state) => ({
     ...state,
-    historyIndex : state.history.length > state.historyIndex ? state.historyIndex + 1 : state.historyIndex,
-    selected : state.history.length >= 0 ? state.history[state.historyIndex + 1] : null
+    historyIndex:
+      state.history.length > state.historyIndex
+        ? state.historyIndex + 1
+        : state.historyIndex,
+    selected:
+      state.history.length >= 0 ? state.history[state.historyIndex + 1] : null,
   })),
-)
+  on(actions.SetColorAction, (state, { color }) => ({
+    ...state,
+    color: color,
+  }))
+);
 
 export function reducer(state: DrawingActionState | undefined, action: Action) {
   return drawingActionReducer(state, action);
 }
-

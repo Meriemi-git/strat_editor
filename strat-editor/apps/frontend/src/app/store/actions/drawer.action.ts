@@ -1,29 +1,33 @@
 import { createAction, props, union } from '@ngrx/store';
-import { DrawingAction } from '@strat-editor/drawing-editor';
+import { Color, DrawerAction } from '@strat-editor/drawing-editor';
 
-export const UnSelectDrawingAction = createAction(
-  '[DrawingAction] Unselect DrawingAction',
+export const UnSelectDrawerAction = createAction(
+  '[DrawerAction] Unselect DrawerAction'
 );
 
-export const PerformDrawingAction = createAction(
-  '[DrawingAction] Perform DrawingAction',
-  props<{ action: DrawingAction }>()
+export const PerformDrawerAction = createAction(
+  '[DrawerAction] Perform DrawerAction',
+  props<{ action: DrawerAction }>()
 );
 
-export const UndoDrawingAction = createAction(
-  '[DrawingAction] Undo DrawingAction',
+export const UndoDrawerAction = createAction(
+  '[DrawerAction] Undo DrawerAction'
 );
 
-export const RedoDrawingAction = createAction(
-  '[DrawingAction] Redo DrawingAction'
+export const RedoDrawerAction = createAction(
+  '[DrawerAction] Redo DrawerAction'
+);
+
+export const SetColorAction = createAction(
+  '[DrawerAction] Select ColorAction',
+  props<{ color: Color }>()
 );
 
 const actions = union({
-  PerformDrawingAction,
-  UndoDrawingAction,
-  RedoDrawingAction
+  PerformDrawerAction,
+  UndoDrawerAction,
+  RedoDrawerAction,
+  SetColorAction,
 });
 
-
-export type DrawingActions = typeof actions;
-
+export type DrawerActions = typeof actions;

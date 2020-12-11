@@ -4,7 +4,7 @@ import { ThemePalette } from '@angular/material/core';
 
 import {
   RectangleAction,
-  DrawingAction,
+  DrawerAction,
   TriangleAction,
   CurveAction,
   EraserAction,
@@ -28,12 +28,12 @@ import {
   styleUrls: ['./drawing-panel.component.scss'],
 })
 export class DrawingPanelComponent implements OnInit {
-  @Output() actionSelected = new EventEmitter<DrawingAction>();
+  @Output() actionSelected = new EventEmitter<DrawerAction>();
   @Output() colorSelected = new EventEmitter<Color>();
-  shapeActions: DrawingAction[] = [];
-  formActions: DrawingAction[] = [];
-  textActions: DrawingAction[] = [];
-  toolActions: DrawingAction[] = [];
+  shapeActions: DrawerAction[] = [];
+  formActions: DrawerAction[] = [];
+  textActions: DrawerAction[] = [];
+  toolActions: DrawerAction[] = [];
 
   colorCtr: AbstractControl = new FormControl(null);
   public color: ThemePalette = 'primary';
@@ -66,7 +66,7 @@ export class DrawingPanelComponent implements OnInit {
     this.colorSelected.emit(color);
   }
 
-  OnActionSelected(action: DrawingAction) {
+  onActionSelected(action: DrawerAction) {
     this.actionSelected.emit(action);
   }
 }

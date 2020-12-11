@@ -1,20 +1,25 @@
 import {
   AfterViewInit,
   Component,
+  ElementRef,
   HostListener,
   OnInit,
   ViewChild,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Agent, Map } from '@strat-editor/data';
-import { Observable, Subscription } from 'rxjs';
+import { Agent, Floor, Map } from '@strat-editor/data';
+import { Observable } from 'rxjs';
 import * as Actions from '../../../store/actions';
 import * as Selectors from '../../../store/selectors';
 import { StratEditorState } from '../../../store/reducers';
-import { MapPanelComponent } from '../../molecules/map-panel/map-panel.component';
-import { Color, DrawingAction } from '@strat-editor/drawing-editor';
+import {
+  Color,
+  DrawerAction,
+  DrawingEditorComponent,
+} from '@strat-editor/drawing-editor';
 import { take } from 'rxjs/operators';
 import { KEY_CODE } from '../../../helpers/key_code';
+import { environment } from 'apps/frontend/src/environments/environment';
 
 @Component({
   selector: 'strat-editor-editor',
@@ -24,12 +29,19 @@ import { KEY_CODE } from '../../../helpers/key_code';
 export class EditorComponent implements OnInit, AfterViewInit {
   leftIsOpened: boolean;
   rightIsOpened: boolean;
+
   $agents: Observable<Agent[]>;
   $maps: Observable<Map[]>;
-  isMapSelected: boolean;
-  actionSubscription: Subscription;
 
-  @ViewChild('mapPanel') mapPanel: MapPanelComponent;
+  selectedMap: Map;
+  selectedFloor: Floor;
+
+  width: number;
+  height: number;
+
+  // @ViewChild('mapPanel') mapPanel: MapPanelComponent;
+  @ViewChild('container') container: ElementRef;
+  @ViewChild('drawerEditor') drawerEditor: DrawingEditorComponent;
 
   constructor(private store: Store<StratEditorState>) {}
 
@@ -48,21 +60,18 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.store.select(Selectors.getSelectedAction).subscribe((selected) => {
-      this.mapPanel.setDrawerByAction(selected);
+      this.drawerEditor.setDrawerByAction(selected);
+    });
+    this.store.select(Selectors.getColor).subscribe((color) => {
+      this.drawerEditor.setColor(color);
     });
   }
 
-  toggleLeftSidenav() {
-    this.store.dispatch(Actions.toggleLeft());
-  }
-
-  toggleRightSidenav() {
-    this.store.dispatch(Actions.toggleRight());
-  }
-
   onMapSelected(map: Map) {
+    this.selectedMap = map;
+    this.selectedFloor = map.floors[1];
     this.store.dispatch(Actions.SelectMap({ selectedMap: map }));
-    this.isMapSelected = true;
+    this.displayCanvas();
   }
 
   onCloseLeftSidenav() {
@@ -80,29 +89,58 @@ export class EditorComponent implements OnInit, AfterViewInit {
       });
   }
 
-  onDrawingActionSelected(action: DrawingAction) {
-    this.store.dispatch(Actions.PerformDrawingAction({ action }));
+  onDrawingActionSelected(action: DrawerAction) {
+    this.store.dispatch(Actions.PerformDrawerAction({ action }));
     this.store.dispatch(Actions.toggleRight());
-    this.mapPanel.setDrawerByAction(action);
-    //this.mapPanel.updatePointerIcon(action.getIconUrl());
+    this.drawerEditor.setDrawerByAction(action);
+    this.drawerEditor.updatePointerIcon(action.getIconUrl());
   }
 
-  onColorSelected(color: Color) {}
+  onColorSelected(color: Color) {
+    this.store.dispatch(Actions.SetColorAction({ color }));
+  }
+
+  displayCanvas() {
+    this.width = (window.innerWidth * 98) / 100;
+    this.height = this.container.nativeElement.clientHeight;
+    this.drawerEditor.resize(this.width, this.height);
+    this.drawerEditor.setBackgroundImageFromUrl(
+      environment.floorImageApiUrl + this.selectedFloor.image
+    );
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event?) {
+    this.width = window.innerWidth;
+    this.height = this.container.nativeElement.clientHeight;
+    this.drawerEditor.resize(this.width, this.height);
+    this.drawerEditor.setBackgroundImageFromUrl(
+      environment.floorImageApiUrl + this.selectedFloor.image
+    );
+  }
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     console.log(event);
 
     if (event.key === KEY_CODE.RIGHT_ARROW) {
-      this.store.dispatch(Actions.RedoDrawingAction());
+      this.store.dispatch(Actions.RedoDrawerAction());
     }
 
     if (event.key === KEY_CODE.LEFT_ARROW) {
-      this.store.dispatch(Actions.UndoDrawingAction());
+      this.store.dispatch(Actions.UndoDrawerAction());
     }
 
     if (event.key === KEY_CODE.ESCAPE) {
-      this.store.dispatch(Actions.UnSelectDrawingAction());
+      this.store.dispatch(Actions.UnSelectDrawerAction());
     }
+  }
+
+  toggleLeftSidenav() {
+    this.store.dispatch(Actions.toggleLeft());
+  }
+
+  toggleRightSidenav() {
+    this.store.dispatch(Actions.toggleRight());
   }
 }

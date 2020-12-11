@@ -1,6 +1,6 @@
-import { DrawingAction } from './drawing-action';
+import { DrawerAction } from './drawer-action';
 
-export class TextAction extends DrawingAction {
+export class TextAction extends DrawerAction {
   stroke: string;
   strokeWidth: number;
   color: string;
