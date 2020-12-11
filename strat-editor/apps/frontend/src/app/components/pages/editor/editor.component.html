@@ -9,7 +9,10 @@
   [(opened)]="rightIsOpened"
   position="end"
   (closedStart)="onCloseRightSidenav()">
-    <strat-editor-drawing-panel (actionSelected)="onDrawingActionSelected($event)"></strat-editor-drawing-panel>
+    <strat-editor-drawing-panel
+    (actionSelected)="onDrawingActionSelected($event)"
+    (colorSelected)="onColorSelected($event)">
+    </strat-editor-drawing-panel>
   </mat-sidenav>
   <mat-sidenav-content class="container">
     <div class="double-arrow-icon-left" *ngIf="isMapSelected">

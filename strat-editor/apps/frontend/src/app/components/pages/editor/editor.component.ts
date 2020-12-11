@@ -3,7 +3,6 @@ import {
   Component,
   HostListener,
   OnInit,
-  Renderer2,
   ViewChild,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -13,7 +12,7 @@ import * as Actions from '../../../store/actions';
 import * as Selectors from '../../../store/selectors';
 import { StratEditorState } from '../../../store/reducers';
 import { MapPanelComponent } from '../../molecules/map-panel/map-panel.component';
-import { DrawingAction } from '@strat-editor/drawing-editor';
+import { Color, DrawingAction } from '@strat-editor/drawing-editor';
 import { take } from 'rxjs/operators';
 import { KEY_CODE } from '../../../helpers/key_code';
 
@@ -32,10 +31,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   @ViewChild('mapPanel') mapPanel: MapPanelComponent;
 
-  constructor(
-    private store: Store<StratEditorState>,
-    private renderer: Renderer2
-  ) {}
+  constructor(private store: Store<StratEditorState>) {}
 
   ngOnInit(): void {
     this.store.select(Selectors.isLeftSidenavOpened).subscribe((isOpened) => {
@@ -90,6 +86,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.mapPanel.setDrawerByAction(action);
     //this.mapPanel.updatePointerIcon(action.getIconUrl());
   }
+
+  onColorSelected(color: Color) {}
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {

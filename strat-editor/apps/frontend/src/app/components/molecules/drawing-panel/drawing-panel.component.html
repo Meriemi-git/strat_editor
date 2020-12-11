@@ -6,7 +6,7 @@
   <hr />
   <h2 class="mat-title">Colors</h2>
   <mat-form-field>
-    <input matInput [ngxMatColorPicker]="picker" [formControl]="colorCtr">
+    <input matInput [ngxMatColorPicker]="picker" [formControl]="colorCtr" (ngModelChange)="onSelectColor($event)">
     <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
     <ngx-mat-color-picker #picker [color]="color"></ngx-mat-color-picker>
   </mat-form-field>

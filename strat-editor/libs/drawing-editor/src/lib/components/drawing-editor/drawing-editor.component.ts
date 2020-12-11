@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { fabric } from 'fabric';
 import { DrawingAction } from '../../actions';
 import { CursorMode } from '../../cursor-mode';
@@ -19,7 +19,7 @@ import { IconHelperService } from '../../services/icon-helper.service';
 export class DrawingEditorComponent implements OnInit {
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
-
+  @Output() objectDrawn = new EventEmitter<fabric.Object>();
   private cursorMode: CursorMode;
 
   private canvas: fabric.Canvas;
@@ -105,6 +105,7 @@ export class DrawingEditorComponent implements OnInit {
 
     this.canvas.on('mouse:up', (event: fabric.IEvent) => {
       this.isDown = false;
+      this.objectDrawn.emit(this.object);
     });
 
     this.canvas.on('selection:created', (o) => {
@@ -128,15 +129,6 @@ export class DrawingEditorComponent implements OnInit {
 
     this.canvas.on('object:scaling', (event: fabric.IEvent) => {
       this.cursorMode = CursorMode.Select;
-    });
-
-    this.canvas.on('text:editing:entered', (textObject) => {
-      console.log('Editing');
-      // calculate canvas offset and textObject offset and scroll to this position
-    });
-    this.canvas.on('text:editing:exited', (textObject) => {
-      console.log('Editing');
-      // calculate canvas offset and textObject offset and scroll to this position
     });
   }
 

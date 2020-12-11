@@ -3,3 +3,4 @@ export { DrawingEditorComponent } from './lib/components/drawing-editor/drawing-
 export { IconHelperService } from './lib/services/icon-helper.service';
 export * from './lib/actions';
 export * from './lib/drawers';
+export { Color } from './lib/models/color';

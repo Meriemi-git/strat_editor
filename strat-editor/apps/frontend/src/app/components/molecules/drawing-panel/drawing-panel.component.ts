@@ -1,11 +1,10 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, AbstractControl } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 
 import {
   RectangleAction,
   DrawingAction,
-  CircleAction,
   TriangleAction,
   CurveAction,
   EraserAction,
@@ -20,6 +19,7 @@ import {
   LineAction,
   UngroupAction,
   ArrowAction,
+  Color,
 } from '@strat-editor/drawing-editor';
 
 @Component({
@@ -27,14 +27,14 @@ import {
   templateUrl: './drawing-panel.component.html',
   styleUrls: ['./drawing-panel.component.scss'],
 })
-export class DrawingPanelComponent {
+export class DrawingPanelComponent implements OnInit {
   @Output() actionSelected = new EventEmitter<DrawingAction>();
+  @Output() colorSelected = new EventEmitter<Color>();
   shapeActions: DrawingAction[] = [];
   formActions: DrawingAction[] = [];
   textActions: DrawingAction[] = [];
   toolActions: DrawingAction[] = [];
 
-  shapeSelector = new FormControl();
   colorCtr: AbstractControl = new FormControl(null);
   public color: ThemePalette = 'primary';
 
@@ -57,6 +57,13 @@ export class DrawingPanelComponent {
     this.toolActions.push(new GroupAction());
     this.toolActions.push(new PictureAction());
     this.toolActions.push(new SelectionAction());
+  }
+  ngOnInit(): void {}
+
+  onSelectColor(event: any) {
+    let color = new Color();
+    Object.assign(color, event);
+    this.colorSelected.emit(color);
   }
 
   OnActionSelected(action: DrawingAction) {
