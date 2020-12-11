@@ -42,12 +42,6 @@ export class SvgDrawer implements ObjectDrawer {
     });
   }
 
-  scale = (event: fabric.IEvent): Promise<fabric.Object> => {
-    return new Promise<fabric.Object>((resolve) => {
-      resolve(event.target);
-    });
-  };
-
   getDistance(x1, y1, x2, y2): number {
     var dx = x1 - x2;
     var dy = y1 - y2;

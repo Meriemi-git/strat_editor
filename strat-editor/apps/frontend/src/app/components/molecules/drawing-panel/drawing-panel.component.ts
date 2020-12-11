@@ -31,6 +31,7 @@ export class DrawingPanelComponent {
   @Output() actionSelected = new EventEmitter<DrawingAction>();
   shapeActions: DrawingAction[] = [];
   formActions: DrawingAction[] = [];
+  textActions: DrawingAction[] = [];
   toolActions: DrawingAction[] = [];
 
   shapeSelector = new FormControl();
@@ -49,11 +50,12 @@ export class DrawingPanelComponent {
     this.formActions.push(new TimeAction());
     this.formActions.push(new LocationAction());
 
+    this.textActions.push(new TextAction());
+
     this.toolActions.push(new UngroupAction());
     this.toolActions.push(new EraserAction());
     this.toolActions.push(new GroupAction());
     this.toolActions.push(new PictureAction());
-    this.toolActions.push(new TextAction());
     this.toolActions.push(new SelectionAction());
   }
 

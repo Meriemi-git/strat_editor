@@ -8,19 +8,20 @@ export class TextDrawer implements ObjectDrawer {
     x: number,
     y: number,
     options: fabric.IObjectOptions
-  ): Promise<fabric.Object> {
-    return new Promise<fabric.Object>((resolve) => {
+  ): Promise<fabric.Textbox> {
+    return new Promise<fabric.Textbox>((resolve) => {
       resolve(
-        new fabric.Text('Test', {
+        new fabric.Textbox('Test', {
           left: x,
           top: y,
+          editable: true,
           ...options,
         })
       );
     });
   }
 
-  resize(object: fabric.Text, x: number, y: number): Promise<fabric.Object> {
+  resize(object: fabric.Textbox, x: number, y: number): Promise<fabric.Object> {
     object
       .set({
         left: x,
@@ -28,14 +29,8 @@ export class TextDrawer implements ObjectDrawer {
       })
       .setCoords();
 
-    return new Promise<fabric.Object>((resolve) => {
+    return new Promise<fabric.Textbox>((resolve) => {
       resolve(object);
     });
   }
-
-  scale = (event: fabric.IEvent): Promise<fabric.Object> => {
-    return new Promise<fabric.Object>((resolve) => {
-      resolve(event.target);
-    });
-  };
 }

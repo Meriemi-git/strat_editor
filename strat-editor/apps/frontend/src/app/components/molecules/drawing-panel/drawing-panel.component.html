@@ -17,6 +17,11 @@
   </div>
 
   <hr />
+  <h2 class="mat-title">Text</h2>
+  <div class="icons">
+    <strat-editor-drawing-action *ngFor="let action of textActions" [action]="action" (actionSelected)="OnActionSelected($event)"></strat-editor-drawing-action>
+  </div>
+  <hr />
   <h2 class="mat-title">Tools</h2>
   <div class="icons">
     <strat-editor-drawing-action *ngFor="let action of toolActions" [action]="action" (actionSelected)="OnActionSelected($event)"></strat-editor-drawing-action>

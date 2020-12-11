@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
+import { DrawingAction } from '../../actions';
 import { CursorMode } from '../../cursor-mode';
 import { ObjectDrawer, LineDrawer, RectangleDrawer } from '../../drawers';
 import { ArrowDrawer } from '../../drawers/arrow-drawer';
@@ -47,9 +48,7 @@ export class DrawingEditorComponent implements OnInit {
     // user is drawing
     this.cursorMode = CursorMode.Undefined;
     // Create the Fabric canvas
-    this.canvas = new fabric.Canvas('canvas', {
-      selection: false,
-    });
+    this.canvas = new fabric.Canvas('canvas', {});
     this.canvas.setWidth(this.canvasWidth);
     this.canvas.setHeight(this.canvasHeight);
 
@@ -78,9 +77,14 @@ export class DrawingEditorComponent implements OnInit {
     this.avalaibleDrawers.set('location', new SvgDrawer('location', this.ihs));
   }
 
-  public setDrawerByName(name: string) {
-    this.cursorMode = CursorMode.Draw;
-    this.drawer = this.avalaibleDrawers.get(name);
+  public setDrawerByAction(action: DrawingAction) {
+    if (action) {
+      this.cursorMode = CursorMode.Draw;
+      this.drawer = this.avalaibleDrawers.get(action.name);
+      Object.assign(this.drawerOptions, action);
+      console.log('drawerOptions', this.drawerOptions);
+    }
+    // TODO pass drawing
   }
 
   private initializeCanvasEvents() {
@@ -115,6 +119,7 @@ export class DrawingEditorComponent implements OnInit {
         );
         this.canvas.setActiveObject(selection);
       }
+      this.canvas.setActiveObject(this.object);
     });
 
     this.canvas.on('selection:cleared', () => {
@@ -123,12 +128,16 @@ export class DrawingEditorComponent implements OnInit {
 
     this.canvas.on('object:scaling', (event: fabric.IEvent) => {
       this.cursorMode = CursorMode.Select;
-      this.scale(event);
     });
-  }
 
-  scale(event: fabric.IEvent) {
-    this.drawer.scale(event);
+    this.canvas.on('text:editing:entered', (textObject) => {
+      console.log('Editing');
+      // calculate canvas offset and textObject offset and scroll to this position
+    });
+    this.canvas.on('text:editing:exited', (textObject) => {
+      console.log('Editing');
+      // calculate canvas offset and textObject offset and scroll to this position
+    });
   }
 
   private async mouseOut(x: number, y: number) {

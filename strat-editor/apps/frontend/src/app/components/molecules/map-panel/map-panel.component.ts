@@ -8,7 +8,10 @@ import {
 import { Component } from '@angular/core';
 import { Map, Floor } from '@strat-editor/data';
 import { HostListener } from '@angular/core';
-import { DrawingEditorComponent } from '@strat-editor/drawing-editor';
+import {
+  DrawingAction,
+  DrawingEditorComponent,
+} from '@strat-editor/drawing-editor';
 import { environment } from 'apps/frontend/src/environments/environment';
 
 @Component({
@@ -59,7 +62,7 @@ export class MapPanelComponent {
     this.drawerEditor.updatePointerIcon(iconUrl);
   }
 
-  setDrawerByName(name: string) {
-    this.drawerEditor.setDrawerByName(name);
+  setDrawerByAction(action: DrawingAction) {
+    this.drawerEditor.setDrawerByAction(action);
   }
 }

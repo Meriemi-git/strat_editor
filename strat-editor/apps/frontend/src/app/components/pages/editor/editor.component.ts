@@ -52,7 +52,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.store.select(Selectors.getSelectedAction).subscribe((selected) => {
-      this.mapPanel.setDrawerByName(selected?.name);
+      this.mapPanel.setDrawerByAction(selected);
     });
   }
 
@@ -87,7 +87,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   onDrawingActionSelected(action: DrawingAction) {
     this.store.dispatch(Actions.PerformDrawingAction({ action }));
     this.store.dispatch(Actions.toggleRight());
-    this.mapPanel.setDrawerByName(action.name);
+    this.mapPanel.setDrawerByAction(action);
     //this.mapPanel.updatePointerIcon(action.getIconUrl());
   }
 

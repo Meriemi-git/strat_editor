@@ -49,10 +49,4 @@ export class RectangleDrawer extends ObjectDrawer {
       resolve(object);
     });
   };
-
-  scale = (event: fabric.IEvent): Promise<fabric.Object> => {
-    return new Promise<fabric.Object>((resolve) => {
-      resolve(event.target);
-    });
-  };
 }

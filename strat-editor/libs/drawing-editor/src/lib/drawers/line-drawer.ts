@@ -36,10 +36,4 @@ export class LineDrawer implements ObjectDrawer {
       resolve(object);
     });
   }
-
-  scale = (event: fabric.IEvent): Promise<fabric.Object> => {
-    return new Promise<fabric.Object>((resolve) => {
-      resolve(event.target);
-    });
-  };
 }

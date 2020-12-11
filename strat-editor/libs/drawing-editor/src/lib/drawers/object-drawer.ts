@@ -18,6 +18,4 @@ export class ObjectDrawer {
     x: number,
     y: number
   ) => Promise<fabric.Object>;
-
-  readonly scale: (event: fabric.IEvent) => Promise<fabric.Object>;
 }

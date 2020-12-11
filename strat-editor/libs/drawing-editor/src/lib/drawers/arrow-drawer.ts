@@ -6,7 +6,6 @@ import { LineArrow } from '../fabricjs/line-arrow';
 export class ArrowDrawer implements ObjectDrawer {
   private originX: number;
   private originY: number;
-  private lineLength = 50;
 
   drawingMode: DrawingMode = DrawingMode.Line;
 
