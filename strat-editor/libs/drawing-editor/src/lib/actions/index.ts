@@ -1,6 +1,6 @@
 export * from './arrow-action';
 export * from './circle-action';
-export * from './curve-action';
+export * from './polyline-action';
 export * from './drawer-action';
 export * from './oval-action';
 export * from './eraser-action';

@@ -1,30 +1,52 @@
 <div class="container">
   <h2 class="mat-title">Shapes</h2>
   <div class="icons">
-    <strat-editor-drawing-action *ngFor="let action of shapeActions" [action]="action" (actionSelected)="onActionSelected($event)"></strat-editor-drawing-action>
+    <strat-editor-drawing-action
+      *ngFor="let action of shapeActions"
+      [action]="action"
+      (actionSelected)="onActionSelected($event)"
+    ></strat-editor-drawing-action>
   </div>
   <hr />
   <h2 class="mat-title">Colors</h2>
   <mat-form-field>
-    <input matInput [ngxMatColorPicker]="picker" [formControl]="colorCtr" (ngModelChange)="onSelectColor($event)">
+    <input
+      matInput
+      [ngxMatColorPicker]="picker"
+      [formControl]="colorCtr"
+      (ngModelChange)="onSelectColor($event)"
+      [value]="getNgxColor()"
+    />
     <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
-    <ngx-mat-color-picker #picker [color]="color"></ngx-mat-color-picker>
+    <ngx-mat-color-picker #picker></ngx-mat-color-picker>
   </mat-form-field>
   <hr />
   <h2 class="mat-title">Forms</h2>
   <div class="icons">
-    <strat-editor-drawing-action *ngFor="let action of formActions" [action]="action" (actionSelected)="onActionSelected($event)"></strat-editor-drawing-action>
+    <strat-editor-drawing-action
+      *ngFor="let action of formActions"
+      [action]="action"
+      (actionSelected)="onActionSelected($event)"
+    ></strat-editor-drawing-action>
   </div>
 
   <hr />
   <h2 class="mat-title">Text</h2>
   <div class="icons">
-    <strat-editor-drawing-action *ngFor="let action of textActions" [action]="action" (actionSelected)="onActionSelected($event)"></strat-editor-drawing-action>
+    <strat-editor-drawing-action
+      *ngFor="let action of textActions"
+      [action]="action"
+      (actionSelected)="onActionSelected($event)"
+    ></strat-editor-drawing-action>
   </div>
   <hr />
   <h2 class="mat-title">Tools</h2>
   <div class="icons">
-    <strat-editor-drawing-action *ngFor="let action of toolActions" [action]="action" (actionSelected)="onActionSelected($event)"></strat-editor-drawing-action>
+    <strat-editor-drawing-action
+      *ngFor="let action of toolActions"
+      [action]="action"
+      (actionSelected)="onActionSelected($event)"
+    ></strat-editor-drawing-action>
   </div>
   <hr />
 </div>

@@ -2,6 +2,7 @@ import { fabric } from 'fabric';
 import { ObjectDrawer } from './object-drawer';
 import { DrawingMode } from './drawing-mode';
 import { LineArrow } from '../fabricjs/line-arrow';
+import { TriangleArrow } from '../fabricjs/triangle-arrow';
 
 export class ArrowDrawer implements ObjectDrawer {
   private originX: number;
@@ -36,21 +37,20 @@ export class ArrowDrawer implements ObjectDrawer {
     x2?: number,
     y2?: number
   ): LineArrow {
-    const triangle = new fabric.Triangle({
+    const triangle = new TriangleArrow({
       ...options,
       left: x,
       top: y,
       width: 20,
       height: 20,
-      fill: 'blue',
-      name: 'tri',
+      fill: options.stroke,
       originX: 'center',
       originY: 'center',
       strokeUniform: false,
       hasControls: false,
       hasBorders: false,
     });
-    const line = new LineArrow([x, y, x2, y2], {
+    const line = new LineArrow([x, y, x2, y + 50], {
       ...options,
       originX: 'center',
       originY: 'center',
@@ -58,6 +58,7 @@ export class ArrowDrawer implements ObjectDrawer {
       centeredRotation: false,
       centeredScaling: false,
     });
+    triangle.line = line;
     line.triangle = triangle;
     return line;
   }

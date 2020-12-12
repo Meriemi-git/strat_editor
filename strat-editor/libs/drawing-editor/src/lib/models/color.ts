@@ -1,11 +1,12 @@
 export class Color {
-  r: number = 0;
-  g: number = 0;
-  b: number = 0;
-  a: number = 1;
-  roundA: number;
-  hex: string = '000000';
-  rgba = (): string => {
-    return `rgba(${this.r},${this.g},${this.b},${this.a})`;
+  public r: number = 0;
+  public g: number = 0;
+  public b: number = 0;
+  public a: number = 1;
+  public roundA: number;
+  public hex: string = '000000';
+
+  public static rgba = (color: Color): string => {
+    return `rgba(${color.r},${color.g},${color.b},${color.a})`;
   };
 }

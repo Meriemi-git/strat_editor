@@ -10,6 +10,7 @@
   position="end"
   (closedStart)="onCloseRightSidenav()">
     <strat-editor-drawing-panel
+    [color]="($color | async)"
     (actionSelected)="onDrawingActionSelected($event)"
     (colorSelected)="onColorSelected($event)">
     </strat-editor-drawing-panel>

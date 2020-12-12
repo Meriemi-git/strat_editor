@@ -16,6 +16,7 @@ import {
   Color,
   DrawerAction,
   DrawingEditorComponent,
+  PolyLineAction,
 } from '@strat-editor/drawing-editor';
 import { take } from 'rxjs/operators';
 import { KEY_CODE } from '../../../helpers/key_code';
@@ -32,6 +33,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   $agents: Observable<Agent[]>;
   $maps: Observable<Map[]>;
+  $color: Observable<Color>;
 
   selectedMap: Map;
   selectedFloor: Floor;
@@ -39,7 +41,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
   width: number;
   height: number;
 
-  // @ViewChild('mapPanel') mapPanel: MapPanelComponent;
   @ViewChild('container') container: ElementRef;
   @ViewChild('drawerEditor') drawerEditor: DrawingEditorComponent;
 
@@ -54,8 +55,13 @@ export class EditorComponent implements OnInit, AfterViewInit {
     });
     this.$agents = this.store.select(Selectors.selectAllAgents);
     this.$maps = this.store.select(Selectors.selectAllMaps);
+    this.$color = this.store.select(Selectors.getColor);
     this.store.dispatch(Actions.FetchAgents());
     this.store.dispatch(Actions.FetchMaps());
+    this.store.dispatch(Actions.SetColorAction({ color: new Color() }));
+    this.store.dispatch(
+      Actions.PerformDrawerAction({ action: new PolyLineAction() })
+    );
   }
 
   ngAfterViewInit(): void {

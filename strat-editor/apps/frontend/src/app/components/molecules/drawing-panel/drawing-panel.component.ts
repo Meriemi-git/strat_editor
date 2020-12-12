@@ -1,12 +1,20 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import * as Ngx from '@angular-material-components/color-picker';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormControl, AbstractControl } from '@angular/forms';
-import { ThemePalette } from '@angular/material/core';
 
 import {
   RectangleAction,
   DrawerAction,
   TriangleAction,
-  CurveAction,
+  PolyLineAction,
   EraserAction,
   GroupAction,
   LocationAction,
@@ -27,16 +35,20 @@ import {
   templateUrl: './drawing-panel.component.html',
   styleUrls: ['./drawing-panel.component.scss'],
 })
-export class DrawingPanelComponent implements OnInit {
+export class DrawingPanelComponent implements OnInit, AfterViewInit {
   @Output() actionSelected = new EventEmitter<DrawerAction>();
   @Output() colorSelected = new EventEmitter<Color>();
+  @Input() color: Color;
+
   shapeActions: DrawerAction[] = [];
   formActions: DrawerAction[] = [];
   textActions: DrawerAction[] = [];
   toolActions: DrawerAction[] = [];
 
-  colorCtr: AbstractControl = new FormControl(null);
-  public color: ThemePalette = 'primary';
+  @ViewChild(Ngx.NgxMatColorPickerInput)
+  pickerInput: Ngx.NgxMatColorPickerInput;
+
+  colorCtr: AbstractControl = new FormControl('');
 
   constructor() {
     this.shapeActions.push(new LineAction());
@@ -44,7 +56,7 @@ export class DrawingPanelComponent implements OnInit {
     this.shapeActions.push(new TriangleAction());
     this.shapeActions.push(new RectangleAction());
     this.shapeActions.push(new OvalAction());
-    this.shapeActions.push(new CurveAction());
+    this.shapeActions.push(new PolyLineAction());
 
     this.formActions.push(new StarAction());
     this.formActions.push(new TimeAction());
@@ -60,13 +72,28 @@ export class DrawingPanelComponent implements OnInit {
   }
   ngOnInit(): void {}
 
+  ngAfterViewInit(): void {}
+
   onSelectColor(event: any) {
     let color = new Color();
+    console.log('event', event);
     Object.assign(color, event);
     this.colorSelected.emit(color);
+    console.log('color', color);
   }
 
   onActionSelected(action: DrawerAction) {
     this.actionSelected.emit(action);
   }
+
+  getNgxColor(): Ngx.Color {
+    return new Ngx.Color(
+      this.color.r,
+      this.color.g,
+      this.color.b,
+      this.color.a
+    );
+  }
+  // (ngModelChange)="onSelectColor($event)"
+  //     [value]="getNgxColor()"
 }

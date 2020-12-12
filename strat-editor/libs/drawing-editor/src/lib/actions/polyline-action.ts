@@ -1,8 +1,8 @@
 import { DrawerAction } from './drawer-action';
 
-export class CurveAction extends DrawerAction {
+export class PolyLineAction extends DrawerAction {
   constructor() {
     super();
-    this.name = 'curve';
+    this.name = 'polyline';
   }
 }

@@ -5,10 +5,12 @@ import { CursorMode } from '../../cursor-mode';
 import { ObjectDrawer, LineDrawer, RectangleDrawer } from '../../drawers';
 import { ArrowDrawer } from '../../drawers/arrow-drawer';
 import { OvalDrawer } from '../../drawers/oval-drawer';
+import { PolyLineDrawer } from '../../drawers/polyline-drawer';
 import { SvgDrawer } from '../../drawers/svg-drawer';
 import { TextDrawer } from '../../drawers/text-drawer';
 import { TriangleDrawer } from '../../drawers/triangle-drawer';
 import { LineArrow } from '../../fabricjs/line-arrow';
+import { TriangleArrow } from '../../fabricjs/triangle-arrow';
 import { Color } from '../../models/color';
 import { IconHelperService } from '../../services/icon-helper.service';
 
@@ -49,14 +51,13 @@ export class DrawingEditorComponent implements OnInit {
     // user is drawing
     this.cursorMode = CursorMode.Undefined;
     // Create the Fabric canvas
-    this.canvas = new fabric.Canvas('canvas', {});
+    this.canvas = new fabric.Canvas('canvas', { selection: false });
     this.canvas.setWidth(this.canvasWidth);
     this.canvas.setHeight(this.canvasHeight);
 
     // Set the default options for the "drawer" class, including stroke color, width, and style
     this.drawerOptions = {
       name: 'line',
-      stroke: 'blue',
       strokeWidth: 5,
       selectable: true,
       strokeUniform: true,
@@ -73,13 +74,14 @@ export class DrawingEditorComponent implements OnInit {
     this.avalaibleDrawers.set('rectangle', new RectangleDrawer());
     this.avalaibleDrawers.set('oval', new OvalDrawer());
     this.avalaibleDrawers.set('text', new TextDrawer());
+    this.avalaibleDrawers.set('polyline', new PolyLineDrawer());
     this.avalaibleDrawers.set('star', new SvgDrawer('star', this.ihs));
     this.avalaibleDrawers.set('time', new SvgDrawer('time', this.ihs));
     this.avalaibleDrawers.set('location', new SvgDrawer('location', this.ihs));
   }
 
   setColor(color: Color) {
-    this.drawerOptions.stroke = `#${color.hex}`;
+    this.drawerOptions.stroke = Color.rgba(color);
   }
 
   public setDrawerByAction(action: DrawerAction) {
@@ -87,9 +89,7 @@ export class DrawingEditorComponent implements OnInit {
       this.cursorMode = CursorMode.Draw;
       this.drawer = this.avalaibleDrawers.get(action.name);
       Object.assign(this.drawerOptions, action);
-      console.log('drawerOptions', this.drawerOptions);
     }
-    // TODO pass drawing
   }
 
   private initializeCanvasEvents() {
@@ -121,8 +121,14 @@ export class DrawingEditorComponent implements OnInit {
           }
         );
         this.canvas.setActiveObject(selection);
+      } else if (o.target instanceof TriangleArrow) {
+        var selection = new fabric.ActiveSelection([o.target, o.target.line], {
+          canvas: this.canvas,
+        });
+        this.canvas.setActiveObject(selection);
+      } else {
+        this.canvas.setActiveObject(this.object);
       }
-      this.canvas.setActiveObject(this.object);
     });
 
     this.canvas.on('selection:cleared', () => {
