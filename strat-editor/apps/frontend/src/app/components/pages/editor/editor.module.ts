@@ -5,7 +5,7 @@ import { EditorComponent } from './editor.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { SidenavLeftContentModule } from '../../molecules/assets-panel/assets-panel.module';
+import { AssetPanelModule } from '../../molecules/assets-panel/assets-panel.module';
 import { DrawingPanelModule } from '../../molecules/drawing-panel/drawing-panel.module';
 import { IconHelperService } from '@strat-editor/drawing-editor';
 import { MapGridModule } from '../../molecules/map-grid/map-grid.module';
@@ -19,7 +19,7 @@ import { DrawingEditorModule } from '@strat-editor/drawing-editor';
     MatSidenavModule,
     MatIconModule,
     MatButtonModule,
-    SidenavLeftContentModule,
+    AssetPanelModule,
     DrawingPanelModule,
     MapGridModule,
     DrawingEditorModule,

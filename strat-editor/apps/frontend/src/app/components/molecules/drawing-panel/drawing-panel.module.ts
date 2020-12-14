@@ -10,6 +10,8 @@ import {
   NgxMatColorPickerModule,
   NGX_MAT_COLOR_FORMATS,
 } from '@angular-material-components/color-picker';
+import { SharedModule } from '../../../shared.module';
+
 @NgModule({
   declarations: [DrawingPanelComponent],
   imports: [
@@ -20,6 +22,7 @@ import {
     MatInputModule,
     NgxMatColorPickerModule,
     DrawingActionModule,
+    SharedModule,
   ],
   providers: [{ provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS }],
   exports: [DrawingPanelComponent],

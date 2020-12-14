@@ -2,17 +2,14 @@
   <mat-sidenav #leftSidenav
   mode="over"
   [(opened)]="leftIsOpened" class="left-sidenav-content" (closedStart)="onCloseLeftSidenav()">
-    <strat-editor-assets-panel [agents]="($agents | async)"></strat-editor-assets-panel>
+    <strat-editor-assets-panel></strat-editor-assets-panel>
   </mat-sidenav>
   <mat-sidenav #rightSidenav
   mode="over"
   [(opened)]="rightIsOpened"
   position="end"
   (closedStart)="onCloseRightSidenav()">
-    <strat-editor-drawing-panel
-    [color]="($color | async)"
-    (actionSelected)="onDrawingActionSelected($event)"
-    (colorSelected)="onColorSelected($event)">
+    <strat-editor-drawing-panel>
     </strat-editor-drawing-panel>
   </mat-sidenav>
   <mat-sidenav-content class="container">

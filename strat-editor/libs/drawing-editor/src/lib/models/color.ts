@@ -1,7 +1,7 @@
 export class Color {
-  public r: number = 0;
-  public g: number = 0;
-  public b: number = 0;
+  public r: number = 255;
+  public g: number = 255;
+  public b: number = 255;
   public a: number = 1;
   public roundA: number;
   public hex: string = '000000';

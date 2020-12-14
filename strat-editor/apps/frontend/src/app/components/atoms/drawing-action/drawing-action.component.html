@@ -1,2 +1,6 @@
-<strat-editor-icon [iconName]="action.name" [iconUrl]="ihs.getSvgIconByName(action.name)" (iconClicked)="onIconClicked()"></strat-editor-icon>
-
+<strat-editor-icon
+  [iconName]="action.name"
+  [iconUrl]="ihs.getSvgIconByName(action.name)"
+  (iconClicked)="onIconClicked()"
+  [active]="action.active"
+></strat-editor-icon>

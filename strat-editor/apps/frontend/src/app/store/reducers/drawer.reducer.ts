@@ -1,29 +1,81 @@
 import * as actions from '../actions/drawer.action';
 import { createReducer, on, Action } from '@ngrx/store';
-import { Color, DrawerAction } from '@strat-editor/drawing-editor';
+import {
+  Color,
+  DrawerAction,
+  DrawingActionType,
+} from '@strat-editor/drawing-editor';
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 
-export interface DrawingActionState {
+export interface DrawingActionState extends EntityState<DrawerAction> {
   color: Color;
-  selected: DrawerAction;
+  selected: DrawerAction | null;
   history: DrawerAction[];
   historyIndex: number;
 }
 
-export const initialstate: DrawingActionState = {
-  color: new Color(),
+export const adapter: EntityAdapter<DrawerAction> = createEntityAdapter<
+  DrawerAction
+>({
+  sortComparer: sortByName,
+  selectId: (agent: DrawerAction) => agent.name,
+});
+
+export function sortByName(a: DrawerAction, b: DrawerAction): number {
+  return a.name.localeCompare(b.name);
+}
+
+export const initialstate: DrawingActionState = adapter.getInitialState({
   selected: null,
   history: [],
   historyIndex: 0,
-};
+  color: new Color(),
+});
 
 const drawingActionReducer = createReducer(
   initialstate,
-  on(actions.PerformDrawerAction, (state, { action }) => ({
+  on(actions.FetchDrawerActions, (state) => ({
+    ...state,
+  })),
+  on(actions.FetchDrawerActionsSuccess, (state, { actions }) => {
+    return adapter.addMany(actions, { ...state });
+  }),
+  on(actions.SelectDrawerAction, (state, { action }) => ({
     ...state,
     selected: action,
-    historyIndex: state.historyIndex + 1,
-    history: [...state.history.slice(0, state.historyIndex), action],
   })),
+  on(actions.PerformDrawerAction, (state, { action }) => {
+    let updatedActions = adapter
+      .getSelectors()
+      .selectAll(state)
+      .map((a) => {
+        let updatedAction: DrawerAction;
+        if (action.type === DrawingActionType.SETTING) {
+          if (a.name === action.name) {
+            updatedAction = Object.assign({}, a, {
+              active: !a.active,
+            });
+          } else {
+            updatedAction = Object.assign({}, a);
+          }
+        } else {
+          updatedAction = Object.assign({}, a, {
+            active:
+              a.type !== DrawingActionType.SETTING
+                ? a.name === action.name
+                : a.active,
+          });
+        }
+        return { id: updatedAction.name, changes: updatedAction };
+      });
+    return adapter.updateMany(updatedActions, {
+      ...state,
+      selected:
+        action.type !== DrawingActionType.SETTING ? action : state.selected,
+      historyIndex: state.historyIndex + 1,
+      history: [...state.history.slice(0, state.historyIndex), action],
+    });
+  }),
   on(actions.UndoDrawerAction, (state) => ({
     ...state,
     selected: null,
@@ -55,3 +107,20 @@ const drawingActionReducer = createReducer(
 export function reducer(state: DrawingActionState | undefined, action: Action) {
   return drawingActionReducer(state, action);
 }
+
+// export function debug(reducer: ActionReducer<DrawingActionState>): ActionReducer<DrawingActionState> {
+//   return function(state, action) {
+//     return reducer(state, action);
+//   };
+// }
+
+// export const metaReducers: MetaReducer<any>[] = [debug];
+
+export const {
+  selectAll,
+  selectEntities,
+  selectIds,
+  selectTotal,
+} = adapter.getSelectors();
+
+export const selectAllActions = selectAll;

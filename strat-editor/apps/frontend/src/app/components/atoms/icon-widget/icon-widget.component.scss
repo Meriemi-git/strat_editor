@@ -1,5 +1,16 @@
-.icon{
+@import '~apps/frontend/src/styles.scss';
+
+//$primary: mat-palette($mat-primary);
+
+.icon {
   cursor: -webkit-pointer; /* Chrome 1-21, Safari 4+ */
-  cursor:    -moz-pointer; /* Firefox 1.5-26 */
-  cursor:         pointer;
+  cursor: -moz-pointer; /* Firefox 1.5-26 */
+  cursor: pointer;
+}
+
+.active {
+  color: $main;
+}
+.inactive {
+  color: white;
 }

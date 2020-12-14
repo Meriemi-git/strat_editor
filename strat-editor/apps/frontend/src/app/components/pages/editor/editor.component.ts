@@ -7,8 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Agent, Floor, Map } from '@strat-editor/data';
-import { Observable } from 'rxjs';
+import { Floor, Map } from '@strat-editor/data';
 import * as Actions from '../../../store/actions';
 import * as Selectors from '../../../store/selectors';
 import { StratEditorState } from '../../../store/reducers';
@@ -21,6 +20,7 @@ import {
 import { take } from 'rxjs/operators';
 import { KEY_CODE } from '../../../helpers/key_code';
 import { environment } from 'apps/frontend/src/environments/environment';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'strat-editor-editor',
@@ -30,14 +30,9 @@ import { environment } from 'apps/frontend/src/environments/environment';
 export class EditorComponent implements OnInit, AfterViewInit {
   leftIsOpened: boolean;
   rightIsOpened: boolean;
-
-  $agents: Observable<Agent[]>;
-  $maps: Observable<Map[]>;
-  $color: Observable<Color>;
-
   selectedMap: Map;
   selectedFloor: Floor;
-
+  $maps: Observable<Map[]>;
   width: number;
   height: number;
 
@@ -53,11 +48,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.select(Selectors.isRightSidenavOpened).subscribe((isOpened) => {
       this.rightIsOpened = isOpened;
     });
-    this.$agents = this.store.select(Selectors.selectAllAgents);
-    this.$maps = this.store.select(Selectors.selectAllMaps);
-    this.$color = this.store.select(Selectors.getColor);
     this.store.dispatch(Actions.FetchAgents());
     this.store.dispatch(Actions.FetchMaps());
+    this.store.dispatch(Actions.FetchDrawerActions());
+    this.$maps = this.store.select(Selectors.selectAllMaps);
     this.store.dispatch(Actions.SetColorAction({ color: new Color() }));
     this.store.dispatch(
       Actions.PerformDrawerAction({ action: new PolyLineAction() })
@@ -66,6 +60,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.store.select(Selectors.getSelectedAction).subscribe((selected) => {
+      if (this.selectedMap) {
+        this.toggleRightSidenav();
+      }
       this.drawerEditor.setDrawerByAction(selected);
     });
     this.store.select(Selectors.getColor).subscribe((color) => {
@@ -98,12 +95,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
   onDrawingActionSelected(action: DrawerAction) {
     this.store.dispatch(Actions.PerformDrawerAction({ action }));
     this.store.dispatch(Actions.toggleRight());
-    this.drawerEditor.setDrawerByAction(action);
-    this.drawerEditor.updatePointerIcon(action.getIconUrl());
-  }
-
-  onColorSelected(color: Color) {
-    this.store.dispatch(Actions.SetColorAction({ color }));
   }
 
   displayCanvas() {

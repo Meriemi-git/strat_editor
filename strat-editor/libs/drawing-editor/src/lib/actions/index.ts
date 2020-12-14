@@ -15,3 +15,6 @@ export * from './text-action';
 export * from './time-action';
 export * from './triangle-action';
 export * from './ungroup-action';
+export * from './underline-action';
+export * from './bold-action';
+export * from './italic-action';

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { DrawerAction } from '@strat-editor/drawing-editor';
+import { DrawerAction, TextAction } from '@strat-editor/drawing-editor';
 import { IconHelperService } from '@strat-editor/drawing-editor';
 @Component({
   selector: 'strat-editor-drawing-action',

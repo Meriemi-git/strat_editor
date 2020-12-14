@@ -2,7 +2,12 @@
   <h2 class="mat-title">Shapes</h2>
   <div class="icons">
     <strat-editor-drawing-action
-      *ngFor="let action of shapeActions"
+      *ngFor="
+        let action of $drawerActions
+          | async
+          | filter: ['shape']:'type'
+          | sortBy: 'ASC':'order'
+      "
       [action]="action"
       (actionSelected)="onActionSelected($event)"
     ></strat-editor-drawing-action>
@@ -15,7 +20,7 @@
       [ngxMatColorPicker]="picker"
       [formControl]="colorCtr"
       (ngModelChange)="onSelectColor($event)"
-      [value]="getNgxColor()"
+      [value]="getNgxColor($color | async)"
     />
     <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
     <ngx-mat-color-picker #picker></ngx-mat-color-picker>
@@ -24,7 +29,12 @@
   <h2 class="mat-title">Forms</h2>
   <div class="icons">
     <strat-editor-drawing-action
-      *ngFor="let action of formActions"
+      *ngFor="
+        let action of $drawerActions
+          | async
+          | filter: ['form']:'type'
+          | sortBy: 'ASC':'order'
+      "
       [action]="action"
       (actionSelected)="onActionSelected($event)"
     ></strat-editor-drawing-action>
@@ -34,7 +44,12 @@
   <h2 class="mat-title">Text</h2>
   <div class="icons">
     <strat-editor-drawing-action
-      *ngFor="let action of textActions"
+      *ngFor="
+        let action of $drawerActions
+          | async
+          | filter: ['text', 'setting']:'type'
+          | sortBy: 'ASC':'order'
+      "
       [action]="action"
       (actionSelected)="onActionSelected($event)"
     ></strat-editor-drawing-action>
@@ -43,7 +58,12 @@
   <h2 class="mat-title">Tools</h2>
   <div class="icons">
     <strat-editor-drawing-action
-      *ngFor="let action of toolActions"
+      *ngFor="
+        let action of $drawerActions
+          | async
+          | filter: ['tool']:'type'
+          | sortBy: 'ASC':'order'
+      "
       [action]="action"
       (actionSelected)="onActionSelected($event)"
     ></strat-editor-drawing-action>

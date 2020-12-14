@@ -1,34 +1,16 @@
 import * as Ngx from '@angular-material-components/color-picker';
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, AbstractControl } from '@angular/forms';
-
+import { Store } from '@ngrx/store';
 import {
-  RectangleAction,
-  DrawerAction,
-  TriangleAction,
-  PolyLineAction,
-  EraserAction,
-  GroupAction,
-  LocationAction,
-  PictureAction,
-  SelectionAction,
-  StarAction,
-  OvalAction,
-  TextAction,
-  TimeAction,
-  LineAction,
-  UngroupAction,
-  ArrowAction,
   Color,
+  DrawerAction,
+  DrawingActionType,
 } from '@strat-editor/drawing-editor';
+import { StratEditorState } from '../../../store/reducers';
+import * as Actions from '../../../store/actions';
+import * as Selectors from '../../../store/selectors';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'strat-editor-drawing-panel',
@@ -36,64 +18,35 @@ import {
   styleUrls: ['./drawing-panel.component.scss'],
 })
 export class DrawingPanelComponent implements OnInit, AfterViewInit {
-  @Output() actionSelected = new EventEmitter<DrawerAction>();
-  @Output() colorSelected = new EventEmitter<Color>();
-  @Input() color: Color;
-
-  shapeActions: DrawerAction[] = [];
-  formActions: DrawerAction[] = [];
-  textActions: DrawerAction[] = [];
-  toolActions: DrawerAction[] = [];
+  $color: Observable<Color>;
+  $drawerActions: Observable<DrawerAction[]>;
+  DrawingActionType: typeof DrawingActionType = DrawingActionType;
 
   @ViewChild(Ngx.NgxMatColorPickerInput)
   pickerInput: Ngx.NgxMatColorPickerInput;
 
   colorCtr: AbstractControl = new FormControl('');
 
-  constructor() {
-    this.shapeActions.push(new LineAction());
-    this.shapeActions.push(new ArrowAction());
-    this.shapeActions.push(new TriangleAction());
-    this.shapeActions.push(new RectangleAction());
-    this.shapeActions.push(new OvalAction());
-    this.shapeActions.push(new PolyLineAction());
+  constructor(private store: Store<StratEditorState>) {}
 
-    this.formActions.push(new StarAction());
-    this.formActions.push(new TimeAction());
-    this.formActions.push(new LocationAction());
-
-    this.textActions.push(new TextAction());
-
-    this.toolActions.push(new UngroupAction());
-    this.toolActions.push(new EraserAction());
-    this.toolActions.push(new GroupAction());
-    this.toolActions.push(new PictureAction());
-    this.toolActions.push(new SelectionAction());
+  ngOnInit(): void {
+    this.$color = this.store.select(Selectors.getColor);
+    this.$drawerActions = this.store.select(Selectors.selectAllDrawerActions);
   }
-  ngOnInit(): void {}
 
   ngAfterViewInit(): void {}
 
   onSelectColor(event: any) {
     let color = new Color();
-    console.log('event', event);
     Object.assign(color, event);
-    this.colorSelected.emit(color);
-    console.log('color', color);
+    this.store.dispatch(Actions.SetColorAction({ color }));
   }
 
   onActionSelected(action: DrawerAction) {
-    this.actionSelected.emit(action);
+    this.store.dispatch(Actions.PerformDrawerAction({ action }));
   }
 
-  getNgxColor(): Ngx.Color {
-    return new Ngx.Color(
-      this.color.r,
-      this.color.g,
-      this.color.b,
-      this.color.a
-    );
+  getNgxColor(color: Color): Ngx.Color {
+    return new Ngx.Color(color.r, color.g, color.b, color.a);
   }
-  // (ngModelChange)="onSelectColor($event)"
-  //     [value]="getNgxColor()"
 }

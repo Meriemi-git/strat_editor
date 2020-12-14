@@ -5,9 +5,23 @@ export const UnSelectDrawerAction = createAction(
   '[DrawerAction] Unselect DrawerAction'
 );
 
+export const SelectDrawerAction = createAction(
+  '[DrawerAction] Select DrawerAction',
+  props<{ action:DrawerAction }>()
+);
+
+export const FetchDrawerActions = createAction(
+  '[DrawerAction] Fetch DrawerAction'
+);
+
+export const FetchDrawerActionsSuccess = createAction(
+  '[DrawerAction] Fetch DrawerAction success',
+  props<{ actions:  DrawerAction[] }>()
+);
+
 export const PerformDrawerAction = createAction(
   '[DrawerAction] Perform DrawerAction',
-  props<{ action: DrawerAction }>()
+  props<{ action:  DrawerAction }>()
 );
 
 export const UndoDrawerAction = createAction(
@@ -24,6 +38,7 @@ export const SetColorAction = createAction(
 );
 
 const actions = union({
+  AddAllActions: FetchDrawerActions,
   PerformDrawerAction,
   UndoDrawerAction,
   RedoDrawerAction,

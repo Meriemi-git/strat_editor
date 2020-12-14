@@ -1,3 +1,4 @@
+import { DrawingActionType } from '../models/drawing-action-type';
 import { DrawerAction } from './drawer-action';
 
 export class TextAction extends DrawerAction {
@@ -8,9 +9,8 @@ export class TextAction extends DrawerAction {
 
   constructor() {
     super();
+    this.order = 1;
     this.name = 'text';
-    this.stroke = 'black';
-    this.strokeWidth = 2;
-    this.font = 'verdana';
+    this.type = DrawingActionType.TEXT;
   }
 }

@@ -23,7 +23,8 @@
             "aot": true,
             "assets": [
               "apps/frontend/src/favicon.ico",
-              "apps/frontend/src/assets"
+              "apps/frontend/src/assets",
+              "apps/frontend/src/assets/icons/*"
             ],
             "styles": ["apps/frontend/src/styles.scss"],
             "scripts": ["node_modules/jquery/dist/jquery.min.js"]
