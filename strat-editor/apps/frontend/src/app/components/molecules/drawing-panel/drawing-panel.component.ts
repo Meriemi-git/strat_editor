@@ -43,7 +43,11 @@ export class DrawingPanelComponent implements OnInit, AfterViewInit {
   }
 
   onActionSelected(action: DrawerAction) {
-    this.store.dispatch(Actions.PerformDrawerAction({ action }));
+    if (action.type === DrawingActionType.SETTING) {
+      this.store.dispatch(Actions.PerformDrawerAction({ action }));
+    } else {
+      this.store.dispatch(Actions.SetDrawerOptions({ options: action }));
+    }
   }
 
   getNgxColor(color: Color): Ngx.Color {

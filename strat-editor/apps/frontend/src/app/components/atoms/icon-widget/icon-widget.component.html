@@ -1,11 +1,4 @@
 <button mat-icon-button (click)="onClick()">
-  <!-- <img
-    mat-image
-    src="{{ 'api/icon/image/' + iconName }}"
-    alt="{{ iconName }} icon"
-    [width]="24"
-    [ngClass]="{ active: active }"
-  /> -->
   <mat-icon
     [svgIcon]="iconName"
     [ngClass]="{ active: active, inactive: !active }"

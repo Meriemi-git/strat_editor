@@ -8,6 +8,8 @@ import { IconHelperService } from '../services/icon-helper.service';
 export class SvgDrawer implements ObjectDrawer {
   drawingMode: DrawingMode = DrawingMode.Svg;
   private svgName: string;
+  origX: number;
+  origY: number;
   constructor(svgName: string, private ihs: IconHelperService) {
     this.svgName = svgName;
   }
@@ -15,30 +17,32 @@ export class SvgDrawer implements ObjectDrawer {
   make(
     x: number,
     y: number,
-    options: fabric.IObjectOptions,
+    drawerOptions: fabric.IObjectOptions,
     x2?: number,
     y2?: number
-  ): Promise<fabric.Image> {
-    // Return a Promise that will draw a line
-    return new Promise<fabric.Image>((resolve) => {
-      fabric.Image.fromURL(this.ihs.getSvgIconByName(this.svgName), function (
-        image
+  ): Promise<fabric.Object> {
+    return new Promise<fabric.Object>((resolve) => {
+      (this.origX = x), (this.origY = y);
+      fabric.loadSVGFromURL(this.ihs.getSvgIconByName(this.svgName), function (
+        objects,
+        options
       ) {
-        image.set({
-          top: y - image.height / 2,
-          left: x - image.width / 2,
+        let shape = fabric.util.groupSVGElements(objects, options);
+        shape.set({
+          ...drawerOptions,
+          left: x - shape.width,
+          top: y - shape.height,
           scaleX: 2,
           scaleY: 2,
         });
-        // scale image down, and flip it, before adding it onto canvas
-        resolve(image);
+        resolve(shape);
       });
     });
   }
 
-  resize(image: fabric.Image, x: number, y: number): Promise<fabric.Image> {
-    return new Promise<fabric.Image>((resolve) => {
-      resolve(image);
+  resize(shape: fabric.Object, x: number, y: number): Promise<fabric.Object> {
+    return new Promise<fabric.Object>((resolve) => {
+      resolve(shape);
     });
   }
 

@@ -82,6 +82,7 @@ export class DrawingEditorComponent implements OnInit {
 
   setColor(color: Color) {
     this.drawerOptions.stroke = Color.rgba(color);
+    this.drawerOptions.fill = Color.rgba(color);
   }
 
   public setDrawerByAction(action: DrawerAction) {
@@ -89,6 +90,7 @@ export class DrawingEditorComponent implements OnInit {
       this.cursorMode = CursorMode.Draw;
       this.drawer = this.avalaibleDrawers.get(action.name);
       Object.assign(this.drawerOptions, action);
+      console.log('this.drawerOptions', this.drawerOptions);
     }
   }
 

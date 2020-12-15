@@ -10,6 +10,7 @@ export class TextDrawer implements ObjectDrawer {
     options: fabric.IObjectOptions
   ): Promise<fabric.Textbox> {
     return new Promise<fabric.Textbox>((resolve) => {
+      console.log('options', options);
       resolve(
         new fabric.Textbox('Test', {
           left: x,

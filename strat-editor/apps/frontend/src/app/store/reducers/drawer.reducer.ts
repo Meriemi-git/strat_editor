@@ -48,22 +48,22 @@ const drawingActionReducer = createReducer(
     let updatedActions = adapter
       .getSelectors()
       .selectAll(state)
-      .map((a) => {
+      .map((someAction) => {
         let updatedAction: DrawerAction;
         if (action.type === DrawingActionType.SETTING) {
-          if (a.name === action.name) {
-            updatedAction = Object.assign({}, a, {
-              active: !a.active,
+          if (someAction.name === action.name) {
+            updatedAction = Object.assign({}, someAction, {
+              active: !someAction.active,
             });
           } else {
-            updatedAction = Object.assign({}, a);
+            updatedAction = Object.assign({}, someAction);
           }
         } else {
-          updatedAction = Object.assign({}, a, {
+          updatedAction = Object.assign({}, someAction, {
             active:
-              a.type !== DrawingActionType.SETTING
-                ? a.name === action.name
-                : a.active,
+              someAction.type !== DrawingActionType.SETTING
+                ? someAction.name === action.name
+                : someAction.active,
           });
         }
         return { id: updatedAction.name, changes: updatedAction };
