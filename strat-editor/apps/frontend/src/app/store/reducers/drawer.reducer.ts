@@ -10,6 +10,7 @@ import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 export interface DrawingActionState extends EntityState<DrawerAction> {
   color: Color;
   selected: DrawerAction | null;
+  options: DrawerAction | null;
   history: DrawerAction[];
   historyIndex: number;
 }
@@ -27,6 +28,7 @@ export function sortByName(a: DrawerAction, b: DrawerAction): number {
 
 export const initialstate: DrawingActionState = adapter.getInitialState({
   selected: null,
+  options: null,
   history: [],
   historyIndex: 0,
   color: new Color(),
@@ -44,28 +46,42 @@ const drawingActionReducer = createReducer(
     ...state,
     selected: action,
   })),
+  on(actions.SetDrawerOptions, (state, { options }) => {
+    return adapter.updateOne(
+      { id: options.name, changes: options },
+      { ...state, options: options }
+    );
+  }),
   on(actions.PerformDrawerAction, (state, { action }) => {
     let updatedActions = adapter
       .getSelectors()
       .selectAll(state)
       .map((someAction) => {
-        let updatedAction: DrawerAction;
-        if (action.type === DrawingActionType.SETTING) {
-          if (someAction.name === action.name) {
-            updatedAction = Object.assign({}, someAction, {
-              active: !someAction.active,
-            });
-          } else {
-            updatedAction = Object.assign({}, someAction);
-          }
-        } else {
-          updatedAction = Object.assign({}, someAction, {
-            active:
-              someAction.type !== DrawingActionType.SETTING
-                ? someAction.name === action.name
-                : someAction.active,
-          });
-        }
+        //   let updatedAction: DrawerAction;
+        //   if (action.type === DrawingActionType.SETTING) {
+        //     if (someAction.name === action.name) {
+        //       updatedAction = Object.assign({}, someAction, {
+        //         active: !someAction.active,
+        //       });
+        //     } else {
+        //       updatedAction = Object.assign({}, someAction);
+        //     }
+        //   } else {
+        //     updatedAction = Object.assign({}, someAction, {
+        //       active:
+        //         someAction.type !== DrawingActionType.SETTING
+        //           ? someAction.name === action.name
+        //           : someAction.active,
+        //     });
+        //   }
+        //   return { id: updatedAction.name, changes: updatedAction };
+        // });
+        let updatedAction = Object.assign({}, someAction, {
+          active:
+            someAction.type !== DrawingActionType.SETTING
+              ? someAction.name === action.name
+              : someAction.active,
+        });
         return { id: updatedAction.name, changes: updatedAction };
       });
     return adapter.updateMany(updatedActions, {

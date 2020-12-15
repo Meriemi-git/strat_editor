@@ -90,7 +90,6 @@ export class DrawingEditorComponent implements OnInit {
       this.cursorMode = CursorMode.Draw;
       this.drawer = this.avalaibleDrawers.get(action.name);
       Object.assign(this.drawerOptions, action);
-      console.log('this.drawerOptions', this.drawerOptions);
     }
   }
 
@@ -215,6 +214,10 @@ export class DrawingEditorComponent implements OnInit {
   resize(screenWidth: number, canvasHeight: number) {
     this.canvas.setWidth(screenWidth);
     this.canvas.setHeight(canvasHeight);
+  }
+
+  setDrawerOptions(options: DrawerAction) {
+    Object.assign(this.drawerOptions, options);
   }
 
   updatePointerIcon(iconUrl: string) {

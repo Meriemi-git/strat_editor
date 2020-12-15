@@ -2,38 +2,43 @@ import { createAction, props, union } from '@ngrx/store';
 import { Color, DrawerAction } from '@strat-editor/drawing-editor';
 
 export const UnSelectDrawerAction = createAction(
-  '[DrawerAction] Unselect DrawerAction'
+  '[DrawerAction] Unselect Drawer Action'
 );
 
 export const SelectDrawerAction = createAction(
-  '[DrawerAction] Select DrawerAction',
-  props<{ action:DrawerAction }>()
+  '[DrawerAction] Select Drawer Action',
+  props<{ action: DrawerAction }>()
+);
+
+export const SetDrawerOptions = createAction(
+  '[DrawerAction] Set Drawer Options',
+  props<{ options: DrawerAction }>()
 );
 
 export const FetchDrawerActions = createAction(
-  '[DrawerAction] Fetch DrawerAction'
+  '[DrawerAction] Fetch Drawer Action'
 );
 
 export const FetchDrawerActionsSuccess = createAction(
-  '[DrawerAction] Fetch DrawerAction success',
-  props<{ actions:  DrawerAction[] }>()
+  '[DrawerAction] Fetch Drawer Action success',
+  props<{ actions: DrawerAction[] }>()
 );
 
 export const PerformDrawerAction = createAction(
-  '[DrawerAction] Perform DrawerAction',
-  props<{ action:  DrawerAction }>()
+  '[DrawerAction] Perform Drawer Action',
+  props<{ action: DrawerAction }>()
 );
 
 export const UndoDrawerAction = createAction(
-  '[DrawerAction] Undo DrawerAction'
+  '[DrawerAction] Undo Drawer Action'
 );
 
 export const RedoDrawerAction = createAction(
-  '[DrawerAction] Redo DrawerAction'
+  '[DrawerAction] Redo Drawer Action'
 );
 
 export const SetColorAction = createAction(
-  '[DrawerAction] Select ColorAction',
+  '[DrawerAction] Select Color Action',
   props<{ color: Color }>()
 );
 
