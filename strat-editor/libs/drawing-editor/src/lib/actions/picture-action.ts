@@ -1,4 +1,4 @@
-import { DrawingActionType } from '../models/drawing-action-type';
+import { DrawerActionType } from '../models/drawer-action-type';
 import { DrawerAction } from './drawer-action';
 
 export class PictureAction extends DrawerAction {
@@ -6,6 +6,6 @@ export class PictureAction extends DrawerAction {
     super();
     this.name = 'picture';
     this.order = 4;
-    this.type = DrawingActionType.FORM;
+    this.type = DrawerActionType.FORM;
   }
 }

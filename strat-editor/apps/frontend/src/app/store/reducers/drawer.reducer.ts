@@ -1,16 +1,16 @@
 import * as actions from '../actions/drawer.action';
 import { createReducer, on, Action } from '@ngrx/store';
 import {
-  Color,
+  DrawerColor,
   DrawerAction,
-  DrawingActionType,
+  DrawerActionType,
 } from '@strat-editor/drawing-editor';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 
 export interface DrawingActionState extends EntityState<DrawerAction> {
-  color: Color;
+  color: DrawerColor;
   selected: DrawerAction | null;
-  options: DrawerAction | null;
+  optionAction: DrawerAction | null;
   history: DrawerAction[];
   historyIndex: number;
 }
@@ -19,7 +19,7 @@ export const adapter: EntityAdapter<DrawerAction> = createEntityAdapter<
   DrawerAction
 >({
   sortComparer: sortByName,
-  selectId: (agent: DrawerAction) => agent.name,
+  selectId: (action: DrawerAction) => action.name,
 });
 
 export function sortByName(a: DrawerAction, b: DrawerAction): number {
@@ -28,10 +28,10 @@ export function sortByName(a: DrawerAction, b: DrawerAction): number {
 
 export const initialstate: DrawingActionState = adapter.getInitialState({
   selected: null,
-  options: null,
+  optionAction: null,
   history: [],
   historyIndex: 0,
-  color: new Color(),
+  color: new DrawerColor(),
 });
 
 const drawingActionReducer = createReducer(
@@ -46,39 +46,27 @@ const drawingActionReducer = createReducer(
     ...state,
     selected: action,
   })),
-  on(actions.SetDrawerOptions, (state, { options }) => {
-    return adapter.updateOne(
-      { id: options.name, changes: options },
-      { ...state, options: options }
-    );
+  on(actions.SetDrawerOptions, (state, { optionAction }) => {
+    let activeOption = Object.assign({}, optionAction, {
+      active: !optionAction.active,
+    });
+    let updatedOption = {
+      id: optionAction.name,
+      changes: activeOption,
+    };
+    return adapter.updateOne(updatedOption, {
+      ...state,
+      optionAction: activeOption,
+    });
   }),
   on(actions.PerformDrawerAction, (state, { action }) => {
     let updatedActions = adapter
       .getSelectors()
       .selectAll(state)
       .map((someAction) => {
-        //   let updatedAction: DrawerAction;
-        //   if (action.type === DrawingActionType.SETTING) {
-        //     if (someAction.name === action.name) {
-        //       updatedAction = Object.assign({}, someAction, {
-        //         active: !someAction.active,
-        //       });
-        //     } else {
-        //       updatedAction = Object.assign({}, someAction);
-        //     }
-        //   } else {
-        //     updatedAction = Object.assign({}, someAction, {
-        //       active:
-        //         someAction.type !== DrawingActionType.SETTING
-        //           ? someAction.name === action.name
-        //           : someAction.active,
-        //     });
-        //   }
-        //   return { id: updatedAction.name, changes: updatedAction };
-        // });
         let updatedAction = Object.assign({}, someAction, {
           active:
-            someAction.type !== DrawingActionType.SETTING
+            someAction.type !== DrawerActionType.SETTING
               ? someAction.name === action.name
               : someAction.active,
         });
@@ -87,7 +75,7 @@ const drawingActionReducer = createReducer(
     return adapter.updateMany(updatedActions, {
       ...state,
       selected:
-        action.type !== DrawingActionType.SETTING ? action : state.selected,
+        action.type !== DrawerActionType.SETTING ? action : state.selected,
       historyIndex: state.historyIndex + 1,
       history: [...state.history.slice(0, state.historyIndex), action],
     });
@@ -123,14 +111,6 @@ const drawingActionReducer = createReducer(
 export function reducer(state: DrawingActionState | undefined, action: Action) {
   return drawingActionReducer(state, action);
 }
-
-// export function debug(reducer: ActionReducer<DrawingActionState>): ActionReducer<DrawingActionState> {
-//   return function(state, action) {
-//     return reducer(state, action);
-//   };
-// }
-
-// export const metaReducers: MetaReducer<any>[] = [debug];
 
 export const {
   selectAll,

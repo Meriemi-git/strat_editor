@@ -1,4 +1,4 @@
-import { DrawingActionType } from '../models/drawing-action-type';
+import { DrawerActionType } from '../models/drawer-action-type';
 import { DrawerAction } from './drawer-action';
 
 export class CircleAction extends DrawerAction {
@@ -6,6 +6,6 @@ export class CircleAction extends DrawerAction {
     super();
     this.order = 6;
     this.name = 'circle';
-    this.type = DrawingActionType.SHAPE;
+    this.type = DrawerActionType.SHAPE;
   }
 }

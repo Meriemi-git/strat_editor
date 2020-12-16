@@ -12,7 +12,7 @@ import * as Actions from '../../../store/actions';
 import * as Selectors from '../../../store/selectors';
 import { StratEditorState } from '../../../store/reducers';
 import {
-  Color,
+  DrawerColor,
   DrawerAction,
   DrawingEditorComponent,
   PolyLineAction,
@@ -53,7 +53,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.dispatch(Actions.FetchMaps());
     this.store.dispatch(Actions.FetchDrawerActions());
     this.$maps = this.store.select(Selectors.selectAllMaps);
-    this.store.dispatch(Actions.SetColorAction({ color: new Color() }));
+    this.store.dispatch(Actions.SetColorAction({ color: new DrawerColor() }));
     this.store.dispatch(
       Actions.PerformDrawerAction({ action: new PolyLineAction() })
     );
@@ -69,8 +69,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.select(Selectors.getColor).subscribe((color) => {
       this.drawerEditor.setColor(color);
     });
-    this.store.select(Selectors.getSelectedOption).subscribe((options) => {
-      this.drawerEditor.setDrawerOptions(options);
+    this.store.select(Selectors.getSelectedOption).subscribe((option) => {
+      console.log('Selectors.getSelectedOption', option);
+      this.drawerEditor.setDrawerOptions(option);
     });
   }
 

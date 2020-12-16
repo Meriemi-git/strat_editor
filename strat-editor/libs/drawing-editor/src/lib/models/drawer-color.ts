@@ -1,4 +1,4 @@
-export class Color {
+export class DrawerColor {
   public r: number = 255;
   public g: number = 255;
   public b: number = 255;
@@ -6,7 +6,7 @@ export class Color {
   public roundA: number;
   public hex: string = '000000';
 
-  public static rgba = (color: Color): string => {
+  public static rgba = (color: DrawerColor): string => {
     return `rgba(${color.r},${color.g},${color.b},${color.a})`;
   };
 }

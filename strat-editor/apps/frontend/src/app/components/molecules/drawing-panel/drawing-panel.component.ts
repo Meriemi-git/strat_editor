@@ -3,9 +3,9 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, AbstractControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import {
-  Color,
+  DrawerColor,
   DrawerAction,
-  DrawingActionType,
+  DrawerActionType,
 } from '@strat-editor/drawing-editor';
 import { StratEditorState } from '../../../store/reducers';
 import * as Actions from '../../../store/actions';
@@ -18,9 +18,9 @@ import { Observable } from 'rxjs';
   styleUrls: ['./drawing-panel.component.scss'],
 })
 export class DrawingPanelComponent implements OnInit, AfterViewInit {
-  $color: Observable<Color>;
+  $color: Observable<DrawerColor>;
   $drawerActions: Observable<DrawerAction[]>;
-  DrawingActionType: typeof DrawingActionType = DrawingActionType;
+  DrawingActionType: typeof DrawerActionType = DrawerActionType;
 
   @ViewChild(Ngx.NgxMatColorPickerInput)
   pickerInput: Ngx.NgxMatColorPickerInput;
@@ -37,20 +37,20 @@ export class DrawingPanelComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {}
 
   onSelectColor(event: any) {
-    let color = new Color();
+    let color = new DrawerColor();
     Object.assign(color, event);
     this.store.dispatch(Actions.SetColorAction({ color }));
   }
 
   onActionSelected(action: DrawerAction) {
-    if (action.type !== DrawingActionType.SETTING) {
+    if (action.type !== DrawerActionType.SETTING) {
       this.store.dispatch(Actions.PerformDrawerAction({ action }));
     } else {
-      this.store.dispatch(Actions.SetDrawerOptions({ options: action }));
+      this.store.dispatch(Actions.SetDrawerOptions({ optionAction: action }));
     }
   }
 
-  getNgxColor(color: Color): Ngx.Color {
+  getNgxColor(color: DrawerColor): Ngx.Color {
     return new Ngx.Color(color.r, color.g, color.b, color.a);
   }
 }

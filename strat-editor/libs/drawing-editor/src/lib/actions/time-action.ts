@@ -1,4 +1,4 @@
-import { DrawingActionType } from '../models/drawing-action-type';
+import { DrawerActionType } from '../models/drawer-action-type';
 import { DrawerAction } from './drawer-action';
 
 export class TimeAction extends DrawerAction {
@@ -6,6 +6,6 @@ export class TimeAction extends DrawerAction {
     super();
     this.name = 'time';
     this.order = 3;
-    this.type = DrawingActionType.FORM;
+    this.type = DrawerActionType.FORM;
   }
 }

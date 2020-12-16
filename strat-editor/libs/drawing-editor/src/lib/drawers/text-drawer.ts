@@ -7,18 +7,19 @@ export class TextDrawer implements ObjectDrawer {
   make(
     x: number,
     y: number,
-    options: fabric.IObjectOptions
+    options: fabric.ITextboxOptions
   ): Promise<fabric.Textbox> {
     return new Promise<fabric.Textbox>((resolve) => {
-      console.log('options', options);
-      resolve(
-        new fabric.Textbox('Test', {
-          left: x,
-          top: y,
-          editable: true,
-          ...options,
-        })
-      );
+      const textbox = new fabric.Textbox('Your text here...', {
+        ...options,
+        fontStyle: options.fontStyle ?? '',
+        fontWeight: options.fontWeight ?? '',
+        underline: options.underline ?? false,
+        left: x,
+        top: y,
+        editable: true,
+      });
+      resolve(textbox);
     });
   }
 

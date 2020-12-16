@@ -1,13 +1,16 @@
-import { DrawingActionType } from '../models/drawing-action-type';
-import { TextAction } from './text-action';
+import { DrawerActionType } from '../models/drawer-action-type';
+import { DrawerAction } from './drawer-action';
 
-export class BoldAction extends TextAction {
-  fontWeight: string;
+export class BoldAction extends DrawerAction {
   constructor() {
     super();
     this.name = 'bold';
     this.order = 2;
-    this.fontWeight = 'bold';
-    this.type = DrawingActionType.SETTING;
+    this.type = DrawerActionType.SETTING;
+    this.drawerOptions.push({
+      initialValue: 'normal',
+      optionName: 'fontWeight',
+      optionValue: 'bold',
+    });
   }
 }

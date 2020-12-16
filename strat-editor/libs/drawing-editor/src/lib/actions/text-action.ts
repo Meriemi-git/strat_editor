@@ -1,4 +1,4 @@
-import { DrawingActionType } from '../models/drawing-action-type';
+import { DrawerActionType } from '../models/drawer-action-type';
 import { DrawerAction } from './drawer-action';
 
 export class TextAction extends DrawerAction {
@@ -11,6 +11,6 @@ export class TextAction extends DrawerAction {
     super();
     this.order = 1;
     this.name = 'text';
-    this.type = DrawingActionType.TEXT;
+    this.type = DrawerActionType.TEXT;
   }
 }

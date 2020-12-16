@@ -1,4 +1,4 @@
-import { DrawingActionType } from '../models/drawing-action-type';
+import { DrawerActionType } from '../models/drawer-action-type';
 import { DrawerAction } from './drawer-action';
 
 export class GroupAction extends DrawerAction {
@@ -6,6 +6,6 @@ export class GroupAction extends DrawerAction {
     super();
     this.order = 3;
     this.name = 'group';
-    this.type = DrawingActionType.TOOL;
+    this.type = DrawerActionType.TOOL;
   }
 }

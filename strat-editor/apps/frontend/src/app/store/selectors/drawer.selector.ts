@@ -18,7 +18,7 @@ export const getSelectedAction = createSelector(
 );
 export const getSelectedOption = createSelector(
   selectDrawerState,
-  (state: Drawer.DrawingActionState) => state.options
+  (state: Drawer.DrawingActionState) => state.optionAction
 );
 export const getPreviousAction = createSelector(
   selectDrawerState,

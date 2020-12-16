@@ -1,4 +1,4 @@
-export enum DrawingActionType {
+export enum DrawerActionType {
   SHAPE = 'shape',
   FORM = 'form',
   TEXT = 'text',

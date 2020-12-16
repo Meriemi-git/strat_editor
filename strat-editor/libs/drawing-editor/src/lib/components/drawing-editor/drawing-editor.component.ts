@@ -11,7 +11,7 @@ import { TextDrawer } from '../../drawers/text-drawer';
 import { TriangleDrawer } from '../../drawers/triangle-drawer';
 import { LineArrow } from '../../fabricjs/line-arrow';
 import { TriangleArrow } from '../../fabricjs/triangle-arrow';
-import { Color } from '../../models/color';
+import { DrawerColor } from '../../models/drawer-color';
 import { IconHelperService } from '../../services/icon-helper.service';
 
 @Component({
@@ -66,7 +66,7 @@ export class DrawingEditorComponent implements OnInit {
     this.initializeCanvasEvents();
   }
 
-  addAvalaibleDrawers() {
+  private addAvalaibleDrawers() {
     this.avalaibleDrawers = new Map<string, ObjectDrawer>();
     this.avalaibleDrawers.set('line', new LineDrawer());
     this.avalaibleDrawers.set('arrow', new ArrowDrawer());
@@ -80,16 +80,30 @@ export class DrawingEditorComponent implements OnInit {
     this.avalaibleDrawers.set('location', new SvgDrawer('location', this.ihs));
   }
 
-  setColor(color: Color) {
-    this.drawerOptions.stroke = Color.rgba(color);
-    this.drawerOptions.fill = Color.rgba(color);
+  public setColor(color: DrawerColor) {
+    this.drawerOptions.stroke = DrawerColor.rgba(color);
+    this.drawerOptions.fill = DrawerColor.rgba(color);
   }
 
   public setDrawerByAction(action: DrawerAction) {
     if (action) {
       this.cursorMode = CursorMode.Draw;
       this.drawer = this.avalaibleDrawers.get(action.name);
-      Object.assign(this.drawerOptions, action);
+    }
+  }
+
+  public setDrawerOptions(action: DrawerAction) {
+    if (action) {
+      action.drawerOptions.forEach((option) => {
+        Object.defineProperties(this.drawerOptions, {
+          [option.optionName]: {
+            value: action.active ? option.optionValue : option.initialValue,
+            writable: false,
+            configurable: true,
+          },
+        });
+      });
+      console.log('After defineProperties', this.drawerOptions);
     }
   }
 
@@ -211,16 +225,12 @@ export class DrawingEditorComponent implements OnInit {
     }
   };
 
-  resize(screenWidth: number, canvasHeight: number) {
+  public resize(screenWidth: number, canvasHeight: number) {
     this.canvas.setWidth(screenWidth);
     this.canvas.setHeight(canvasHeight);
   }
 
-  setDrawerOptions(options: DrawerAction) {
-    Object.assign(this.drawerOptions, options);
-  }
-
-  updatePointerIcon(iconUrl: string) {
+  public updatePointerIcon(iconUrl: string) {
     // this.canvas.freeDrawingCursor = "pointer";
     // this.canvas.hoverCursor = `url('/${iconUrl}') x y, auto`;
     // eslint-disable-next-line @typescript-eslint/no-this-alias
