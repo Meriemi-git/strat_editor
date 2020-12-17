@@ -20,6 +20,7 @@ export class TextDrawer implements ObjectDrawer {
         top: y,
         editable: true,
       });
+      console.log('textbox', textbox);
       resolve(textbox);
     });
   }

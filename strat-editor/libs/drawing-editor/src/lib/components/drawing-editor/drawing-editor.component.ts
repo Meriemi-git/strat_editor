@@ -106,6 +106,28 @@ export class DrawingEditorComponent implements OnInit {
     }
   }
 
+  setFontFamily(font: string) {
+    Object.defineProperties(this.drawerOptions, {
+      ['fontFamily']: {
+        value: font,
+        writable: false,
+        configurable: true,
+      },
+    });
+    this.canvas.renderAll();
+  }
+
+  setFontSize(fontSize: number) {
+    Object.defineProperties(this.drawerOptions, {
+      ['fontSize']: {
+        value: fontSize,
+        writable: true,
+        configurable: true,
+      },
+    });
+    this.canvas.renderAll();
+  }
+
   private initializeCanvasEvents() {
     this.canvas.on('mouse:out', (o) => {});
 

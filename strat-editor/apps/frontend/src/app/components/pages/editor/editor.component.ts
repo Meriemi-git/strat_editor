@@ -73,6 +73,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.select(Selectors.getSelectedOption).subscribe((option) => {
       this.drawerEditor.setDrawerOptions(option);
     });
+    this.store.select(Selectors.getFont).subscribe((font) => {
+      this.drawerEditor.setFontFamily(font);
+    });
   }
 
   onMapSelected(map: Map) {

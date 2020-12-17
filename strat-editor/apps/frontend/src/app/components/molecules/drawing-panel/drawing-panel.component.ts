@@ -55,9 +55,6 @@ export class DrawingPanelComponent implements OnInit, AfterViewInit {
 
   onFontSelected(font: string) {
     console.log('font', font);
-    this.store.dispatch(
-      Actions.SetOptions({ optionAction: new FontAction(font) })
-    );
     this.store.dispatch(Actions.SetFont({ font }));
   }
 

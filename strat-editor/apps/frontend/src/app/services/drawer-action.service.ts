@@ -5,6 +5,7 @@ import {
   BoldAction,
   DrawerAction,
   EraserAction,
+  FontAction,
   GroupAction,
   ItalicAction,
   LineAction,
@@ -19,14 +20,14 @@ import {
   TimeAction,
   TriangleAction,
   UnderlineAction,
-  UngroupAction }
-  from '@strat-editor/drawing-editor';
+  UngroupAction,
+} from '@strat-editor/drawing-editor';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DrawerActionService {
-  actions : DrawerAction[] = [];
+  actions: DrawerAction[] = [];
   constructor() {
     this.actions.push(new LineAction());
     this.actions.push(new ArrowAction());
@@ -51,7 +52,7 @@ export class DrawerActionService {
     this.actions.push(new SelectionAction());
   }
 
-  getAllDrawerActions(): Observable<DrawerAction[]>{
+  getAllDrawerActions(): Observable<DrawerAction[]> {
     return of(this.actions);
   }
 }
