@@ -6,6 +6,7 @@ import {
   DrawerColor,
   DrawerAction,
   DrawerActionType,
+  FontAction,
 } from '@strat-editor/drawing-editor';
 import { StratEditorState } from '../../../store/reducers';
 import * as Actions from '../../../store/actions';
@@ -20,6 +21,7 @@ import { Observable } from 'rxjs';
 export class DrawingPanelComponent implements OnInit, AfterViewInit {
   $color: Observable<DrawerColor>;
   $drawerActions: Observable<DrawerAction[]>;
+  $fontNames: Observable<string[]>;
   DrawingActionType: typeof DrawerActionType = DrawerActionType;
 
   @ViewChild(Ngx.NgxMatColorPickerInput)
@@ -32,6 +34,7 @@ export class DrawingPanelComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.$color = this.store.select(Selectors.getColor);
     this.$drawerActions = this.store.select(Selectors.selectAllDrawerActions);
+    this.$fontNames = this.store.select(Selectors.getFontNames);
   }
 
   ngAfterViewInit(): void {}
@@ -39,15 +42,23 @@ export class DrawingPanelComponent implements OnInit, AfterViewInit {
   onSelectColor(event: any) {
     let color = new DrawerColor();
     Object.assign(color, event);
-    this.store.dispatch(Actions.SetColorAction({ color }));
+    this.store.dispatch(Actions.SetColor({ color }));
   }
 
   onActionSelected(action: DrawerAction) {
     if (action.type !== DrawerActionType.SETTING) {
       this.store.dispatch(Actions.PerformDrawerAction({ action }));
     } else {
-      this.store.dispatch(Actions.SetDrawerOptions({ optionAction: action }));
+      this.store.dispatch(Actions.SetOptions({ optionAction: action }));
     }
+  }
+
+  onFontSelected(font: string) {
+    console.log('font', font);
+    this.store.dispatch(
+      Actions.SetOptions({ optionAction: new FontAction(font) })
+    );
+    this.store.dispatch(Actions.SetFont({ font }));
   }
 
   getNgxColor(color: DrawerColor): Ngx.Color {

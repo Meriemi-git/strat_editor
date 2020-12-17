@@ -103,7 +103,6 @@ export class DrawingEditorComponent implements OnInit {
           },
         });
       });
-      console.log('After defineProperties', this.drawerOptions);
     }
   }
 

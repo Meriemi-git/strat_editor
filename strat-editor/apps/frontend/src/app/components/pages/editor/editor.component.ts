@@ -52,8 +52,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.dispatch(Actions.FetchAgents());
     this.store.dispatch(Actions.FetchMaps());
     this.store.dispatch(Actions.FetchDrawerActions());
+    this.store.dispatch(Actions.FetchFontNames());
     this.$maps = this.store.select(Selectors.selectAllMaps);
-    this.store.dispatch(Actions.SetColorAction({ color: new DrawerColor() }));
+    this.store.dispatch(Actions.SetColor({ color: new DrawerColor() }));
     this.store.dispatch(
       Actions.PerformDrawerAction({ action: new PolyLineAction() })
     );
@@ -70,7 +71,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
       this.drawerEditor.setColor(color);
     });
     this.store.select(Selectors.getSelectedOption).subscribe((option) => {
-      console.log('Selectors.getSelectedOption', option);
       this.drawerEditor.setDrawerOptions(option);
     });
   }
@@ -123,8 +123,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
-    console.log(event);
-
     if (event.key === KEY_CODE.RIGHT_ARROW) {
       this.store.dispatch(Actions.RedoDrawerAction());
     }

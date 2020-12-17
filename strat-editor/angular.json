@@ -23,14 +23,11 @@
             "aot": true,
             "assets": [
               "apps/frontend/src/favicon.ico",
-              "apps/frontend/src/assets",
-              "apps/frontend/src/assets/icons/*"
+              "apps/frontend/src/assets"
             ],
             "styles": ["apps/frontend/src/styles.scss"],
             "scripts": ["node_modules/jquery/dist/jquery.min.js"],
-            "allowedCommonJsDependencies": [
-              "fabric"
-           ]
+            "allowedCommonJsDependencies": ["fabric"]
           },
           "configurations": {
             "production": {

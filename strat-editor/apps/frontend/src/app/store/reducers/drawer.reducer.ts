@@ -9,10 +9,12 @@ import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 
 export interface DrawingActionState extends EntityState<DrawerAction> {
   color: DrawerColor;
-  selected: DrawerAction | null;
+  drawerAction: DrawerAction | null;
   optionAction: DrawerAction | null;
   history: DrawerAction[];
   historyIndex: number;
+  fontNames: string[];
+  font: string;
 }
 
 export const adapter: EntityAdapter<DrawerAction> = createEntityAdapter<
@@ -27,11 +29,13 @@ export function sortByName(a: DrawerAction, b: DrawerAction): number {
 }
 
 export const initialstate: DrawingActionState = adapter.getInitialState({
-  selected: null,
+  drawerAction: null,
   optionAction: null,
   history: [],
   historyIndex: 0,
   color: new DrawerColor(),
+  fontNames: [],
+  font: '',
 });
 
 const drawingActionReducer = createReducer(
@@ -42,11 +46,22 @@ const drawingActionReducer = createReducer(
   on(actions.FetchDrawerActionsSuccess, (state, { actions }) => {
     return adapter.addMany(actions, { ...state });
   }),
-  on(actions.SelectDrawerAction, (state, { action }) => ({
+  on(actions.FetchFontNames, (state) => ({
     ...state,
-    selected: action,
   })),
-  on(actions.SetDrawerOptions, (state, { optionAction }) => {
+  on(actions.FetchFontNamesSuccess, (state, { fontNames }) => ({
+    ...state,
+    fontNames: fontNames,
+  })),
+  on(actions.SetFont, (state, { font }) => ({
+    ...state,
+    font: font,
+  })),
+  on(actions.SetDrawerAction, (state, { action }) => ({
+    ...state,
+    drawerAction: action,
+  })),
+  on(actions.SetOptions, (state, { optionAction }) => {
     let activeOption = Object.assign({}, optionAction, {
       active: !optionAction.active,
     });
@@ -74,8 +89,8 @@ const drawingActionReducer = createReducer(
       });
     return adapter.updateMany(updatedActions, {
       ...state,
-      selected:
-        action.type !== DrawerActionType.SETTING ? action : state.selected,
+      drawerAction:
+        action.type !== DrawerActionType.SETTING ? action : state.drawerAction,
       historyIndex: state.historyIndex + 1,
       history: [...state.history.slice(0, state.historyIndex), action],
     });
@@ -102,7 +117,7 @@ const drawingActionReducer = createReducer(
     selected:
       state.history.length >= 0 ? state.history[state.historyIndex + 1] : null,
   })),
-  on(actions.SetColorAction, (state, { color }) => ({
+  on(actions.SetColor, (state, { color }) => ({
     ...state,
     color: color,
   }))

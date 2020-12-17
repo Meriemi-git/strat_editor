@@ -9,4 +9,5 @@ export const environment = {
   floor_extensions: '.webp',
   icon_folder: 'icons',
   icon_extension: '.svg',
+  font_folder: 'fonts',
 };

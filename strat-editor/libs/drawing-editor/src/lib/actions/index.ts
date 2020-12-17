@@ -18,3 +18,4 @@ export * from './ungroup-action';
 export * from './underline-action';
 export * from './bold-action';
 export * from './italic-action';
+export * from './font-action';

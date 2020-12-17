@@ -5,14 +5,26 @@ export const UnSelectDrawerAction = createAction(
   '[DrawerAction] Unselect Drawer Action'
 );
 
-export const SelectDrawerAction = createAction(
+export const SetDrawerAction = createAction(
   '[DrawerAction] Select Drawer Action',
   props<{ action: DrawerAction }>()
 );
 
-export const SetDrawerOptions = createAction(
+export const SetOptions = createAction(
   '[DrawerAction] Set Drawer Options',
   props<{ optionAction: DrawerAction }>()
+);
+
+export const FetchFontNames = createAction('[DrawerAction] Fetch font names');
+
+export const FetchFontNamesSuccess = createAction(
+  '[DrawerAction] Fetch font names success',
+  props<{ fontNames: string[] }>()
+);
+
+export const SetFont = createAction(
+  '[DrawerAction] Set font',
+  props<{ font: string }>()
 );
 
 export const FetchDrawerActions = createAction(
@@ -37,7 +49,7 @@ export const RedoDrawerAction = createAction(
   '[DrawerAction] Redo Drawer Action'
 );
 
-export const SetColorAction = createAction(
+export const SetColor = createAction(
   '[DrawerAction] Select Color Action',
   props<{ color: DrawerColor }>()
 );
@@ -47,7 +59,7 @@ const actions = union({
   PerformDrawerAction,
   UndoDrawerAction,
   RedoDrawerAction,
-  SetColorAction,
+  SetColorAction: SetColor,
 });
 
 export type DrawerActions = typeof actions;

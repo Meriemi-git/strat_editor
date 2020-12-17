@@ -42,17 +42,29 @@
 
   <hr />
   <h2 class="mat-title">Text</h2>
-  <div class="icons">
-    <strat-editor-drawing-action
-      *ngFor="
-        let action of $drawerActions
-          | async
-          | filter: ['text', 'setting']:'type'
-          | sortBy: 'ASC':'order'
-      "
-      [action]="action"
-      (actionSelected)="onActionSelected($event)"
-    ></strat-editor-drawing-action>
+  <div class="text-widgets">
+    <div class="icons">
+      <strat-editor-drawing-action
+        *ngFor="
+          let action of $drawerActions
+            | async
+            | filter: ['text', 'setting']:'type'
+            | sortBy: 'ASC':'order'
+        "
+        [action]="action"
+        (actionSelected)="onActionSelected($event)"
+      ></strat-editor-drawing-action>
+    </div>
+    <div class="fonts">
+      <mat-form-field>
+        <mat-label>Font</mat-label>
+        <mat-select (selectionChange)="onFontSelected($event.value)">
+          <mat-option *ngFor="let font of $fontNames | async" [value]="font">{{
+            font
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
   <hr />
   <h2 class="mat-title">Tools</h2>

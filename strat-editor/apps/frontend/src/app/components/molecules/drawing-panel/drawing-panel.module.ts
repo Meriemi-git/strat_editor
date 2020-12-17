@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { DrawingActionModule } from '../../atoms/drawing-action/drawing-action.module';
+import { MatSelectModule } from '@angular/material/select';
 import {
   MAT_COLOR_FORMATS,
   NgxMatColorPickerModule,
@@ -23,6 +24,7 @@ import { SharedModule } from '../../../shared.module';
     NgxMatColorPickerModule,
     DrawingActionModule,
     SharedModule,
+    MatSelectModule,
   ],
   providers: [{ provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS }],
   exports: [DrawingPanelComponent],

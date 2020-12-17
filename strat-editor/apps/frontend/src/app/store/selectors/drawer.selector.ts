@@ -14,7 +14,7 @@ export const selectAllDrawerActions = createSelector(
 );
 export const getSelectedAction = createSelector(
   selectDrawerState,
-  (state: Drawer.DrawingActionState) => state.selected
+  (state: Drawer.DrawingActionState) => state.drawerAction
 );
 export const getSelectedOption = createSelector(
   selectDrawerState,
@@ -28,4 +28,9 @@ export const getPreviousAction = createSelector(
 export const getColor = createSelector(
   drawingActionFeature,
   (state: Drawer.DrawingActionState) => state.color
+);
+
+export const getFontNames = createSelector(
+  drawingActionFeature,
+  (state: Drawer.DrawingActionState) => state.fontNames
 );

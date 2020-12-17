@@ -5,6 +5,7 @@ import { AgentModule } from './agent/agent.module';
 import { MapModule } from './map/map.module';
 import { FloorModule } from './floor/floor.module';
 import { IconModule } from './icon/icon.module';
+import { FontModule } from './fonts/font.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { IconModule } from './icon/icon.module';
     MapModule,
     FloorModule,
     IconModule,
+    FontModule,
   ],
 })
 export class AppModule implements NestModule {

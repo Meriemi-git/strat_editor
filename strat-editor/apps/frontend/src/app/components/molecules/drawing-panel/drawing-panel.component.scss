@@ -1,10 +1,15 @@
-.icons{
-  display:flex;
+.icons {
+  display: flex;
   flex-wrap: wrap;
   flex-direction: row-reverse;
-  justify-content: space-evenly
+  justify-content: space-evenly;
 }
 
-.mat-icon{
+.mat-icon {
   display: block;
+}
+
+.text-widgets {
+  display: flex;
+  flex-direction: column;
 }
