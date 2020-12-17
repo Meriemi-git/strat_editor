@@ -14,7 +14,8 @@ export interface DrawingActionState extends EntityState<DrawerAction> {
   history: DrawerAction[];
   historyIndex: number;
   fontNames: string[];
-  font: string;
+  fontFamily: string;
+  fontSize: number;
 }
 
 export const adapter: EntityAdapter<DrawerAction> = createEntityAdapter<
@@ -35,7 +36,8 @@ export const initialstate: DrawingActionState = adapter.getInitialState({
   historyIndex: 0,
   color: new DrawerColor(),
   fontNames: [],
-  font: '',
+  fontFamily: 'Verdana',
+  fontSize: 80,
 });
 
 const drawingActionReducer = createReducer(
@@ -53,9 +55,13 @@ const drawingActionReducer = createReducer(
     ...state,
     fontNames: fontNames,
   })),
-  on(actions.SetFont, (state, { font }) => ({
+  on(actions.SetFontFamily, (state, { fontFamily }) => ({
     ...state,
-    font: font,
+    fontFamily: fontFamily,
+  })),
+  on(actions.SetFontSize, (state, { fontSize }) => ({
+    ...state,
+    fontSize: fontSize,
   })),
   on(actions.SetDrawerAction, (state, { action }) => ({
     ...state,

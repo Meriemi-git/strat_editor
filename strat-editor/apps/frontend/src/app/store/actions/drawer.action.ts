@@ -22,9 +22,14 @@ export const FetchFontNamesSuccess = createAction(
   props<{ fontNames: string[] }>()
 );
 
-export const SetFont = createAction(
-  '[DrawerAction] Set font',
-  props<{ font: string }>()
+export const SetFontFamily = createAction(
+  '[DrawerAction] Set font family',
+  props<{ fontFamily: string }>()
+);
+
+export const SetFontSize = createAction(
+  '[DrawerAction] Set font size',
+  props<{ fontSize: number }>()
 );
 
 export const FetchDrawerActions = createAction(

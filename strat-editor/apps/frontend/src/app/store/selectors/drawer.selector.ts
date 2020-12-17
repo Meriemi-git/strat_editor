@@ -35,7 +35,12 @@ export const getFontNames = createSelector(
   (state: Drawer.DrawingActionState) => state.fontNames
 );
 
-export const getFont = createSelector(
+export const getFontFamily = createSelector(
   drawingActionFeature,
-  (state: Drawer.DrawingActionState) => state.font
+  (state: Drawer.DrawingActionState) => state.fontFamily
+);
+
+export const getFontSize = createSelector(
+  drawingActionFeature,
+  (state: Drawer.DrawingActionState) => state.fontSize
 );

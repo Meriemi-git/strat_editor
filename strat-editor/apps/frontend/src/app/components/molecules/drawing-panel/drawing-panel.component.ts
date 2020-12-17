@@ -6,7 +6,6 @@ import {
   DrawerColor,
   DrawerAction,
   DrawerActionType,
-  FontAction,
 } from '@strat-editor/drawing-editor';
 import { StratEditorState } from '../../../store/reducers';
 import * as Actions from '../../../store/actions';
@@ -22,6 +21,7 @@ export class DrawingPanelComponent implements OnInit, AfterViewInit {
   $color: Observable<DrawerColor>;
   $drawerActions: Observable<DrawerAction[]>;
   $fontNames: Observable<string[]>;
+  fontSizes: number[];
   DrawingActionType: typeof DrawerActionType = DrawerActionType;
 
   @ViewChild(Ngx.NgxMatColorPickerInput)
@@ -29,7 +29,11 @@ export class DrawingPanelComponent implements OnInit, AfterViewInit {
 
   colorCtr: AbstractControl = new FormControl('');
 
-  constructor(private store: Store<StratEditorState>) {}
+  constructor(private store: Store<StratEditorState>) {
+    this.fontSizes = Array(50)
+      .fill(0)
+      .map((x, i) => i);
+  }
 
   ngOnInit(): void {
     this.$color = this.store.select(Selectors.getColor);
@@ -53,9 +57,12 @@ export class DrawingPanelComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onFontSelected(font: string) {
-    console.log('font', font);
-    this.store.dispatch(Actions.SetFont({ font }));
+  onFontFamilySelected(font: string) {
+    this.store.dispatch(Actions.SetFontFamily({ fontFamily: font }));
+  }
+
+  onFontSizeSelected(fontSize: number) {
+    this.store.dispatch(Actions.SetFontSize({ fontSize }));
   }
 
   getNgxColor(color: DrawerColor): Ngx.Color {

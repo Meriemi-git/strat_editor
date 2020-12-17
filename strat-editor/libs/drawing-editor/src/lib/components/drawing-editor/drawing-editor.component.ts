@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { fabric } from 'fabric';
 import { DrawerAction } from '../../actions';
 import { CursorMode } from '../../cursor-mode';
@@ -58,7 +65,7 @@ export class DrawingEditorComponent implements OnInit {
     // Set the default options for the "drawer" class, including stroke color, width, and style
     this.drawerOptions = {
       name: 'line',
-      strokeWidth: 5,
+      strokeWidth: 2,
       selectable: true,
       strokeUniform: true,
     };
@@ -107,6 +114,7 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   setFontFamily(font: string) {
+    console.log('Editor setFontFamily :', font);
     Object.defineProperties(this.drawerOptions, {
       ['fontFamily']: {
         value: font,
@@ -118,6 +126,7 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   setFontSize(fontSize: number) {
+    console.log('Editor setFontSize :', fontSize);
     Object.defineProperties(this.drawerOptions, {
       ['fontSize']: {
         value: fontSize,
@@ -125,7 +134,7 @@ export class DrawingEditorComponent implements OnInit {
         configurable: true,
       },
     });
-    this.canvas.renderAll();
+    //this.canvas.renderAll();
   }
 
   private initializeCanvasEvents() {

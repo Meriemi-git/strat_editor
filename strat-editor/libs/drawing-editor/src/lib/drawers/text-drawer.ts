@@ -15,6 +15,7 @@ export class TextDrawer implements ObjectDrawer {
         fontStyle: options.fontStyle ?? '',
         fontWeight: options.fontWeight ?? '',
         fontFamily: options.fontFamily ?? '',
+        fontSize: options.fontSize ?? 0,
         underline: options.underline ?? false,
         left: x,
         top: y,

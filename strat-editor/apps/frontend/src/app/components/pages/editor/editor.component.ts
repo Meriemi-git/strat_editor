@@ -73,8 +73,11 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.select(Selectors.getSelectedOption).subscribe((option) => {
       this.drawerEditor.setDrawerOptions(option);
     });
-    this.store.select(Selectors.getFont).subscribe((font) => {
-      this.drawerEditor.setFontFamily(font);
+    this.store.select(Selectors.getFontFamily).subscribe((fontFamily) => {
+      this.drawerEditor.setFontFamily(fontFamily);
+    });
+    this.store.select(Selectors.getFontSize).subscribe((fontSize) => {
+      this.drawerEditor.setFontSize(fontSize);
     });
   }
 

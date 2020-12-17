@@ -57,8 +57,16 @@
     </div>
     <div class="fonts">
       <mat-form-field>
-        <mat-label>Font</mat-label>
-        <mat-select (selectionChange)="onFontSelected($event.value)">
+        <mat-label class="select-label">Font size</mat-label>
+        <mat-select (selectionChange)="onFontSizeSelected($event.value)">
+          <mat-option *ngFor="let size of fontSizes" [value]="size">{{
+            size
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label class="select-label">Font family</mat-label>
+        <mat-select (selectionChange)="onFontFamilySelected($event.value)">
           <mat-option *ngFor="let font of $fontNames | async" [value]="font">{{
             font
           }}</mat-option>
