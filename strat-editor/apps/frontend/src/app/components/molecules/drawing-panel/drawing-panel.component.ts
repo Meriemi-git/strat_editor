@@ -51,7 +51,7 @@ export class DrawingPanelComponent implements OnInit, AfterViewInit {
 
   onActionSelected(action: DrawerAction) {
     if (action.type !== DrawerActionType.SETTING) {
-      this.store.dispatch(Actions.PerformDrawerAction({ action }));
+      this.store.dispatch(Actions.SetDrawerAction({ action }));
     } else {
       this.store.dispatch(Actions.SetOptions({ optionAction: action }));
     }

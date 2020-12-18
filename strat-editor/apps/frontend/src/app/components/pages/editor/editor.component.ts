@@ -17,7 +17,7 @@ import {
   DrawingEditorComponent,
   PolyLineAction,
 } from '@strat-editor/drawing-editor';
-import { take } from 'rxjs/operators';
+import { sample, take } from 'rxjs/operators';
 import { KEY_CODE } from '../../../helpers/key_code';
 import { environment } from 'apps/frontend/src/environments/environment';
 import { Observable } from 'rxjs';
@@ -35,6 +35,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   $maps: Observable<Map[]>;
   width: number;
   height: number;
+  canvasStateLoading: boolean;
 
   @ViewChild('container') container: ElementRef;
   @ViewChild('drawerEditor') drawerEditor: DrawingEditorComponent;
@@ -48,7 +49,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.select(Selectors.isRightSidenavOpened).subscribe((isOpened) => {
       this.rightIsOpened = isOpened;
     });
-
     this.store.dispatch(Actions.FetchAgents());
     this.store.dispatch(Actions.FetchMaps());
     this.store.dispatch(Actions.FetchDrawerActions());
@@ -56,7 +56,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.$maps = this.store.select(Selectors.selectAllMaps);
     this.store.dispatch(Actions.SetColor({ color: new DrawerColor() }));
     this.store.dispatch(
-      Actions.PerformDrawerAction({ action: new PolyLineAction() })
+      Actions.SetDrawerAction({ action: new PolyLineAction() })
     );
   }
 
@@ -79,6 +79,13 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.select(Selectors.getFontSize).subscribe((fontSize) => {
       this.drawerEditor.setFontSize(fontSize);
     });
+    this.store
+      .select(Selectors.getCurrentCanvasState)
+      .subscribe((canvasState) => {
+        if (canvasState) {
+          this.drawerEditor.setCanvasState(canvasState);
+        }
+      });
   }
 
   onMapSelected(map: Map) {
@@ -104,8 +111,16 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   onDrawingActionSelected(action: DrawerAction) {
-    this.store.dispatch(Actions.PerformDrawerAction({ action }));
+    this.store.dispatch(Actions.SetDrawerAction({ action }));
     this.store.dispatch(Actions.toggleRight());
+  }
+
+  onStateModified(canvasState: string) {
+    this.store.dispatch(Actions.SaveCanvasState({ canvasState }));
+  }
+
+  onCanvasStateLoaded() {
+    this.canvasStateLoading = false;
   }
 
   displayCanvas() {
@@ -130,20 +145,26 @@ export class EditorComponent implements OnInit, AfterViewInit {
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (event.key === KEY_CODE.RIGHT_ARROW) {
-      this.store.dispatch(Actions.RedoDrawerAction());
+      if (!this.canvasStateLoading) {
+        this.store.dispatch(Actions.RedoCanvasState());
+      }
     }
 
     if (event.key === KEY_CODE.LEFT_ARROW) {
-      this.store.dispatch(Actions.UndoDrawerAction());
+      if (!this.canvasStateLoading) {
+        this.store.dispatch(Actions.UndoCanvasState());
+      }
     }
 
     if (event.key === KEY_CODE.ESCAPE) {
-      this.store.dispatch(Actions.UnSelectDrawerAction());
+      //this.store.dispatch(Actions.UnSelectDrawerAction());
     }
   }
 
   toggleLeftSidenav() {
-    this.store.dispatch(Actions.toggleLeft());
+    if (!this.canvasStateLoading) {
+      this.store.dispatch(Actions.toggleLeft());
+    }
   }
 
   toggleRightSidenav() {

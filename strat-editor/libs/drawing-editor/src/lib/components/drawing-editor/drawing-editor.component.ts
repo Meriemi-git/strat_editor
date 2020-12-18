@@ -1,11 +1,4 @@
-import {
-  Component,
-  ComponentFactoryResolver,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { fabric } from 'fabric';
 import { DrawerAction } from '../../actions';
 import { CursorMode } from '../../cursor-mode';
@@ -29,7 +22,8 @@ import { IconHelperService } from '../../services/icon-helper.service';
 export class DrawingEditorComponent implements OnInit {
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
-  @Output() objectDrawn = new EventEmitter<fabric.Object>();
+  @Output() stateModified = new EventEmitter<string>();
+  @Output() stateLoaded = new EventEmitter<void>();
   private cursorMode: CursorMode;
 
   private canvas: fabric.Canvas;
@@ -65,11 +59,10 @@ export class DrawingEditorComponent implements OnInit {
     // Set the default options for the "drawer" class, including stroke color, width, and style
     this.drawerOptions = {
       name: 'line',
-      strokeWidth: 2,
+      strokeWidth: 5,
       selectable: true,
       strokeUniform: true,
     };
-
     this.initializeCanvasEvents();
   }
 
@@ -113,8 +106,7 @@ export class DrawingEditorComponent implements OnInit {
     }
   }
 
-  setFontFamily(font: string) {
-    console.log('Editor setFontFamily :', font);
+  public setFontFamily(font: string) {
     Object.defineProperties(this.drawerOptions, {
       ['fontFamily']: {
         value: font,
@@ -125,8 +117,7 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.renderAll();
   }
 
-  setFontSize(fontSize: number) {
-    console.log('Editor setFontSize :', fontSize);
+  public setFontSize(fontSize: number) {
     Object.defineProperties(this.drawerOptions, {
       ['fontSize']: {
         value: fontSize,
@@ -134,8 +125,24 @@ export class DrawingEditorComponent implements OnInit {
         configurable: true,
       },
     });
-    //this.canvas.renderAll();
+    this.canvas.renderAll();
   }
+
+  public deleteObject(object: fabric.Object) {
+    this.canvas.remove(object);
+  }
+
+  public getCanvasState(): string {
+    return this.canvas.toDatalessJSON();
+  }
+
+  public setCanvasState(canvasState: string): void {
+    this.canvas.loadFromJSON(canvasState, this.canvasStateIsLoaded);
+  }
+
+  canvasStateIsLoaded = (): void => {
+    this.stateLoaded.emit();
+  };
 
   private initializeCanvasEvents() {
     this.canvas.on('mouse:out', (o) => {});
@@ -151,8 +158,7 @@ export class DrawingEditorComponent implements OnInit {
     });
 
     this.canvas.on('mouse:up', (event: fabric.IEvent) => {
-      this.isDown = false;
-      this.objectDrawn.emit(this.object);
+      this.mouseUp();
     });
 
     this.canvas.on('selection:created', (o) => {
@@ -184,6 +190,10 @@ export class DrawingEditorComponent implements OnInit {
       this.cursorMode = CursorMode.Select;
     });
   }
+  private async mouseUp() {
+    this.isDown = false;
+    this.stateModified.emit(this.getCanvasState());
+  }
 
   private async mouseDown(x: number, y: number): Promise<void> {
     this.isDown = true; //The mouse is being clicked
@@ -193,6 +203,7 @@ export class DrawingEditorComponent implements OnInit {
     }
     // Create an object at the point (x,y)
     this.object = await this.make(x, y);
+
     if (this.object instanceof LineArrow && this.object.triangle) {
       this.canvas.add(this.object.triangle);
     }
@@ -253,6 +264,7 @@ export class DrawingEditorComponent implements OnInit {
         }
       );
     }
+    this.stateModified.emit(this.getCanvasState());
   };
 
   public resize(screenWidth: number, canvasHeight: number) {

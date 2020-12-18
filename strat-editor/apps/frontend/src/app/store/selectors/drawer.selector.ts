@@ -20,11 +20,7 @@ export const getSelectedOption = createSelector(
   selectDrawerState,
   (state: Drawer.DrawingActionState) => state.optionAction
 );
-export const getPreviousAction = createSelector(
-  selectDrawerState,
-  (state: Drawer.DrawingActionState) =>
-    state.history.length > 1 ? state.history[state.historyIndex] : null
-);
+
 export const getColor = createSelector(
   drawingActionFeature,
   (state: Drawer.DrawingActionState) => state.color

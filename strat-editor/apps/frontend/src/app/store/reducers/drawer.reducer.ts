@@ -11,8 +11,6 @@ export interface DrawingActionState extends EntityState<DrawerAction> {
   color: DrawerColor;
   drawerAction: DrawerAction | null;
   optionAction: DrawerAction | null;
-  history: DrawerAction[];
-  historyIndex: number;
   fontNames: string[];
   fontFamily: string;
   fontSize: number;
@@ -32,8 +30,6 @@ export function sortByName(a: DrawerAction, b: DrawerAction): number {
 export const initialstate: DrawingActionState = adapter.getInitialState({
   drawerAction: null,
   optionAction: null,
-  history: [],
-  historyIndex: 0,
   color: new DrawerColor(),
   fontNames: [],
   fontFamily: 'Verdana',
@@ -63,24 +59,7 @@ const drawingActionReducer = createReducer(
     ...state,
     fontSize: fontSize,
   })),
-  on(actions.SetDrawerAction, (state, { action }) => ({
-    ...state,
-    drawerAction: action,
-  })),
-  on(actions.SetOptions, (state, { optionAction }) => {
-    let activeOption = Object.assign({}, optionAction, {
-      active: !optionAction.active,
-    });
-    let updatedOption = {
-      id: optionAction.name,
-      changes: activeOption,
-    };
-    return adapter.updateOne(updatedOption, {
-      ...state,
-      optionAction: activeOption,
-    });
-  }),
-  on(actions.PerformDrawerAction, (state, { action }) => {
+  on(actions.SetDrawerAction, (state, { action }) => {
     let updatedActions = adapter
       .getSelectors()
       .selectAll(state)
@@ -97,32 +76,21 @@ const drawingActionReducer = createReducer(
       ...state,
       drawerAction:
         action.type !== DrawerActionType.SETTING ? action : state.drawerAction,
-      historyIndex: state.historyIndex + 1,
-      history: [...state.history.slice(0, state.historyIndex), action],
     });
   }),
-  on(actions.UndoDrawerAction, (state) => ({
-    ...state,
-    selected: null,
-  })),
-  on(actions.UndoDrawerAction, (state) => ({
-    ...state,
-    historyIndex:
-      state.historyIndex >= 0 ? state.historyIndex - 1 : state.historyIndex,
-    selected:
-      state.historyIndex >= 0 && state.history.length >= 0
-        ? state.history[state.historyIndex - 1]
-        : null,
-  })),
-  on(actions.RedoDrawerAction, (state) => ({
-    ...state,
-    historyIndex:
-      state.history.length > state.historyIndex
-        ? state.historyIndex + 1
-        : state.historyIndex,
-    selected:
-      state.history.length >= 0 ? state.history[state.historyIndex + 1] : null,
-  })),
+  on(actions.SetOptions, (state, { optionAction }) => {
+    let activeOption = Object.assign({}, optionAction, {
+      active: !optionAction.active,
+    });
+    let updatedOption = {
+      id: optionAction.name,
+      changes: activeOption,
+    };
+    return adapter.updateOne(updatedOption, {
+      ...state,
+      optionAction: activeOption,
+    });
+  }),
   on(actions.SetColor, (state, { color }) => ({
     ...state,
     color: color,

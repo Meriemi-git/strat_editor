@@ -41,30 +41,19 @@ export const FetchDrawerActionsSuccess = createAction(
   props<{ actions: DrawerAction[] }>()
 );
 
-export const PerformDrawerAction = createAction(
-  '[DrawerAction] Perform Drawer Action',
-  props<{ action: DrawerAction }>()
-);
-
-export const UndoDrawerAction = createAction(
-  '[DrawerAction] Undo Drawer Action'
-);
-
-export const RedoDrawerAction = createAction(
-  '[DrawerAction] Redo Drawer Action'
-);
-
 export const SetColor = createAction(
   '[DrawerAction] Select Color Action',
   props<{ color: DrawerColor }>()
 );
 
 const actions = union({
-  AddAllActions: FetchDrawerActions,
-  PerformDrawerAction,
-  UndoDrawerAction,
-  RedoDrawerAction,
-  SetColorAction: SetColor,
+  FetchDrawerActions,
+  FetchFontNames,
+  SetDrawerAction,
+  FetchFontNamesSuccess,
+  SetColor,
+  SetFontFamily,
+  SetFontSize,
 });
 
 export type DrawerActions = typeof actions;

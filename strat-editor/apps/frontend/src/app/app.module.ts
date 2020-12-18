@@ -11,7 +11,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from '../environments/environment';
-//import { metaReducers } from './store/reducers/drawer.reducer';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,10 +26,6 @@ import { environment } from '../environments/environment';
       maxAge: 40, // Retains last 25 states
     }),
     EffectsModule.forRoot(effects),
-    StoreDevtoolsModule.instrument({
-      maxAge: 25,
-      logOnly: environment.production,
-    }),
   ],
   bootstrap: [AppComponent],
 })
