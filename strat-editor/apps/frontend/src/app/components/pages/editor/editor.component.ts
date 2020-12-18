@@ -39,6 +39,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   @ViewChild('container') container: ElementRef;
   @ViewChild('drawerEditor') drawerEditor: DrawingEditorComponent;
+  CTRLPressed: boolean;
 
   constructor(private store: Store<StratEditorState>) {}
 
@@ -143,21 +144,45 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (event.key === KEY_CODE.RIGHT_ARROW) {
-      if (!this.canvasStateLoading) {
-        this.store.dispatch(Actions.RedoCanvasState());
-      }
+  keyUp(event: KeyboardEvent) {
+    console.log('keyup :', event.key);
+    switch (event.key.toLocaleLowerCase()) {
+      case KEY_CODE.DELETE:
+        this.drawerEditor.deleteActiveObject();
+        break;
+      case KEY_CODE.ESCAPE:
+        //this.store.dispatch(Actions.UnSelectDrawerAction());
+        break;
+      case KEY_CODE.CTRL:
+        this.CTRLPressed = false;
+        break;
+      case KEY_CODE.A:
+        if (this.CTRLPressed) {
+          this.drawerEditor.selectAllObjects();
+        }
+        break;
+      case KEY_CODE.Z:
+        if (this.CTRLPressed && !this.canvasStateLoading) {
+          this.store.dispatch(Actions.UndoCanvasState());
+        }
+        break;
+      case KEY_CODE.Y:
+        if (this.CTRLPressed && !this.canvasStateLoading) {
+          this.store.dispatch(Actions.RedoCanvasState());
+        }
+        break;
+      default:
+        console.log('Key mapping not managed');
     }
+  }
 
-    if (event.key === KEY_CODE.LEFT_ARROW) {
-      if (!this.canvasStateLoading) {
-        this.store.dispatch(Actions.UndoCanvasState());
-      }
-    }
-
-    if (event.key === KEY_CODE.ESCAPE) {
-      //this.store.dispatch(Actions.UnSelectDrawerAction());
+  @HostListener('window:keydown', ['$event'])
+  keyDown(event: KeyboardEvent) {
+    console.log('keydown :', event.key);
+    switch (event.key.toLocaleLowerCase()) {
+      case KEY_CODE.CTRL:
+        this.CTRLPressed = true;
+        break;
     }
   }
 

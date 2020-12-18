@@ -127,9 +127,21 @@ export class DrawingEditorComponent implements OnInit {
     });
     this.canvas.renderAll();
   }
+  public deleteActiveObject() {
+    this.canvas.getActiveObjects().forEach((obj) => {
+      this.canvas.remove(obj);
+    });
+    this.canvas.setActiveObject(null);
+    this.stateModified.emit(this.getCanvasState());
+    this.canvas.renderAll();
+  }
 
-  public deleteObject(object: fabric.Object) {
-    this.canvas.remove(object);
+  public selectAllObjects() {
+    var selection = new fabric.ActiveSelection(this.canvas.getObjects(), {
+      canvas: this.canvas,
+    });
+    this.canvas.setActiveObject(selection);
+    this.canvas.renderAll();
   }
 
   public getCanvasState(): string {
@@ -140,12 +152,16 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.loadFromJSON(canvasState, this.canvasStateIsLoaded);
   }
 
-  canvasStateIsLoaded = (): void => {
+  public setBackgroundImageFromUrl = (imageUrl: string) => {
+    fabric.Image.fromURL(imageUrl, this.setBackground);
+  };
+
+  private canvasStateIsLoaded = (): void => {
     this.stateLoaded.emit();
   };
 
   private initializeCanvasEvents() {
-    this.canvas.on('mouse:out', (o) => {});
+    this.canvas.on('mouse:out', () => {});
 
     this.canvas.on('mouse:down', (o) => {
       const pointer = this.canvas.getPointer(o.e);
@@ -157,38 +173,45 @@ export class DrawingEditorComponent implements OnInit {
       this.mouseMove(pointer.x, pointer.y);
     });
 
-    this.canvas.on('mouse:up', (event: fabric.IEvent) => {
+    this.canvas.on('mouse:up', () => {
       this.mouseUp();
     });
 
-    this.canvas.on('selection:created', (o) => {
-      this.cursorMode = CursorMode.Select;
-      this.object = o.target;
-      if (o.target instanceof LineArrow) {
-        var selection = new fabric.ActiveSelection(
-          [o.target, o.target.triangle],
-          {
-            canvas: this.canvas,
-          }
-        );
-        this.canvas.setActiveObject(selection);
-      } else if (o.target instanceof TriangleArrow) {
-        var selection = new fabric.ActiveSelection([o.target, o.target.line], {
-          canvas: this.canvas,
-        });
-        this.canvas.setActiveObject(selection);
-      } else {
-        this.canvas.setActiveObject(this.object);
-      }
+    this.canvas.on('selection:created', (event: fabric.IEvent) => {
+      this.selectionCreated(event);
     });
 
     this.canvas.on('selection:cleared', () => {
       this.cursorMode = CursorMode.Draw;
     });
 
-    this.canvas.on('object:scaling', (event: fabric.IEvent) => {
+    this.canvas.on('object:scaling', () => {
       this.cursorMode = CursorMode.Select;
     });
+  }
+
+  private selectionCreated(event: fabric.IEvent) {
+    this.cursorMode = CursorMode.Select;
+    this.object = event.target;
+    if (event.target instanceof LineArrow) {
+      var selection = new fabric.ActiveSelection(
+        [event.target, event.target.triangle],
+        {
+          canvas: this.canvas,
+        }
+      );
+      this.canvas.setActiveObject(selection);
+    } else if (event.target instanceof TriangleArrow) {
+      var selection = new fabric.ActiveSelection(
+        [event.target, event.target.line],
+        {
+          canvas: this.canvas,
+        }
+      );
+      this.canvas.setActiveObject(selection);
+    } else {
+      this.canvas.setActiveObject(this.object);
+    }
   }
   private async mouseUp() {
     this.isDown = false;
@@ -229,10 +252,6 @@ export class DrawingEditorComponent implements OnInit {
       return await this.drawer.make(x, y, this.drawerOptions);
     }
   }
-
-  public setBackgroundImageFromUrl = (imageUrl: string) => {
-    fabric.Image.fromURL(imageUrl, this.setBackground);
-  };
 
   private setBackground = (img: fabric.Image): void => {
     if (this.canvas.width < this.canvas.height) {
