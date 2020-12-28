@@ -37,10 +37,11 @@ export class DrawingEditorComponent implements OnInit {
   private object: fabric.Object; // The object currently being drawn
 
   private isDown: boolean; //Is user dragging the mouse?
-
+  private isMoving: boolean;
   private cursorSvg: fabric.Image;
 
   private mouseIsIn: boolean;
+  isObjectSelected: boolean;
 
   constructor(private ihs: IconHelperService) {
     this.setBackgroundImageFromUrl.bind(this);
@@ -52,7 +53,10 @@ export class DrawingEditorComponent implements OnInit {
     // user is drawing
     this.cursorMode = CursorMode.Undefined;
     // Create the Fabric canvas
-    this.canvas = new fabric.Canvas('canvas', { selection: false });
+    this.canvas = new fabric.Canvas('canvas', {
+      selection: false,
+      includeDefaultValues: true,
+    });
     this.canvas.setWidth(this.canvasWidth);
     this.canvas.setHeight(this.canvasHeight);
 
@@ -127,6 +131,7 @@ export class DrawingEditorComponent implements OnInit {
     });
     this.canvas.renderAll();
   }
+
   public deleteActiveObject() {
     this.canvas.getActiveObjects().forEach((obj) => {
       this.canvas.remove(obj);
@@ -145,10 +150,18 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   public getCanvasState(): string {
-    return this.canvas.toDatalessJSON();
+    this.updateNestedObjects();
+    return this.canvas.toDatalessJSON([
+      'line',
+      'triangle',
+      'type',
+      'uid',
+      'name',
+    ]);
   }
 
   public setCanvasState(canvasState: string): void {
+    console.log('setCanvasState');
     this.canvas.loadFromJSON(canvasState, this.canvasStateIsLoaded);
   }
 
@@ -157,15 +170,45 @@ export class DrawingEditorComponent implements OnInit {
   };
 
   private canvasStateIsLoaded = (): void => {
+    console.log('canvasStateIsLoaded');
+    this.updateNestedObjects();
     this.stateLoaded.emit();
   };
 
-  private initializeCanvasEvents() {
-    this.canvas.on('mouse:out', () => {});
+  updateNestedObjects() {
+    console.log('updateNestedObjects');
+    this.canvas._objects.forEach((object) => {
+      let triangleArrow = (object as LineArrow).triangle;
+      let lineArrow = (object as TriangleArrow).line;
+      if (triangleArrow) {
+        (object as LineArrow).triangle = this.getFabricObjectByUidAndType(
+          (object as LineArrow).uid,
+          'TriangleArrow'
+        );
+      } else if (lineArrow) {
+        (object as TriangleArrow).line = this.getFabricObjectByUidAndType(
+          (object as TriangleArrow).uid,
+          'LineArrow'
+        );
+      }
+    });
+  }
 
-    this.canvas.on('mouse:down', (o) => {
-      const pointer = this.canvas.getPointer(o.e);
+  getFabricObjectByUidAndType(uid: string, type: string): any {
+    const object = this.canvas._objects.find(
+      (object) => (object as any).uid === uid && (object as any).name === type
+    );
+    if (!object) {
+      console.log('getFabricObjectByCoords => object NOT found !');
+    }
+    return object;
+  }
+
+  private initializeCanvasEvents() {
+    this.canvas.on('mouse:down', (event: fabric.IEvent) => {
+      const pointer = this.canvas.getPointer(event.e);
       this.mouseDown(pointer.x, pointer.y);
+      this.isObjectSelected = event.target != null;
     });
 
     this.canvas.on('mouse:move', (event: fabric.IEvent) => {
@@ -175,6 +218,10 @@ export class DrawingEditorComponent implements OnInit {
 
     this.canvas.on('mouse:up', () => {
       this.mouseUp();
+    });
+
+    this.canvas.on('object:moving', () => {
+      this.isMoving = true;
     });
 
     this.canvas.on('selection:created', (event: fabric.IEvent) => {
@@ -188,49 +235,66 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.on('object:scaling', () => {
       this.cursorMode = CursorMode.Select;
     });
+
+    this.canvas.on('selection:cleared', () => {
+      console.log('Selection cleared');
+    });
   }
 
   private selectionCreated(event: fabric.IEvent) {
     this.cursorMode = CursorMode.Select;
     this.object = event.target;
-    if (event.target instanceof LineArrow) {
-      var selection = new fabric.ActiveSelection(
-        [event.target, event.target.triangle],
+    console.log('selectionCreated', this.object);
+    let selection: fabric.ActiveSelection;
+    if ((event.target as LineArrow).triangle) {
+      console.log('Add triangle to selection');
+      selection = new fabric.ActiveSelection(
+        [event.target, (event.target as LineArrow).triangle],
         {
           canvas: this.canvas,
         }
       );
-      this.canvas.setActiveObject(selection);
-    } else if (event.target instanceof TriangleArrow) {
-      var selection = new fabric.ActiveSelection(
-        [event.target, event.target.line],
+    } else if ((event.target as TriangleArrow).line) {
+      console.log('Add line to selection');
+      selection = new fabric.ActiveSelection(
+        [event.target, (event.target as TriangleArrow).line],
         {
           canvas: this.canvas,
         }
       );
+    }
+    if (selection) {
       this.canvas.setActiveObject(selection);
     } else {
       this.canvas.setActiveObject(this.object);
     }
+    this.canvas.renderAll();
   }
+
   private async mouseUp() {
+    if (this.isMoving) {
+      this.canvas.discardActiveObject();
+    }
     this.isDown = false;
+    this.isMoving = false;
+    console.log('mouseUp', this.canvas._objects);
+    //this.canvas.discardActiveObject();
+    this.canvas.renderAll();
     this.stateModified.emit(this.getCanvasState());
   }
 
   private async mouseDown(x: number, y: number): Promise<void> {
+    console.log('mouseDown');
     this.isDown = true; //The mouse is being clicked
-
     if (this.cursorMode !== CursorMode.Draw) {
       return;
     }
     // Create an object at the point (x,y)
     this.object = await this.make(x, y);
-
+    // Add the object to the canvas
     if (this.object instanceof LineArrow && this.object.triangle) {
       this.canvas.add(this.object.triangle);
     }
-    // Add the object to the canvas
     this.canvas.add(this.object);
 
     // Renders all objects to the canvas
@@ -238,6 +302,7 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   private mouseMove(x: number, y: number): void {
+    console.log('mouseMove');
     if (!(this.cursorMode === CursorMode.Draw && this.isDown)) {
       return;
     }
@@ -283,6 +348,7 @@ export class DrawingEditorComponent implements OnInit {
         }
       );
     }
+    console.log('setBackground => getCanvasState');
     this.stateModified.emit(this.getCanvasState());
   };
 

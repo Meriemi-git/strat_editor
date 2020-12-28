@@ -1,6 +1,7 @@
 import { fabric } from 'fabric';
 
-export class LineArrow extends fabric.Line{
-  type: 'Arrow';
-  public triangle : fabric.Triangle
+export class LineArrow extends fabric.Line {
+  public type: 'LineArrow';
+  public triangle: fabric.Triangle;
+  public uid: string;
 }

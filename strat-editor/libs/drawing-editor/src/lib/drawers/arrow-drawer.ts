@@ -3,6 +3,7 @@ import { ObjectDrawer } from './object-drawer';
 import { DrawingMode } from './drawing-mode';
 import { LineArrow } from '../fabricjs/line-arrow';
 import { TriangleArrow } from '../fabricjs/triangle-arrow';
+import * as uuid from 'uuid';
 
 export class ArrowDrawer implements ObjectDrawer {
   private originX: number;
@@ -37,6 +38,7 @@ export class ArrowDrawer implements ObjectDrawer {
     x2?: number,
     y2?: number
   ): LineArrow {
+    const uid = uuid.v4();
     const triangle = new TriangleArrow({
       ...options,
       left: x,
@@ -47,19 +49,21 @@ export class ArrowDrawer implements ObjectDrawer {
       originX: 'center',
       originY: 'center',
       strokeUniform: false,
-      hasControls: false,
-      hasBorders: false,
+      name: 'TriangleArrow',
     });
-    const line = new LineArrow([x, y, x2, y + 50], {
+    const line = new LineArrow([x, y, x2, y2], {
       ...options,
+      left: x,
+      top: y,
       originX: 'center',
       originY: 'center',
       strokeUniform: false,
-      centeredRotation: false,
-      centeredScaling: false,
+      name: 'LineArrow',
     });
     triangle.line = line;
+    triangle.uid = uid;
     line.triangle = triangle;
+    line.uid = uid;
     return line;
   }
 
@@ -68,6 +72,7 @@ export class ArrowDrawer implements ObjectDrawer {
     arrow.triangle.set({
       angle: angle,
     });
+
     arrow
       .set({
         x2: x,

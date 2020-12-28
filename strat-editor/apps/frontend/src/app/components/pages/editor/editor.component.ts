@@ -84,7 +84,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
       .select(Selectors.getCurrentCanvasState)
       .subscribe((canvasState) => {
         if (canvasState) {
-          this.drawerEditor.setCanvasState(canvasState);
+          const state = JSON.parse(canvasState);
+          this.drawerEditor.setCanvasState(state);
         }
       });
   }
@@ -116,7 +117,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.dispatch(Actions.toggleRight());
   }
 
-  onStateModified(canvasState: string) {
+  onStateModified(state: string) {
+    const canvasState = JSON.stringify(state);
+
+    //const canvasState = state;
     this.store.dispatch(Actions.SaveCanvasState({ canvasState }));
   }
 
@@ -145,7 +149,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   @HostListener('window:keyup', ['$event'])
   keyUp(event: KeyboardEvent) {
-    console.log('keyup :', event.key);
     switch (event.key.toLocaleLowerCase()) {
       case KEY_CODE.DELETE:
         this.drawerEditor.deleteActiveObject();
@@ -178,7 +181,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   @HostListener('window:keydown', ['$event'])
   keyDown(event: KeyboardEvent) {
-    console.log('keydown :', event.key);
     switch (event.key.toLocaleLowerCase()) {
       case KEY_CODE.CTRL:
         this.CTRLPressed = true;
