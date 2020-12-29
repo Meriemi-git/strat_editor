@@ -94,7 +94,31 @@ const drawingActionReducer = createReducer(
   on(actions.SetColor, (state, { color }) => ({
     ...state,
     color: color,
-  }))
+  })),
+  on(actions.UnSelectDrawerAction, (state) => {
+    let updatedActions = adapter
+      .getSelectors()
+      .selectAll(state)
+      .map((someAction) => {
+        const isActive =
+          someAction.type === DrawerActionType.SETTING
+            ? someAction.active
+            : someAction.name === 'selection'
+            ? true
+            : false;
+        let updatedAction = Object.assign({}, someAction, {
+          active: isActive,
+        });
+        return { id: updatedAction.name, changes: updatedAction };
+      });
+    return adapter.updateMany(updatedActions, {
+      ...state,
+      drawerAction: adapter
+        .getSelectors()
+        .selectAll(state)
+        .find((action) => action.name === 'selection'),
+    });
+  })
 );
 
 export function reducer(state: DrawingActionState | undefined, action: Action) {

@@ -57,7 +57,6 @@ export class DrawingEditorComponent implements OnInit {
     // Create the Fabric canvas
     this.canvas = new fabric.Canvas('canvas', {
       selection: false,
-      includeDefaultValues: true,
     });
     this.canvas.setWidth(this.canvasWidth);
     this.canvas.setHeight(this.canvasHeight);
@@ -94,6 +93,10 @@ export class DrawingEditorComponent implements OnInit {
   public callAction(action: DrawerAction) {
     if (action) {
       this.dispatchActionByType(action);
+    } else {
+      console.log('callAction null , cursor mode select drawer null');
+      this.drawer = null;
+      this.cursorMode = CursorMode.Select;
     }
   }
 
@@ -252,7 +255,7 @@ export class DrawingEditorComponent implements OnInit {
     });
 
     this.canvas.on('selection:cleared', () => {
-      this.cursorMode = CursorMode.Draw;
+      //this.cursorMode = CursorMode.Draw;
     });
 
     this.canvas.on('object:scaling', () => {
@@ -287,12 +290,11 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   private mouseMove(x: number, y: number): void {
-    if (!(this.cursorMode === CursorMode.Draw && this.isDown)) {
-      return;
+    console.log(`cursorMode : ${this.cursorMode}\n isDown : ${this.isDown}`);
+    if (this.cursorMode === CursorMode.Draw && this.isDown) {
+      this.drawer.resize(this.object, x, y);
+      this.canvas.renderAll();
     }
-    this.drawer.resize(this.object, x, y);
-    this.canvas.renderAll();
-    this.mouseIsIn = true;
   }
 
   private async mouseUp() {

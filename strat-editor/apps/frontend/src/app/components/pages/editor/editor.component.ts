@@ -64,7 +64,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.store.select(Selectors.getSelectedAction).subscribe((selected) => {
       if (this.selectedMap) {
-        this.toggleRightSidenav();
+        this.closeRightSidenav();
       }
       this.drawerEditor.callAction(selected);
     });
@@ -152,7 +152,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
         this.drawerEditor.deleteActiveObject();
         break;
       case KEY_CODE.ESCAPE:
-        //this.store.dispatch(Actions.UnSelectDrawerAction());
+        this.store.dispatch(Actions.UnSelectDrawerAction());
         break;
       case KEY_CODE.CTRL:
         this.CTRLPressed = false;
@@ -194,5 +194,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   toggleRightSidenav() {
     this.store.dispatch(Actions.toggleRight());
+  }
+
+  closeRightSidenav() {
+    this.store.dispatch(Actions.closeRight());
   }
 }
