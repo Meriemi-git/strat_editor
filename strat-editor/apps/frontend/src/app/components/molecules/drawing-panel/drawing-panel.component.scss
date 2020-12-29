@@ -1,16 +1,15 @@
-.icons {
+.actions {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row-reverse;
   justify-content: space-evenly;
 }
 
-.mat-icon {
-  display: block;
+.action {
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
-.fonts {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+.mat-icon {
+  display: block;
 }

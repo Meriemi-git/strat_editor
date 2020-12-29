@@ -1,6 +1,6 @@
 <div class="container">
   <h2 class="mat-title">Shapes</h2>
-  <div class="icons">
+  <div class="actions">
     <strat-editor-drawing-action
       *ngFor="
         let action of $drawerActions
@@ -10,6 +10,7 @@
       "
       [action]="action"
       (actionSelected)="onActionSelected($event)"
+      class="action"
     ></strat-editor-drawing-action>
   </div>
   <hr />
@@ -27,7 +28,7 @@
   </mat-form-field>
   <hr />
   <h2 class="mat-title">Forms</h2>
-  <div class="icons">
+  <div class="actions">
     <strat-editor-drawing-action
       *ngFor="
         let action of $drawerActions
@@ -37,13 +38,14 @@
       "
       [action]="action"
       (actionSelected)="onActionSelected($event)"
+      class="action"
     ></strat-editor-drawing-action>
   </div>
 
   <hr />
   <h2 class="mat-title">Text</h2>
   <div class="text-widgets">
-    <div class="icons">
+    <div class="actions">
       <strat-editor-drawing-action
         *ngFor="
           let action of $drawerActions
@@ -53,12 +55,16 @@
         "
         [action]="action"
         (actionSelected)="onActionSelected($event)"
+        class="action"
       ></strat-editor-drawing-action>
     </div>
     <div class="fonts">
       <mat-form-field>
         <mat-label class="select-label">Font size</mat-label>
-        <mat-select (selectionChange)="onFontSizeSelected($event.value)">
+        <mat-select
+          [(value)]="selectedSize"
+          (selectionChange)="onFontSizeSelected($event.value)"
+        >
           <mat-option *ngFor="let size of fontSizes" [value]="size">{{
             size
           }}</mat-option>
@@ -66,7 +72,10 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label class="select-label">Font family</mat-label>
-        <mat-select (selectionChange)="onFontFamilySelected($event.value)">
+        <mat-select
+          [(value)]="selectedFont"
+          (selectionChange)="onFontFamilySelected($event.value)"
+        >
           <mat-option *ngFor="let font of $fontNames | async" [value]="font">{{
             font
           }}</mat-option>
@@ -76,7 +85,7 @@
   </div>
   <hr />
   <h2 class="mat-title">Tools</h2>
-  <div class="icons">
+  <div class="actions">
     <strat-editor-drawing-action
       *ngFor="
         let action of $drawerActions
@@ -86,6 +95,7 @@
       "
       [action]="action"
       (actionSelected)="onActionSelected($event)"
+      class="action"
     ></strat-editor-drawing-action>
   </div>
   <hr />

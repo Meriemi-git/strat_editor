@@ -1,4 +1,8 @@
 <div class="grid">
-  <strat-editor-agent *ngFor="let agent of agents" [agent]="agent">
+  <strat-editor-agent
+    *ngFor="let agent of agents"
+    [agent]="agent"
+    (agentDragged)="onAgentDragged($event)"
+  >
   </strat-editor-agent>
 </div>

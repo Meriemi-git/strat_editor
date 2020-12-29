@@ -4,9 +4,6 @@ import {
   ArrowAction,
   BoldAction,
   DrawerAction,
-  EraserAction,
-  FontAction,
-  GroupAction,
   ItalicAction,
   LineAction,
   LocationAction,
@@ -20,7 +17,7 @@ import {
   TimeAction,
   TriangleAction,
   UnderlineAction,
-  UngroupAction,
+  VideoAction,
 } from '@strat-editor/drawing-editor';
 
 @Injectable({
@@ -45,10 +42,8 @@ export class DrawerActionService {
     this.actions.push(new BoldAction());
     this.actions.push(new ItalicAction());
 
-    this.actions.push(new UngroupAction());
-    this.actions.push(new EraserAction());
-    this.actions.push(new GroupAction());
     this.actions.push(new PictureAction());
+    this.actions.push(new VideoAction());
     this.actions.push(new SelectionAction());
   }
 

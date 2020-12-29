@@ -6,6 +6,7 @@ export class OvalAction extends DrawerAction {
     super();
     this.order = 6;
     this.name = 'oval';
+    this.label = 'Circle';
     this.type = DrawerActionType.SHAPE;
   }
 }

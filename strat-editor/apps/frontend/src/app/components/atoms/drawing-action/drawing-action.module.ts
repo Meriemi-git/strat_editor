@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DrawingActionComponent } from './drawing-action.component';
-import { IconWidgetModule } from '../icon-widget/icon-widget.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [DrawingActionComponent],
-  imports: [CommonModule, IconWidgetModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule],
   exports: [DrawingActionComponent],
 })
 export class DrawingActionModule {}

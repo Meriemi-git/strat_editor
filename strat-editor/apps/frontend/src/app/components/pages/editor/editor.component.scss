@@ -1,4 +1,6 @@
-.double-arrow-icon-left {
+@import '~apps/frontend/src/styles.scss';
+
+.icons-left {
   position: sticky;
   top: 40vh;
   height: 0px;
@@ -6,8 +8,10 @@
   z-index: 20;
   left: 3vw;
   height: 0px;
+  display: flex;
+  flex-direction: column;
 }
-.double-arrow-icon-right {
+.icons-right {
   position: fixed;
   top: 40vh;
   height: 0px;
@@ -15,6 +19,8 @@
   z-index: 20;
   top: 50%;
   left: 90vw;
+  display: flex;
+  flex-direction: column;
 }
 .container {
   height: 100%;
@@ -36,14 +42,31 @@
   margin: 0;
 }
 
-.btn-sidenav {
-  display: block;
-  margin-bottom: 20px;
-  opacity: 0.85;
-  width: 7vw;
-  text-align: left;
+.first,
+.second {
+  font-family: 'Amiko';
+  background-color: yellow;
+  padding: 10px 10px 10px 10px;
+  margin: 10px;
+  border-radius: 5px;
+  display: inline-block;
+  width: 80px;
+  text-align: center;
 }
 
+.double-arrow-icon-left > .first {
+  color: black !important;
+}
+
+.first {
+  background-color: $main;
+  color: $lighter;
+}
+
+.second {
+  background-color: $lighter;
+  color: $main;
+}
 ::ng-deep .mat-drawer-inner-container {
   overflow-x: hidden !important;
   overflow-y: scroll !important;

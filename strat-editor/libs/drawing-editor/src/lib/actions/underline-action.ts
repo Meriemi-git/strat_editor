@@ -6,6 +6,7 @@ export class UnderlineAction extends DrawerAction {
     super();
     this.order = 4;
     this.name = 'underline';
+    this.label = 'Underline';
     this.type = DrawerActionType.SETTING;
     this.drawerOptions.push({
       initialValue: false,

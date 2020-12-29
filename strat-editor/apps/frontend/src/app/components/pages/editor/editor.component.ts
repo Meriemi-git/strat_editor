@@ -7,7 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Floor, Map } from '@strat-editor/data';
+import { Agent, Floor, Map } from '@strat-editor/data';
 import * as Actions from '../../../store/actions';
 import * as Selectors from '../../../store/selectors';
 import { StratEditorState } from '../../../store/reducers';
@@ -17,7 +17,7 @@ import {
   DrawingEditorComponent,
   PolyLineAction,
 } from '@strat-editor/drawing-editor';
-import { sample, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { KEY_CODE } from '../../../helpers/key_code';
 import { environment } from 'apps/frontend/src/environments/environment';
 import { Observable } from 'rxjs';
@@ -40,21 +40,25 @@ export class EditorComponent implements OnInit, AfterViewInit {
   @ViewChild('container') container: ElementRef;
   @ViewChild('drawerEditor') drawerEditor: DrawingEditorComponent;
   CTRLPressed: boolean;
+  draggingAgent: Agent;
 
   constructor(private store: Store<StratEditorState>) {}
 
   ngOnInit(): void {
+    this.$maps = this.store.select(Selectors.selectAllMaps);
+
     this.store.select(Selectors.isLeftSidenavOpened).subscribe((isOpened) => {
+      console.log('leftIsOpened');
       this.leftIsOpened = isOpened;
     });
     this.store.select(Selectors.isRightSidenavOpened).subscribe((isOpened) => {
+      console.log('rightIsOpened');
       this.rightIsOpened = isOpened;
     });
     this.store.dispatch(Actions.FetchAgents());
     this.store.dispatch(Actions.FetchMaps());
     this.store.dispatch(Actions.FetchDrawerActions());
     this.store.dispatch(Actions.FetchFontNames());
-    this.$maps = this.store.select(Selectors.selectAllMaps);
     this.store.dispatch(Actions.SetColor({ color: new DrawerColor() }));
     this.store.dispatch(
       Actions.SetDrawerAction({ action: new PolyLineAction() })
@@ -88,6 +92,13 @@ export class EditorComponent implements OnInit, AfterViewInit {
           this.drawerEditor.setCanvasState(state);
         }
       });
+    this.store.select(Selectors.getDraggedAgent).subscribe((agent) => {
+      if (agent) {
+        console.log('getDraggedAgent');
+        this.draggingAgent = agent;
+        this.store.dispatch(Actions.closeLeft());
+      }
+    });
   }
 
   onMapSelected(map: Map) {
@@ -98,7 +109,14 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   onCloseLeftSidenav() {
-    this.store.dispatch(Actions.toggleLeft());
+    this.store
+      .select(Selectors.isLeftSidenavOpened)
+      .pipe(take(1))
+      .subscribe((isOpen) => {
+        if (isOpen) {
+          this.store.dispatch(Actions.toggleLeft());
+        }
+      });
   }
 
   onCloseRightSidenav() {
@@ -114,7 +132,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   onDrawingActionSelected(action: DrawerAction) {
     this.store.dispatch(Actions.SetDrawerAction({ action }));
-    this.store.dispatch(Actions.toggleRight());
+    this.store.dispatch(Actions.closeRight());
   }
 
   onStateModified(state: string) {
@@ -186,13 +204,33 @@ export class EditorComponent implements OnInit, AfterViewInit {
     }
   }
 
+  @HostListener('window:drop', ['$event'])
+  onwindowDrop(event: any) {
+    if (this.draggingAgent) {
+      console.log('window:drop', event);
+      event.preventDefault();
+      this.drawerEditor.draggAgent(
+        this.draggingAgent,
+        event.layerX,
+        event.layerY
+      );
+    }
+  }
+
+  @HostListener('mouseup', ['$event'])
+  onMouseUp(event: any) {
+    console.log('mouseup in editor component');
+  }
+
   toggleLeftSidenav() {
     if (!this.canvasStateLoading) {
+      console.log('toggleLeftSidenav');
       this.store.dispatch(Actions.toggleLeft());
     }
   }
 
   toggleRightSidenav() {
+    console.log('toggleRightSidenav');
     this.store.dispatch(Actions.toggleRight());
   }
 

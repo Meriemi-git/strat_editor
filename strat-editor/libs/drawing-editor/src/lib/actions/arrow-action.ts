@@ -6,6 +6,7 @@ export class ArrowAction extends DrawerAction {
     super();
     this.order = 3;
     this.name = 'arrow';
+    this.label = 'Arrow';
     this.type = DrawerActionType.SHAPE;
   }
 }

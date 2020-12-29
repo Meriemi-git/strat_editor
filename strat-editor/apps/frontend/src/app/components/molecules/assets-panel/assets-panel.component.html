@@ -3,6 +3,7 @@
   <mat-tab label="Attackers">
     <strat-editor-agents-grid
       [agents]="$agents | async | filter: ['ATTACKER']:'side'"
+      (agentDragged)="onAgentDragged($event)"
     >
     </strat-editor-agents-grid>
   </mat-tab>

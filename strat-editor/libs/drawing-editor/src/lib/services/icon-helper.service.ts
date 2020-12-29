@@ -11,4 +11,11 @@ export class IconHelperService {
       `${environment.apiUrl}icon/image/${iconName}`
     );
   }
+
+  getAgentImageByName(iconName: string): string {
+    return this.domSanitizer.sanitize(
+      SecurityContext.URL,
+      `${environment.apiUrl}agent/badge/${iconName}`
+    );
+  }
 }

@@ -4,6 +4,7 @@ import { DrawerOption } from '../models/drawer-option';
 
 export abstract class DrawerAction {
   name: string;
+  label: string;
   order: number;
   type: DrawerActionType;
   active: boolean;

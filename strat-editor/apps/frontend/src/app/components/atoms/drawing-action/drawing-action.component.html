@@ -1,6 +1,11 @@
-<strat-editor-icon
-  [iconName]="action.name"
-  [iconUrl]="ihs.getSvgIconByName(action.name)"
-  (iconClicked)="onIconClicked()"
-  [active]="action.active"
-></strat-editor-icon>
+<div class="container">
+  <button mat-icon-button (click)="onClick()">
+    <mat-icon
+      [svgIcon]="action.name"
+      [ngClass]="{ active: action.active, inactive: !action.active }"
+    ></mat-icon>
+  </button>
+  <div class="label">
+    {{ action.label }}
+  </div>
+</div>

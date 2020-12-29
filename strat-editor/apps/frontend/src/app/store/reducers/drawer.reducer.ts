@@ -32,7 +32,7 @@ export const initialstate: DrawingActionState = adapter.getInitialState({
   optionAction: null,
   color: new DrawerColor(),
   fontNames: [],
-  fontFamily: 'Verdana',
+  fontFamily: 'Amiri',
   fontSize: 80,
 });
 

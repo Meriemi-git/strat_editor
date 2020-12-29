@@ -1,12 +1,12 @@
 import { DrawerActionType } from '../models/drawer-action-type';
 import { DrawerAction } from './drawer-action';
 
-export class PictureAction extends DrawerAction {
+export class VideoAction extends DrawerAction {
   constructor() {
     super();
-    this.name = 'picture';
-    this.label = 'Picture';
-    this.order = 2;
+    this.name = 'video';
+    this.label = 'Video';
+    this.order = 3;
     this.type = DrawerActionType.TOOL;
   }
 }

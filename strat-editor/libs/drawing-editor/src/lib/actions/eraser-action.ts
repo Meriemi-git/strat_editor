@@ -6,6 +6,7 @@ export class EraserAction extends DrawerAction {
     super();
     this.order = 2;
     this.name = 'eraser';
+    this.label = 'Eraser';
     this.type = DrawerActionType.TOOL;
   }
 }

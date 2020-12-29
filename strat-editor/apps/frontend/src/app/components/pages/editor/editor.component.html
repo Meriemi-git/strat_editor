@@ -1,4 +1,4 @@
-<mat-sidenav-container class="double-sidenav">
+<mat-sidenav-container class="double-sidenav" hasBackdrop="false">
   <mat-sidenav
     #leftSidenav
     mode="over"
@@ -18,67 +18,22 @@
     <strat-editor-drawing-panel> </strat-editor-drawing-panel>
   </mat-sidenav>
   <mat-sidenav-content class="container">
-    <div class="double-arrow-icon-left" *ngIf="selectedMap">
-      <button
-        mat-raised-button
-        color="primary"
-        class="btn-sidenav"
-        (click)="toggleLeftSidenav()"
-      >
-        <span>Agents</span>
-        <mat-icon
-          [ngStyle]="{
-            transform: leftIsOpened ? 'rotate(180deg)' : 'rotate(0deg)'
-          }"
-          >double_arrow</mat-icon
-        >
-      </button>
-      <button
-        mat-raised-button
-        color="accent"
-        class="btn-sidenav"
-        (click)="toggleLeftSidenav()"
-      >
-        <span>Gadgets</span>
-        <mat-icon
-          [ngStyle]="{
-            transform: leftIsOpened ? 'rotate(180deg)' : 'rotate(0deg)'
-          }"
-          >double_arrow</mat-icon
-        >
-      </button>
+    <div class="icons-left" *ngIf="selectedMap">
+      <div (click)="toggleLeftSidenav()">
+        <span class="first">Agents</span>
+      </div>
+      <div (click)="toggleLeftSidenav()">
+        <span class="second">Gadgets</span>
+      </div>
     </div>
-    <div class="double-arrow-icon-right" *ngIf="selectedMap">
-      <button
-        mat-raised-button
-        color="primary"
-        class="btn-sidenav"
-        (click)="toggleRightSidenav()"
-      >
-        <mat-icon
-          [ngStyle]="{
-            transform: rightIsOpened ? 'rotate(0deg)' : 'rotate(180deg)'
-          }"
-          >double_arrow</mat-icon
-        >
-        <span>Drawing</span>
-      </button>
-      <button
-        mat-raised-button
-        color="accent"
-        class="btn-sidenav"
-        (click)="toggleRightSidenav()"
-      >
-        <mat-icon
-          [ngStyle]="{
-            transform: rightIsOpened ? 'rotate(0deg)' : 'rotate(180deg)'
-          }"
-          >double_arrow</mat-icon
-        >
-        <span>Colors</span>
-      </button>
+    <div class="icons-right" *ngIf="selectedMap">
+      <div (click)="toggleRightSidenav()">
+        <span class="first">Drawing</span>
+      </div>
+      <div (click)="toggleRightSidenav()">
+        <span class="second">Library</span>
+      </div>
     </div>
-
     <div #container class="map-container">
       <div class="map-selector" *ngIf="!selectedMap">
         <strat-editor-map-grid
@@ -87,6 +42,7 @@
         ></strat-editor-map-grid>
       </div>
       <strat-editor-drawing-editor
+        class="editor"
         #drawerEditor
         [canvasWidth]="width"
         [canvasHeight]="height"

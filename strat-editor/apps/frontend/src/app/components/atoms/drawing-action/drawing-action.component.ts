@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { DrawerAction, TextAction } from '@strat-editor/drawing-editor';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { DrawerAction } from '@strat-editor/drawing-editor';
 import { IconHelperService } from '@strat-editor/drawing-editor';
 @Component({
   selector: 'strat-editor-drawing-action',
@@ -9,9 +11,23 @@ import { IconHelperService } from '@strat-editor/drawing-editor';
 export class DrawingActionComponent {
   @Input() action: DrawerAction;
   @Output() actionSelected = new EventEmitter<DrawerAction>();
-  constructor(public ihs: IconHelperService) {}
 
-  onIconClicked() {
+  constructor(
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
+    public ihs: IconHelperService
+  ) {}
+
+  ngOnInit(): void {
+    this.matIconRegistry.addSvgIcon(
+      this.action.name,
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        this.ihs.getSvgIconByName(this.action.name)
+      )
+    );
+  }
+
+  onClick() {
     this.actionSelected.emit(this.action);
   }
 }

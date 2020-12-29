@@ -6,6 +6,7 @@ export class LineAction extends DrawerAction {
     super();
     this.order = 2;
     this.name = 'line';
+    this.label = 'Line';
     this.type = DrawerActionType.SHAPE;
   }
 }

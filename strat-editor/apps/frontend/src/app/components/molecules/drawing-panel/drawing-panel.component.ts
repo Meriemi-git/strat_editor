@@ -1,5 +1,5 @@
 import * as Ngx from '@angular-material-components/color-picker';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, AbstractControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import {
@@ -17,7 +17,7 @@ import { Observable } from 'rxjs';
   templateUrl: './drawing-panel.component.html',
   styleUrls: ['./drawing-panel.component.scss'],
 })
-export class DrawingPanelComponent implements OnInit, AfterViewInit {
+export class DrawingPanelComponent implements OnInit {
   $color: Observable<DrawerColor>;
   $drawerActions: Observable<DrawerAction[]>;
   $fontNames: Observable<string[]>;
@@ -28,20 +28,25 @@ export class DrawingPanelComponent implements OnInit, AfterViewInit {
   pickerInput: Ngx.NgxMatColorPickerInput;
 
   colorCtr: AbstractControl = new FormControl('');
-
+  selectedSize: number;
+  selectedFont: string;
   constructor(private store: Store<StratEditorState>) {
-    this.fontSizes = Array(50)
+    this.fontSizes = Array(100)
       .fill(0)
-      .map((x, i) => i);
+      .map((x, i) => i + 1);
   }
 
   ngOnInit(): void {
     this.$color = this.store.select(Selectors.getColor);
     this.$drawerActions = this.store.select(Selectors.selectAllDrawerActions);
     this.$fontNames = this.store.select(Selectors.getFontNames);
+    this.store
+      .select(Selectors.getFontFamily)
+      .subscribe((font) => (this.selectedFont = font));
+    this.store
+      .select(Selectors.getFontSize)
+      .subscribe((size) => (this.selectedSize = size));
   }
-
-  ngAfterViewInit(): void {}
 
   onSelectColor(event: any) {
     let color = new DrawerColor();

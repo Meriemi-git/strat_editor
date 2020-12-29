@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
+import { Agent } from '@strat-editor/data';
 import { fabric } from 'fabric';
 import { DrawerAction } from '../../actions';
 import { CursorMode } from '../../cursor-mode';
@@ -44,6 +52,7 @@ export class DrawingEditorComponent implements OnInit {
   private mouseIsIn: boolean;
   isObjectSelected: boolean;
   objectIsModifying: boolean;
+  draggedAgent: Agent;
 
   constructor(private ihs: IconHelperService) {
     this.setBackgroundImageFromUrl.bind(this);
@@ -88,6 +97,24 @@ export class DrawingEditorComponent implements OnInit {
   public setColor(color: DrawerColor) {
     this.drawerOptions.stroke = DrawerColor.rgba(color);
     this.drawerOptions.fill = DrawerColor.rgba(color);
+  }
+
+  public draggAgent(agent: Agent, x, y) {
+    console.log(`agent : ${agent} x : ${x} y : ${y}`);
+    if (agent) {
+      console.log('this.draggedAgent');
+      const that = this;
+      fabric.Image.fromURL(this.ihs.getAgentImageByName(agent.badge), function (
+        oImg
+      ) {
+        oImg.set({
+          left: x,
+          top: y,
+        });
+        that.canvas.add(oImg);
+        that.canvas.renderAll();
+      });
+    }
   }
 
   public callAction(action: DrawerAction) {
@@ -232,18 +259,21 @@ export class DrawingEditorComponent implements OnInit {
 
   private initializeCanvasEvents() {
     this.canvas.on('mouse:down', (event: fabric.IEvent) => {
+      console.log('mouse:down');
       const pointer = this.canvas.getPointer(event.e);
       this.mouseDown(pointer.x, pointer.y);
       this.isObjectSelected = event.target != null;
     });
 
     this.canvas.on('mouse:move', (event: fabric.IEvent) => {
+      console.log('mouse:move');
       const pointer = this.canvas.getPointer(event.e);
       this.mouseMove(pointer.x, pointer.y);
     });
 
-    this.canvas.on('mouse:up', () => {
-      this.mouseUp();
+    this.canvas.on('mouse:up', (event: fabric.IEvent) => {
+      console.log('mouse:up');
+      this.mouseUp(event);
     });
 
     this.canvas.on('object:moving', () => {
@@ -290,20 +320,19 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   private mouseMove(x: number, y: number): void {
-    console.log(`cursorMode : ${this.cursorMode}\n isDown : ${this.isDown}`);
     if (this.cursorMode === CursorMode.Draw && this.isDown) {
       this.drawer.resize(this.object, x, y);
       this.canvas.renderAll();
     }
   }
 
-  private async mouseUp() {
+  private async mouseUp(event: fabric.IEvent) {
+    console.log('mouseUp', event);
     if (this.isMoving) {
       this.canvas.discardActiveObject();
     }
     this.isDown = false;
     this.isMoving = false;
-    console.log('mouseUp', this.canvas._objects);
     this.canvas.renderAll();
     this.stateModified.emit(this.getCanvasState());
   }
