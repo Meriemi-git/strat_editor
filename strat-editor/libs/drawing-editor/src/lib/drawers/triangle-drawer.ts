@@ -20,12 +20,13 @@ export class TriangleDrawer implements ObjectDrawer {
     return new Promise<fabric.Object>((resolve) => {
       resolve(
         new fabric.Triangle({
+          ...options,
           left: x,
           top: y,
           width: width,
           height: height,
           fill: 'transparent',
-          ...options,
+          selectable: false,
         })
       );
     });

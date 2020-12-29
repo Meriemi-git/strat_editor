@@ -50,6 +50,7 @@ export class ArrowDrawer implements ObjectDrawer {
       originY: 'center',
       strokeUniform: false,
       name: 'TriangleArrow',
+      selectable: false,
     });
     const line = new LineArrow([x, y, x2, y2], {
       ...options,
@@ -59,6 +60,7 @@ export class ArrowDrawer implements ObjectDrawer {
       originY: 'center',
       strokeUniform: false,
       name: 'LineArrow',
+      selectable: false,
     });
     triangle.line = line;
     triangle.uid = uid;

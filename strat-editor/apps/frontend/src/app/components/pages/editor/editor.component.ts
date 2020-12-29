@@ -66,7 +66,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
       if (this.selectedMap) {
         this.toggleRightSidenav();
       }
-      this.drawerEditor.setDrawerByAction(selected);
+      this.drawerEditor.callAction(selected);
     });
     this.store.select(Selectors.getColor).subscribe((color) => {
       this.drawerEditor.setColor(color);
@@ -119,8 +119,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   onStateModified(state: string) {
     const canvasState = JSON.stringify(state);
-
-    //const canvasState = state;
     this.store.dispatch(Actions.SaveCanvasState({ canvasState }));
   }
 

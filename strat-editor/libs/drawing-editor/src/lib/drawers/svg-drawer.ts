@@ -34,6 +34,7 @@ export class SvgDrawer implements ObjectDrawer {
           top: y - shape.height,
           scaleX: 2,
           scaleY: 2,
+          selectable: false,
         });
         resolve(shape);
       });

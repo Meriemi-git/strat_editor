@@ -20,12 +20,13 @@ export class RectangleDrawer extends ObjectDrawer {
     return new Promise<fabric.Object>((resolve) => {
       resolve(
         new fabric.Rect({
+          ...options,
           left: x,
           top: y,
           width: width,
           height: height,
+          selectable: false,
           fill: 'transparent',
-          ...options,
         })
       );
     });

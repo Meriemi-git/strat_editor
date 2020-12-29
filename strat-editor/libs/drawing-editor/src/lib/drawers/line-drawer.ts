@@ -14,7 +14,12 @@ export class LineDrawer implements ObjectDrawer {
     // Return a Promise that will draw a line
     return new Promise<fabric.Object>((resolve) => {
       // Inside the Promise, draw the actual line from (x,y) to (x2,y2)
-      resolve(new fabric.Line([x, y, x2, y2], options));
+      resolve(
+        new fabric.Line([x, y, x2, y2], {
+          ...options,
+          selectable: false,
+        })
+      );
     });
   }
 

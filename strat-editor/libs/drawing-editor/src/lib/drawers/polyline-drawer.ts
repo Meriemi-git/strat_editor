@@ -27,13 +27,13 @@ export class PolyLineDrawer implements ObjectDrawer {
     //Create and push a new Point for the Polyline
     object.points.push(new fabric.Point(x, y));
     const dim = object._calcDimensions();
-
     object
       .set({
         left: dim.left,
         top: dim.top,
         width: dim.width,
         height: dim.height,
+        selectable: false,
         dirty: true,
         pathOffset: new fabric.Point(
           dim.left + dim.width / 2,

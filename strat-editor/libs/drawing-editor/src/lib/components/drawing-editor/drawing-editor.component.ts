@@ -11,6 +11,7 @@ import { TextDrawer } from '../../drawers/text-drawer';
 import { TriangleDrawer } from '../../drawers/triangle-drawer';
 import { LineArrow } from '../../fabricjs/line-arrow';
 import { TriangleArrow } from '../../fabricjs/triangle-arrow';
+import { DrawerActionType } from '../../models';
 import { DrawerColor } from '../../models/drawer-color';
 import { IconHelperService } from '../../services/icon-helper.service';
 
@@ -42,6 +43,7 @@ export class DrawingEditorComponent implements OnInit {
 
   private mouseIsIn: boolean;
   isObjectSelected: boolean;
+  objectIsModifying: boolean;
 
   constructor(private ihs: IconHelperService) {
     this.setBackgroundImageFromUrl.bind(this);
@@ -89,10 +91,38 @@ export class DrawingEditorComponent implements OnInit {
     this.drawerOptions.fill = DrawerColor.rgba(color);
   }
 
-  public setDrawerByAction(action: DrawerAction) {
+  public callAction(action: DrawerAction) {
     if (action) {
-      this.cursorMode = CursorMode.Draw;
-      this.drawer = this.avalaibleDrawers.get(action.name);
+      this.dispatchActionByType(action);
+    }
+  }
+
+  private dispatchActionByType(action: DrawerAction) {
+    switch (action.type) {
+      case DrawerActionType.SHAPE:
+      case DrawerActionType.TEXT:
+      case DrawerActionType.FORM:
+        this.canvas.forEachObject((object) => (object.selectable = false));
+        this.cursorMode = CursorMode.Draw;
+        this.drawer = this.avalaibleDrawers.get(action.name);
+        break;
+      case DrawerActionType.TOOL:
+        this.manageToolsActions(action);
+        break;
+      default:
+        console.log('Action type not managed');
+    }
+  }
+
+  private manageToolsActions(action: DrawerAction) {
+    switch (action.name) {
+      case 'selection':
+        this.cursorMode = CursorMode.Select;
+        this.drawer = null;
+        this.canvas.forEachObject((object) => (object.selectable = true));
+        break;
+      default:
+        console.log('Tool action name not managed');
     }
   }
 
@@ -161,7 +191,6 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   public setCanvasState(canvasState: string): void {
-    console.log('setCanvasState');
     this.canvas.loadFromJSON(canvasState, this.canvasStateIsLoaded);
   }
 
@@ -170,13 +199,11 @@ export class DrawingEditorComponent implements OnInit {
   };
 
   private canvasStateIsLoaded = (): void => {
-    console.log('canvasStateIsLoaded');
     this.updateNestedObjects();
     this.stateLoaded.emit();
   };
 
   updateNestedObjects() {
-    console.log('updateNestedObjects');
     this.canvas._objects.forEach((object) => {
       let triangleArrow = (object as LineArrow).triangle;
       let lineArrow = (object as TriangleArrow).line;
@@ -195,13 +222,9 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   getFabricObjectByUidAndType(uid: string, type: string): any {
-    const object = this.canvas._objects.find(
+    return this.canvas._objects.find(
       (object) => (object as any).uid === uid && (object as any).name === type
     );
-    if (!object) {
-      console.log('getFabricObjectByCoords => object NOT found !');
-    }
-    return object;
   }
 
   private initializeCanvasEvents() {
@@ -239,54 +262,16 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.on('selection:cleared', () => {
       console.log('Selection cleared');
     });
-  }
-
-  private selectionCreated(event: fabric.IEvent) {
-    this.cursorMode = CursorMode.Select;
-    this.object = event.target;
-    console.log('selectionCreated', this.object);
-    let selection: fabric.ActiveSelection;
-    if ((event.target as LineArrow).triangle) {
-      console.log('Add triangle to selection');
-      selection = new fabric.ActiveSelection(
-        [event.target, (event.target as LineArrow).triangle],
-        {
-          canvas: this.canvas,
-        }
-      );
-    } else if ((event.target as TriangleArrow).line) {
-      console.log('Add line to selection');
-      selection = new fabric.ActiveSelection(
-        [event.target, (event.target as TriangleArrow).line],
-        {
-          canvas: this.canvas,
-        }
-      );
-    }
-    if (selection) {
-      this.canvas.setActiveObject(selection);
-    } else {
-      this.canvas.setActiveObject(this.object);
-    }
-    this.canvas.renderAll();
-  }
-
-  private async mouseUp() {
-    if (this.isMoving) {
-      this.canvas.discardActiveObject();
-    }
-    this.isDown = false;
-    this.isMoving = false;
-    console.log('mouseUp', this.canvas._objects);
-    //this.canvas.discardActiveObject();
-    this.canvas.renderAll();
-    this.stateModified.emit(this.getCanvasState());
+    this.canvas.on('object:modified', () => {
+      this.objectIsModifying = true;
+    });
   }
 
   private async mouseDown(x: number, y: number): Promise<void> {
     console.log('mouseDown');
     this.isDown = true; //The mouse is being clicked
-    if (this.cursorMode !== CursorMode.Draw) {
+    if (this.cursorMode !== CursorMode.Draw || this.objectIsModifying) {
+      this.objectIsModifying = false;
       return;
     }
     // Create an object at the point (x,y)
@@ -302,13 +287,50 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   private mouseMove(x: number, y: number): void {
-    console.log('mouseMove');
     if (!(this.cursorMode === CursorMode.Draw && this.isDown)) {
       return;
     }
     this.drawer.resize(this.object, x, y);
     this.canvas.renderAll();
     this.mouseIsIn = true;
+  }
+
+  private async mouseUp() {
+    if (this.isMoving) {
+      this.canvas.discardActiveObject();
+    }
+    this.isDown = false;
+    this.isMoving = false;
+    console.log('mouseUp', this.canvas._objects);
+    this.canvas.renderAll();
+    this.stateModified.emit(this.getCanvasState());
+  }
+
+  private selectionCreated(event: fabric.IEvent) {
+    this.cursorMode = CursorMode.Select;
+    this.object = event.target;
+    let selection: fabric.ActiveSelection;
+    if ((event.target as LineArrow).triangle) {
+      selection = new fabric.ActiveSelection(
+        [event.target, (event.target as LineArrow).triangle],
+        {
+          canvas: this.canvas,
+        }
+      );
+    } else if ((event.target as TriangleArrow).line) {
+      selection = new fabric.ActiveSelection(
+        [event.target, (event.target as TriangleArrow).line],
+        {
+          canvas: this.canvas,
+        }
+      );
+    }
+    if (selection) {
+      this.canvas.setActiveObject(selection);
+    } else {
+      this.canvas.setActiveObject(this.object);
+    }
+    this.canvas.renderAll();
   }
 
   // Method which allows any drawer to Promise their make() function
@@ -348,7 +370,6 @@ export class DrawingEditorComponent implements OnInit {
         }
       );
     }
-    console.log('setBackground => getCanvasState');
     this.stateModified.emit(this.getCanvasState());
   };
 

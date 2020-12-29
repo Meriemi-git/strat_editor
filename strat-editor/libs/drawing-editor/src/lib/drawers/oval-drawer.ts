@@ -20,12 +20,13 @@ export class OvalDrawer implements ObjectDrawer {
     return new Promise<fabric.Object>((resolve) => {
       resolve(
         new fabric.Ellipse({
+          ...options,
           left: x,
           top: y,
           rx: rx,
           ry: ry,
           fill: 'transparent',
-          ...options,
+          selectable: false,
         })
       );
     });
