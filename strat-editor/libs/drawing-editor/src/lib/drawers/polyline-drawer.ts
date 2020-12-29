@@ -24,7 +24,6 @@ export class PolyLineDrawer implements ObjectDrawer {
     x: number,
     y: number
   ): Promise<fabric.Object> {
-    //Create and push a new Point for the Polyline
     if (object.points) {
       object.points.push(new fabric.Point(x, y));
       const dim = object._calcDimensions();
