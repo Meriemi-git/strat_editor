@@ -65,13 +65,13 @@
 }
 
 .first {
-  background-color: $main;
+  background-color: $primaryDarkColor;
   color: $lighter;
 }
 
 .second {
-  background-color: $lighter;
-  color: $main;
+  background-color: $primaryLightColor;
+  color: $secondaryDarkColor;
 }
 
 ::ng-deep.mat-drawer-inner-container {

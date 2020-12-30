@@ -89,7 +89,7 @@ $mat-dark-theme-foreground: (
   disabled: $light-disabled-text,
   disabled-button: rgba($light-text, 0.3),
   disabled-text: $light-disabled-text,
-  elevation: black,
+  elevation: rgb(0, 0, 0),
   hint-text: $light-disabled-text,
   secondary-text: $light-accent-text,
   accent-text: $light-accent-text,
@@ -173,15 +173,20 @@ body {
   --text-primary-darker-color: #{$light-primary-text};
 }
 
-$main: #5533cc;
-$lighter: #ccc2f0;
-$darker: #3b20b9;
-
+$primaryColor: #327eff;
+$primaryLightColor: #79adff;
+$primaryDarkColor: #0053cb;
+$secondaryColor: #2c383d;
+$secondaryLightColor: #556267;
+$secondaryDarkColor: #021217;
+$primaryTextColor: #ffffff;
+$secondaryTextColor: #ffffff;
+$lighter: #000000;
 $mat-primary: (
-  main: #5533cc,
-  lighter: #ccc2f0,
-  darker: #3b20b9,
-  200: #5533cc,
+  main: #327eff,
+  lighter: #79adff,
+  darker: #0053cb,
+  200: #2c383d,
   // For slide toggle,
   contrast:
     (
@@ -193,9 +198,9 @@ $mat-primary: (
 $theme-primary: mat-palette($mat-primary, main, lighter, darker);
 
 body {
-  --accent-color: #0c0b19;
-  --accent-lighter-color: #d3d3d4;
-  --accent-darker-color: #8080a1;
+  --accent-color: #f44336;
+  --accent-lighter-color: #e57373;
+  --accent-darker-color: #263238;
   --text-accent-color: #{$light-primary-text};
   --text-accent-lighter-color: #{$dark-primary-text};
   --text-accent-darker-color: #{$dark-primary-text};
