@@ -6,6 +6,9 @@
     class="left-sidenav-content"
     (closedStart)="onCloseLeftSidenav()"
   >
+    <button mat-mini-fab class="assets-close" (click)="toggleLeftSidenav()">
+      <mat-icon color="primary">close</mat-icon>
+    </button>
     <strat-editor-assets-panel></strat-editor-assets-panel>
   </mat-sidenav>
   <mat-sidenav
@@ -13,8 +16,12 @@
     mode="over"
     [(opened)]="rightIsOpened"
     position="end"
+    class="right-sidenav-content"
     (closedStart)="onCloseRightSidenav()"
   >
+    <button mat-mini-fab class="drawing-close" (click)="toggleRightSidenav()">
+      <mat-icon color="primary">close</mat-icon>
+    </button>
     <strat-editor-drawing-panel> </strat-editor-drawing-panel>
   </mat-sidenav>
   <mat-sidenav-content class="container">

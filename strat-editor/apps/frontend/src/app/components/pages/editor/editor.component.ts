@@ -17,11 +17,13 @@ import {
   DrawerAction,
   DrawingEditorComponent,
   PolyLineAction,
+  SelectionAction,
 } from '@strat-editor/drawing-editor';
 import { take } from 'rxjs/operators';
 import { KEY_CODE } from '../../../helpers/key_code';
 import { environment } from 'apps/frontend/src/environments/environment';
 import { Observable } from 'rxjs';
+import { selectAllMaps } from '../../../store/reducers/map.reducer';
 
 @Component({
   selector: 'strat-editor-editor',
@@ -29,6 +31,9 @@ import { Observable } from 'rxjs';
   styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent implements OnInit, AfterViewInit {
+  @ViewChild('container') container: ElementRef;
+  @ViewChild('drawerEditor') drawerEditor: DrawingEditorComponent;
+
   leftIsOpened: boolean;
   rightIsOpened: boolean;
   selectedMap: Map;
@@ -37,11 +42,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
   width: number;
   height: number;
   canvasStateLoading: boolean;
-
-  @ViewChild('container') container: ElementRef;
-  @ViewChild('drawerEditor') drawerEditor: DrawingEditorComponent;
   CTRLPressed: boolean;
   draggingAgent: Agent;
+
+  previousAction: DrawerAction;
 
   constructor(
     private store: Store<StratEditorState>,
@@ -72,6 +76,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
       if (this.selectedMap) {
         this.closeRightSidenav();
       }
+      if (!(selected instanceof SelectionAction)) {
+        this.previousAction = selected;
+      }
       this.drawerEditor.callAction(selected);
     });
     this.store.select(Selectors.getColor).subscribe((color) => {
@@ -96,7 +103,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
       });
     this.store.select(Selectors.getDraggedAgent).subscribe((agent) => {
       if (agent) {
-        console.log('getDraggedAgent');
         this.draggingAgent = agent;
         this.store.dispatch(Actions.closeLeft());
       }
@@ -175,6 +181,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
         this.store.dispatch(Actions.UnSelectDrawerAction());
         break;
       case KEY_CODE.CTRL:
+        if (this.CTRLPressed) {
+          const action = this.previousAction;
+          this.store.dispatch(Actions.SetDrawerAction({ action }));
+        }
         this.CTRLPressed = false;
         break;
       case KEY_CODE.A:
@@ -201,72 +211,36 @@ export class EditorComponent implements OnInit, AfterViewInit {
   keyDown(event: KeyboardEvent) {
     switch (event.key.toLocaleLowerCase()) {
       case KEY_CODE.CTRL:
+        if (!this.CTRLPressed) {
+          const action = new SelectionAction();
+          this.store.dispatch(Actions.SetDrawerAction({ action }));
+        }
         this.CTRLPressed = true;
         break;
     }
   }
 
-  // @HostListener('drag', ['$event'])
-  // onWindowDrag(event: any) {
-  //   event.preventDefault();
-  //   event.stopPropagation();
-  // }
-
-  // @HostListener('dragenter', ['$event'])
-  // onWindowDragEnter(event: any) {
-  //   event.preventDefault();
-  //   event.stopPropagation();
-  // }
-
-  // @HostListener('dragexit', ['$event'])
-  // onwindowDragExit(event: any) {
-  //   event.preventDefault();
-  //   event.stopPropagation();
-  // }
-
-  // @HostListener('dragleave', ['$event'])
-  // onWindowDragLeave(event: any) {
-  //   event.preventDefault();
-  //   event.stopPropagation();
-  // }
-
-  // @HostListener('dragover', ['$event'])
-  // onWindowDragOver(event: any) {
-  //   event.preventDefault();
-  //   event.stopPropagation();
-  // }
-
   @HostListener('dragstart', ['$event'])
   onWindowDragStart(event: any) {
-    console.log('dragstart');
     this.cdr.detach();
-    event.stopPropagation();
   }
 
   @HostListener('dragend', ['$event'])
   onwindowDragEnd(event: any) {
     this.cdr.reattach();
-    event.preventDefault();
-    event.stopPropagation();
   }
 
   @HostListener('drop', ['$event'])
   onwindowDrop(event: any) {
-    console.log('drop');
     event.preventDefault();
     event.stopPropagation();
     if (this.draggingAgent) {
-      this.drawerEditor.draggAgent(
+      this.drawerEditor.drawAgent(
         this.draggingAgent,
         event.layerX,
         event.layerY
       );
     }
-  }
-
-  @HostListener('mouseup', ['$event'])
-  onMouseUp(event: any) {
-    console.log('mouseup');
   }
 
   toggleLeftSidenav() {

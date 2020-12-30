@@ -26,6 +26,7 @@ export class DrawingEditorComponent implements OnInit {
   @Input() canvasHeight: number;
   @Output() stateModified = new EventEmitter<string>();
   @Output() stateLoaded = new EventEmitter<void>();
+
   private cursorMode: CursorMode;
 
   private canvas: fabric.Canvas;
@@ -40,12 +41,13 @@ export class DrawingEditorComponent implements OnInit {
 
   private isDown: boolean; //Is user dragging the mouse?
   private isMoving: boolean;
+
   private cursorSvg: fabric.Image;
 
   private mouseIsIn: boolean;
-  isObjectSelected: boolean;
-  objectIsModifying: boolean;
+  editingText: boolean;
   draggedAgent: Agent;
+  selelectedObjects: fabric.Object[] = [];
 
   constructor(private ihs: IconHelperService) {
     this.setBackgroundImageFromUrl.bind(this);
@@ -92,29 +94,29 @@ export class DrawingEditorComponent implements OnInit {
     this.drawerOptions.fill = DrawerColor.rgba(color);
   }
 
-  public draggAgent(agent: Agent, x, y) {
+  public drawAgent(agent: Agent, x, y) {
     if (agent) {
-      const that = this;
-      fabric.Image.fromURL(this.ihs.getAgentImageByName(agent.badge), function (
-        oImg
-      ) {
-        oImg.set({
-          left: x,
-          top: y,
-        });
-        that.canvas.add(oImg);
-        that.canvas.renderAll();
-      });
+      fabric.Image.fromURL(
+        this.ihs.getAgentImageByName(agent.badge),
+        function (image) {
+          const div = 50 / image.width;
+          image.set({
+            left: x,
+            top: y,
+            scaleX: div,
+            scaleY: div,
+          });
+          this.canvas.add(image);
+          this.canvas.renderAll();
+        }.bind(this)
+      );
     }
   }
-
-  private addImageToCanvas(image: fabric.Image) {}
 
   public callAction(action: DrawerAction) {
     if (action) {
       this.dispatchActionByType(action);
     } else {
-      console.log('callAction null , cursor mode select drawer null');
       this.drawer = null;
       this.cursorMode = CursorMode.Select;
     }
@@ -189,7 +191,7 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.getActiveObjects().forEach((obj) => {
       this.canvas.remove(obj);
     });
-    this.canvas.setActiveObject(null);
+    this.canvas.discardActiveObject();
     this.stateModified.emit(this.getCanvasState());
     this.canvas.renderAll();
   }
@@ -253,8 +255,8 @@ export class DrawingEditorComponent implements OnInit {
   private initializeCanvasEvents() {
     this.canvas.on('mouse:down', (event: fabric.IEvent) => {
       const pointer = this.canvas.getPointer(event.e);
+      this.selelectedObjects = this.canvas.getActiveObjects();
       this.mouseDown(pointer.x, pointer.y);
-      this.isObjectSelected = event.target != null;
     });
 
     this.canvas.on('mouse:move', (event: fabric.IEvent) => {
@@ -278,15 +280,23 @@ export class DrawingEditorComponent implements OnInit {
       this.cursorMode = CursorMode.Select;
     });
 
-    this.canvas.on('object:modified', () => {
-      this.objectIsModifying = true;
+    this.canvas.on('object:modified', (event: fabric.IEvent) => {
+      console.log('object:modified');
+      if (event.target instanceof fabric.Textbox) {
+        this.editingText = true;
+        this.cursorMode = CursorMode.Draw;
+      }
     });
   }
 
   private async mouseDown(x: number, y: number): Promise<void> {
     this.isDown = true; //The mouse is being clicked
-    if (this.cursorMode !== CursorMode.Draw || this.objectIsModifying) {
-      this.objectIsModifying = false;
+    if (
+      this.cursorMode !== CursorMode.Draw ||
+      this.editingText ||
+      this.selelectedObjects.length > 0
+    ) {
+      this.editingText = false;
       return;
     }
     // Create an object at the point (x,y)
@@ -309,6 +319,7 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   private async mouseUp(event: fabric.IEvent) {
+    console.log('mouseUp');
     if (this.isMoving) {
       this.canvas.discardActiveObject();
     }

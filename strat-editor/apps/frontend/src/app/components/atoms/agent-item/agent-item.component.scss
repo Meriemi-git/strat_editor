@@ -1,14 +1,19 @@
-.title{
+.title {
   text-align: center;
 }
-.container{
+.container {
   cursor: -webkit-grab; /* Chrome 1-21, Safari 4+ */
-  cursor:    -moz-grab; /* Firefox 1.5-26 */
-  cursor:         grab;
+  cursor: -moz-grab; /* Firefox 1.5-26 */
+  cursor: grab;
 }
 
 .container:active {
   cursor: -webkit-grabbing;
-  cursor:    -moz-grabbing;
-  cursor:         grabbing;
+  cursor: -moz-grabbing;
+  cursor: grabbing;
+}
+
+.agent-name {
+  font-family: 'Ubuntu';
+  margin: 0 auto;
 }

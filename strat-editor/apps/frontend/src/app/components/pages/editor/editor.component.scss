@@ -38,6 +38,12 @@
   width: 25%;
 }
 
+.right-sidenav-content {
+  padding: 10px;
+  text-align: center;
+  width: 25%;
+}
+
 .mat-h2 {
   margin: 0;
 }
@@ -67,9 +73,9 @@
   background-color: $lighter;
   color: $main;
 }
-::ng-deep .mat-drawer-inner-container {
+
+::ng-deep.mat-drawer-inner-container {
   overflow-x: hidden !important;
-  overflow-y: scroll !important;
   direction: rtl;
   scrollbar-width: thin;
 }
@@ -89,4 +95,11 @@
   height: 100%;
   display: block;
   margin: 0 auto;
+}
+
+.assets-close {
+  float: right;
+}
+.drawing-close {
+  float: left;
 }

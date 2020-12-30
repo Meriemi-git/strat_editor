@@ -1,5 +1,5 @@
 export enum CursorMode {
-  Undefined,
-  Draw,
-  Select
+  Undefined = 0,
+  Draw = 1,
+  Select = 2,
 }
