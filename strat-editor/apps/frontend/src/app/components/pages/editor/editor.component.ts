@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
@@ -42,17 +43,18 @@ export class EditorComponent implements OnInit, AfterViewInit {
   CTRLPressed: boolean;
   draggingAgent: Agent;
 
-  constructor(private store: Store<StratEditorState>) {}
+  constructor(
+    private store: Store<StratEditorState>,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.$maps = this.store.select(Selectors.selectAllMaps);
 
     this.store.select(Selectors.isLeftSidenavOpened).subscribe((isOpened) => {
-      console.log('leftIsOpened');
       this.leftIsOpened = isOpened;
     });
     this.store.select(Selectors.isRightSidenavOpened).subscribe((isOpened) => {
-      console.log('rightIsOpened');
       this.rightIsOpened = isOpened;
     });
     this.store.dispatch(Actions.FetchAgents());
@@ -204,11 +206,56 @@ export class EditorComponent implements OnInit, AfterViewInit {
     }
   }
 
-  @HostListener('window:drop', ['$event'])
+  // @HostListener('drag', ['$event'])
+  // onWindowDrag(event: any) {
+  //   event.preventDefault();
+  //   event.stopPropagation();
+  // }
+
+  // @HostListener('dragenter', ['$event'])
+  // onWindowDragEnter(event: any) {
+  //   event.preventDefault();
+  //   event.stopPropagation();
+  // }
+
+  // @HostListener('dragexit', ['$event'])
+  // onwindowDragExit(event: any) {
+  //   event.preventDefault();
+  //   event.stopPropagation();
+  // }
+
+  // @HostListener('dragleave', ['$event'])
+  // onWindowDragLeave(event: any) {
+  //   event.preventDefault();
+  //   event.stopPropagation();
+  // }
+
+  // @HostListener('dragover', ['$event'])
+  // onWindowDragOver(event: any) {
+  //   event.preventDefault();
+  //   event.stopPropagation();
+  // }
+
+  @HostListener('dragstart', ['$event'])
+  onWindowDragStart(event: any) {
+    console.log('dragstart');
+    this.cdr.detach();
+    event.stopPropagation();
+  }
+
+  @HostListener('dragend', ['$event'])
+  onwindowDragEnd(event: any) {
+    this.cdr.reattach();
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  @HostListener('drop', ['$event'])
   onwindowDrop(event: any) {
+    console.log('drop');
+    event.preventDefault();
+    event.stopPropagation();
     if (this.draggingAgent) {
-      console.log('window:drop', event);
-      event.preventDefault();
       this.drawerEditor.draggAgent(
         this.draggingAgent,
         event.layerX,
@@ -219,18 +266,16 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   @HostListener('mouseup', ['$event'])
   onMouseUp(event: any) {
-    console.log('mouseup in editor component');
+    console.log('mouseup');
   }
 
   toggleLeftSidenav() {
     if (!this.canvasStateLoading) {
-      console.log('toggleLeftSidenav');
       this.store.dispatch(Actions.toggleLeft());
     }
   }
 
   toggleRightSidenav() {
-    console.log('toggleRightSidenav');
     this.store.dispatch(Actions.toggleRight());
   }
 
