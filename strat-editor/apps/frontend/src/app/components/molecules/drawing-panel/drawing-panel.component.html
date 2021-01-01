@@ -81,6 +81,15 @@
           }}</mat-option>
         </mat-select>
       </mat-form-field>
+      <p
+        class="sample-text"
+        [ngStyle]="{
+          'font-family': selectedFont,
+          color: '#' + ($color | async).hex
+        }"
+      >
+        Sample text to see fonts
+      </p>
     </div>
   </div>
   <hr />

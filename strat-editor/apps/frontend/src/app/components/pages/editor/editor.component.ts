@@ -23,7 +23,6 @@ import { take } from 'rxjs/operators';
 import { KEY_CODE } from '../../../helpers/key_code';
 import { environment } from 'apps/frontend/src/environments/environment';
 import { Observable } from 'rxjs';
-import { selectAllMaps } from '../../../store/reducers/map.reducer';
 
 @Component({
   selector: 'strat-editor-editor',
@@ -104,7 +103,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.select(Selectors.getDraggedAgent).subscribe((agent) => {
       if (agent) {
         this.draggingAgent = agent;
-        this.store.dispatch(Actions.closeLeft());
       }
     });
   }
@@ -122,7 +120,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
       .pipe(take(1))
       .subscribe((isOpen) => {
         if (isOpen) {
-          this.store.dispatch(Actions.toggleLeft());
+          this.store.dispatch(Actions.closeLeft());
         }
       });
   }
@@ -133,7 +131,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
       .pipe(take(1))
       .subscribe((isOpen) => {
         if (isOpen) {
-          this.store.dispatch(Actions.toggleRight());
+          this.store.dispatch(Actions.closeRight());
         }
       });
   }
@@ -190,6 +188,13 @@ export class EditorComponent implements OnInit, AfterViewInit {
       case KEY_CODE.A:
         if (this.CTRLPressed) {
           this.drawerEditor.selectAllObjects();
+          if (window.getSelection) {
+            if (window.getSelection().empty) {
+              window.getSelection().empty();
+            } else if (window.getSelection().removeAllRanges) {
+              window.getSelection().removeAllRanges();
+            }
+          }
         }
         break;
       case KEY_CODE.Z:
@@ -226,7 +231,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   @HostListener('dragend', ['$event'])
-  onwindowDragEnd(event: any) {
+  onWindowDragEnd(event: any) {
     this.cdr.reattach();
   }
 

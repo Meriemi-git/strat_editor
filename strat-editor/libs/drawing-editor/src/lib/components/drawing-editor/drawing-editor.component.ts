@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  InjectionToken,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { Agent } from '@strat-editor/data';
 import { fabric } from 'fabric';
 import { DrawerAction } from '../../actions';
@@ -319,7 +326,6 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   private async mouseUp(event: fabric.IEvent) {
-    console.log('mouseUp');
     if (this.isMoving) {
       this.canvas.discardActiveObject();
     }
