@@ -38,41 +38,35 @@ export class DrawingEditorComponent implements OnInit {
 
   private canvas: fabric.Canvas;
 
-  private drawer: ObjectDrawer; // Current drawer
+  private drawer: ObjectDrawer;
 
   private avalaibleDrawers: Map<string, ObjectDrawer>;
 
-  private drawerOptions: fabric.IObjectOptions; // Current drawer options
+  private drawerOptions: fabric.IObjectOptions;
+  private object: fabric.Object;
 
-  private object: fabric.Object; // The object currently being drawn
-
-  private isDown: boolean; //Is user dragging the mouse?
+  private isDown: boolean;
   private isMoving: boolean;
 
-  private cursorSvg: fabric.Image;
+  private editingText: boolean;
+  private selectedObjects: fabric.Object[] = [];
 
-  private mouseIsIn: boolean;
-  editingText: boolean;
-  draggedAgent: Agent;
-  selelectedObjects: fabric.Object[] = [];
+  private lastPosX: number = 0;
+  private lastPosY: number = 0;
 
   constructor(private ihs: IconHelperService) {
-    this.setBackgroundImageFromUrl.bind(this);
     this.addAvalaibleDrawers();
   }
 
   ngOnInit(): void {
     this.isDown = false;
-    // user is drawing
     this.cursorMode = CursorMode.Undefined;
-    // Create the Fabric canvas
     this.canvas = new fabric.Canvas('canvas', {
       selection: false,
     });
     this.canvas.setWidth(this.canvasWidth);
     this.canvas.setHeight(this.canvasHeight);
 
-    // Set the default options for the "drawer" class, including stroke color, width, and style
     this.drawerOptions = {
       name: 'line',
       strokeWidth: 5,
@@ -125,7 +119,7 @@ export class DrawingEditorComponent implements OnInit {
       this.dispatchActionByType(action);
     } else {
       this.drawer = null;
-      this.cursorMode = CursorMode.Select;
+      this.cursorMode = CursorMode.Selection;
     }
   }
 
@@ -149,12 +143,18 @@ export class DrawingEditorComponent implements OnInit {
   private manageToolsActions(action: DrawerAction) {
     switch (action.name) {
       case 'selection':
-        this.cursorMode = CursorMode.Select;
+        this.cursorMode = CursorMode.Selection;
         this.drawer = null;
-        this.canvas.forEachObject((object) => (object.selectable = true));
+        this.canvas.forEachObject(
+          (object) => (object.selectable = object.name !== 'map')
+        );
+        break;
+      case 'dragging':
+        this.cursorMode = CursorMode.Dragging;
+        this.drawer = null;
         break;
       default:
-        console.log('Tool action name not managed');
+        console.log('Tool action name not managed :', action.name);
     }
   }
 
@@ -226,9 +226,30 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.loadFromJSON(canvasState, this.canvasStateIsLoaded);
   }
 
-  public setBackgroundImageFromUrl = (imageUrl: string) => {
-    fabric.Image.fromURL(imageUrl, this.setBackground);
-  };
+  public setBackgroundImageFromUrl(imageUrl: string) {
+    fabric.Image.fromURL(
+      imageUrl,
+      function (image) {
+        const scale =
+          this.canvas.width < this.canvas.height
+            ? this.canvas.width / image.width
+            : this.canvas.height / image.height;
+        image.set({
+          top: this.canvas.getCenter().top,
+          left: this.canvas.getCenter().left,
+          originX: 'center',
+          originY: 'center',
+          scaleX: scale,
+          scaleY: scale,
+          selectable: false,
+          name: 'map',
+        });
+        this.canvas.add(image);
+        this.canvas.renderAll();
+        this.stateModified.emit(this.getCanvasState());
+      }.bind(this)
+    );
+  }
 
   private canvasStateIsLoaded = (): void => {
     this.updateNestedObjects();
@@ -261,14 +282,11 @@ export class DrawingEditorComponent implements OnInit {
 
   private initializeCanvasEvents() {
     this.canvas.on('mouse:down', (event: fabric.IEvent) => {
-      const pointer = this.canvas.getPointer(event.e);
-      this.selelectedObjects = this.canvas.getActiveObjects();
-      this.mouseDown(pointer.x, pointer.y);
+      this.mouseDown(event);
     });
 
     this.canvas.on('mouse:move', (event: fabric.IEvent) => {
-      const pointer = this.canvas.getPointer(event.e);
-      this.mouseMove(pointer.x, pointer.y);
+      this.mouseMove(event);
     });
 
     this.canvas.on('mouse:up', (event: fabric.IEvent) => {
@@ -284,43 +302,55 @@ export class DrawingEditorComponent implements OnInit {
     });
 
     this.canvas.on('object:scaling', () => {
-      this.cursorMode = CursorMode.Select;
+      this.cursorMode = CursorMode.Selection;
     });
 
     this.canvas.on('object:modified', (event: fabric.IEvent) => {
-      console.log('object:modified');
       if (event.target instanceof fabric.Textbox) {
         this.editingText = true;
         this.cursorMode = CursorMode.Draw;
       }
     });
+
+    this.canvas.on('mouse:wheel', (event: fabric.IEvent) => {
+      this.onMouseWheel(event);
+    });
   }
 
-  private async mouseDown(x: number, y: number): Promise<void> {
-    this.isDown = true; //The mouse is being clicked
+  private async mouseDown(event: fabric.IEvent): Promise<void> {
+    const pointer = this.canvas.getPointer(event.e);
+    this.lastPosX = (event.e as any).clientX;
+    this.lastPosY = (event.e as any).clientY;
+    this.selectedObjects = this.canvas.getActiveObjects();
+    this.isDown = true;
     if (
       this.cursorMode !== CursorMode.Draw ||
       this.editingText ||
-      this.selelectedObjects.length > 0
+      this.selectedObjects.length > 0
     ) {
       this.editingText = false;
       return;
     }
-    // Create an object at the point (x,y)
-    this.object = await this.make(x, y);
-    // Add the object to the canvas
+    this.object = await this.make(pointer.x, pointer.y);
     if (this.object instanceof LineArrow && this.object.triangle) {
       this.canvas.add(this.object.triangle);
     }
     this.canvas.add(this.object);
-
-    // Renders all objects to the canvas
     this.canvas.renderAll();
   }
 
-  private mouseMove(x: number, y: number): void {
+  private mouseMove(event: fabric.IEvent): void {
+    const pointer = this.canvas.getPointer(event.e);
     if (this.cursorMode === CursorMode.Draw && this.isDown) {
-      this.drawer.resize(this.object, x, y);
+      this.drawer.resize(this.object, pointer.x, pointer.y);
+      this.canvas.renderAll();
+    } else if (this.cursorMode === CursorMode.Dragging && this.isDown) {
+      let vpt = this.canvas.viewportTransform;
+
+      vpt[4] += (event.e as any).clientX - this.lastPosX;
+      vpt[5] += (event.e as any).clientY - this.lastPosY;
+      this.lastPosX = (event.e as any).clientX;
+      this.lastPosY = (event.e as any).clientY;
       this.canvas.renderAll();
     }
   }
@@ -331,12 +361,13 @@ export class DrawingEditorComponent implements OnInit {
     }
     this.isDown = false;
     this.isMoving = false;
+    this.canvas.setViewportTransform(this.canvas.viewportTransform);
     this.canvas.renderAll();
     this.stateModified.emit(this.getCanvasState());
   }
 
   private selectionCreated(event: fabric.IEvent) {
-    this.cursorMode = CursorMode.Select;
+    this.cursorMode = CursorMode.Selection;
     this.object = event.target;
     let selection: fabric.ActiveSelection;
     if ((event.target as LineArrow).triangle) {
@@ -362,59 +393,33 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.renderAll();
   }
 
-  // Method which allows any drawer to Promise their make() function
+  private onMouseWheel(event: fabric.IEvent) {
+    var delta = (event.e as any).deltaY;
+    var zoom = this.canvas.getZoom();
+    zoom *= 0.9 ** delta;
+    if (zoom > 10) zoom = 10;
+    if (zoom < 0.3) zoom = 0.3;
+    let pointToZoom = new fabric.Point(
+      (event.e as any).offsetX,
+      (event.e as any).offsetY
+    );
+    this.canvas.zoomToPoint(pointToZoom, zoom);
+    event.e.preventDefault();
+    event.e.stopPropagation();
+  }
+
   private async make(x: number, y: number): Promise<fabric.Object> {
     if (this.drawer) {
       return await this.drawer.make(x, y, this.drawerOptions);
     }
   }
 
-  private setBackground = (img: fabric.Image): void => {
-    if (this.canvas.width < this.canvas.height) {
-      const scaleX = this.canvas.width / img.width;
-      this.canvas.setBackgroundImage(
-        img,
-        this.canvas.renderAll.bind(this.canvas),
-        {
-          scaleX: scaleX,
-          scaleY: scaleX,
-          top: this.canvas.getCenter().top,
-          left: this.canvas.getCenter().left,
-          originX: 'center',
-          originY: 'center',
-        }
-      );
-    } else {
-      const scaleY = this.canvas.height / img.height;
-      this.canvas.setBackgroundImage(
-        img,
-        this.canvas.renderAll.bind(this.canvas),
-        {
-          scaleX: scaleY,
-          scaleY: scaleY,
-          top: this.canvas.getCenter().top,
-          left: this.canvas.getCenter().left,
-          originX: 'center',
-          originY: 'center',
-        }
-      );
-    }
-    this.stateModified.emit(this.getCanvasState());
-  };
-
   public resize(screenWidth: number, canvasHeight: number) {
     this.canvas.setWidth(screenWidth);
     this.canvas.setHeight(canvasHeight);
   }
 
-  public updatePointerIcon(iconUrl: string) {
-    // this.canvas.freeDrawingCursor = "pointer";
-    // this.canvas.hoverCursor = `url('/${iconUrl}') x y, auto`;
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    // const that = this;
-    // fabric.Image.fromURL(iconUrl, function(image) {
-    //   image.scaleToWidth(15,false);
-    //   that.canvas.add(image);
-    // }, {crossOrigin: "anonymous"});
+  public resetView() {
+    this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
   }
 }

@@ -18,6 +18,7 @@ import {
   DrawingEditorComponent,
   PolyLineAction,
   SelectionAction,
+  DraggingAction,
 } from '@strat-editor/drawing-editor';
 import { take } from 'rxjs/operators';
 import { KEY_CODE } from '../../../helpers/key_code';
@@ -33,18 +34,18 @@ export class EditorComponent implements OnInit, AfterViewInit {
   @ViewChild('container') container: ElementRef;
   @ViewChild('drawerEditor') drawerEditor: DrawingEditorComponent;
 
-  leftIsOpened: boolean;
-  rightIsOpened: boolean;
-  selectedMap: Map;
-  selectedFloor: Floor;
-  $maps: Observable<Map[]>;
-  width: number;
-  height: number;
-  canvasStateLoading: boolean;
-  CTRLPressed: boolean;
-  draggingAgent: Agent;
+  public leftIsOpened: boolean;
+  public rightIsOpened: boolean;
+  public selectedMap: Map;
+  public selectedFloor: Floor;
+  public $maps: Observable<Map[]>;
+  public width: number;
+  public height: number;
+  private canvasStateLoading: boolean;
+  private draggingAgent: Agent;
 
-  previousAction: DrawerAction;
+  private previousAction: DrawerAction;
+  private CTRLPressed: boolean;
 
   constructor(
     private store: Store<StratEditorState>,
@@ -53,7 +54,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.$maps = this.store.select(Selectors.selectAllMaps);
-
     this.store.select(Selectors.isLeftSidenavOpened).subscribe((isOpened) => {
       this.leftIsOpened = isOpened;
     });
@@ -75,9 +75,13 @@ export class EditorComponent implements OnInit, AfterViewInit {
       if (this.selectedMap) {
         this.closeRightSidenav();
       }
-      if (!(selected instanceof SelectionAction)) {
+      if (
+        !(selected instanceof SelectionAction) &&
+        !(selected instanceof DraggingAction)
+      ) {
         this.previousAction = selected;
       }
+      console.log('getSelectedAction', selected.name);
       this.drawerEditor.callAction(selected);
     });
     this.store.select(Selectors.getColor).subscribe((color) => {
@@ -171,17 +175,22 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   @HostListener('window:keyup', ['$event'])
   keyUp(event: KeyboardEvent) {
+    console.log('keyup :', event.key.toLocaleLowerCase());
     switch (event.key.toLocaleLowerCase()) {
       case KEY_CODE.DELETE:
         this.drawerEditor.deleteActiveObject();
         break;
       case KEY_CODE.ESCAPE:
-        this.store.dispatch(Actions.UnSelectDrawerAction());
+        this.store.dispatch(
+          Actions.SetDrawerAction({ action: this.previousAction })
+        );
+        this.drawerEditor.resetView();
         break;
       case KEY_CODE.CTRL:
         if (this.CTRLPressed) {
-          const action = this.previousAction;
-          this.store.dispatch(Actions.SetDrawerAction({ action }));
+          this.store.dispatch(
+            Actions.SetDrawerAction({ action: this.previousAction })
+          );
         }
         this.CTRLPressed = false;
         break;
@@ -217,8 +226,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
     switch (event.key.toLocaleLowerCase()) {
       case KEY_CODE.CTRL:
         if (!this.CTRLPressed) {
-          const action = new SelectionAction();
-          this.store.dispatch(Actions.SetDrawerAction({ action }));
+          this.store.dispatch(
+            Actions.SetDrawerAction({ action: new SelectionAction() })
+          );
         }
         this.CTRLPressed = true;
         break;

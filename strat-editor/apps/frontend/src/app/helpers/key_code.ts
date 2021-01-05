@@ -8,4 +8,5 @@ export enum KEY_CODE {
   A = 'a',
   Y = 'y',
   Z = 'z',
+  ALT = 'alt',
 }
