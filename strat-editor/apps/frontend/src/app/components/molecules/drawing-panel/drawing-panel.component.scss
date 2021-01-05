@@ -1,5 +1,5 @@
 .actions {
-  display: flex;
+  display: inline-flex;
   flex-wrap: wrap;
   flex-direction: row-reverse;
   justify-content: space-evenly;
@@ -8,6 +8,7 @@
 .action {
   margin-left: 5px;
   margin-right: 5px;
+  margin-bottom: 10px;
 }
 
 .mat-icon {
@@ -15,5 +16,15 @@
 }
 
 .sample-text {
-  font-size: 1.3em;
+  font-size: 1.1em;
+  margin: 0 auto;
+}
+
+.fonts {
+  display: flex;
+  flex-direction: row;
+}
+
+.mat-h3 {
+  margin: 0px;
 }

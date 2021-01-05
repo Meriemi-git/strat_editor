@@ -196,7 +196,9 @@ export class DrawingEditorComponent implements OnInit {
 
   public deleteActiveObject() {
     this.canvas.getActiveObjects().forEach((obj) => {
-      this.canvas.remove(obj);
+      if (obj.name != 'map') {
+        this.canvas.remove(obj);
+      }
     });
     this.canvas.discardActiveObject();
     this.stateModified.emit(this.getCanvasState());
@@ -204,22 +206,19 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   public selectAllObjects() {
-    var selection = new fabric.ActiveSelection(this.canvas.getObjects(), {
-      canvas: this.canvas,
-    });
+    var selection = new fabric.ActiveSelection(
+      this.canvas.getObjects().filter((obj) => obj.name !== 'map'),
+      {
+        canvas: this.canvas,
+      }
+    );
     this.canvas.setActiveObject(selection);
     this.canvas.renderAll();
   }
 
   public getCanvasState(): string {
     this.updateNestedObjects();
-    return this.canvas.toDatalessJSON([
-      'line',
-      'triangle',
-      'type',
-      'uid',
-      'name',
-    ]);
+    return this.canvas.toJSON(['line', 'triangle', 'type', 'uid', 'name']);
   }
 
   public setCanvasState(canvasState: string): void {

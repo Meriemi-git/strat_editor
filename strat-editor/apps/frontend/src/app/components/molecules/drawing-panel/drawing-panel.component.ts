@@ -21,6 +21,8 @@ export class DrawingPanelComponent implements OnInit {
   $color: Observable<DrawerColor>;
   $drawerActions: Observable<DrawerAction[]>;
   $fontNames: Observable<string[]>;
+  $isDrawingPanelOpened: Observable<boolean>;
+  $isGalleryPanelOpened: Observable<boolean>;
   fontSizes: number[];
   DrawingActionType: typeof DrawerActionType = DrawerActionType;
 
@@ -46,6 +48,12 @@ export class DrawingPanelComponent implements OnInit {
     this.store
       .select(Selectors.getFontSize)
       .subscribe((size) => (this.selectedSize = size));
+    this.$isDrawingPanelOpened = this.store.select(
+      Selectors.isDrawingPanelOpened
+    );
+    this.$isGalleryPanelOpened = this.store.select(
+      Selectors.isGalleryPanelOpened
+    );
   }
 
   onSelectColor(event: any) {

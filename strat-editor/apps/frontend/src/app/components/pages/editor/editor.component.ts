@@ -258,6 +258,22 @@ export class EditorComponent implements OnInit, AfterViewInit {
     }
   }
 
+  openAgentsPanel() {
+    this.store.dispatch(Actions.showAgentsPanel());
+  }
+
+  openGadgetsPanel() {
+    this.store.dispatch(Actions.showGadgetsPanel());
+  }
+
+  openDrawingPanel() {
+    this.store.dispatch(Actions.showDrawingPanel());
+  }
+
+  openGalleryPanel() {
+    this.store.dispatch(Actions.showGalleryPanel());
+  }
+
   toggleLeftSidenav() {
     if (!this.canvasStateLoading) {
       this.store.dispatch(Actions.toggleLeft());
@@ -270,5 +286,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   closeRightSidenav() {
     this.store.dispatch(Actions.closeRight());
+  }
+
+  closeLeftSidenav() {
+    this.store.dispatch(Actions.closeLeft());
   }
 }

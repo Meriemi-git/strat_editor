@@ -1,26 +1,16 @@
 @import '~apps/frontend/src/styles.scss';
 
 .icons-left {
-  position: sticky;
-  top: 40vh;
-  height: 0px;
-  width: 0px;
   z-index: 20;
-  left: 3vw;
-  height: 0px;
-  display: flex;
-  flex-direction: column;
+  float: left;
+  top: 50%;
+  position: relative;
 }
 .icons-right {
-  position: fixed;
-  top: 40vh;
-  height: 0px;
-  width: 0px;
   z-index: 20;
+  float: right;
+  position: relative;
   top: 50%;
-  left: 90vw;
-  display: flex;
-  flex-direction: column;
 }
 .container {
   height: 100%;
@@ -35,13 +25,11 @@
 .left-sidenav-content {
   padding: 10px;
   text-align: center;
-  width: 25%;
 }
 
 .right-sidenav-content {
   padding: 10px;
   text-align: center;
-  width: 25%;
 }
 
 .mat-h2 {
@@ -78,10 +66,10 @@
   overflow-x: hidden !important;
   direction: rtl;
   scrollbar-width: thin;
+  scrollbar-color: $primaryColor black;
 }
 
 .mat-sidenav {
-  width: 25%;
   margin: 0 auto;
   text-align: center;
 }
@@ -99,7 +87,11 @@
 
 .assets-close {
   float: right;
+  position: relative;
+  top: 0;
 }
 .drawing-close {
   float: left;
+  position: relative;
+  top: 0;
 }

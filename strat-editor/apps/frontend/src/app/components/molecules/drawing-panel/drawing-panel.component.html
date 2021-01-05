@@ -1,5 +1,5 @@
-<div class="container">
-  <h2 class="mat-title">Shapes</h2>
+<div class="container" *ngIf="$isDrawingPanelOpened | async">
+  <h2 class="mat-h3">Shapes</h2>
   <div class="actions">
     <strat-editor-drawing-action
       *ngFor="
@@ -14,7 +14,7 @@
     ></strat-editor-drawing-action>
   </div>
   <hr />
-  <h2 class="mat-title">Colors</h2>
+  <h2 class="mat-h3">Colors</h2>
   <mat-form-field>
     <input
       matInput
@@ -27,7 +27,7 @@
     <ngx-mat-color-picker #picker></ngx-mat-color-picker>
   </mat-form-field>
   <hr />
-  <h2 class="mat-title">Forms</h2>
+  <h2 class="mat-h3">Forms</h2>
   <div class="actions">
     <strat-editor-drawing-action
       *ngFor="
@@ -43,7 +43,7 @@
   </div>
 
   <hr />
-  <h2 class="mat-title">Text</h2>
+  <h2 class="mat-h3">Text</h2>
   <div class="text-widgets">
     <div class="actions">
       <strat-editor-drawing-action
@@ -62,6 +62,7 @@
       <mat-form-field>
         <mat-label class="select-label">Font size</mat-label>
         <mat-select
+          color="primary"
           [(value)]="selectedSize"
           (selectionChange)="onFontSizeSelected($event.value)"
         >
@@ -81,19 +82,19 @@
           }}</mat-option>
         </mat-select>
       </mat-form-field>
-      <p
-        class="sample-text"
-        [ngStyle]="{
-          'font-family': selectedFont,
-          color: '#' + ($color | async).hex
-        }"
-      >
-        Sample text to see fonts
-      </p>
     </div>
+    <p
+      class="sample-text"
+      [ngStyle]="{
+        'font-family': selectedFont,
+        color: '#' + ($color | async).hex
+      }"
+    >
+      Sample text to see fonts
+    </p>
   </div>
   <hr />
-  <h2 class="mat-title">Tools</h2>
+  <h2 class="mat-h3">Tools</h2>
   <div class="actions">
     <strat-editor-drawing-action
       *ngFor="
@@ -109,3 +110,4 @@
   </div>
   <hr />
 </div>
+<div *ngIf="$isGalleryPanelOpened | async"></div>
