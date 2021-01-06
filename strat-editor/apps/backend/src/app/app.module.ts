@@ -8,10 +8,13 @@ import { IconModule } from './icon/icon.module';
 import { FontModule } from './fonts/font.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { GalleryModule } from './gallery/gallery.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/strat-editor'),
+    MongooseModule.forRoot('mongodb://localhost:27017/strat-editor', {
+      useCreateIndex: true,
+    }),
     AgentModule,
     MapModule,
     FloorModule,
@@ -19,6 +22,7 @@ import { UserModule } from './user/user.module';
     FontModule,
     UserModule,
     AuthModule,
+    GalleryModule,
   ],
 })
 export class AppModule implements NestModule {

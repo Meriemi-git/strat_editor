@@ -11,6 +11,11 @@ export interface User extends mongoose.Document {
   mail: string;
 }
 
+export interface UserDto extends mongoose.Document {
+  password: string;
+  mail: string;
+}
+
 export const UserSchema = new mongoose.Schema({
   firstName: String,
   lastName: String,

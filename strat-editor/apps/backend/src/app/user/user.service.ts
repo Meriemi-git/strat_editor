@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '@strat-editor/data';
 import { Model } from 'mongoose';
+import { AuthInfos } from '../models/auth-infos';
 
 @Injectable()
 export class UserService {
@@ -23,5 +24,11 @@ export class UserService {
         }
       });
     });
+  }
+
+  async verifyToken(payload: AuthInfos): Promise<User> {
+    return this.userModel
+      .findOne({ mail: payload.userMail, _id: payload.userId })
+      .exec();
   }
 }
