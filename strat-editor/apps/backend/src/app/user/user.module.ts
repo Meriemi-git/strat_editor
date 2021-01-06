@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { UserSchema } from '@strat-editor/data';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { UserSchema } from '@strat-editor/data';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: 'User', schema: UserSchema }])],

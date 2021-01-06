@@ -6,6 +6,8 @@ import { MapModule } from './map/map.module';
 import { FloorModule } from './floor/floor.module';
 import { IconModule } from './icon/icon.module';
 import { FontModule } from './fonts/font.module';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { FontModule } from './fonts/font.module';
     FloorModule,
     IconModule,
     FontModule,
+    UserModule,
+    AuthModule,
   ],
 })
 export class AppModule implements NestModule {
