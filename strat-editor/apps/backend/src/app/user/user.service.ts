@@ -7,13 +7,13 @@ import { Model } from 'mongoose';
 export class UserService {
   constructor(@InjectModel('User') private userModel: Model<UserDocument>) {}
 
-  async findOne(mail: string): Promise<User> {
+  async findByMail(mail: string): Promise<User> {
     return this.userModel.findOne({ mail: mail }).exec();
   }
 
   async addUser(user: User): Promise<User> {
     return new Promise<User>((resolve, reject) => {
-      this.findOne(user.mail).then((existing) => {
+      this.findByMail(user.mail).then((existing) => {
         if (existing) {
           reject('User already registered');
         } else {

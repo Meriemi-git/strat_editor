@@ -21,7 +21,6 @@ export const UserSchema = new mongoose.Schema({
 UserSchema.pre<User>('save', function () {
   return new Promise<void>((resolve, reject) => {
     let user = this;
-    console.log('In pre-save', user);
     if (!this.isModified('password')) {
       resolve();
     }
@@ -33,9 +32,7 @@ UserSchema.pre<User>('save', function () {
         if (err) {
           return reject(err);
         }
-        console.log('hash', hash);
         user.password = hash;
-
         resolve();
       });
     });

@@ -5,14 +5,19 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from '@strat-editor/data';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { LocalStrategy } from './local.strategy';
+import { jwtConstants } from './constants';
+import { JwtStrategy } from './jwt.strategy';
+
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     JwtModule.register({
-      secretOrPrivateKey: '$A39KKxK*ebhsPz$!Q7M$B!uWaiaRv',
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '60s' },
     }),
   ],
   controllers: [AuthController],
-  providers: [UserService, AuthService],
+  providers: [UserService, AuthService, LocalStrategy, JwtStrategy],
 })
 export class AuthModule {}
