@@ -1,6 +1,7 @@
 @import '~apps/frontend/src/styles.scss';
 
-.login {
+.login,
+.disconnect {
   width: 300px;
   margin: 16px auto;
   font-size: 16px;
@@ -38,6 +39,22 @@
   color: $warn-lighter-color;
 }
 
+.error-block {
+  padding: 12px;
+  font-size: 0.9em;
+  color: $warn-color;
+}
+
 .submit-button {
   background-color: $primaryColor;
+}
+
+.register-button {
+  background-color: $primaryLightColor;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }

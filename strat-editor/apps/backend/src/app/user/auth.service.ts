@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthInfos, JwtInfos, User, UserDto } from '@strat-editor/data';
 import { UserService } from '../user/user.service';
@@ -14,7 +14,8 @@ export class AuthService {
   public async login(userDto: UserDto): Promise<any> {
     return this.validateUser(userDto).then((user) => {
       if (!user) {
-        return { status: 404 };
+        console.log('!user');
+        throw new UnauthorizedException();
       }
       const payload: JwtInfos = { userId: user._id, userMail: user.mail };
       const accessToken = this.jwtService.sign(payload);
@@ -29,19 +30,23 @@ export class AuthService {
 
   public async validateUser(userDto: UserDto): Promise<User> {
     return new Promise<User>((resolve, reject) => {
-      this.userService.findByMail(userDto.mail).then((matchingUser) => {
-        if (matchingUser) {
-          bcrypt
-            .compare(userDto.password, matchingUser.password)
-            .then((matching) => {
-              if (matching) {
-                resolve(matchingUser);
-              } else {
-                reject('Wrong credentials');
-              }
-            });
-        }
-      });
+      this.userService
+        .findByMail(userDto.mail.toLocaleLowerCase())
+        .then((matchingUser) => {
+          if (matchingUser) {
+            bcrypt
+              .compare(userDto.password, matchingUser.password)
+              .then((matching) => {
+                if (matching) {
+                  resolve(matchingUser);
+                } else {
+                  reject('Wrong credentials');
+                }
+              });
+          } else {
+            reject('Wrong credentials');
+          }
+        });
     });
   }
 }

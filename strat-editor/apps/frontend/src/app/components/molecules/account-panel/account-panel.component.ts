@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AuthInfos, UserDto } from '@strat-editor/data';
-import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'strat-editor-account-panel',
@@ -9,24 +8,25 @@ import { UserService } from '../../../services/user.service';
   styleUrls: ['./account-panel.component.scss'],
 })
 export class AccountPanelComponent implements OnInit {
-  @Output() logIn = new EventEmitter<AuthInfos>();
+  @Output() logIn = new EventEmitter<UserDto>();
   @Output() disconnect = new EventEmitter<void>();
+  @Output() register = new EventEmitter<AuthInfos>();
   @Input() authInfos: AuthInfos;
+  @Input() connexionFailed: boolean;
   private readonly passwordRegex: string =
     '(?=\\D*\\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{8,30}';
-  authForm = this.formBuilder.group({
+
+  public authForm = this.formBuilder.group({
     mail: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
       Validators.required,
       Validators.pattern(this.passwordRegex),
     ]),
   });
-  isSubmitted = false;
+  public isSubmitted: boolean = false;
+  public isRegisterForm: boolean = false;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private userService: UserService
-  ) {}
+  constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {}
 
@@ -37,12 +37,8 @@ export class AccountPanelComponent implements OnInit {
         mail: this.authForm.get('mail').value,
         password: this.authForm.get('password').value,
       };
-      this.userService.login(userDto).subscribe((authInfos) => {
-        localStorage.setItem('accessToken', authInfos.accessToken);
-        this.logIn.emit(authInfos);
-        //this.authForm.get('mail').value.set(null);
-        //this.authForm.get('password').value.set(null);
-      });
+      this.logIn.emit(userDto);
+      this.isSubmitted = false;
     }
   }
 
@@ -52,5 +48,9 @@ export class AccountPanelComponent implements OnInit {
 
   onDisconnect() {
     this.disconnect.emit();
+  }
+
+  onDisplayRegisterForm() {
+    this.isRegisterForm = true;
   }
 }

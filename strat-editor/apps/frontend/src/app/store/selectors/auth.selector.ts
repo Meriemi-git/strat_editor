@@ -10,3 +10,8 @@ export const getAuthInfos = createSelector(
   authState,
   (state: AuthState) => state.infos
 );
+
+export const getAuthError = createSelector(
+  authState,
+  (state: AuthState) => state.error
+);

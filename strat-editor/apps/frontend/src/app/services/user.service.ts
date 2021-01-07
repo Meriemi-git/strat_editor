@@ -18,7 +18,6 @@ export class UserService {
       .post<User>(environment.apiUrl + this.controller + '/register', userDto)
       .pipe(
         catchError((err) => {
-          console.log(err);
           return throwError(err);
         })
       );
@@ -29,7 +28,6 @@ export class UserService {
       .post<AuthInfos>(environment.apiUrl + this.controller + '/login', userDto)
       .pipe(
         catchError((err) => {
-          console.log(err);
           return throwError(err);
         })
       );

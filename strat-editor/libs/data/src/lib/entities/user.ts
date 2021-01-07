@@ -37,6 +37,7 @@ UserSchema.pre<User>('save', function () {
           return reject(err);
         }
         user.password = hash;
+        user.mail = user.mail.toLocaleLowerCase();
         resolve();
       });
     });

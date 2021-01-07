@@ -2,6 +2,7 @@
   <strat-editor-account-panel
     (logIn)="onLogin($event)"
     (disconnect)="onDisconnect()"
+    [connexionFailed]="connexionFailed"
     [authInfos]="$authInfos | async"
   >
   </strat-editor-account-panel>
