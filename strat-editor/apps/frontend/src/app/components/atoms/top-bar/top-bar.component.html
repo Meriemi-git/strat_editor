@@ -1,11 +1,20 @@
 <mat-toolbar class="toolbar" color="primary">
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+  <button
+    mat-icon-button
+    class="example-icon"
+    aria-label="Example icon-button with menu icon"
+  >
     <mat-icon>menu</mat-icon>
   </button>
   <span>Strat Editor</span>
-  <span class = "filler"></span>
-  <span class="example-spacer"></span>
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with account_circle icon">
+  <span class="filler"></span>
+  <span class="example-spacer">{{ username }}</span>
+  <button
+    mat-icon-button
+    class="example-icon"
+    (click)="onButtonClick()"
+    aria-label="Example icon-button with account_circle icon"
+  >
     <mat-icon>account_circle</mat-icon>
   </button>
 </mat-toolbar>

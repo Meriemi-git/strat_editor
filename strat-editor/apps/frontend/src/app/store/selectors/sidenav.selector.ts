@@ -30,3 +30,13 @@ export const isGalleryPanelOpened = createSelector(
   selectSidenavState,
   (state: SidenavState) => state.galleryPanelIsOpen
 );
+
+export const isAccountPanelOpened = createSelector(
+  selectSidenavState,
+  (state: SidenavState) => state.accountPanelIsOpen
+);
+
+export const isMainMenuPanelOpened = createSelector(
+  selectSidenavState,
+  (state: SidenavState) => state.mainMenuPanelIsOpen
+);

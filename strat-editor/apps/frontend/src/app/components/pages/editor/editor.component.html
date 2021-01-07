@@ -19,10 +19,12 @@
     class="right-sidenav-content"
     (closedStart)="onCloseRightSidenav()"
   >
-    <button mat-mini-fab class="drawing-close" (click)="closeRightSidenav()">
-      <mat-icon color="primary">close</mat-icon>
-    </button>
-    <strat-editor-drawing-panel> </strat-editor-drawing-panel>
+    <div class="button-container">
+      <button mat-mini-fab class="drawing-close" (click)="closeRightSidenav()">
+        <mat-icon color="primary">close</mat-icon>
+      </button>
+    </div>
+    <strat-editor-right-panel></strat-editor-right-panel>
   </mat-sidenav>
   <mat-sidenav-content class="container">
     <div class="icons-left" *ngIf="selectedMap">

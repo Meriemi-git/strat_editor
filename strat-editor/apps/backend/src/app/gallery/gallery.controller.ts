@@ -1,6 +1,14 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import {
+  Body,
+  Controller,
+  Post,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { GalleryService } from './gallery.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from '../user/jwt-auth.guard';
 
 @Controller('gallery')
 export class GalleryController {
@@ -10,5 +18,12 @@ export class GalleryController {
   @Post('images')
   allImages(@Body() userId): Promise<string[]> {
     return this.galleryService.getAllImagesForUser(userId);
+  }
+
+  //@UseGuards(JwtAuthGuard)
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file', { dest: './uploads' }))
+  uploadFile(@UploadedFile() file) {
+    console.log('file', file);
   }
 }

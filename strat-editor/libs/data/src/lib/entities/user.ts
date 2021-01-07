@@ -5,20 +5,19 @@ export type UserDocument = User & mongoose.Document;
 
 export interface User extends mongoose.Document {
   _id: string;
-  firstName: string;
-  lastName: string;
+  username: string;
   password: string;
   mail: string;
 }
 
-export interface UserDto extends mongoose.Document {
+export interface UserDto {
   password: string;
   mail: string;
+  username?: string;
 }
 
 export const UserSchema = new mongoose.Schema({
-  firstName: String,
-  lastName: String,
+  username: String,
   password: String,
   mail: String,
 });

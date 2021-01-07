@@ -81,7 +81,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
       ) {
         this.previousAction = selected;
       }
-      console.log('getSelectedAction', selected.name);
       this.drawerEditor.callAction(selected);
     });
     this.store.select(Selectors.getColor).subscribe((color) => {
@@ -168,9 +167,11 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.width = window.innerWidth;
     this.height = this.container.nativeElement.clientHeight;
     this.drawerEditor.resize(this.width, this.height);
-    this.drawerEditor.setBackgroundImageFromUrl(
-      environment.floorImageApiUrl + this.selectedFloor.image
-    );
+    if (this.selectedFloor) {
+      this.drawerEditor.setBackgroundImageFromUrl(
+        environment.floorImageApiUrl + this.selectedFloor.image
+      );
+    }
   }
 
   @HostListener('window:keyup', ['$event'])

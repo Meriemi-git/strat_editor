@@ -86,12 +86,12 @@
 }
 
 .assets-close {
-  float: right;
-  position: relative;
-  top: 0;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 .drawing-close {
-  float: left;
-  position: relative;
-  top: 0;
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }

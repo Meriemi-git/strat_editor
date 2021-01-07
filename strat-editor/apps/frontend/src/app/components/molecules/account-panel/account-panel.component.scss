@@ -1,0 +1,43 @@
+@import '~apps/frontend/src/styles.scss';
+
+.login {
+  width: 300px;
+  margin: 16px auto;
+  font-size: 16px;
+}
+
+.login input {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  border-width: 1px;
+  border-style: solid;
+  padding: 10px;
+  font-family: inherit;
+  font-size: 0.95em;
+  direction: LTR;
+}
+
+.login input[type='email'],
+.login input[type='password'] {
+  background: #fff;
+  border-color: #bbb;
+  color: #555;
+  text-align: center;
+  direction: LTR;
+}
+
+.has-error input[type='email'],
+.has-error input[type='password'] {
+  border-color: $warn-lighter-color;
+}
+
+.help-block {
+  padding: 12px;
+  font-size: 0.8em;
+  color: $warn-lighter-color;
+}
+
+.submit-button {
+  background-color: $primaryColor;
+}

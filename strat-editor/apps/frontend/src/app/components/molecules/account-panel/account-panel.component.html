@@ -1,0 +1,35 @@
+<div class="login" *ngIf="!authInfos; else disconnect">
+  <h2 class="login-header">Log in</h2>
+  <form [formGroup]="authForm" class="login-container" (ngSubmit)="onSubmit()">
+    <p [ngClass]="{ 'has-error': isSubmitted && formControls.mail.errors }">
+      <input type="email" placeholder="Email" formControlName="mail" />
+    </p>
+    <div *ngIf="isSubmitted && formControls.mail.errors" class="help-block">
+      <div *ngIf="formControls.mail.errors.required">Email is required</div>
+      <div *ngIf="formControls.mail.errors.email">Email is invalid</div>
+    </div>
+    <p [ngClass]="{ 'has-error': isSubmitted && formControls.password.errors }">
+      <input
+        type="password"
+        placeholder="Password"
+        formControlName="password"
+      />
+    </p>
+    <div *ngIf="isSubmitted && formControls.password.errors" class="help-block">
+      <div *ngIf="formControls.password.errors?.required">
+        Password is required
+      </div>
+      <div *ngIf="formControls.password.errors?.pattern">
+        Passwords must contain 8 characters with at least one uppercase letter,
+        number and symbol
+      </div>
+    </div>
+    <button mat-raised-button class="submit-button">Log In</button>
+  </form>
+</div>
+<ng-template #disconnect>
+  <h2 class="login-header">{{ authInfos.username }}</h2>
+  <button mat-raised-button class="submit-button" (click)="onDisconnect()">
+    Disconnect
+  </button>
+</ng-template>

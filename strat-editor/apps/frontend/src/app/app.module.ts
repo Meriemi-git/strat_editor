@@ -10,7 +10,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
-import { environment } from '../environments/environment';
+import { AccountPanelComponent } from './components/molecules/account-panel/account-panel.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,7 +21,6 @@ import { environment } from '../environments/environment';
     HttpClientModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers),
-    // StoreModule.forRoot(reducers,{ metaReducers: metaReducers }),
     StoreDevtoolsModule.instrument({
       maxAge: 40, // Retains last 25 states
     }),

@@ -3,6 +3,8 @@ import * as sidenavReducer from './sidenav.reducer';
 import * as mapReducer from './map.reducer';
 import * as drawerReducer from './drawer.reducer';
 import * as canvasReducer from './canvas.reducer';
+import * as authReducer from './auth.reducer';
+
 import { ActionReducerMap } from '@ngrx/store';
 
 export interface StratEditorState {
@@ -11,6 +13,7 @@ export interface StratEditorState {
   MapState: mapReducer.MapState;
   DrawerState: drawerReducer.DrawingActionState;
   CanvasState: canvasReducer.CanvasState;
+  AuthState: authReducer.AuthState;
 }
 
 export const reducers: ActionReducerMap<StratEditorState> = {
@@ -19,4 +22,5 @@ export const reducers: ActionReducerMap<StratEditorState> = {
   MapState: mapReducer.reducer,
   DrawerState: drawerReducer.reducer,
   CanvasState: canvasReducer.reducer,
+  AuthState: authReducer.reducer,
 };

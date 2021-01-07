@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User, UserDto } from '@strat-editor/data';
+import { AuthInfos, JwtInfos, User, UserDto } from '@strat-editor/data';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcryptjs';
-import { AuthInfos } from '../models/auth-infos';
 
 @Injectable()
 export class AuthService {
@@ -17,14 +16,14 @@ export class AuthService {
       if (!user) {
         return { status: 404 };
       }
-      const payload: AuthInfos = { userId: user._id, userMail: user.mail };
+      const payload: JwtInfos = { userId: user._id, userMail: user.mail };
       const accessToken = this.jwtService.sign(payload);
       return {
-        expires_in: 60,
-        access_token: accessToken,
-        user_id: user._id,
-        status: 200,
-      };
+        username: user.username,
+        expiresIn: 60,
+        accessToken: accessToken,
+        userId: user._id,
+      } as AuthInfos;
     });
   }
 

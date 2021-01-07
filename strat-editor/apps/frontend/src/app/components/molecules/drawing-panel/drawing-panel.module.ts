@@ -12,6 +12,7 @@ import {
   NGX_MAT_COLOR_FORMATS,
 } from '@angular-material-components/color-picker';
 import { SharedModule } from '../../../shared.module';
+import { ImageUploaderModule } from '../../atoms/image-uploader/image-uploader.module';
 
 @NgModule({
   declarations: [DrawingPanelComponent],
@@ -25,6 +26,7 @@ import { SharedModule } from '../../../shared.module';
     DrawingActionModule,
     SharedModule,
     MatSelectModule,
+    ImageUploaderModule,
   ],
   providers: [{ provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS }],
   exports: [DrawingPanelComponent],

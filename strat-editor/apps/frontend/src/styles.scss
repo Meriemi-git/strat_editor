@@ -4,10 +4,6 @@
 
 @import 'font-all.scss';
 
-body {
-  margin: 0;
-}
-
 .canvas-container {
   display: block;
   margin: 0 auto;
@@ -15,6 +11,21 @@ body {
 
 .mat-form-field-label-wrapper {
   text-align: center !important;
+}
+
+body {
+  margin: 0;
+  background-color: #3a3a3a;
+  font-family: 'Roboto';
+}
+
+/* Overwrite the styles of the mat-dialog-container element globally, but only for those
+that have an id of `modal-component` */
+/* https://stackoverflow.com/a/48689004/9263761 */
+mat-dialog-container#modal-component {
+  border: 3px solid #262626;
+  border-radius: 11px;
+  background-color: #1a1a1a;
 }
 /**
 * Generated theme by Material Theme Generator
@@ -182,6 +193,8 @@ $secondaryDarkColor: #021217;
 $primaryTextColor: #ffffff;
 $secondaryTextColor: #ffffff;
 $lighter: #000000;
+$warn-color: #ff0000;
+$warn-lighter-color: #ffb3b3;
 $mat-primary: (
   main: #327eff,
   lighter: #79adff,

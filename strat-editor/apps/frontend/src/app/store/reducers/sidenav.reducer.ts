@@ -8,6 +8,8 @@ export interface SidenavState {
   gadgetsPanelIsOpen: boolean;
   drawingPanelIsOpen: boolean;
   galleryPanelIsOpen: boolean;
+  mainMenuPanelIsOpen: boolean;
+  accountPanelIsOpen: boolean;
 }
 
 export const initialstate: SidenavState = {
@@ -17,6 +19,8 @@ export const initialstate: SidenavState = {
   gadgetsPanelIsOpen: false,
   drawingPanelIsOpen: false,
   galleryPanelIsOpen: false,
+  mainMenuPanelIsOpen: false,
+  accountPanelIsOpen: false,
 };
 
 const sidenavReducer = createReducer(
@@ -35,7 +39,9 @@ const sidenavReducer = createReducer(
     agentsPanelIsOpen: false,
     gadgetsPanelIsOpen: false,
     drawingPanelIsOpen: false,
-    galeryPanelIsOpen: false,
+    galleryPanelIsOpen: false,
+    mainMenuPanelIsOpen: false,
+    accountPanelIsOpen: false,
   })),
   on(actions.closeLeft, (state) => ({
     ...state,
@@ -44,6 +50,8 @@ const sidenavReducer = createReducer(
     gadgetsPanelIsOpen: false,
     drawingPanelIsOpen: false,
     galleryPanelIsOpen: false,
+    mainMenuPanelIsOpen: false,
+    accountPanelIsOpen: false,
   })),
   on(actions.showAgentsPanel, (state) => ({
     ...state,
@@ -53,6 +61,8 @@ const sidenavReducer = createReducer(
     gadgetsPanelIsOpen: false,
     drawingPanelIsOpen: false,
     galleryPanelIsOpen: false,
+    mainMenuPanelIsOpen: false,
+    accountPanelIsOpen: false,
   })),
 
   on(actions.showGadgetsPanel, (state) => ({
@@ -63,6 +73,8 @@ const sidenavReducer = createReducer(
     gadgetsPanelIsOpen: true,
     drawingPanelIsOpen: false,
     galleryPanelIsOpen: false,
+    mainMenuPanelIsOpen: false,
+    accountPanelIsOpen: false,
   })),
   on(actions.showDrawingPanel, (state) => ({
     ...state,
@@ -72,6 +84,8 @@ const sidenavReducer = createReducer(
     gadgetsPanelIsOpen: false,
     drawingPanelIsOpen: true,
     galleryPanelIsOpen: false,
+    mainMenuPanelIsOpen: false,
+    accountPanelIsOpen: false,
   })),
   on(actions.showGalleryPanel, (state) => ({
     ...state,
@@ -81,6 +95,30 @@ const sidenavReducer = createReducer(
     gadgetsPanelIsOpen: false,
     drawingPanelIsOpen: false,
     galleryPanelIsOpen: true,
+    mainMenuPanelIsOpen: false,
+    accountPanelIsOpen: false,
+  })),
+  on(actions.showMainMenuPanel, (state) => ({
+    ...state,
+    leftIsOpen: true,
+    rightIsOpen: false,
+    agentsPanelIsOpen: false,
+    gadgetsPanelIsOpen: false,
+    drawingPanelIsOpen: false,
+    galleryPanelIsOpen: false,
+    mainMenuPanelIsOpen: true,
+    accountPanelIsOpen: false,
+  })),
+  on(actions.showAccountPanel, (state) => ({
+    ...state,
+    leftIsOpen: false,
+    rightIsOpen: true,
+    agentsPanelIsOpen: false,
+    gadgetsPanelIsOpen: false,
+    drawingPanelIsOpen: false,
+    galleryPanelIsOpen: false,
+    mainMenuPanelIsOpen: false,
+    accountPanelIsOpen: true,
   }))
 );
 
