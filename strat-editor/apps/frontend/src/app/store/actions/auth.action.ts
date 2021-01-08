@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { createAction, props, union } from '@ngrx/store';
 import { AuthInfos, UserDto } from '@strat-editor/data';
 
@@ -13,7 +14,7 @@ export const LogInSuccess = createAction(
 
 export const LogInError = createAction(
   '[Auth] LogIn Error',
-  props<{ error: string }>()
+  props<{ error: HttpErrorResponse }>()
 );
 
 export const Register = createAction(
@@ -25,7 +26,7 @@ export const RegisterSuccess = createAction('[Auth] Register Success');
 
 export const RegisterError = createAction(
   '[Auth] Register Error',
-  props<{ error: string }>()
+  props<{ error: any }>()
 );
 
 export const Disconnect = createAction('[Auth] Disconnect');

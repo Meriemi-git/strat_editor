@@ -9,9 +9,7 @@ import * as AgentActions from '../../../store/actions/agent.action';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  constructor(private store: Store<StratEditorState>) {}
+  constructor() {}
 
-  ngOnInit(): void {
-    this.store.dispatch(AgentActions.FetchAgents());
-  }
+  ngOnInit(): void {}
 }

@@ -1,6 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { AuthInfos, UserDto } from '@strat-editor/data';
+import { StratEditorState } from '../../../store/reducers';
+import * as Actions from '../../../store/actions';
+import * as Selectors from '../../../store/selectors';
+
+import { Observable } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'strat-editor-account-panel',
@@ -8,49 +14,41 @@ import { AuthInfos, UserDto } from '@strat-editor/data';
   styleUrls: ['./account-panel.component.scss'],
 })
 export class AccountPanelComponent implements OnInit {
-  @Output() logIn = new EventEmitter<UserDto>();
-  @Output() disconnect = new EventEmitter<void>();
-  @Output() register = new EventEmitter<AuthInfos>();
-  @Input() authInfos: AuthInfos;
-  @Input() connexionFailed: boolean;
-  private readonly passwordRegex: string =
-    '(?=\\D*\\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{8,30}';
+  $authInfos: Observable<AuthInfos>;
+  public httpErrorResponse: HttpErrorResponse;
 
-  public authForm = this.formBuilder.group({
-    mail: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.pattern(this.passwordRegex),
-    ]),
-  });
-  public isSubmitted: boolean = false;
   public isRegisterForm: boolean = false;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private store: Store<StratEditorState>) {}
 
-  ngOnInit(): void {}
-
-  onSubmit() {
-    this.isSubmitted = true;
-    if (this.authForm.valid) {
-      const userDto: UserDto = {
-        mail: this.authForm.get('mail').value,
-        password: this.authForm.get('password').value,
-      };
-      this.logIn.emit(userDto);
-      this.isSubmitted = false;
-    }
+  ngOnInit(): void {
+    this.$authInfos = this.store.select(Selectors.getAuthInfos);
+    this.$authInfos.subscribe((authInfos) => {
+      if (authInfos) {
+        localStorage.setItem('accessToken', authInfos.accessToken);
+        this.httpErrorResponse = null;
+      }
+    });
+    this.store.select(Selectors.getAuthError).subscribe((error) => {
+      console.log('error', error);
+      this.httpErrorResponse = error;
+    });
   }
 
-  get formControls() {
-    return this.authForm.controls;
+  onRegister(userDto: UserDto) {
+    this.store.dispatch(Actions.Register({ userDto }));
+  }
+
+  onLogin(userDto: UserDto) {
+    this.store.dispatch(Actions.LogIn({ userDto }));
   }
 
   onDisconnect() {
-    this.disconnect.emit();
+    this.store.dispatch(Actions.Disconnect());
   }
 
-  onDisplayRegisterForm() {
-    this.isRegisterForm = true;
+  onDisplayRegisterForm(display: boolean) {
+    this.isRegisterForm = display;
+    this.httpErrorResponse = null;
   }
 }

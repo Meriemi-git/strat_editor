@@ -10,7 +10,11 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
-import { AccountPanelComponent } from './components/molecules/account-panel/account-panel.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { LeftPanelModule } from './components/molecules/left-panel/left-panel.module';
+import { RightPanelModule } from './components/molecules/right-panel/right-panel.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +24,11 @@ import { AccountPanelComponent } from './components/molecules/account-panel/acco
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
+    MatSidenavModule,
+    MatIconModule,
+    RightPanelModule,
+    LeftPanelModule,
+    MatButtonModule,
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({
       maxAge: 40, // Retains last 25 states

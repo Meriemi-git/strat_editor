@@ -5,6 +5,7 @@ import {
   HttpException,
   HttpStatus,
   Post,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthInfos, User, UserDto } from '@strat-editor/data';
@@ -20,10 +21,8 @@ export class UserController {
   ) {}
 
   @Post('register')
-  public async register(@Body() user: User): Promise<User> {
-    return this.userService.addUser(user).catch(() => {
-      throw new HttpException('User already exists', HttpStatus.CONFLICT);
-    });
+  public async register(@Body() user: User, @Res() res): Promise<User> {
+    return this.userService.addUser(user);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -34,8 +33,6 @@ export class UserController {
 
   @Post('login')
   async login(@Body() userDto: UserDto): Promise<AuthInfos> {
-    return this.authService.login(userDto).catch(() => {
-      throw new HttpException('Wrong Credentials', HttpStatus.UNAUTHORIZED);
-    });
+    return this.authService.login(userDto);
   }
 }

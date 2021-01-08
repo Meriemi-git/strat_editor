@@ -1,11 +1,5 @@
 <div *ngIf="$isAccountPanelOpened | async">
-  <strat-editor-account-panel
-    (logIn)="onLogin($event)"
-    (disconnect)="onDisconnect()"
-    [connexionFailed]="connexionFailed"
-    [authInfos]="$authInfos | async"
-  >
-  </strat-editor-account-panel>
+  <strat-editor-account-panel> </strat-editor-account-panel>
 </div>
 <div *ngIf="$isDrawingPanelOpened | async">
   <strat-editor-drawing-panel> </strat-editor-drawing-panel>

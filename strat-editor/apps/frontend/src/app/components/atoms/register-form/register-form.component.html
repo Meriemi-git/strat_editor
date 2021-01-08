@@ -1,0 +1,80 @@
+<div class="register">
+  <h2 class="mat-h1">Log in</h2>
+  <form [formGroup]="authForm" class="register-container">
+    <p [ngClass]="{ 'has-error': isSubmitted && formControls.username.errors }">
+      <input type="text" placeholder="Username" formControlName="username" />
+    </p>
+    <div *ngIf="isSubmitted && formControls.username.errors" class="help-block">
+      <div *ngIf="formControls.username.errors.required">
+        Username is required
+      </div>
+      <div *ngIf="formControls.username.errors.minlength">
+        Username must contains at least 3 character
+      </div>
+    </div>
+
+    <p [ngClass]="{ 'has-error': isSubmitted && formControls.mail.errors }">
+      <input type="email" placeholder="Email" formControlName="mail" />
+    </p>
+    <div *ngIf="isSubmitted && formControls.mail.errors" class="help-block">
+      <div *ngIf="formControls.mail.errors.required">Email is required</div>
+      <div *ngIf="formControls.mail.errors.email">Email is invalid</div>
+    </div>
+    <p
+      [ngClass]="{
+        'has-error': isSubmitted && formControls.confirmMail.errors
+      }"
+    >
+      <input
+        type="email"
+        placeholder="Email confirmation"
+        formControlName="confirmMail"
+      />
+    </p>
+    <div
+      *ngIf="isSubmitted && formControls.confirmMail.errors"
+      class="help-block"
+    >
+      <div *ngIf="formControls.confirmMail.errors.required">
+        Confirmation email is required
+      </div>
+      <div *ngIf="formControls.confirmMail.errors.email">
+        Confirmation email is invalid
+      </div>
+      <div *ngIf="formControls.confirmMail.errors.mustMatch">
+        Confirmation email must match email
+      </div>
+    </div>
+    <p [ngClass]="{ 'has-error': isSubmitted && formControls.password.errors }">
+      <input
+        type="password"
+        placeholder="Password"
+        formControlName="password"
+      />
+    </p>
+    <div *ngIf="isSubmitted && formControls.password.errors" class="help-block">
+      <div *ngIf="formControls.password.errors?.required">
+        Password is required
+      </div>
+      <div *ngIf="formControls.password.errors?.pattern">
+        Passwords must contain 8 characters with at least one uppercase letter,
+        number and symbol.
+      </div>
+    </div>
+    <div *ngIf="httpErrorResponse" class="error-block">
+      {{ httpErrorResponse.error.message }}
+    </div>
+    <div class="buttons">
+      <button
+        mat-raised-button
+        class="login-button"
+        (click)="onDisplayLoginForm()"
+      >
+        Log In
+      </button>
+      <button mat-raised-button class="submit-button" (click)="onSubmit()">
+        Validate
+      </button>
+    </div>
+  </form>
+</div>

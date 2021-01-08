@@ -20,7 +20,6 @@ import {
   SelectionAction,
   DraggingAction,
 } from '@strat-editor/drawing-editor';
-import { take } from 'rxjs/operators';
 import { KEY_CODE } from '../../../helpers/key_code';
 import { environment } from 'apps/frontend/src/environments/environment';
 import { Observable } from 'rxjs';
@@ -34,8 +33,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
   @ViewChild('container') container: ElementRef;
   @ViewChild('drawerEditor') drawerEditor: DrawingEditorComponent;
 
-  public leftIsOpened: boolean;
-  public rightIsOpened: boolean;
   public selectedMap: Map;
   public selectedFloor: Floor;
   public $maps: Observable<Map[]>;
@@ -54,12 +51,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.$maps = this.store.select(Selectors.selectAllMaps);
-    this.store.select(Selectors.isLeftSidenavOpened).subscribe((isOpened) => {
-      this.leftIsOpened = isOpened;
-    });
-    this.store.select(Selectors.isRightSidenavOpened).subscribe((isOpened) => {
-      this.rightIsOpened = isOpened;
-    });
     this.store.dispatch(Actions.FetchMaps());
     this.store.dispatch(Actions.FetchAgents());
     this.store.dispatch(Actions.FetchDrawerActions());
@@ -73,7 +64,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.store.select(Selectors.getSelectedAction).subscribe((selected) => {
       if (this.selectedMap) {
-        this.closeRightSidenav();
+        this.store.dispatch(Actions.closeRight());
       }
       if (
         !(selected instanceof SelectionAction) &&
@@ -117,28 +108,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.displayCanvas();
   }
 
-  onCloseLeftSidenav() {
-    this.store
-      .select(Selectors.isLeftSidenavOpened)
-      .pipe(take(1))
-      .subscribe((isOpen) => {
-        if (isOpen) {
-          this.store.dispatch(Actions.closeLeft());
-        }
-      });
-  }
-
-  onCloseRightSidenav() {
-    this.store
-      .select(Selectors.isRightSidenavOpened)
-      .pipe(take(1))
-      .subscribe((isOpen) => {
-        if (isOpen) {
-          this.store.dispatch(Actions.closeRight());
-        }
-      });
-  }
-
   onDrawingActionSelected(action: DrawerAction) {
     this.store.dispatch(Actions.SetDrawerAction({ action }));
     this.store.dispatch(Actions.closeRight());
@@ -174,7 +143,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     }
   }
 
-  @HostListener('window:keyup', ['$event'])
+  @HostListener('document:keyup', ['$event'])
   keyUp(event: KeyboardEvent) {
     console.log('keyup :', event.key.toLocaleLowerCase());
     switch (event.key.toLocaleLowerCase()) {
@@ -222,7 +191,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     }
   }
 
-  @HostListener('window:keydown', ['$event'])
+  @HostListener('document:keydown', ['$event'])
   keyDown(event: KeyboardEvent) {
     switch (event.key.toLocaleLowerCase()) {
       case KEY_CODE.CTRL:
@@ -273,23 +242,5 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   openGalleryPanel() {
     this.store.dispatch(Actions.showGalleryPanel());
-  }
-
-  toggleLeftSidenav() {
-    if (!this.canvasStateLoading) {
-      this.store.dispatch(Actions.toggleLeft());
-    }
-  }
-
-  toggleRightSidenav() {
-    this.store.dispatch(Actions.toggleRight());
-  }
-
-  closeRightSidenav() {
-    this.store.dispatch(Actions.closeRight());
-  }
-
-  closeLeftSidenav() {
-    this.store.dispatch(Actions.closeLeft());
   }
 }

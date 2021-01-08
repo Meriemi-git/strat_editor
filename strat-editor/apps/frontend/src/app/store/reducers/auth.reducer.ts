@@ -1,10 +1,11 @@
 import { AuthInfos } from '@strat-editor/data';
 import * as actions from '../actions/auth.action';
 import { createReducer, on, Action } from '@ngrx/store';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export interface AuthState {
   infos: AuthInfos;
-  error: string;
+  error: HttpErrorResponse;
 }
 
 export const initialstate: AuthState = {
@@ -25,6 +26,18 @@ const authReducer = createReducer(
   on(actions.LogInError, (state, { error }) => ({
     ...state,
     infos: null,
+    error: error,
+  })),
+  on(actions.Register, (state) => ({
+    ...state,
+    error: null,
+  })),
+  on(actions.RegisterSuccess, (state) => ({
+    ...state,
+    error: null,
+  })),
+  on(actions.RegisterError, (state, { error }) => ({
+    ...state,
     error: error,
   })),
   on(actions.Disconnect, (state) => ({

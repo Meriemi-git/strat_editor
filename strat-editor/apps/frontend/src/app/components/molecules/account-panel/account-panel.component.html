@@ -1,49 +1,19 @@
-<div class="login" *ngIf="!authInfos">
-  <h2 class="mat-h1">Log in</h2>
-  <form [formGroup]="authForm" class="login-container">
-    <p [ngClass]="{ 'has-error': isSubmitted && formControls.mail.errors }">
-      <input type="email" placeholder="Email" formControlName="mail" />
-    </p>
-    <div *ngIf="isSubmitted && formControls.mail.errors" class="help-block">
-      <div *ngIf="formControls.mail.errors.required">Email is required</div>
-      <div *ngIf="formControls.mail.errors.email">Email is invalid</div>
-    </div>
-    <p [ngClass]="{ 'has-error': isSubmitted && formControls.password.errors }">
-      <input
-        type="password"
-        placeholder="Password"
-        formControlName="password"
-      />
-    </p>
-    <div *ngIf="isSubmitted && formControls.password.errors" class="help-block">
-      <div *ngIf="formControls.password.errors?.required">
-        Password is required.
-      </div>
-      <div *ngIf="formControls.password.errors?.pattern">
-        Passwords must contain 8 characters with at least one uppercase letter,
-        number and symbol.
-      </div>
-    </div>
-    <div *ngIf="connexionFailed" class="error-block">
-      Cannot connect your account<br />Please check your credentials
-    </div>
-    <div class="buttons">
-      <button
-        mat-raised-button
-        class="register-button"
-        (click)="onDisplayRegisterForm()"
-      >
-        Register
-      </button>
-      <button mat-raised-button class="submit-button" (click)="onSubmit()">
-        Log In
-      </button>
-    </div>
-  </form>
+<div class="login" *ngIf="!($authInfos | async) && !isRegisterForm">
+  <strat-editor-login-form
+    (logIn)="onLogin($event)"
+    (displayRegisterForm)="onDisplayRegisterForm(true)"
+    [httpErrorResponse]="httpErrorResponse"
+  ></strat-editor-login-form>
 </div>
-<div class="register" *ngIf="isRegisterForm"></div>
+<div class="register" *ngIf="isRegisterForm">
+  <strat-editor-register-form
+    (register)="onRegister($event)"
+    (displayLoginForm)="onDisplayRegisterForm(false)"
+    [httpErrorResponse]="httpErrorResponse"
+  ></strat-editor-register-form>
+</div>
 
-<div class="disconnect" *ngIf="authInfos && !isRegisterForm">
+<div class="disconnect" *ngIf="($authInfos | async) && !isRegisterForm">
   <h2 class="login-header">{{ authInfos.username | titlecase }}</h2>
   <button mat-raised-button class="submit-button" (click)="onDisconnect()">
     Disconnect

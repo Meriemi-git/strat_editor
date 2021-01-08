@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtInfos, User, UserDocument } from '@strat-editor/data';
 import { Model } from 'mongoose';
@@ -15,7 +15,7 @@ export class UserService {
     return new Promise<User>((resolve, reject) => {
       this.findByMail(user.mail).then((existing) => {
         if (existing) {
-          reject('User already registered');
+          reject(new ConflictException('User already exists'));
         } else {
           const createdUser = new this.userModel(user);
           createdUser.save();

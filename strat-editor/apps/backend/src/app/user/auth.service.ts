@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthInfos, JwtInfos, User, UserDto } from '@strat-editor/data';
 import { UserService } from '../user/user.service';
@@ -38,13 +42,21 @@ export class AuthService {
               .compare(userDto.password, matchingUser.password)
               .then((matching) => {
                 if (matching) {
-                  resolve(matchingUser);
+                  if (matchingUser.confirmed) {
+                    resolve(matchingUser);
+                  } else {
+                    reject(
+                      new ForbiddenException(
+                        'Please confirm your account first'
+                      )
+                    );
+                  }
                 } else {
-                  reject('Wrong credentials');
+                  reject(new UnauthorizedException('Wrong credentials'));
                 }
               });
           } else {
-            reject('Wrong credentials');
+            reject(new UnauthorizedException('Wrong credentials'));
           }
         });
     });

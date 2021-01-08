@@ -17,7 +17,7 @@ export class AuthEffect {
         this.userService.login(action.userDto).pipe(
           map((authInfos) => actions.LogInSuccess({ authInfos })),
           catchError((err: HttpErrorResponse) =>
-            of(actions.LogInError({ error: err.message }))
+            of(actions.LogInError({ error: err }))
           )
         )
       )
@@ -31,7 +31,7 @@ export class AuthEffect {
         this.userService.register(action.userDto).pipe(
           map(() => actions.RegisterSuccess()),
           catchError((err: HttpErrorResponse) =>
-            of(actions.RegisterError({ error: err.message }))
+            of(actions.RegisterError({ error: err }))
           )
         )
       )

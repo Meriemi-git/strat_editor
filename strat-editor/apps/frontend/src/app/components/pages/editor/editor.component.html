@@ -1,63 +1,32 @@
-<mat-sidenav-container class="double-sidenav" hasBackdrop="false">
-  <mat-sidenav
-    #leftSidenav
-    mode="over"
-    [(opened)]="leftIsOpened"
-    class="left-sidenav-content"
-    (closedStart)="onCloseLeftSidenav()"
-  >
-    <button mat-mini-fab class="assets-close" (click)="closeLeftSidenav()">
-      <mat-icon color="primary">close</mat-icon>
-    </button>
-    <strat-editor-left-panel></strat-editor-left-panel>
-  </mat-sidenav>
-  <mat-sidenav
-    #rightSidenav
-    mode="over"
-    [(opened)]="rightIsOpened"
-    position="end"
-    class="right-sidenav-content"
-    (closedStart)="onCloseRightSidenav()"
-  >
-    <div class="button-container">
-      <button mat-mini-fab class="drawing-close" (click)="closeRightSidenav()">
-        <mat-icon color="primary">close</mat-icon>
-      </button>
-    </div>
-    <strat-editor-right-panel></strat-editor-right-panel>
-  </mat-sidenav>
-  <mat-sidenav-content class="container">
-    <div class="icons-left" *ngIf="selectedMap">
-      <div (click)="openAgentsPanel()">
-        <span class="first">Agents</span>
-      </div>
-      <div (click)="openGadgetsPanel()">
-        <span class="second">Gadgets</span>
-      </div>
-    </div>
-    <div class="icons-right" *ngIf="selectedMap">
-      <div (click)="openDrawingPanel()">
-        <span class="first">Drawing</span>
-      </div>
-      <div (click)="openGalleryPanel()">
-        <span class="second">Gallery</span>
-      </div>
-    </div>
-    <div #container class="map-container">
-      <div class="map-selector" *ngIf="!selectedMap">
-        <strat-editor-map-grid
-          [maps]="$maps | async"
-          (selectMap)="onMapSelected($event)"
-        ></strat-editor-map-grid>
-      </div>
-      <strat-editor-drawing-editor
-        class="editor"
-        #drawerEditor
-        [canvasWidth]="width"
-        [canvasHeight]="height"
-        (stateModified)="onStateModified($event)"
-        (stateLoaded)="onCanvasStateLoaded()"
-      ></strat-editor-drawing-editor>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+<div class="icons-left" *ngIf="selectedMap">
+  <div (click)="openAgentsPanel()">
+    <span class="first">Agents</span>
+  </div>
+  <div (click)="openGadgetsPanel()">
+    <span class="second">Gadgets</span>
+  </div>
+</div>
+<div class="icons-right" *ngIf="selectedMap">
+  <div (click)="openDrawingPanel()">
+    <span class="first">Drawing</span>
+  </div>
+  <div (click)="openGalleryPanel()">
+    <span class="second">Gallery</span>
+  </div>
+</div>
+<div #container class="map-container">
+  <div class="map-selector" *ngIf="!selectedMap">
+    <strat-editor-map-grid
+      [maps]="$maps | async"
+      (selectMap)="onMapSelected($event)"
+    ></strat-editor-map-grid>
+  </div>
+  <strat-editor-drawing-editor
+    class="editor"
+    #drawerEditor
+    [canvasWidth]="width"
+    [canvasHeight]="height"
+    (stateModified)="onStateModified($event)"
+    (stateLoaded)="onCanvasStateLoaded()"
+  ></strat-editor-drawing-editor>
+</div>
