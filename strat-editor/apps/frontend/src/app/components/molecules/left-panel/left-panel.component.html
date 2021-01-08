@@ -1,1 +1,9 @@
-<p>left-panel works!</p>
+<div *ngIf="$isAgentsPanelOpened | async">
+  <strat-editor-agents-panel
+    [agents]="$agents | async"
+    (agentDragged)="onAgentDragged($event)"
+  ></strat-editor-agents-panel>
+</div>
+<div *ngIf="$isGadgetsPanelOpened | async">
+  <strat-editor-gadget-panel></strat-editor-gadget-panel>
+</div>

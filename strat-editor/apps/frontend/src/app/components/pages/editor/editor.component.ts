@@ -60,8 +60,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.select(Selectors.isRightSidenavOpened).subscribe((isOpened) => {
       this.rightIsOpened = isOpened;
     });
-    this.store.dispatch(Actions.FetchAgents());
     this.store.dispatch(Actions.FetchMaps());
+    this.store.dispatch(Actions.FetchAgents());
     this.store.dispatch(Actions.FetchDrawerActions());
     this.store.dispatch(Actions.FetchFontNames());
     this.store.dispatch(Actions.SetColor({ color: new DrawerColor() }));

@@ -1,0 +1,21 @@
+<h1 class="mat-h2">Agents</h1>
+<mat-tab-group
+  mat-align-tabs="center"
+  disableRipple="true"
+  dynamicHeight="false"
+>
+  <mat-tab label="Attackers" disableRipple="true">
+    <strat-editor-agents-grid
+      [agents]="agents | filter: ['ATTACKER']:'side'"
+      (agentDragged)="onAgentDragged($event)"
+    >
+    </strat-editor-agents-grid>
+  </mat-tab>
+  <mat-tab label="Defenders" disableRipple="true">
+    <strat-editor-agents-grid
+      [agents]="agents | filter: ['DEFENDER']:'side'"
+      (agentDragged)="onAgentDragged($event)"
+    >
+    </strat-editor-agents-grid>
+  </mat-tab>
+</mat-tab-group>

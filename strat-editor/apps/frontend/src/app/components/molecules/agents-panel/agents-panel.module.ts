@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AgentsGridModule } from '../agents-grid/agents-grid.module';
 import { MatTabsModule } from '@angular/material/tabs';
-import { AssetPanelComponent } from './assets-panel.component';
+import { AgentsPanelComponent } from './agents-panel.component';
 import { MatIconModule } from '@angular/material/icon';
 import { SharedModule } from '../../../shared.module';
 
 @NgModule({
-  declarations: [AssetPanelComponent],
+  declarations: [AgentsPanelComponent],
   imports: [
     CommonModule,
     AgentsGridModule,
@@ -15,6 +15,6 @@ import { SharedModule } from '../../../shared.module';
     MatTabsModule,
     SharedModule,
   ],
-  exports: [AssetPanelComponent],
+  exports: [AgentsPanelComponent],
 })
-export class AssetPanelModule {}
+export class AgentsPanelModule {}
