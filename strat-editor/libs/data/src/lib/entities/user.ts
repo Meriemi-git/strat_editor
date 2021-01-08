@@ -9,6 +9,7 @@ export interface User extends mongoose.Document {
   password: string;
   mail: string;
   confirmed: boolean;
+  uid: string;
 }
 
 export interface UserDto {
@@ -22,6 +23,7 @@ export const UserSchema = new mongoose.Schema({
   password: String,
   mail: String,
   confirmed: Boolean,
+  uid: String,
 });
 
 UserSchema.pre<User>('save', function () {

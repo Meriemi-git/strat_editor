@@ -21,8 +21,13 @@ export class UserController {
   ) {}
 
   @Post('register')
-  public async register(@Body() user: User, @Res() res): Promise<User> {
+  public async register(@Body() user: User): Promise<User> {
     return this.userService.addUser(user);
+  }
+
+  @Post('confirm')
+  public async confirm(@Body() body: any): Promise<User> {
+    return this.userService.confirmEmailAddress(body.token);
   }
 
   @UseGuards(JwtAuthGuard)

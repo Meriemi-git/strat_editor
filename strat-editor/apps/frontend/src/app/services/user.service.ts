@@ -32,4 +32,14 @@ export class UserService {
         })
       );
   }
+
+  confirmEmail(token: string) {
+    return this.http
+      .post<any>(environment.apiUrl + this.controller + '/confirm', { token })
+      .pipe(
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
 }

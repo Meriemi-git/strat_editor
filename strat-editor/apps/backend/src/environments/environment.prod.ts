@@ -10,4 +10,5 @@ export const environment = {
   icon_folder: 'icons',
   icon_extension: '.svg',
   font_folder: 'fonts',
+  confirmationLink: 'http://localhost:4200/confirmation/',
 };
