@@ -28,6 +28,7 @@ export class AuthService {
         expiresIn: 60,
         accessToken: accessToken,
         userId: user._id,
+        mailConfirmed: user.confirmed,
       } as AuthInfos;
     });
   }
@@ -42,15 +43,7 @@ export class AuthService {
               .compare(userDto.password, matchingUser.password)
               .then((matching) => {
                 if (matching) {
-                  if (matchingUser.confirmed) {
-                    resolve(matchingUser);
-                  } else {
-                    reject(
-                      new ForbiddenException(
-                        'Please confirm your account first'
-                      )
-                    );
-                  }
+                  resolve(matchingUser);
                 } else {
                   reject(new UnauthorizedException('Wrong credentials'));
                 }

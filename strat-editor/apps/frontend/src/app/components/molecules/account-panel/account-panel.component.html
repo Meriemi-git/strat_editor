@@ -13,9 +13,31 @@
   ></strat-editor-register-form>
 </div>
 
-<div class="disconnect" *ngIf="($authInfos | async) && !isRegisterForm">
-  <h2 class="login-header">{{ authInfos.username | titlecase }}</h2>
-  <button mat-raised-button class="submit-button" (click)="onDisconnect()">
+<div class="disconnect" *ngIf="$authInfos | async; let authInfos">
+  <h2 class="mat-h1">
+    {{ authInfos.username }}
+  </h2>
+  <div *ngIf="!authInfos.mailConfirmed">
+    <p class="email-unverified">
+      You need to confirm your email by clicking on the link send on your email
+      address. If you haven't receive the mail you can re-send it by clicking on
+      the button below.
+    </p>
+    <button
+      color="primary"
+      mat-raised-button
+      class="submit-button"
+      (click)="resendEmailLink()"
+    >
+      Re-send
+    </button>
+  </div>
+  <button
+    color="warning"
+    mat-raised-button
+    class="submit-button"
+    (click)="onDisconnect()"
+  >
     Disconnect
   </button>
 </div>
