@@ -18,7 +18,8 @@
     {{ authInfos.username }}
   </h2>
   <div *ngIf="!authInfos.mailConfirmed">
-    <p class="email-unverified">
+    <h3 class="email-unverified mat-h3">Account confirmation pending.</h3>
+    <p class="email-unverified-description">
       You need to confirm your email by clicking on the link send on your email
       address. If you haven't receive the mail you can re-send it by clicking on
       the button below.

@@ -1,8 +1,4 @@
-import {
-  ForbiddenException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthInfos, JwtInfos, User, UserDto } from '@strat-editor/data';
 import { UserService } from '../user/user.service';
@@ -18,7 +14,6 @@ export class AuthService {
   public async login(userDto: UserDto): Promise<any> {
     return this.validateUser(userDto).then((user) => {
       if (!user) {
-        console.log('!user');
         throw new UnauthorizedException();
       }
       const payload: JwtInfos = { userId: user._id, userMail: user.mail };

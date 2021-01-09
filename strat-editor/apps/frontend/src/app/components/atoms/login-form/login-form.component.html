@@ -24,15 +24,19 @@
       {{ httpErrorResponse.error.message }}
     </div>
     <div class="buttons">
+      <button mat-raised-button class="submit-button" (click)="onSubmit()">
+        Log In
+      </button>
+      <p>
+        You don't have an account yet ? <br />
+        Create one for free.
+      </p>
       <button
         mat-raised-button
         class="register-button"
         (click)="onDisplayRegisterForm()"
       >
         Register
-      </button>
-      <button mat-raised-button class="submit-button" (click)="onSubmit()">
-        Validate
       </button>
     </div>
   </form>

@@ -8,13 +8,18 @@ import { reducers } from './store/reducers';
 import { effects } from './store/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
-import { HttpClientModule } from '@angular/common/http';
+import {
+  HttpClientModule,
+  HttpClientXsrfModule,
+  HTTP_INTERCEPTORS,
+} from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { LeftPanelModule } from './components/molecules/left-panel/left-panel.module';
 import { RightPanelModule } from './components/molecules/right-panel/right-panel.module';
+import { HttpXsrfInterceptor } from './interceptors/http-xsrf-interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -34,7 +39,14 @@ import { RightPanelModule } from './components/molecules/right-panel/right-panel
       maxAge: 40, // Retains last 25 states
     }),
     EffectsModule.forRoot(effects),
+    HttpClientXsrfModule.withOptions({
+      cookieName: 'XSRF-TOKEN',
+      headerName: 'X-XSRF-TOKEN',
+    }),
   ],
+  // providers: [
+  //   { provide: HTTP_INTERCEPTORS, useClass: HttpXsrfInterceptor, multi: true },
+  // ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

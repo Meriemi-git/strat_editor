@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3333/api/',
+  apiUrl: '/api/',
   iconActionUrl: 'assets/icons',
   floorImageApiUrl: 'api/floor/image/',
 };

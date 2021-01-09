@@ -145,7 +145,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   @HostListener('document:keyup', ['$event'])
   keyUp(event: KeyboardEvent) {
-    console.log('keyup :', event.key.toLocaleLowerCase());
     switch (event.key.toLocaleLowerCase()) {
       case KEY_CODE.DELETE:
         this.drawerEditor.deleteActiveObject();
@@ -187,7 +186,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
         }
         break;
       default:
-        console.log('Key mapping not managed');
     }
   }
 
