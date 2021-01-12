@@ -9,6 +9,7 @@ import { FontModule } from './fonts/font.module';
 import { UserModule } from './user/user.module';
 import { GalleryModule } from './gallery/gallery.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -29,10 +30,11 @@ import { MailerModule } from '@nestjs-modules/mailer';
     FontModule,
     UserModule,
     GalleryModule,
+    AuthModule,
   ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RequestMiddleware).forRoutes('/api');
+    //consumer.apply(RequestMiddleware).forRoutes('/');
   }
 }

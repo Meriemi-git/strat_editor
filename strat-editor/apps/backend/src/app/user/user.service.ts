@@ -34,7 +34,7 @@ export class UserService {
           const generatedUID: string = v4();
           createdUser.uid = generatedUID;
           createdUser.save();
-          return this.sendConfirmationMail(createdUser);
+          this.sendConfirmationMail(createdUser).then(() => resolve(user));
         }
       });
     });

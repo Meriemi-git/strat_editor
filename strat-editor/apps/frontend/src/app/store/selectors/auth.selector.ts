@@ -1,4 +1,5 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
+import { UserInfos } from '@strat-editor/data';
 import { AuthState } from '../reducers/auth.reducer';
 
 const authFeature = createFeatureSelector<AuthState>('AuthState');
@@ -8,7 +9,7 @@ export const authState = createSelector(
 );
 export const getAuthInfos = createSelector(
   authState,
-  (state: AuthState) => state.infos
+  (state: AuthState) => state.userInfos
 );
 
 export const getAuthError = createSelector(

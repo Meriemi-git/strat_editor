@@ -1,4 +1,4 @@
-<div class="login" *ngIf="!($authInfos | async) && !isRegisterForm">
+<div class="login" *ngIf="!($userInfos | async) && !isRegisterForm">
   <strat-editor-login-form
     (logIn)="onLogin($event)"
     (displayRegisterForm)="onDisplayRegisterForm(true)"
@@ -13,12 +13,12 @@
   ></strat-editor-register-form>
 </div>
 
-<div class="disconnect" *ngIf="$authInfos | async; let authInfos">
+<div class="disconnect" *ngIf="$userInfos | async; let userInfos">
   <h2 class="mat-h1">
-    {{ authInfos.username }}
+    {{ userInfos.username }}
   </h2>
-  <div *ngIf="!authInfos.mailConfirmed">
-    <h3 class="email-unverified mat-h3">Account confirmation pending.</h3>
+  <div *ngIf="!userInfos.mailConfirmed" class="email-unverified">
+    <h3 class="mat-h3">Account confirmation pending.</h3>
     <p class="email-unverified-description">
       You need to confirm your email by clicking on the link send on your email
       address. If you haven't receive the mail you can re-send it by clicking on
@@ -33,6 +33,14 @@
       Re-send
     </button>
   </div>
+  <button
+    color="warning"
+    mat-raised-button
+    class="submit-button"
+    (click)="testAuthent()"
+  >
+    Test Authent
+  </button>
   <button
     color="warning"
     mat-raised-button

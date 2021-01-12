@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AuthInfos, User, UserDto } from '@strat-editor/data';
+import { User, UserDto, UserInfos } from '@strat-editor/data';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { catchError } from 'rxjs/operators';
@@ -23,9 +23,9 @@ export class UserService {
       );
   }
 
-  login(userDto: UserDto): Observable<AuthInfos> {
+  confirmEmail(token: string) {
     return this.http
-      .post<AuthInfos>(environment.apiUrl + this.controller + '/login', userDto)
+      .post<any>(environment.apiUrl + this.controller + '/confirm', { token })
       .pipe(
         catchError((err) => {
           return throwError(err);
@@ -33,9 +33,9 @@ export class UserService {
       );
   }
 
-  confirmEmail(token: string) {
+  testAuthent(): Observable<UserInfos> {
     return this.http
-      .post<any>(environment.apiUrl + this.controller + '/confirm', { token })
+      .get<UserInfos>(environment.apiUrl + this.controller + '/details')
       .pipe(
         catchError((err) => {
           return throwError(err);

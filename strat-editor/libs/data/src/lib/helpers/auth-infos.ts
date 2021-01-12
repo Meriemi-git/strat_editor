@@ -1,7 +1,7 @@
+import { UserInfos } from './user-infos';
+
 export interface AuthInfos {
-  username: string;
-  mailConfirmed: boolean;
-  expiresIn: number;
-  accessToken: string;
-  userId: string;
+  userInfos?: UserInfos;
+  authToken: string;
+  refreshToken: string;
 }

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { TopBarModule } from '../app/components/atoms/top-bar/top-bar.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -19,7 +19,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { LeftPanelModule } from './components/molecules/left-panel/left-panel.module';
 import { RightPanelModule } from './components/molecules/right-panel/right-panel.module';
-import { HttpXsrfInterceptor } from './interceptors/http-xsrf-interceptor';
+import { AppLoaderService } from './services/app-loader.service';
+import { HttpJwtInterceptor } from './interceptors/http-jwt-interceptor';
+
+export function init_app(appLoaderService: AppLoaderService) {
+  return () => appLoaderService.initializeApp();
+}
 
 @NgModule({
   declarations: [AppComponent],
@@ -36,17 +41,20 @@ import { HttpXsrfInterceptor } from './interceptors/http-xsrf-interceptor';
     MatButtonModule,
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({
-      maxAge: 40, // Retains last 25 states
+      maxAge: 40,
     }),
     EffectsModule.forRoot(effects),
-    HttpClientXsrfModule.withOptions({
-      cookieName: 'XSRF-TOKEN',
-      headerName: 'X-XSRF-TOKEN',
-    }),
+    HttpClientXsrfModule.withOptions(),
   ],
-  // providers: [
-  //   { provide: HTTP_INTERCEPTORS, useClass: HttpXsrfInterceptor, multi: true },
-  // ],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: HttpJwtInterceptor, multi: true },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: init_app,
+      deps: [AppLoaderService],
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

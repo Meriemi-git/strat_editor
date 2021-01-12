@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { createAction, props, union } from '@ngrx/store';
-import { AuthInfos, UserDto } from '@strat-editor/data';
+import { UserDto, UserInfos } from '@strat-editor/data';
 
 export const LogIn = createAction(
   '[Auth] LogIn',
@@ -9,7 +9,7 @@ export const LogIn = createAction(
 
 export const LogInSuccess = createAction(
   '[Auth] LogIn Success',
-  props<{ authInfos: AuthInfos }>()
+  props<{ userInfos: UserInfos }>()
 );
 
 export const LogInError = createAction(

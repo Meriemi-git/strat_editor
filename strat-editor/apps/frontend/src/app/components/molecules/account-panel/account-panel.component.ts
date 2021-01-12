@@ -1,12 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AuthInfos, UserDto } from '@strat-editor/data';
+import { UserDto, UserInfos } from '@strat-editor/data';
 import { StratEditorState } from '../../../store/reducers';
 import * as Actions from '../../../store/actions';
 import * as Selectors from '../../../store/selectors';
 
 import { Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'strat-editor-account-panel',
@@ -14,18 +15,20 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./account-panel.component.scss'],
 })
 export class AccountPanelComponent implements OnInit {
-  $authInfos: Observable<AuthInfos>;
+  $userInfos: Observable<UserInfos>;
   public httpErrorResponse: HttpErrorResponse;
 
   public isRegisterForm: boolean = false;
 
-  constructor(private store: Store<StratEditorState>) {}
+  constructor(
+    private store: Store<StratEditorState>,
+    private userService: UserService
+  ) {}
 
   ngOnInit(): void {
-    this.$authInfos = this.store.select(Selectors.getAuthInfos);
-    this.$authInfos.subscribe((authInfos) => {
-      if (authInfos) {
-        localStorage.setItem('accessToken', authInfos.accessToken);
+    this.$userInfos = this.store.select(Selectors.getAuthInfos);
+    this.$userInfos.subscribe((userInfos) => {
+      if (userInfos) {
         this.httpErrorResponse = null;
       }
     });
@@ -50,5 +53,9 @@ export class AccountPanelComponent implements OnInit {
   onDisplayRegisterForm(display: boolean) {
     this.isRegisterForm = display;
     this.httpErrorResponse = null;
+  }
+
+  testAuthent() {
+    this.userService.testAuthent().subscribe((result) => console.log(result));
   }
 }

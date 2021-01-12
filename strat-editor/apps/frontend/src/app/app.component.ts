@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
     this.store
       .select(Selectors.getAuthInfos)
       .subscribe((authInfos) => (this.username = authInfos?.username));
+
     this.store.select(Selectors.isLeftSidenavOpened).subscribe((isOpened) => {
       this.leftIsOpened = isOpened;
     });
