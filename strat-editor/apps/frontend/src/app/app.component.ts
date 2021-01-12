@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.store
-      .select(Selectors.getAuthInfos)
+      .select(Selectors.getUserInfos)
       .subscribe((authInfos) => (this.username = authInfos?.username));
 
     this.store.select(Selectors.isLeftSidenavOpened).subscribe((isOpened) => {

@@ -15,7 +15,6 @@ import * as moment from 'moment';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Request } from 'express';
-import { resolve } from 'url';
 
 @Injectable()
 export class AuthService {
@@ -65,13 +64,13 @@ export class AuthService {
 
     const accessTokenEncrypted = this.jwtService.sign(payload, {
       jwtid: jwtUid,
-      expiresIn: '5m',
+      expiresIn: '30s',
     });
     const refreshToken = await this.generateRefreshToken(user, jwtUid);
     console.log('refreshToken', refreshToken);
     const refreshTokenEncrypted = this.jwtService.sign(refreshToken, {
       jwtid: jwtUid,
-      expiresIn: '10d',
+      expiresIn: '1d',
     });
     const authInfos: AuthInfos = {
       userInfos: {
@@ -88,7 +87,7 @@ export class AuthService {
   async generateRefreshToken(user: User, jwtId: string): Promise<RefreshToken> {
     const refeshToken: RefreshToken = {
       jwtid: jwtId,
-      useriId: user._id,
+      userId: user._id,
       invalidated: false,
       creationDate: moment().toDate(),
       expirationDate: moment().add(10, 'd').toDate(),
@@ -102,26 +101,41 @@ export class AuthService {
   }
 
   refresh(request: Request): Promise<any> {
-    const authInfos = this.decryptTokens(request);
-    console.log('authToken', authInfos.authToken);
-    console.log('refreshToken', authInfos.refreshToken);
+    const authTokenEncrypted = request.cookies['X-AUTH-TOKEN'];
+    const refreshTokenEncrypted = request.cookies['X-REFRESH-TOKEN'];
+    const jwtInfosVerify = this.jwtService.verify(authTokenEncrypted);
+    console.log('jwtInfosVerify', jwtInfosVerify);
+    const refreshTokenVerify = this.jwtService.verify(authTokenEncrypted);
+    console.log('refreshToken', refreshTokenVerify);
+    const jwtInfos = this.jwtService.decode(authTokenEncrypted);
+    const refreshToken = this.jwtService.decode(refreshTokenEncrypted);
+    return this.refreshTokenIsValid(jwtInfos, refreshToken).then((isValid) => {
+      if (isValid) {
+        this.userService.findUserById(refreshToken['userId']);
+        Promise.resolve();
+      }
+    });
+
     return Promise.resolve({});
+  }
+
+  async refreshTokenIsValid(jwtInfos, refreshToken): Promise<boolean> {
+    if (jwtInfos['jwtId'] !== refreshToken['jwtId']) {
+      return false;
+    }
+    this.refreshTokenModel
+      .findOne({ jwtid: refreshToken['jwtId'] })
+      .exec()
+      .then((existingRToken) => {
+        if (existingRToken && !existingRToken.invalidate) {
+          Promise.resolve(true);
+        } else {
+          Promise.resolve(false);
+        }
+      });
   }
 
   invalidateTokens(request: any) {
     throw new Error('Method not implemented.');
-  }
-
-  decryptTokens(request: Request): AuthInfos {
-    console.log('decryptTokens');
-    console.log('request', request);
-    const authTokenEncrypted = request.cookies['X-AUTH-TOKEN'];
-    const refreshTokenEncrypted = request.cookies['X-REFRESH-TOKEN'];
-    console.log('authTokenEncrypted', authTokenEncrypted);
-    console.log('refreshTokenEncrypted', refreshTokenEncrypted);
-    return {
-      authToken: this.jwtService.decode(authTokenEncrypted),
-      refreshToken: this.jwtService.decode(refreshTokenEncrypted),
-    } as AuthInfos;
   }
 }

@@ -20,11 +20,15 @@ export class UserService {
     private readonly jwtService: JwtService
   ) {}
 
-  async findByMail(mail: string): Promise<User> {
+  public async findByMail(mail: string): Promise<User> {
     return this.userModel.findOne({ mail: mail }).exec();
   }
 
-  async addUser(user: User): Promise<User> {
+  public async findUserById(userId: string): Promise<User> {
+    return this.userModel.findOne({ _id: userId }).exec();
+  }
+
+  public async addUser(user: User): Promise<User> {
     return new Promise<User>((resolve, reject) => {
       this.findByMail(user.mail).then((existing) => {
         if (existing) {
@@ -40,7 +44,7 @@ export class UserService {
     });
   }
 
-  async confirmEmailAddress(token: string): Promise<any> {
+  public async confirmEmailAddress(token: string): Promise<any> {
     const verifyOptions: JwtVerifyOptions = {
       ignoreExpiration: false,
     };
@@ -70,13 +74,13 @@ export class UserService {
     }
   }
 
-  async verifyToken(payload: JwtInfos): Promise<User> {
+  public async verifyToken(payload: JwtInfos): Promise<User> {
     return this.userModel
       .findOne({ mail: payload.userMail, _id: payload.userId })
       .exec();
   }
 
-  sendConfirmationMail(user: UserDocument): Promise<any> {
+  public sendConfirmationMail(user: UserDocument): Promise<any> {
     const signOptions: JwtSignOptions = {
       expiresIn: '30m',
     };

@@ -17,9 +17,10 @@ export class AuthentService {
     return this.http
       .post<UserInfos>(environment.apiUrl + this.controller + '/login', userDto)
       .pipe(
-        map((userInfos) =>
-          localStorage.set('userInfos', JSON.stringify(userInfos))
-        ),
+        map((userInfos) => {
+          localStorage.setItem('userInfos', JSON.stringify(userInfos));
+          return userInfos;
+        }),
         catchError((err) => {
           return throwError(err);
         })

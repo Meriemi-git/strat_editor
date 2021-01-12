@@ -26,8 +26,9 @@ export class AccountPanelComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.$userInfos = this.store.select(Selectors.getAuthInfos);
+    this.$userInfos = this.store.select(Selectors.getUserInfos);
     this.$userInfos.subscribe((userInfos) => {
+      console.log('On user infos', userInfos);
       if (userInfos) {
         this.httpErrorResponse = null;
       }
