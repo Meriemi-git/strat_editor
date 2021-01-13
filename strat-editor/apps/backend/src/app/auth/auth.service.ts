@@ -59,7 +59,7 @@ export class AuthService {
     });
   }
 
-  refresh(request: Request): Promise<AuthInfos> {
+  async refresh(request: Request): Promise<AuthInfos> {
     const xAuthToken = request.cookies['X-AUTH-TOKEN'];
     const xRefreshToken = request.cookies['X-REFRESH-TOKEN'];
     if (!this.tokensWasPaired(xAuthToken, xRefreshToken)) {

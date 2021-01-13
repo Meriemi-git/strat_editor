@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { UserDto, UserInfos } from '@strat-editor/data';
 import { environment } from '../../environments/environment';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, timeout } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +30,9 @@ export class AuthentService {
     return this.http
       .get<any>(environment.apiUrl + this.controller + '/refresh')
       .pipe(
+        timeout(2000),
         catchError((err) => {
+          console.log('Error refresh');
           return throwError(err);
         })
       );

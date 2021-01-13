@@ -41,17 +41,13 @@ export class HttpJwtInterceptor implements HttpInterceptor {
             this.store.dispatch(Actions.Disconnect());
             return of(error);
           }
-        } else {
-          throw error;
         }
       })
     );
   }
 
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
-    console.log('handle401Error');
     if (!this.isRefreshing) {
-      console.log('isRefreshing true');
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
       return this.authService.refreshToken().pipe(
@@ -73,6 +69,13 @@ export class HttpJwtInterceptor implements HttpInterceptor {
         take(1),
         switchMap(() => {
           return next.handle(request.clone());
+        }),
+        catchError((error) => {
+          console.log('unsubscribe');
+          this.refreshTokenSubject.unsubscribe();
+          this.refreshTokenSubject = new BehaviorSubject<any>(null);
+          this.isRefreshing = false;
+          return of(error);
         })
       );
     }

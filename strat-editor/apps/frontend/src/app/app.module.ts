@@ -19,11 +19,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { LeftPanelModule } from './components/molecules/left-panel/left-panel.module';
 import { RightPanelModule } from './components/molecules/right-panel/right-panel.module';
-import { AppLoaderService } from './services/app-loader.service';
+import { AppInitService } from './services/app-init.service';
 import { HttpJwtInterceptor } from './interceptors/http-jwt-interceptor';
 
-export function init_app(appLoaderService: AppLoaderService) {
-  return () => appLoaderService.initializeApp();
+export function init_app(appInitService: AppInitService) {
+  return () => appInitService.initializeApp();
 }
 
 @NgModule({
@@ -51,7 +51,7 @@ export function init_app(appLoaderService: AppLoaderService) {
     {
       provide: APP_INITIALIZER,
       useFactory: init_app,
-      deps: [AppLoaderService],
+      deps: [AppInitService],
       multi: true,
     },
   ],

@@ -13,7 +13,6 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   testAuthent(): Observable<string> {
-    console.log('testAuthent');
     return this.http
       .get<string>(environment.apiUrl + this.controller + '/details')
       .pipe(

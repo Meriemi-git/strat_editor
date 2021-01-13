@@ -8,7 +8,7 @@ import { AuthentService } from './authent.service';
 @Injectable({
   providedIn: 'root',
 })
-export class AppLoaderService {
+export class AppInitService {
   constructor(
     private store: Store<StratEditorState>,
     private authentService: AuthentService

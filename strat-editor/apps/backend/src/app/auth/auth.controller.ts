@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  InternalServerErrorException,
   Post,
   Req,
   Res,
@@ -53,7 +54,6 @@ export class AuthController {
         );
       })
       .catch((error) => {
-        console.log('error', error);
         response.clearCookie('X-AUTH-TOKEN');
         response.clearCookie('X-REFRESH-TOKEN');
         Promise.resolve(response.status(HttpStatus.FORBIDDEN).send());

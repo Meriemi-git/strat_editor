@@ -48,7 +48,6 @@ export class UserService {
               resolve(createdUser);
             })
             .catch((error) => {
-              console.log('Error when saving new user : ', error);
               reject(new InternalServerErrorException());
             });
         }
