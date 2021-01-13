@@ -2,14 +2,14 @@
   <strat-editor-login-form
     (logIn)="onLogin($event)"
     (displayRegisterForm)="onDisplayRegisterForm(true)"
-    [httpErrorResponse]="httpErrorResponse"
+    [httpError]="httpError"
   ></strat-editor-login-form>
 </div>
 <div class="register" *ngIf="isRegisterForm">
   <strat-editor-register-form
     (register)="onRegister($event)"
     (displayLoginForm)="onDisplayRegisterForm(false)"
-    [httpErrorResponse]="httpErrorResponse"
+    [httpError]="httpError"
   ></strat-editor-register-form>
 </div>
 

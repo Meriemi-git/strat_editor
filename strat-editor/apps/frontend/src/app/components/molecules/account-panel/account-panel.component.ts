@@ -16,7 +16,7 @@ import { UserService } from '../../../services/user.service';
 })
 export class AccountPanelComponent implements OnInit {
   $userInfos: Observable<UserInfos>;
-  public httpErrorResponse: HttpErrorResponse;
+  public httpError: HttpErrorResponse;
 
   public isRegisterForm: boolean = false;
 
@@ -28,14 +28,13 @@ export class AccountPanelComponent implements OnInit {
   ngOnInit(): void {
     this.$userInfos = this.store.select(Selectors.getUserInfos);
     this.$userInfos.subscribe((userInfos) => {
-      console.log('On user infos', userInfos);
       if (userInfos) {
-        this.httpErrorResponse = null;
+        this.isRegisterForm = false;
+        this.httpError = null;
       }
     });
     this.store.select(Selectors.getAuthError).subscribe((error) => {
-      console.log('error', error);
-      this.httpErrorResponse = error;
+      this.httpError = error;
     });
   }
 
@@ -53,7 +52,7 @@ export class AccountPanelComponent implements OnInit {
 
   onDisplayRegisterForm(display: boolean) {
     this.isRegisterForm = display;
-    this.httpErrorResponse = null;
+    this.httpError = null;
   }
 
   testAuthent() {

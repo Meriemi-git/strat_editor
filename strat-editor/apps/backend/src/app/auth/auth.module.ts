@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RefreshTokenSchema, UserSchema } from '@strat-editor/data';
 import { AuthService } from '../auth/auth.service';
@@ -18,7 +18,6 @@ import { AuthController } from './auth.controller';
     }),
   ],
   controllers: [AuthController],
-
   providers: [AuthService, UserService],
 })
 export class AuthModule {}

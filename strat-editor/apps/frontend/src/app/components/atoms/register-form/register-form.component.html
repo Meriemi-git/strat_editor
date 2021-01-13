@@ -61,8 +61,8 @@
         number and symbol.
       </div>
     </div>
-    <div *ngIf="httpErrorResponse" class="error-block">
-      {{ httpErrorResponse.error.message }}
+    <div *ngIf="httpError" class="error-block">
+      {{ httpError.error.message }}
     </div>
     <div class="buttons">
       <button

@@ -11,7 +11,7 @@ import { AuthInfos, UserDto } from '@strat-editor/data';
 export class RegisterFormComponent implements OnInit {
   @Output() register = new EventEmitter<UserDto>();
   @Output() displayLoginForm = new EventEmitter<void>();
-  @Input() httpErrorResponse: HttpErrorResponse;
+  @Input() httpError: HttpErrorResponse;
 
   private readonly passwordRegex: string =
     '(?=\\D*\\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{8,30}';
@@ -31,7 +31,9 @@ export class RegisterFormComponent implements OnInit {
   public isSubmitted: boolean = false;
   constructor(private formBuilder: FormBuilder) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log('RegisterFormComponent httpErrorResponse:', this.httpError);
+  }
 
   onSubmit() {
     this.isSubmitted = true;

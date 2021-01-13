@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { UserService } from '../../../services/user.service';
+import { AuthentService } from '../../../services/authent.service';
 
 @Component({
   selector: 'strat-editor-confirmation',
@@ -12,13 +12,13 @@ import { UserService } from '../../../services/user.service';
 export class ConfirmationComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
-    private userService: UserService
+    private authService: AuthentService
   ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       console.log('The token of this route is: ', params.token);
-      this.userService
+      this.authService
         .confirmEmail(params.token)
         .pipe(
           catchError((err) => {

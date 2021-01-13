@@ -36,12 +36,39 @@ export class AuthentService {
       );
   }
 
-  public logout() {
+  register(userDto: UserDto): Observable<UserInfos> {
+    return this.http
+      .post<UserInfos>(
+        environment.apiUrl + this.controller + '/register',
+        userDto
+      )
+      .pipe(
+        catchError((err) => {
+          {
+            return throwError(err);
+          }
+        })
+      );
+  }
+
+  confirmEmail(token: string) {
+    return this.http
+      .post<any>(environment.apiUrl + this.controller + '/confirm', { token })
+      .pipe(
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
+
+  public disconnect() {
     localStorage.removeItem('userInfos');
-    return this.http.get(environment.apiUrl + this.controller + '/logout').pipe(
-      catchError((err) => {
-        return throwError(err);
-      })
-    );
+    return this.http
+      .get(environment.apiUrl + this.controller + '/disconnect')
+      .pipe(
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
   }
 }

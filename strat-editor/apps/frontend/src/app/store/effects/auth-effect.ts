@@ -4,16 +4,11 @@ import { map, catchError, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as actions from '../actions/auth.action';
 import { HttpErrorResponse } from '@angular/common/http';
-import { UserService } from '../../services/user.service';
 import { AuthentService } from '../../services/authent.service';
 
 @Injectable()
 export class AuthEffect {
-  constructor(
-    private actions$: Actions,
-    private userService: UserService,
-    private authService: AuthentService
-  ) {}
+  constructor(private actions$: Actions, private authService: AuthentService) {}
 
   logIn$ = createEffect(() =>
     this.actions$.pipe(
@@ -29,14 +24,44 @@ export class AuthEffect {
     )
   );
 
+  refreshTokens$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(actions.RefreshTokens),
+      mergeMap(() =>
+        this.authService.refreshToken().pipe(
+          map((userInfos) => actions.RefreshTokensSuccess({ userInfos })),
+          catchError((err: HttpErrorResponse) =>
+            of(actions.RefreshTokensError({ error: err }))
+          )
+        )
+      )
+    )
+  );
+
   register$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.Register),
       mergeMap((action) =>
-        this.userService.register(action.userDto).pipe(
-          map(() => actions.RegisterSuccess()),
+        this.authService.register(action.userDto).pipe(
+          map((userInfos) => {
+            return actions.RegisterSuccess({ userInfos });
+          }),
+          catchError((err: HttpErrorResponse) => {
+            return of(actions.RegisterError({ error: err }));
+          })
+        )
+      )
+    )
+  );
+
+  disconnect$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(actions.Disconnect),
+      mergeMap(() =>
+        this.authService.disconnect().pipe(
+          map(() => actions.DisconnectSuccess()),
           catchError((err: HttpErrorResponse) =>
-            of(actions.RegisterError({ error: err }))
+            of(actions.DisconnectError({ error: err }))
           )
         )
       )

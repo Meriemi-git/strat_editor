@@ -9,7 +9,7 @@ import { UserDto } from '@strat-editor/data';
   styleUrls: ['./login-form.component.scss'],
 })
 export class LoginFormComponent implements OnInit {
-  @Input() httpErrorResponse: HttpErrorResponse;
+  @Input() httpError: HttpErrorResponse;
   @Output() logIn = new EventEmitter<UserDto>();
   @Output() displayRegisterForm = new EventEmitter<void>();
 

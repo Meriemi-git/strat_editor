@@ -3,22 +3,21 @@ import { Store } from '@ngrx/store';
 import { UserInfos } from '@strat-editor/data';
 import { StratEditorState } from '../store/reducers';
 import * as Actions from '../store/actions';
+import { AuthentService } from './authent.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppLoaderService {
-  constructor(private store: Store<StratEditorState>) {}
+  constructor(
+    private store: Store<StratEditorState>,
+    private authentService: AuthentService
+  ) {}
 
-  public initializeApp(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const userInfos: UserInfos = JSON.parse(
-        localStorage.getItem('userInfos')
-      );
-      if (userInfos) {
-        this.store.dispatch(Actions.LogInSuccess({ userInfos }));
-      }
-      resolve(userInfos);
-    });
+  public initializeApp(): void {
+    const userInfos: UserInfos = JSON.parse(localStorage.getItem('userInfos'));
+    if (userInfos) {
+      this.store.dispatch(Actions.RefreshTokens());
+    }
   }
 }

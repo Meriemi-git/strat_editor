@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { User, UserDto, UserInfos } from '@strat-editor/data';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -13,31 +12,17 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  register(userDto: UserDto): Observable<User> {
+  testAuthent(): Observable<string> {
+    console.log('testAuthent');
     return this.http
-      .post<User>(environment.apiUrl + this.controller + '/register', userDto)
+      .get<string>(environment.apiUrl + this.controller + '/details')
       .pipe(
+        map((result) => {
+          console.log('ondetails', result);
+          return result;
+        }),
         catchError((err) => {
-          return throwError(err);
-        })
-      );
-  }
-
-  confirmEmail(token: string) {
-    return this.http
-      .post<any>(environment.apiUrl + this.controller + '/confirm', { token })
-      .pipe(
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
-  }
-
-  testAuthent(): Observable<UserInfos> {
-    return this.http
-      .get<UserInfos>(environment.apiUrl + this.controller + '/details')
-      .pipe(
-        catchError((err) => {
+          console.log('Error in service :', err);
           return throwError(err);
         })
       );

@@ -1,25 +1,15 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { User } from '@strat-editor/data';
+import { Controller, Get, HttpStatus, Res, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { UserService } from './user.service';
+import { Response } from 'express';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('register')
-  public async register(@Body() user: User): Promise<User> {
-    return this.userService.addUser(user);
-  }
-
-  @Post('confirm')
-  public async confirm(@Body() body: any): Promise<User> {
-    return this.userService.confirmEmailAddress(body.token);
-  }
-
   @UseGuards(JwtAuthGuard)
   @Get('details')
-  public async details() {
-    return 'User is authentified';
+  public async details(@Res() response: Response) {
+    return response.status(HttpStatus.OK).send();
   }
 }

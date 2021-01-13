@@ -1,11 +1,17 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import {
   AuthInfos,
   JwtInfos,
   RefreshToken,
   RefreshTokenDocument,
   User,
+  UserDocument,
   UserDto,
 } from '@strat-editor/data';
 import { UserService } from '../user/user.service';
@@ -15,12 +21,15 @@ import * as moment from 'moment';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Request } from 'express';
+import { environment } from '../../environments/environment.prod';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel('RefreshToken')
     private refreshTokenModel: Model<RefreshTokenDocument>,
+    private readonly mailerService: MailerService,
     private userService: UserService,
     private readonly jwtService: JwtService
   ) {}
@@ -30,9 +39,7 @@ export class AuthService {
       if (!user) {
         throw new UnauthorizedException();
       }
-      const tokens = this.generateTokenAndRefreshToken(user);
-
-      return tokens;
+      return this.generateTokenAndRefreshToken(user);
     });
   }
 
@@ -58,16 +65,53 @@ export class AuthService {
     });
   }
 
+  refresh(request: Request): Promise<AuthInfos> {
+    const jwtInfos = this.jwtService.decode(request.cookies['X-AUTH-TOKEN']);
+    const refreshToken = this.jwtService.decode(
+      request.cookies['X-REFRESH-TOKEN']
+    );
+    return this.refreshTokenIsValid(jwtInfos, refreshToken).then((isValid) => {
+      console.log('refreshTokenIsValid', isValid);
+      if (isValid) {
+        return this.userService
+          .findUserById(refreshToken['userId'])
+          .then((user) => {
+            const auhtInfos = this.generateTokenAndRefreshToken(user);
+            return auhtInfos;
+          });
+      } else {
+        throw new BadRequestException();
+      }
+    });
+  }
+
+  async refreshTokenIsValid(jwtInfos, refreshToken): Promise<boolean> {
+    if (jwtInfos['jti'] !== refreshToken['jti']) {
+      return false;
+    }
+    return await this.refreshTokenModel
+      .findOne({ _id: refreshToken['_id'] })
+      .exec()
+      .then((existingRToken) => {
+        if (existingRToken && !existingRToken.isValid) {
+          console.log('RefreshToken exists and is valid');
+          return true;
+        } else {
+          console.log("RefreshToken doesn't exists or is invalid");
+          return false;
+        }
+      });
+  }
+
   async generateTokenAndRefreshToken(user: User): Promise<AuthInfos> {
     const jwtUid = uuid();
     const payload: JwtInfos = { userId: user._id, userMail: user.mail };
 
     const accessTokenEncrypted = this.jwtService.sign(payload, {
       jwtid: jwtUid,
-      expiresIn: '30s',
+      expiresIn: '5s',
     });
-    const refreshToken = await this.generateRefreshToken(user, jwtUid);
-    console.log('refreshToken', refreshToken);
+    const refreshToken = await this.generateRefreshToken(user);
     const refreshTokenEncrypted = this.jwtService.sign(refreshToken, {
       jwtid: jwtUid,
       expiresIn: '1d',
@@ -84,11 +128,10 @@ export class AuthService {
     return authInfos;
   }
 
-  async generateRefreshToken(user: User, jwtId: string): Promise<RefreshToken> {
+  async generateRefreshToken(user: User): Promise<RefreshToken> {
     const refeshToken: RefreshToken = {
-      jwtid: jwtId,
       userId: user._id,
-      invalidated: false,
+      isValid: false,
       creationDate: moment().toDate(),
       expirationDate: moment().add(10, 'd').toDate(),
     };
@@ -100,42 +143,49 @@ export class AuthService {
     });
   }
 
-  refresh(request: Request): Promise<any> {
-    const authTokenEncrypted = request.cookies['X-AUTH-TOKEN'];
-    const refreshTokenEncrypted = request.cookies['X-REFRESH-TOKEN'];
-    const jwtInfosVerify = this.jwtService.verify(authTokenEncrypted);
-    console.log('jwtInfosVerify', jwtInfosVerify);
-    const refreshTokenVerify = this.jwtService.verify(authTokenEncrypted);
-    console.log('refreshToken', refreshTokenVerify);
-    const jwtInfos = this.jwtService.decode(authTokenEncrypted);
-    const refreshToken = this.jwtService.decode(refreshTokenEncrypted);
-    return this.refreshTokenIsValid(jwtInfos, refreshToken).then((isValid) => {
-      if (isValid) {
-        this.userService.findUserById(refreshToken['userId']);
-        Promise.resolve();
-      }
-    });
-
-    return Promise.resolve({});
-  }
-
-  async refreshTokenIsValid(jwtInfos, refreshToken): Promise<boolean> {
-    if (jwtInfos['jwtId'] !== refreshToken['jwtId']) {
-      return false;
-    }
-    this.refreshTokenModel
-      .findOne({ jwtid: refreshToken['jwtId'] })
-      .exec()
-      .then((existingRToken) => {
-        if (existingRToken && !existingRToken.invalidate) {
-          Promise.resolve(true);
-        } else {
-          Promise.resolve(false);
-        }
-      });
-  }
-
   invalidateTokens(request: any) {
-    throw new Error('Method not implemented.');
+    const refreshToken = this.jwtService.decode(
+      request.cookies['X-REFRESH-TOKEN']
+    );
+    if (refreshToken) {
+      this.refreshTokenModel
+        .findOne({ jwiId: refreshToken['jti'] })
+        .exec()
+        .then((existingToken) => {
+          if (existingToken) {
+            // Remove all refresh tokens for this user to disconnect him on every devices
+            const userId = existingToken.userId;
+            this.refreshTokenModel.remove({ userId: userId }).exec();
+          }
+        });
+    }
+  }
+
+  public sendConfirmationMail(user: UserDocument): Promise<any> {
+    const signOptions: JwtSignOptions = {
+      expiresIn: '30m',
+    };
+    const payload = { mail: user.mail, uid: user.uid };
+    const token = this.jwtService.sign(payload, signOptions);
+    const link = environment.confirmationLink + token;
+    return this.mailerService
+      .sendMail({
+        to: user.mail, // list of receivers
+        from: 'contact@aboucipu.fr', // sender address
+        subject: 'Confirm your email', // Subject line
+        text: `Welcome to strat editor ${user.username} ! \n Please click on the following link to confirm your email address and start using Strat Editor.\n This link will expire in 30 minutes.\n ${link}`,
+        html: `<b>Welcome to strat editor ${user.username} !</b><br/>Please click on the following link to confirm your email address and start using Strat Editor.<br/>This link will expire in 30 minutes.<br/> <a href="${link}">${link}</a>`, // HTML body content
+      })
+      .then(() => {
+        Promise.resolve(user);
+      })
+      .catch((error) => {
+        Promise.reject(
+          new InternalServerErrorException(
+            'Error when sending confirmation mail'
+          )
+        );
+        console.log(error);
+      });
   }
 }

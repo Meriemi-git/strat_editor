@@ -10,6 +10,8 @@ import { UserModule } from './user/user.module';
 import { GalleryModule } from './gallery/gallery.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { AuthModule } from './auth/auth.module';
+import { AuthService } from './auth/auth.service';
+import { AuthController } from './auth/auth.controller';
 
 @Module({
   imports: [
@@ -28,9 +30,9 @@ import { AuthModule } from './auth/auth.module';
     FloorModule,
     IconModule,
     FontModule,
+    AuthModule,
     UserModule,
     GalleryModule,
-    AuthModule,
   ],
 })
 export class AppModule implements NestModule {

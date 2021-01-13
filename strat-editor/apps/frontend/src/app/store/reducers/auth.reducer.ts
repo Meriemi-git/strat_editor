@@ -1,4 +1,4 @@
-import { AuthInfos, UserInfos } from '@strat-editor/data';
+import { UserInfos } from '@strat-editor/data';
 import * as actions from '../actions/auth.action';
 import { createReducer, on, Action } from '@ngrx/store';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -32,8 +32,9 @@ const authReducer = createReducer(
     ...state,
     error: null,
   })),
-  on(actions.RegisterSuccess, (state) => ({
+  on(actions.RegisterSuccess, (state, { userInfos }) => ({
     ...state,
+    userInfos: userInfos,
     error: null,
   })),
   on(actions.RegisterError, (state, { error }) => ({
@@ -42,8 +43,16 @@ const authReducer = createReducer(
   })),
   on(actions.Disconnect, (state) => ({
     ...state,
-    infos: null,
+  })),
+  on(actions.DisconnectSuccess, (state) => ({
+    ...state,
+    userInfos: null,
     error: null,
+  })),
+  on(actions.DisconnectError, (state, { error }) => ({
+    ...state,
+    userInfos: null,
+    error: error,
   }))
 );
 
