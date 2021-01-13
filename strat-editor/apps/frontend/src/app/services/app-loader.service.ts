@@ -16,6 +16,7 @@ export class AppLoaderService {
 
   public initializeApp(): void {
     const userInfos: UserInfos = JSON.parse(localStorage.getItem('userInfos'));
+    console.log('Getting userInfos from localStorage :', userInfos);
     if (userInfos) {
       this.store.dispatch(Actions.RefreshTokens());
     }

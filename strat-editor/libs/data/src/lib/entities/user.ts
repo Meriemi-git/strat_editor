@@ -10,6 +10,7 @@ export interface User extends mongoose.Document {
   mail: string;
   confirmed: boolean;
   uid: string;
+  refreshToken: string;
 }
 
 export interface UserDto {
@@ -24,6 +25,7 @@ export const UserSchema = new mongoose.Schema({
   mail: String,
   confirmed: Boolean,
   uid: String,
+  refreshToken: String,
 });
 
 UserSchema.pre<User>('save', function () {

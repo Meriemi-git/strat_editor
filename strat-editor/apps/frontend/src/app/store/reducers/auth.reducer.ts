@@ -53,6 +53,20 @@ const authReducer = createReducer(
     ...state,
     userInfos: null,
     error: error,
+  })),
+  on(actions.RefreshTokens, (state) => ({
+    ...state,
+    userInfos: null,
+  })),
+  on(actions.RefreshTokensSuccess, (state, { userInfos }) => ({
+    ...state,
+    userInfos: userInfos,
+    error: null,
+  })),
+  on(actions.RefreshTokensError, (state, { error }) => ({
+    ...state,
+    userInfos: null,
+    error: error,
   }))
 );
 

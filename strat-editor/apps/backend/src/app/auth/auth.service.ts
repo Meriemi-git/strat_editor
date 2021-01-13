@@ -8,18 +8,14 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import {
   AuthInfos,
   JwtInfos,
-  RefreshToken,
-  RefreshTokenDocument,
   User,
   UserDocument,
   UserDto,
+  UserInfos,
 } from '@strat-editor/data';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
-import * as moment from 'moment';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { Request } from 'express';
 import { environment } from '../../environments/environment.prod';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -27,8 +23,6 @@ import { MailerService } from '@nestjs-modules/mailer';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel('RefreshToken')
-    private refreshTokenModel: Model<RefreshTokenDocument>,
     private readonly mailerService: MailerService,
     private userService: UserService,
     private readonly jwtService: JwtService
@@ -66,81 +60,98 @@ export class AuthService {
   }
 
   refresh(request: Request): Promise<AuthInfos> {
-    const jwtInfos = this.jwtService.decode(request.cookies['X-AUTH-TOKEN']);
-    const refreshToken = this.jwtService.decode(
-      request.cookies['X-REFRESH-TOKEN']
-    );
-    return this.refreshTokenIsValid(jwtInfos, refreshToken).then((isValid) => {
-      console.log('refreshTokenIsValid', isValid);
-      if (isValid) {
-        return this.userService
-          .findUserById(refreshToken['userId'])
-          .then((user) => {
-            const auhtInfos = this.generateTokenAndRefreshToken(user);
-            return auhtInfos;
-          });
-      } else {
-        throw new BadRequestException();
-      }
-    });
+    const xAuthToken = request.cookies['X-AUTH-TOKEN'];
+    const xRefreshToken = request.cookies['X-REFRESH-TOKEN'];
+    if (!this.tokensWasPaired(xAuthToken, xRefreshToken)) {
+      throw new BadRequestException('Tokens are invalid');
+    }
+    try {
+      const refreshToken = this.jwtService.verify(xRefreshToken);
+      const jwtID = refreshToken['jti'].toString();
+      // AuthToken is expired, try to get the user who own this refreshToken
+      return this.userService
+        .findUserById(refreshToken['userId'])
+        .then((user) => {
+          if (user) {
+            // We found user so refreshToken is valid
+            const xAuthToken = this.generateAuthToken(user, jwtID);
+            const authInfos = this.createAuthInfos(
+              xAuthToken,
+              xRefreshToken,
+              user
+            );
+            return Promise.resolve(authInfos);
+          } else {
+            throw new BadRequestException('You must log in');
+          }
+        });
+    } catch (error) {
+      throw new BadRequestException('You must log in');
+    }
   }
 
-  async refreshTokenIsValid(jwtInfos, refreshToken): Promise<boolean> {
-    if (jwtInfos['jti'] !== refreshToken['jti']) {
+  private tokensWasPaired(xAuthToken: any, xRefreshToken: any): boolean {
+    try {
+      const authToken = this.jwtService.decode(xAuthToken);
+      const refreshToken = this.jwtService.decode(xRefreshToken);
+      return authToken['jti'] === refreshToken['jti'];
+    } catch (error) {
       return false;
     }
-    return await this.refreshTokenModel
-      .findOne({ _id: refreshToken['_id'] })
-      .exec()
-      .then((existingRToken) => {
-        if (existingRToken && !existingRToken.isValid) {
-          console.log('RefreshToken exists and is valid');
-          return true;
-        } else {
-          console.log("RefreshToken doesn't exists or is invalid");
-          return false;
-        }
-      });
+  }
+
+  private createAuthInfos(
+    authToken: string,
+    refreshToken: string,
+    user: User
+  ): AuthInfos {
+    return {
+      authToken: authToken,
+      refreshToken: refreshToken,
+      userInfos: {
+        username: user.username,
+        userMail: user.mail,
+        mailConfirmed: user.confirmed,
+      } as UserInfos,
+    } as AuthInfos;
   }
 
   async generateTokenAndRefreshToken(user: User): Promise<AuthInfos> {
-    const jwtUid = uuid();
-    const payload: JwtInfos = { userId: user._id, userMail: user.mail };
-
-    const accessTokenEncrypted = this.jwtService.sign(payload, {
-      jwtid: jwtUid,
-      expiresIn: '5s',
-    });
-    const refreshToken = await this.generateRefreshToken(user);
-    const refreshTokenEncrypted = this.jwtService.sign(refreshToken, {
-      jwtid: jwtUid,
-      expiresIn: '1d',
-    });
+    const jwtId = uuid().toString();
+    const authToken = this.generateAuthToken(user, jwtId);
+    const refreshToken = await this.generateRefreshToken(user, jwtId);
     const authInfos: AuthInfos = {
       userInfos: {
         mailConfirmed: user.confirmed,
         userMail: user.mail,
         username: user.username,
       },
-      authToken: accessTokenEncrypted,
-      refreshToken: refreshTokenEncrypted,
+      authToken: authToken,
+      refreshToken: refreshToken,
     };
     return authInfos;
   }
 
-  async generateRefreshToken(user: User): Promise<RefreshToken> {
-    const refeshToken: RefreshToken = {
-      userId: user._id,
-      isValid: false,
-      creationDate: moment().toDate(),
-      expirationDate: moment().add(10, 'd').toDate(),
-    };
-    const createdRefeshToken = new this.refreshTokenModel(refeshToken);
-    return new Promise<RefreshToken>((resolve) => {
-      createdRefeshToken.save(function (err, refreshToken) {
-        resolve(refreshToken.toJSON());
-      });
+  generateAuthToken(user: User, jwtId: string): string {
+    const payload: JwtInfos = { userId: user._id, userMail: user.mail };
+    return this.jwtService.sign(payload, {
+      jwtid: jwtId,
+      expiresIn: '5s',
     });
+  }
+
+  async generateRefreshToken(user: User, jwtUid: string): Promise<string> {
+    const payload = { userId: user._id };
+    const refreshTokenEncrypted = this.jwtService.sign(payload, {
+      jwtid: jwtUid,
+      expiresIn: '1d',
+    });
+    return this.userService
+      .updateRefreshToken(user._id, refreshTokenEncrypted)
+      .then(() => Promise.resolve(refreshTokenEncrypted))
+      .catch((error) => {
+        throw new InternalServerErrorException('Cannot update refresh token');
+      });
   }
 
   invalidateTokens(request: any) {
@@ -148,16 +159,11 @@ export class AuthService {
       request.cookies['X-REFRESH-TOKEN']
     );
     if (refreshToken) {
-      this.refreshTokenModel
-        .findOne({ jwiId: refreshToken['jti'] })
-        .exec()
-        .then((existingToken) => {
-          if (existingToken) {
-            // Remove all refresh tokens for this user to disconnect him on every devices
-            const userId = existingToken.userId;
-            this.refreshTokenModel.remove({ userId: userId }).exec();
-          }
-        });
+      this.userService.findUserById(refreshToken['userId']).then((user) => {
+        if (user) {
+          this.userService.updateRefreshToken(refreshToken['userId'], null);
+        }
+      });
     }
   }
 

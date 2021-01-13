@@ -40,7 +40,6 @@ export class AuthController {
     return this.authService
       .refresh(request)
       .then((authInfos) => {
-        console.log('refreshToken : ', authInfos);
         response.cookie('X-AUTH-TOKEN', authInfos.authToken, {
           httpOnly: true,
           secure: true,
@@ -69,6 +68,7 @@ export class AuthController {
     return this.userService.addUser(userDto).then((createdUser) => {
       this.authService.sendConfirmationMail(createdUser);
       return this.authService.login(userDto).then((authInfos) => {
+        console.log('setting Cookies from authInfos :', authInfos);
         response.cookie('X-AUTH-TOKEN', authInfos.authToken, {
           httpOnly: true,
           secure: true,

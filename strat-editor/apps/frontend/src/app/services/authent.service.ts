@@ -43,6 +43,10 @@ export class AuthentService {
         userDto
       )
       .pipe(
+        map((userInfos) => {
+          localStorage.setItem('userInfos', JSON.stringify(userInfos));
+          return userInfos;
+        }),
         catchError((err) => {
           {
             return throwError(err);

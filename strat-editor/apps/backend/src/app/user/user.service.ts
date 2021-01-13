@@ -25,6 +25,15 @@ export class UserService {
     return this.userModel.findOne({ _id: userId }).exec();
   }
 
+  public async updateRefreshToken(
+    userId: string,
+    refreshTokenEncrypted: string
+  ): Promise<any> {
+    return this.userModel
+      .updateOne({ _id: userId }, { refreshToken: refreshTokenEncrypted })
+      .exec();
+  }
+
   public async addUser(userDto: UserDto): Promise<UserDocument> {
     return new Promise<UserDocument>((resolve, reject) => {
       this.findByMail(userDto.mail).then((existing) => {
@@ -79,7 +88,7 @@ export class UserService {
 
   public async verifyToken(payload: JwtInfos): Promise<User> {
     return this.userModel
-      .findOne({ mail: payload.userMail, _id: payload.userId })
+      .findOne({ mail: payload.userMail, _id: payload.userId, confirmed: true })
       .exec();
   }
 }
