@@ -67,6 +67,21 @@ export class AuthentService {
       );
   }
 
+  sendConfirmationEmail(userInfos: UserInfos) {
+    return this.http
+      .post<any>(
+        environment.apiUrl + this.controller + '/send-confirmation-mail',
+        {
+          userMail: userInfos.userMail,
+        }
+      )
+      .pipe(
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
+
   public disconnect() {
     localStorage.removeItem('userInfos');
     return this.http

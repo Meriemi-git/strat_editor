@@ -35,12 +35,17 @@ export class HttpJwtInterceptor implements HttpInterceptor {
           !request.url.endsWith('register')
         ) {
           console.log('HttpJwtInterceptor request url', request.url);
-          if (error instanceof HttpErrorResponse && error.status === 401) {
-            return this.handle401Error(request, next);
-          } else {
-            this.store.dispatch(Actions.Disconnect());
-            return of(error);
+          if (error instanceof HttpErrorResponse) {
+            switch (error.status) {
+              case 401:
+                return this.handle401Error(request, next);
+                break;
+              case 403:
+                this.store.dispatch(Actions.Disconnect());
+                return of(error);
+            }
           }
+          return of(error);
         }
       })
     );

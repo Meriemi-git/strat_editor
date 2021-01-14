@@ -54,6 +54,22 @@ export class AuthEffect {
     )
   );
 
+  sendConfirmationEmail$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(actions.SendConfirmationEmail),
+      mergeMap((action) =>
+        this.authService.sendConfirmationEmail(action.userInfos).pipe(
+          map(() => {
+            return actions.SendConfirmationEmailSuccess();
+          }),
+          catchError((error: HttpErrorResponse) => {
+            return of(actions.SendConfirmationEmailError({ error }));
+          })
+        )
+      )
+    )
+  );
+
   disconnect$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.Disconnect),

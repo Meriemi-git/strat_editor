@@ -1,6 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { RequestMiddleware } from './request.middleware';
 import { AgentModule } from './agent/agent.module';
 import { MapModule } from './map/map.module';
 import { FloorModule } from './floor/floor.module';
@@ -10,9 +9,7 @@ import { UserModule } from './user/user.module';
 import { GalleryModule } from './gallery/gallery.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { AuthModule } from './auth/auth.module';
-import { AuthService } from './auth/auth.service';
-import { AuthController } from './auth/auth.controller';
-
+import { RateLimiterModule } from 'nestjs-rate-limiter';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/strat-editor', {
@@ -33,6 +30,7 @@ import { AuthController } from './auth/auth.controller';
     AuthModule,
     UserModule,
     GalleryModule,
+    RateLimiterModule,
   ],
 })
 export class AppModule implements NestModule {

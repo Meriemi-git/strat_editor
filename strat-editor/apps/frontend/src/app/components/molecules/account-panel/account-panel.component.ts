@@ -8,6 +8,7 @@ import * as Selectors from '../../../store/selectors';
 import { Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../../../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'strat-editor-account-panel',
@@ -22,7 +23,8 @@ export class AccountPanelComponent implements OnInit {
 
   constructor(
     private store: Store<StratEditorState>,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -37,11 +39,6 @@ export class AccountPanelComponent implements OnInit {
       this.httpError = error;
     });
   }
-
-  onRegister(userDto: UserDto) {
-    this.store.dispatch(Actions.Register({ userDto }));
-  }
-
   onLogin(userDto: UserDto) {
     this.store.dispatch(Actions.LogIn({ userDto }));
   }
@@ -50,11 +47,15 @@ export class AccountPanelComponent implements OnInit {
     this.store.dispatch(Actions.Disconnect());
   }
 
-  onDisplayRegisterForm(display: boolean) {
-    this.isRegisterForm = display;
+  onDisplayRegisterForm() {
     this.httpError = null;
+    this.store.dispatch(Actions.closeRight());
+    this.router.navigateByUrl('/register');
   }
 
+  resendEmailLink(userInfos: UserInfos) {
+    this.store.dispatch(Actions.SendConfirmationEmail({ userInfos }));
+  }
   testAuthent() {
     this.userService.testAuthent().subscribe((result) => console.log(result));
   }

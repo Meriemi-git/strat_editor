@@ -43,6 +43,20 @@ export const RegisterError = createAction(
   props<{ error: HttpErrorResponse }>()
 );
 
+export const SendConfirmationEmail = createAction(
+  '[Auth] Send confirmation email',
+  props<{ userInfos: UserInfos }>()
+);
+
+export const SendConfirmationEmailSuccess = createAction(
+  '[Auth] Send confirmation email success'
+);
+
+export const SendConfirmationEmailError = createAction(
+  '[Auth] Send confirmation email error',
+  props<{ error: HttpErrorResponse }>()
+);
+
 export const Disconnect = createAction('[Auth] Disconnect');
 export const DisconnectSuccess = createAction('[Auth] Disconnect Success');
 export const DisconnectError = createAction(
@@ -57,6 +71,10 @@ const actions = union({
   Register,
   RegisterSuccess,
   RegisterError,
+  RefreshTokens,
+  RefreshTokensSuccess,
+  RefreshTokensError,
+  SendConfirmationEmail,
 });
 
 export type AuthActions = typeof actions;

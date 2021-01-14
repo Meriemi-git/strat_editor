@@ -14,6 +14,10 @@ import { Request, Response } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  // see https://expressjs.com/en/guide/behind-proxies.html
+  // app.set('trust proxy', 1);
+
   app.enableCors();
   app.use(cookieParser());
   const globalPrefix = 'api';

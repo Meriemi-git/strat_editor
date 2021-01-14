@@ -1,7 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, Validators, FormBuilder } from '@angular/forms';
-import { AuthInfos, UserDto } from '@strat-editor/data';
+import {
+  FormControl,
+  Validators,
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
+import { Router } from '@angular/router';
+import { UserDto } from '@strat-editor/data';
 
 @Component({
   selector: 'strat-editor-register-form',
@@ -16,20 +22,30 @@ export class RegisterFormComponent implements OnInit {
   private readonly passwordRegex: string =
     '(?=\\D*\\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{8,30}';
 
-  public authForm = this.formBuilder.group({
-    username: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-    ]),
-    mail: new FormControl('', [Validators.required, Validators.email]),
-    confirmMail: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.pattern(this.passwordRegex),
-    ]),
-  });
+  public authForm = this.formBuilder.group(
+    {
+      username: new FormControl('', [
+        Validators.required,
+        Validators.minLength(3),
+      ]),
+      mail: new FormControl('', [Validators.required, Validators.email]),
+
+      password: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.passwordRegex),
+      ]),
+      confirmPassword: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.passwordRegex),
+      ]),
+    },
+    {
+      validator: this.mustMatch('password', 'confirmPassword'),
+    }
+  );
   public isSubmitted: boolean = false;
-  constructor(private formBuilder: FormBuilder) {}
+  CGUAccepted: boolean;
+  constructor(private formBuilder: FormBuilder, private router: Router) {}
 
   ngOnInit(): void {
     console.log('RegisterFormComponent httpErrorResponse:', this.httpError);
@@ -53,5 +69,30 @@ export class RegisterFormComponent implements OnInit {
 
   onDisplayLoginForm() {
     this.displayLoginForm.emit();
+  }
+
+  private mustMatch(controlName: string, matchingControlName: string) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
+
+      if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+        return;
+      }
+
+      if (control.value !== matchingControl.value) {
+        matchingControl.setErrors({ match: true });
+      } else {
+        matchingControl.setErrors(null);
+      }
+    };
+  }
+
+  closeRegisterForm() {
+    this.router.navigateByUrl('/');
+  }
+
+  toogleAcceptance(accepted: boolean) {
+    this.CGUAccepted = accepted;
   }
 }

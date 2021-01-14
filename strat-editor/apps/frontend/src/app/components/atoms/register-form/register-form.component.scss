@@ -1,10 +1,14 @@
 @import '~apps/frontend/src/styles.scss';
 
-.register,
-.disconnect {
-  width: 300px;
-  margin: 16px auto;
+.register {
+  margin: 0 auto;
   font-size: 16px;
+  text-align: center;
+}
+
+.register-container {
+  width: 300px;
+  margin: 0 auto;
 }
 
 .register input {
@@ -54,6 +58,17 @@
 .buttons {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
-  padding: 12px;
+  width: 300px;
+  justify-content: space-around;
+  margin: 0 auto;
+}
+
+.mentions {
+  display: flex;
+  align-items: baseline;
+  text-align: justify;
+}
+
+.mentions p {
+  margin-left: 10px;
 }

@@ -23,6 +23,13 @@ const routes: Routes = [
         (mod) => mod.ConfirmationModule
       ),
   },
+  {
+    path: 'register',
+    loadChildren: () =>
+      import('./components/pages/register/register.module').then(
+        (mod) => mod.RegisterModule
+      ),
+  },
 ];
 
 @NgModule({

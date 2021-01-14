@@ -1,16 +1,9 @@
 <div class="login" *ngIf="!($userInfos | async) && !isRegisterForm">
   <strat-editor-login-form
     (logIn)="onLogin($event)"
-    (displayRegisterForm)="onDisplayRegisterForm(true)"
+    (displayRegisterForm)="onDisplayRegisterForm()"
     [httpError]="httpError"
   ></strat-editor-login-form>
-</div>
-<div class="register" *ngIf="isRegisterForm">
-  <strat-editor-register-form
-    (register)="onRegister($event)"
-    (displayLoginForm)="onDisplayRegisterForm(false)"
-    [httpError]="httpError"
-  ></strat-editor-register-form>
 </div>
 
 <div class="disconnect" *ngIf="$userInfos | async; let userInfos">
@@ -24,14 +17,7 @@
       address. If you haven't receive the mail you can re-send it by clicking on
       the button below.
     </p>
-    <button
-      color="primary"
-      mat-raised-button
-      class="submit-button"
-      (click)="resendEmailLink()"
-    >
-      Re-send
-    </button>
+    <p *ngIf="httpError" color="warn">{{ httpError.error.message }}</p>
   </div>
   <button
     color="warning"
@@ -42,11 +28,19 @@
     Test Authent
   </button>
   <button
-    color="warning"
+    color="warn"
     mat-raised-button
     class="submit-button"
     (click)="onDisconnect()"
   >
     Disconnect
+  </button>
+  <button
+    color="primary"
+    mat-raised-button
+    class="submit-button"
+    (click)="resendEmailLink(userInfos)"
+  >
+    Re-Send
   </button>
 </div>

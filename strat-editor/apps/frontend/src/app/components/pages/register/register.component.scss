@@ -1,0 +1,31 @@
+.register {
+  margin: auto 0;
+  text-align: center;
+  padding-top: 20px;
+}
+.infos {
+  width: max-content;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  justify-content: flex-start;
+}
+.confirmations {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.confirmations h2 {
+  text-align: center;
+}
+
+.confirmations p {
+  text-align: center;
+  margin: 0 auto;
+  width: max-content;
+}
+
+.resend {
+  font-style: italic;
+  margin-bottom: 10px;
+}

@@ -21,6 +21,8 @@ import { LeftPanelModule } from './components/molecules/left-panel/left-panel.mo
 import { RightPanelModule } from './components/molecules/right-panel/right-panel.module';
 import { AppInitService } from './services/app-init.service';
 import { HttpJwtInterceptor } from './interceptors/http-jwt-interceptor';
+import { InfoModalComponent } from './components/modals/info-modal/info-modal.component';
+import { InfoModalModule } from './components/modals/info-modal/info-modal.module';
 
 export function init_app(appInitService: AppInitService) {
   return () => appInitService.initializeApp();
