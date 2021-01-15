@@ -16,7 +16,7 @@ import {
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { environment } from '../../environments/environment.prod';
 import { MailerService } from '@nestjs-modules/mailer';
 
@@ -125,6 +125,8 @@ export class AuthService {
         mailConfirmed: user.confirmed,
         userMail: user.mail,
         username: user.username,
+        userId: user._id,
+        stratIds: [],
       },
       authToken: authToken,
       refreshToken: refreshToken,
@@ -193,5 +195,15 @@ export class AuthService {
         );
         console.log(error);
       });
+  }
+
+  public getUserIdFromCookies(request: Request) {
+    const xAuthToken = request.cookies['X-AUTH-TOKEN'];
+    try {
+      const jwtInfos = this.jwtService.decode(xAuthToken);
+      return jwtInfos['userId'];
+    } catch (error) {
+      return null;
+    }
   }
 }

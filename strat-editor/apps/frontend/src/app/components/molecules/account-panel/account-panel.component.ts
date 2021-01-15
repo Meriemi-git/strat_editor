@@ -56,7 +56,4 @@ export class AccountPanelComponent implements OnInit {
   resendEmailLink(userInfos: UserInfos) {
     this.store.dispatch(Actions.SendConfirmationEmail({ userInfos }));
   }
-  testAuthent() {
-    this.userService.testAuthent().subscribe((result) => console.log(result));
-  }
 }

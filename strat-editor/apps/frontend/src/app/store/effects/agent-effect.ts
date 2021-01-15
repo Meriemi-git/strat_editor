@@ -26,8 +26,6 @@ export class AgentEffect {
   fechagents$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.FetchAgents.type),
-      //withLatestFrom(this.store.select(Selectors.selectAllAgents)),
-      // filter(([action, agents]) => agents.length == 0),
       mergeMap(() =>
         this.agentService.getAllAgents().pipe(
           map((agents) => actions.FetchAgentsSuccess({ agents: agents })),

@@ -77,6 +77,7 @@ export class AuthentService {
       )
       .pipe(
         catchError((err) => {
+          console.log('in service err', err);
           return throwError(err);
         })
       );

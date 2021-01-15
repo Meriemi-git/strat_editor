@@ -1,0 +1,9 @@
+<div class="account-wrapper">
+  <div *ngIf="$userInfos | async; let userInfos; else: notLogged">
+    <div class="account-container">
+      <h2 class="mat-h2 title">Account details</h2>
+      <span>{{ userInfos.username }}</span>
+    </div>
+  </div>
+  <ng-template #notLogged> Please login first </ng-template>
+</div>

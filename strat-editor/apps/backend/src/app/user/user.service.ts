@@ -5,7 +5,13 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { JwtInfos, User, UserDocument, UserDto } from '@strat-editor/data';
+import {
+  JwtInfos,
+  User,
+  UserDocument,
+  UserDto,
+  UserInfos,
+} from '@strat-editor/data';
 import { Model } from 'mongoose';
 import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
 import { v4 } from 'uuid';
@@ -87,7 +93,17 @@ export class UserService {
 
   public async verifyToken(payload: JwtInfos): Promise<User> {
     return this.userModel
-      .findOne({ mail: payload.userMail, _id: payload.userId, confirmed: true })
+      .findOne({ mail: payload.userMail, _id: payload.userId })
       .exec();
+  }
+
+  public getUserInfos(user: User): any {
+    return {
+      mailConfirmed: user.confirmed,
+      stratIds: [],
+      userId: user._id,
+      userMail: user.mail,
+      username: user.username,
+    } as UserInfos;
   }
 }

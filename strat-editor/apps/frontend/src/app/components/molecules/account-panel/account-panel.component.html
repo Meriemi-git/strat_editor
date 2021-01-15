@@ -11,36 +11,34 @@
     {{ userInfos.username }}
   </h2>
   <div *ngIf="!userInfos.mailConfirmed" class="email-unverified">
-    <h3 class="mat-h3">Account confirmation pending.</h3>
+    <h3 class="mat-h2">Email confirmation pending.</h3>
     <p class="email-unverified-description">
       You need to confirm your email by clicking on the link send on your email
-      address. If you haven't receive the mail you can re-send it by clicking on
-      the button below.
+      address.
+      <br /><br />
+      <span class="resend">
+        If you haven't receive the mail you can re-send it by clicking on the
+        button below.
+      </span>
     </p>
     <p *ngIf="httpError" color="warn">{{ httpError.error.message }}</p>
   </div>
-  <button
-    color="warning"
-    mat-raised-button
-    class="submit-button"
-    (click)="testAuthent()"
-  >
-    Test Authent
-  </button>
-  <button
-    color="warn"
-    mat-raised-button
-    class="submit-button"
-    (click)="onDisconnect()"
-  >
-    Disconnect
-  </button>
-  <button
-    color="primary"
-    mat-raised-button
-    class="submit-button"
-    (click)="resendEmailLink(userInfos)"
-  >
-    Re-Send
-  </button>
+  <div class="buttons">
+    <button
+      color="warn"
+      mat-raised-button
+      class="submit-button"
+      (click)="onDisconnect()"
+    >
+      Disconnect
+    </button>
+    <button
+      color="primary"
+      mat-raised-button
+      class="submit-button"
+      (click)="resendEmailLink(userInfos)"
+    >
+      Re-Send
+    </button>
+  </div>
 </div>

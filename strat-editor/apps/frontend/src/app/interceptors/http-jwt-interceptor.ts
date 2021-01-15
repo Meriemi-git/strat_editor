@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthentService } from '../services/authent.service';
 import { StratEditorState } from '../store/reducers';
@@ -42,10 +42,10 @@ export class HttpJwtInterceptor implements HttpInterceptor {
                 break;
               case 403:
                 this.store.dispatch(Actions.Disconnect());
-                return of(error);
+                break;
             }
           }
-          return of(error);
+          return throwError(error);
         }
       })
     );

@@ -17,7 +17,6 @@ export class ConfirmationComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      console.log('The token of this route is: ', params.token);
       this.authService
         .confirmEmail(params.token)
         .pipe(

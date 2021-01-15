@@ -24,6 +24,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'account',
+    loadChildren: () =>
+      import('./components/pages/account/account.module').then(
+        (mod) => mod.AccountModule
+      ),
+  },
+  {
     path: 'register',
     loadChildren: () =>
       import('./components/pages/register/register.module').then(

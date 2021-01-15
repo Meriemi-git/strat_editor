@@ -1,6 +1,11 @@
 import { Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, PreconditionFailedException, Req } from '@nestjs/common';
+import {
+  Injectable,
+  PreconditionFailedException,
+  Req,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { jwtConstants } from './constants';
 import { UserService } from '../user/user.service';
 import { JwtInfos, User } from '@strat-editor/data';
@@ -16,15 +21,24 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtInfos): Promise<User> {
-    return this.userService.verifyToken(payload).then((user) => {
-      if (user) {
-        return Promise.resolve(user);
-      } else {
-        throw new PreconditionFailedException(
-          'Please confirm your email first'
-        );
-      }
-    });
+    return this.userService
+      .verifyToken(payload)
+      .then((user) => {
+        if (user) {
+          if (user.confirmed) {
+            return Promise.resolve(user);
+          } else {
+            throw new PreconditionFailedException(
+              'Please confirm your email first'
+            );
+          }
+        } else {
+          throw new UnauthorizedException();
+        }
+      })
+      .catch((error) => {
+        throw new UnauthorizedException();
+      });
   }
 
   static cookieExtractor(@Req() req: Request) {
