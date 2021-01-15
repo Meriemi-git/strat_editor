@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { createAction, props, union } from '@ngrx/store';
-import { UserDto, UserInfos } from '@strat-editor/data';
+import { PasswordChangeWrapper, UserDto, UserInfos } from '@strat-editor/data';
 
 export const LogIn = createAction(
   '[Auth] LogIn',
@@ -58,23 +58,45 @@ export const SendConfirmationEmailError = createAction(
 );
 
 export const Disconnect = createAction('[Auth] Disconnect');
+
 export const DisconnectSuccess = createAction('[Auth] Disconnect Success');
+
 export const DisconnectError = createAction(
   '[Auth] Disconnect Error',
   props<{ error: HttpErrorResponse }>()
 );
-const actions = union({
-  LogIn,
-  LogInSuccess,
-  LogInError,
-  Disconnect,
-  Register,
-  RegisterSuccess,
-  RegisterError,
-  RefreshTokens,
-  RefreshTokensSuccess,
-  RefreshTokensError,
-  SendConfirmationEmail,
-});
 
-export type AuthActions = typeof actions;
+export const ChangePassword = createAction(
+  '[Auth] Change Password',
+  props<{ passwords: PasswordChangeWrapper }>()
+);
+
+export const ChangePasswordSuccess = createAction(
+  '[Auth] Change Password success'
+);
+
+export const ChangePasswordError = createAction(
+  '[Auth] Change Password error',
+  props<{ error: HttpErrorResponse }>()
+);
+
+// const actions = union({
+//   LogIn,
+//   LogInSuccess,
+//   LogInError,
+//   Disconnect,
+//   DisconnectSuccess,
+//   DisconnectError,
+//   Register,
+//   RegisterSuccess,
+//   RegisterError,
+//   RefreshTokens,
+//   RefreshTokensSuccess,
+//   RefreshTokensError,
+//   SendConfirmationEmail,
+//   ChangePassword,
+//   ChangePasswordSuccess,
+//   ChangePasswordError,
+// });
+
+//export type AuthActions = typeof actions;

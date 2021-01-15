@@ -76,8 +76,22 @@ export class AuthEffect {
       mergeMap(() =>
         this.authService.disconnect().pipe(
           map(() => actions.DisconnectSuccess()),
-          catchError((err: HttpErrorResponse) =>
-            of(actions.DisconnectError({ error: err }))
+          catchError((error: HttpErrorResponse) =>
+            of(actions.DisconnectError({ error }))
+          )
+        )
+      )
+    )
+  );
+
+  chnagePassword$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(actions.ChangePassword),
+      mergeMap((action) =>
+        this.authService.changePassword(action.passwords).pipe(
+          map(() => actions.ChangePasswordSuccess()),
+          catchError((error: HttpErrorResponse) =>
+            of(actions.ChangePasswordError({ error }))
           )
         )
       )

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserDto, UserInfos } from '@strat-editor/data';
+import { PasswordChangeWrapper, UserDto, UserInfos } from '@strat-editor/data';
 import { environment } from '../../environments/environment';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, timeout } from 'rxjs/operators';
@@ -87,6 +87,19 @@ export class AuthentService {
     localStorage.removeItem('userInfos');
     return this.http
       .get(environment.apiUrl + this.controller + '/disconnect')
+      .pipe(
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
+
+  public changePassword(passwords: PasswordChangeWrapper) {
+    return this.http
+      .post(
+        environment.apiUrl + this.controller + '/change-password',
+        passwords
+      )
       .pipe(
         catchError((err) => {
           return throwError(err);
