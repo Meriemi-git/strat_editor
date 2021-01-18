@@ -1,0 +1,20 @@
+<form [formGroup]="mailForm" class="mail-container">
+  <p [ngClass]="{ 'has-error': isSubmitted && formControls.mail.errors }">
+    <mat-form-field>
+      <mat-label>Enter your mail</mat-label>
+      <input matInput type="email" placeholder="Email" formControlName="mail" />
+    </mat-form-field>
+  </p>
+  <div *ngIf="isSubmitted && formControls.mail.errors" class="help-block">
+    <div *ngIf="formControls.mail.errors.required">Email is required</div>
+    <div *ngIf="formControls.mail.errors.email">Email is invalid</div>
+  </div>
+  <div *ngIf="httpError" class="error-block">
+    {{ httpError.error.message }}
+  </div>
+  <div class="buttons">
+    <button mat-raised-button class="submit-button" (click)="onSubmit()">
+      Validate
+    </button>
+  </div>
+</form>

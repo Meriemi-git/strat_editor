@@ -8,7 +8,7 @@ import {
   Res,
   UseInterceptors,
 } from '@nestjs/common';
-import { User, UserDto, UserInfos } from '@strat-editor/data';
+import { AuthInfos, User, UserDto, UserInfos } from '@strat-editor/data';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { UserService } from '../user/user.service';
@@ -25,14 +25,7 @@ export class AuthController {
   @Post('login')
   async login(@Body() userDto: UserDto, @Res() response): Promise<UserInfos> {
     return this.authService.login(userDto).then((authInfos) => {
-      response.cookie('X-AUTH-TOKEN', authInfos.authToken, {
-        httpOnly: true,
-        secure: true,
-      });
-      response.cookie('X-REFRESH-TOKEN', authInfos.refreshToken, {
-        httpOnly: true,
-        secure: true,
-      });
+      this.setAuthCookies(authInfos, response);
       response.status(HttpStatus.OK).send(authInfos.userInfos);
       return Promise.resolve(authInfos.userInfos);
     });
@@ -43,14 +36,7 @@ export class AuthController {
     return this.authService
       .refresh(request)
       .then((authInfos) => {
-        response.cookie('X-AUTH-TOKEN', authInfos.authToken, {
-          httpOnly: true,
-          secure: true,
-        });
-        response.cookie('X-REFRESH-TOKEN', authInfos.refreshToken, {
-          httpOnly: true,
-          secure: true,
-        });
+        this.setAuthCookies(authInfos, response);
         Promise.resolve(
           response.status(HttpStatus.OK).send(authInfos.userInfos)
         );
@@ -70,14 +56,7 @@ export class AuthController {
     return this.userService.addUser(userDto).then((createdUser) => {
       this.authService.sendConfirmationMail(createdUser);
       return this.authService.login(userDto).then((authInfos) => {
-        response.cookie('X-AUTH-TOKEN', authInfos.authToken, {
-          httpOnly: true,
-          secure: true,
-        });
-        response.cookie('X-REFRESH-TOKEN', authInfos.refreshToken, {
-          httpOnly: true,
-          secure: true,
-        });
+        this.setAuthCookies(authInfos, response);
         response.status(HttpStatus.OK).send(authInfos.userInfos);
         return Promise.resolve(authInfos.userInfos);
       });
@@ -85,11 +64,11 @@ export class AuthController {
   }
   @UseInterceptors(RateLimiterInterceptor)
   @RateLimit({
-    keyPrefix: 'qsdqsd',
+    keyPrefix: 'send-confirmation-mail',
     points: 1,
-    duration: 60,
+    duration: 300,
     errorMessage:
-      'Confirmation mail cannot be sent more than once in per minute',
+      'Confirmation mail cannot be sent more than once in per 5 minutes',
   })
   @Post('send-confirmation-mail')
   public async sendConfirmationEmail(
@@ -100,6 +79,7 @@ export class AuthController {
     return Promise.resolve();
   }
 
+  @Post('confirm')
   public async confirm(@Body() body: any): Promise<User> {
     return this.userService.confirmEmailAddress(body.token);
   }
@@ -110,5 +90,16 @@ export class AuthController {
     response.clearCookie('X-AUTH-TOKEN');
     response.clearCookie('X-REFRESH-TOKEN');
     return response.status(HttpStatus.OK).send();
+  }
+
+  private setAuthCookies(authInfos: AuthInfos, response: Response) {
+    response.cookie('X-AUTH-TOKEN', authInfos.authToken, {
+      httpOnly: true,
+      secure: true,
+    });
+    response.cookie('X-REFRESH-TOKEN', authInfos.refreshToken, {
+      httpOnly: true,
+      secure: true,
+    });
   }
 }

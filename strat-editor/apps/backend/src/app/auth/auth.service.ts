@@ -16,7 +16,7 @@ import {
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { environment } from '../../environments/environment.prod';
 import { MailerService } from '@nestjs-modules/mailer';
 
@@ -152,7 +152,10 @@ export class AuthService {
       .updateRefreshToken(user._id, refreshTokenEncrypted)
       .then(() => Promise.resolve(refreshTokenEncrypted))
       .catch((error) => {
-        throw new InternalServerErrorException('Cannot update refresh token');
+        console.log('Cannot update refresh token', error);
+        throw new InternalServerErrorException(
+          'Cannot update refresh token : '
+        );
       });
   }
 

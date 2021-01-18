@@ -1,12 +1,15 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import {
   JwtInfos,
+  PasswordChangeWrapper,
   User,
   UserDocument,
   UserDto,
@@ -15,6 +18,7 @@ import {
 import { Model } from 'mongoose';
 import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
 import { v4 } from 'uuid';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
@@ -29,6 +33,45 @@ export class UserService {
 
   public async findUserById(userId: string): Promise<User> {
     return this.userModel.findOne({ _id: userId }).exec();
+  }
+
+  public changePassword(
+    xAuthToken: string,
+    xRefreshToken: string,
+    passwords: PasswordChangeWrapper
+  ): Promise<any> {
+    console.log('in change password');
+    const authToken = this.jwtService.decode(xAuthToken);
+
+    return this.userModel
+      .findOne({ _id: authToken['userId'], refreshToken: xRefreshToken })
+      .then((user) => {
+        if (user) {
+          bcrypt
+            .compare(passwords.oldPassword, user.password)
+            .then((matching) => {
+              if (matching) {
+                console.log('password match');
+                user.password = passwords.newPassword;
+                return user
+                  .save()
+                  .then(() => {
+                    return Promise.resolve();
+                  })
+                  .catch(() => {
+                    console.log('Error during update');
+                    throw new InternalServerErrorException();
+                  });
+              } else {
+                console.log("Password doesn't match");
+                throw new UnauthorizedException();
+              }
+            });
+        } else {
+          console.log('USer not founded');
+          throw new ForbiddenException();
+        }
+      });
   }
 
   public async updateRefreshToken(

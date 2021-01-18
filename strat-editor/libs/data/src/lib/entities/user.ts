@@ -3,7 +3,7 @@ import * as bcrypt from 'bcryptjs';
 
 export type UserDocument = User & mongoose.Document;
 
-export interface User extends mongoose.Document {
+export class User extends mongoose.Document {
   _id: string;
   username: string;
   password: string;
@@ -30,7 +30,7 @@ export const UserSchema = new mongoose.Schema({
 
 UserSchema.pre<User>('save', function () {
   return new Promise<void>((resolve, reject) => {
-    let user = this;
+    let user: UserDocument = this;
     if (!this.isModified('password')) {
       resolve();
     }

@@ -1,8 +1,10 @@
 import {
+  Body,
   Controller,
   Get,
   HttpStatus,
   Param,
+  Post,
   Req,
   Res,
   UseGuards,
@@ -11,6 +13,8 @@ import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { UserService } from './user.service';
 import { Response, Request } from 'express';
 import { AuthService } from '../auth/auth.service';
+import { PasswordChangeWrapper } from '@strat-editor/data';
+import { RateLimit } from 'nestjs-rate-limiter';
 
 @Controller('user')
 export class UserController {
@@ -40,5 +44,25 @@ export class UserController {
         }
       });
     }
+  }
+
+  @RateLimit({
+    keyPrefix: 'change-password',
+    points: 1,
+    duration: 300,
+    errorMessage: 'Password cannot be changed more than once in per 5 minutes',
+  })
+  @Post('change-password')
+  public async chnagePassword(
+    @Body() passwords: PasswordChangeWrapper,
+    @Req() request: Request
+  ): Promise<any> {
+    const xRefreshToken = request.cookies['X-REFRESH-TOKEN'];
+    const xAuthToken = request.cookies['X-AUTH-TOKEN'];
+    return this.userService
+      .changePassword(xAuthToken, xRefreshToken, passwords)
+      .catch((error) => {
+        throw error;
+      });
   }
 }

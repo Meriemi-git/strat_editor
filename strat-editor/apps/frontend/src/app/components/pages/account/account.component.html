@@ -2,11 +2,46 @@
   <div *ngIf="userInfos">
     <div class="account-container">
       <h2 class="mat-h2 title">Account details</h2>
-      <span>{{ userInfos.username }}</span>
-      <strat-editor-password-changer
-        [httpError]="$httpError | async"
-        (passwordChanged)="onPasswordChanged($event)"
-      ></strat-editor-password-changer>
+
+      <mat-tab-group mat-align-tabs="center">
+        <mat-tab label="Overview">
+          <span>{{ userInfos.username }}</span>
+        </mat-tab>
+        <mat-tab label="Security" class="secutity">
+          <mat-accordion class="headers-align" hideToggle>
+            <mat-expansion-panel expanded="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>Email address </mat-panel-title>
+
+                <mat-panel-description>
+                  Change your email address
+                  <mat-icon>alternate_email</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <strat-editor-mail-changer
+                [httpError]="$httpError | async"
+                (mailChange)="onMailChange($event)"
+              ></strat-editor-mail-changer>
+              <!-- Mail changer -->
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title> Password </mat-panel-title>
+                <mat-panel-description>
+                  Change your password
+                  <mat-icon>vpn_key</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <strat-editor-password-changer
+                [httpError]="$httpError | async"
+                (passwordChanged)="onPasswordChanged($event)"
+              >
+              </strat-editor-password-changer>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </mat-tab>
+        <mat-tab label="CGU">Content 3</mat-tab>
+      </mat-tab-group>
 
       <div *ngIf="!userInfos">You are not connected.</div>
     </div>

@@ -38,7 +38,7 @@ export class AuthentService {
       );
   }
 
-  register(userDto: UserDto): Observable<UserInfos> {
+  public register(userDto: UserDto): Observable<UserInfos> {
     return this.http
       .post<UserInfos>(
         environment.apiUrl + this.controller + '/register',
@@ -57,7 +57,7 @@ export class AuthentService {
       );
   }
 
-  confirmEmail(token: string) {
+  public confirmEmail(token: string) {
     return this.http
       .post<any>(environment.apiUrl + this.controller + '/confirm', { token })
       .pipe(
@@ -67,7 +67,7 @@ export class AuthentService {
       );
   }
 
-  sendConfirmationEmail(userInfos: UserInfos) {
+  public sendConfirmationEmail(userInfos: UserInfos) {
     return this.http
       .post<any>(
         environment.apiUrl + this.controller + '/send-confirmation-mail',
@@ -87,19 +87,6 @@ export class AuthentService {
     localStorage.removeItem('userInfos');
     return this.http
       .get(environment.apiUrl + this.controller + '/disconnect')
-      .pipe(
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
-  }
-
-  public changePassword(passwords: PasswordChangeWrapper) {
-    return this.http
-      .post(
-        environment.apiUrl + this.controller + '/change-password',
-        passwords
-      )
       .pipe(
         catchError((err) => {
           return throwError(err);

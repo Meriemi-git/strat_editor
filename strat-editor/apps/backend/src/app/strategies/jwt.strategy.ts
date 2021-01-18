@@ -21,6 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtInfos): Promise<User> {
+    console.log('in jwt validate');
     return this.userService
       .verifyToken(payload)
       .then((user) => {
@@ -28,16 +29,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           if (user.confirmed) {
             return Promise.resolve(user);
           } else {
+            console.log('confirm your mail');
             throw new PreconditionFailedException(
               'Please confirm your email first'
             );
           }
         } else {
+          console.log('Unknown user');
           throw new UnauthorizedException();
         }
       })
       .catch((error) => {
-        throw new UnauthorizedException();
+        console.log('Error inbside verifyToken');
+        throw error;
       });
   }
 

@@ -32,7 +32,9 @@ export class HttpJwtInterceptor implements HttpInterceptor {
       catchError((error) => {
         if (
           !request.url.endsWith('disconnect') &&
-          !request.url.endsWith('register')
+          !request.url.endsWith('login') &&
+          !request.url.endsWith('register') &&
+          !request.url.endsWith('refresh')
         ) {
           console.log('HttpJwtInterceptor request url', request.url);
           if (error instanceof HttpErrorResponse) {

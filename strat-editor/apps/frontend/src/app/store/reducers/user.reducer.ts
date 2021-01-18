@@ -1,14 +1,14 @@
-import { UserInfos } from '@strat-editor/data';
+import { UserInfos as userReducer } from '@strat-editor/data';
 import * as actions from '../actions/auth.action';
 import { createReducer, on, Action } from '@ngrx/store';
 import { HttpErrorResponse } from '@angular/common/http';
 
-export interface AuthState {
-  userInfos: UserInfos;
+export interface UserState {
+  userInfos: userReducer;
   error: HttpErrorResponse;
 }
 
-export const initialstate: AuthState = {
+export const initialstate: UserState = {
   userInfos: null,
   error: null,
 };
@@ -82,6 +82,6 @@ const authReducer = createReducer(
   }))
 );
 
-export function reducer(state: AuthState | undefined, action: Action) {
+export function reducer(state: UserState | undefined, action: Action) {
   return authReducer(state, action);
 }

@@ -1,0 +1,19 @@
+@import '~apps/frontend/src/styles.scss';
+
+.error-block {
+  padding: 12px;
+  font-size: 0.9em;
+  color: $warn-color;
+}
+
+.submit-button {
+  background-color: $primaryColor;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  width: 300px;
+  justify-content: space-around;
+  margin: 0 auto;
+}

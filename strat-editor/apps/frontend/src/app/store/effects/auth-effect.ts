@@ -83,18 +83,4 @@ export class AuthEffect {
       )
     )
   );
-
-  chnagePassword$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(actions.ChangePassword),
-      mergeMap((action) =>
-        this.authService.changePassword(action.passwords).pipe(
-          map(() => actions.ChangePasswordSuccess()),
-          catchError((error: HttpErrorResponse) =>
-            of(actions.ChangePasswordError({ error }))
-          )
-        )
-      )
-    )
-  );
 }

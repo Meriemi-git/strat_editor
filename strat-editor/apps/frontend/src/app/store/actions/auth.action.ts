@@ -66,20 +66,6 @@ export const DisconnectError = createAction(
   props<{ error: HttpErrorResponse }>()
 );
 
-export const ChangePassword = createAction(
-  '[Auth] Change Password',
-  props<{ passwords: PasswordChangeWrapper }>()
-);
-
-export const ChangePasswordSuccess = createAction(
-  '[Auth] Change Password success'
-);
-
-export const ChangePasswordError = createAction(
-  '[Auth] Change Password error',
-  props<{ error: HttpErrorResponse }>()
-);
-
 // const actions = union({
 //   LogIn,
 //   LogInSuccess,
