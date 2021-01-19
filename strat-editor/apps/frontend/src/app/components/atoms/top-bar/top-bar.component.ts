@@ -1,5 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthInfos, UserInfos } from '@strat-editor/data';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'strat-editor-top-bar',
@@ -7,9 +9,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./top-bar.component.scss'],
 })
 export class TopBarComponent {
-  @Input() username: string;
+  @Input() $userInfos: Observable<UserInfos>;
   @Output() disconnect = new EventEmitter<void>();
   constructor(private router: Router) {}
+
   onAccountClick() {
     this.router.navigateByUrl('/account');
   }

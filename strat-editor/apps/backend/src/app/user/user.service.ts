@@ -17,9 +17,11 @@ import {
   UserInfos,
 } from '@strat-editor/data';
 import { Model } from 'mongoose';
-import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
+import { JwtService, JwtSignOptions, JwtVerifyOptions } from '@nestjs/jwt';
 import { v4 } from 'uuid';
 import * as bcrypt from 'bcryptjs';
+import { environment } from '../../environments/environment.prod';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class UserService {
@@ -27,6 +29,7 @@ export class UserService {
 
   constructor(
     @InjectModel('User') private userModel: Model<UserDocument>,
+    private readonly mailerService: MailerService,
     private readonly jwtService: JwtService
   ) {}
 
@@ -178,7 +181,7 @@ export class UserService {
       .exec();
   }
 
-  public getUserInfos(user: User): any {
+  public getUserInfos(user: User): UserInfos {
     return {
       mailConfirmed: user.confirmed,
       stratIds: [],
@@ -186,5 +189,30 @@ export class UserService {
       userMail: user.mail,
       username: user.username,
     } as UserInfos;
+  }
+
+  public sendConfirmationMail(user: User): Promise<any> {
+    const signOptions: JwtSignOptions = {
+      expiresIn: '30m',
+    };
+    const payload = { mail: user.mail, uid: user.uid };
+    const token = this.jwtService.sign(payload, signOptions);
+    const link = environment.confirmationLink + token;
+    return this.mailerService
+      .sendMail({
+        to: user.mail, // list of receivers
+        from: 'contact@aboucipu.fr', // sender address
+        subject: 'Confirm your email', // Subject line
+        text: `Welcome to strat editor ${user.username} ! \n Please click on the following link to confirm your email address and start using Strat Editor.\n This link will expire in 30 minutes.\n ${link}`,
+        html: `<b>Welcome to strat editor ${user.username} !</b><br/>Please click on the following link to confirm your email address and start using Strat Editor.<br/>This link will expire in 30 minutes.<br/> <a href="${link}">${link}</a>`, // HTML body content
+      })
+      .then(() => {
+        this.logger.debug('Confirmation mail successfully sent');
+        Promise.resolve();
+      })
+      .catch((error) => {
+        this.logger.error('Error during confirmation mail sending');
+        throw new InternalServerErrorException();
+      });
   }
 }

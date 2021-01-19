@@ -59,31 +59,6 @@ export class AuthentService {
       );
   }
 
-  public sendConfirmationEmail(userInfos: UserInfos) {
-    return this.http
-      .post<any>(
-        environment.apiUrl + this.controller + '/send-confirmation-mail',
-        {
-          userMail: userInfos.userMail,
-        }
-      )
-      .pipe(
-        map(() => {
-          this.notificationService.displayNotification({
-            message: 'Confirmation mail sent !',
-            type: NotificationType.success,
-          });
-        }),
-        catchError((err) => {
-          this.notificationService.displayNotification({
-            message: 'Error during confirmation mail sending',
-            type: NotificationType.error,
-          });
-          return throwError(err);
-        })
-      );
-  }
-
   public disconnect() {
     localStorage.removeItem('userInfos');
     return this.http

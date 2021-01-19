@@ -23,7 +23,6 @@ export class InfoModalComponent implements OnInit {
   ngOnInit(): void {
     this.title = this.data.title;
     this.text = this.data.text;
-    console.log('data', this.data);
   }
 
   closeModal() {

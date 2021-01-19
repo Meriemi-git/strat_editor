@@ -3,7 +3,9 @@ import {
   Controller,
   Get,
   HttpStatus,
+  InternalServerErrorException,
   Logger,
+  NotFoundException,
   Param,
   Post,
   Req,
@@ -22,6 +24,7 @@ import {
 } from '@strat-editor/data';
 import { RateLimit, RateLimiterInterceptor } from 'nestjs-rate-limiter';
 import { AuthGuard } from '@nestjs/passport';
+import { use } from 'passport';
 
 @Controller('user')
 export class UserController {
@@ -103,7 +106,7 @@ export class UserController {
     @Res() response: Response
   ): Promise<UserInfos> {
     return this.userService.addUser(userDto).then((createdUser) => {
-      this.authService.sendConfirmationMail(createdUser);
+      this.userService.sendConfirmationMail(createdUser);
       return this.authService.login(userDto).then((authInfos) => {
         this.setAuthCookies(authInfos, response);
         response.status(HttpStatus.OK).send(authInfos.userInfos);
@@ -122,13 +125,31 @@ export class UserController {
   })
   @Post('send-confirmation-mail')
   public async sendConfirmationEmail(
-    @Body() mailUser: string,
+    @Body() userInfos: UserInfos,
     @Res() response: Response
-  ): Promise<any> {
-    response.status(HttpStatus.OK).send();
-    return Promise.resolve();
+  ): Promise<UserInfos> {
+    this.logger.debug(
+      'send-confirmation-mail userInfos :' + JSON.stringify(userInfos)
+    );
+    return this.userService.findUserById(userInfos.userId).then((user) => {
+      if (user) {
+        return this.userService
+          .sendConfirmationMail(user)
+          .then(() => {
+            const userInfos = this.userService.getUserInfos(user);
+            response.status(HttpStatus.OK).send(userInfos);
+            return Promise.resolve(userInfos);
+          })
+          .catch((error) => {
+            throw new InternalServerErrorException(
+              'Cannot send verification email'
+            );
+          });
+      } else {
+        throw new NotFoundException('No user found for sending email');
+      }
+    });
   }
-  q;
 
   private setAuthCookies(authInfos: AuthInfos, response: Response) {
     response.cookie('X-AUTH-TOKEN', authInfos.authToken, {

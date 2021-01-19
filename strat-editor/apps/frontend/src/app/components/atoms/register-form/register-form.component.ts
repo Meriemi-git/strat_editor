@@ -48,9 +48,7 @@ export class RegisterFormComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private router: Router) {}
 
-  ngOnInit(): void {
-    console.log('RegisterFormComponent httpErrorResponse:', this.httpError);
-  }
+  ngOnInit(): void {}
 
   onSubmit() {
     this.isSubmitted = true;

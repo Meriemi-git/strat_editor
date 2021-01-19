@@ -28,20 +28,6 @@ export const LogInError = createAction(
   props<{ error: HttpErrorResponse }>()
 );
 
-export const SendConfirmationEmail = createAction(
-  '[Auth] Send confirmation email',
-  props<{ userInfos: UserInfos }>()
-);
-
-export const SendConfirmationEmailSuccess = createAction(
-  '[Auth] Send confirmation email success'
-);
-
-export const SendConfirmationEmailError = createAction(
-  '[Auth] Send confirmation email error',
-  props<{ error: HttpErrorResponse }>()
-);
-
 export const Disconnect = createAction('[Auth] Disconnect');
 
 export const DisconnectSuccess = createAction('[Auth] Disconnect Success');

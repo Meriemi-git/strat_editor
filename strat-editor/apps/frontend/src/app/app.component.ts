@@ -4,6 +4,8 @@ import { StratEditorState } from './store/reducers';
 import * as Actions from './store/actions';
 import * as Selectors from './store/selectors';
 import { take } from 'rxjs/operators';
+import { AuthInfos, UserInfos } from '@strat-editor/data';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'strat-editor-root',
@@ -13,15 +15,12 @@ import { take } from 'rxjs/operators';
 export class AppComponent implements OnInit {
   public leftIsOpened: boolean;
   public rightIsOpened: boolean;
-  public username: string;
+  public $userInfos: Observable<UserInfos>;
 
   constructor(private store: Store<StratEditorState>) {}
 
   ngOnInit(): void {
-    this.store
-      .select(Selectors.getUserInfos)
-      .subscribe((authInfos) => (this.username = authInfos?.username));
-
+    this.$userInfos = this.store.select(Selectors.getUserInfos);
     this.store.select(Selectors.isLeftSidenavOpened).subscribe((isOpened) => {
       this.leftIsOpened = isOpened;
     });

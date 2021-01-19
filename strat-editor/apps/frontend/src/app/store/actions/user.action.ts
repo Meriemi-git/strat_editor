@@ -60,3 +60,18 @@ export const RegisterError = createAction(
   '[User] Register Error',
   props<{ error: HttpErrorResponse }>()
 );
+
+export const SendConfirmationEmail = createAction(
+  '[Auth] Send confirmation email',
+  props<{ userInfos: UserInfos }>()
+);
+
+export const SendConfirmationEmailSuccess = createAction(
+  '[Auth] Send confirmation email success',
+  props<{ userInfos: UserInfos }>()
+);
+
+export const SendConfirmationEmailError = createAction(
+  '[Auth] Send confirmation email error',
+  props<{ error: HttpErrorResponse }>()
+);

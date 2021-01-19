@@ -1,3 +1,5 @@
+@import '~apps/frontend/src/styles.scss';
+
 .account-wrapper {
   margin: 0 auto;
   text-align: center;
@@ -24,4 +26,30 @@
 .headers-align {
   width: 513px;
   display: inline-block;
+}
+
+.error-block {
+  padding: 12px;
+  font-size: 0.9em;
+  color: $warn-color;
+}
+
+.resend {
+  font-style: italic;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+}
+
+.confirmations {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+.verified {
+  display: flex;
+  margin: 0 auto;
+  text-align: center;
+  flex-direction: row;
+  width: max-content;
+  align-items: center;
 }

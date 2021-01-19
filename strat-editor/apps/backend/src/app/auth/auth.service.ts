@@ -5,7 +5,7 @@ import {
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService, JwtSignOptions } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 import {
   AuthInfos,
   JwtInfos,
@@ -18,15 +18,12 @@ import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
 import { Request } from 'express';
-import { environment } from '../../environments/environment.prod';
-import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
 
   constructor(
-    private readonly mailerService: MailerService,
     private userService: UserService,
     private readonly jwtService: JwtService
   ) {}
@@ -182,31 +179,6 @@ export class AuthService {
         }
       });
     }
-  }
-
-  public sendConfirmationMail(user: UserDocument): Promise<any> {
-    const signOptions: JwtSignOptions = {
-      expiresIn: '30m',
-    };
-    const payload = { mail: user.mail, uid: user.uid };
-    const token = this.jwtService.sign(payload, signOptions);
-    const link = environment.confirmationLink + token;
-    return this.mailerService
-      .sendMail({
-        to: user.mail, // list of receivers
-        from: 'contact@aboucipu.fr', // sender address
-        subject: 'Confirm your email', // Subject line
-        text: `Welcome to strat editor ${user.username} ! \n Please click on the following link to confirm your email address and start using Strat Editor.\n This link will expire in 30 minutes.\n ${link}`,
-        html: `<b>Welcome to strat editor ${user.username} !</b><br/>Please click on the following link to confirm your email address and start using Strat Editor.<br/>This link will expire in 30 minutes.<br/> <a href="${link}">${link}</a>`, // HTML body content
-      })
-      .then(() => {
-        this.logger.debug('Confirmation mail successfully sent');
-        Promise.resolve(user);
-      })
-      .catch((error) => {
-        this.logger.error('Error during confirmation mail sending');
-        throw new InternalServerErrorException();
-      });
   }
 
   public getUserIdFromCookies(request: Request) {

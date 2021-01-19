@@ -6,6 +6,8 @@ import * as Selectors from '../../../store/selectors';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserDto, UserInfos } from '@strat-editor/data';
 import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'strat-editor-register',
@@ -14,40 +16,25 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class RegisterComponent implements OnInit {
   httpError: HttpErrorResponse;
-  isAlreadyRegistered: boolean;
-  userInfos: UserInfos;
-  constructor(
-    private store: Store<StratEditorState>,
-    public matDialog: MatDialog
-  ) {}
+  $userInfos: Observable<UserInfos>;
+  public userInfos: UserInfos;
+  constructor(private store: Store<StratEditorState>, private router: Router) {}
 
   ngOnInit(): void {
     this.store.select(Selectors.getAuthError).subscribe((error) => {
       this.httpError = error;
     });
-    this.store.select(Selectors.getUserInfos).subscribe((userInfos) => {
-      this.isAlreadyRegistered = userInfos !== null;
+
+    this.$userInfos = this.store.select(Selectors.getUserInfos);
+    this.$userInfos.subscribe((userInfos) => {
       this.userInfos = userInfos;
-      // if (userInfos) {
-      //   const infoModalData: InfoModalData = {
-      //     title: 'Confirmation mail sent',
-      //     text:
-      //       'Please confirm your email by clicking on the link we sent you by email',
-      //   };
-      //   this.matDialog.open(InfoModalComponent, {
-      //     data: infoModalData,
-      //   });
-      // }
+      if (userInfos) {
+        this.router.navigateByUrl('/login');
+      }
     });
   }
 
   onRegister(userDto: UserDto) {
     this.store.dispatch(Actions.Register({ userDto }));
-  }
-
-  resendEmailLink() {
-    this.store.dispatch(
-      Actions.SendConfirmationEmail({ userInfos: this.userInfos })
-    );
   }
 }

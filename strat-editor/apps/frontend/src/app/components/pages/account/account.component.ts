@@ -33,4 +33,8 @@ export class AccountComponent implements OnInit {
   onMailChange(newMail: string) {
     this.store.dispatch(Actions.ChangeMail({ newMail }));
   }
+
+  resendEmailLink(userInfos: UserInfos) {
+    this.store.dispatch(Actions.SendConfirmationEmail({ userInfos }));
+  }
 }

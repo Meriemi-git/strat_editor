@@ -1,36 +1,6 @@
-<div class="register" *ngIf="!isAlreadyRegistered; else alreadyRegistered">
-  <strat-editor-register-form
-    (register)="onRegister($event)"
-    [httpError]="httpError"
-  ></strat-editor-register-form>
-</div>
-<ng-template #alreadyRegistered>
-  <div class="infos" *ngIf="userInfos.mailConfirmed; else confirmation">
-    <mat-icon>infos</mat-icon>
-    <p>You are already registered</p>
-  </div>
-  <ng-template #confirmation>
-    <div class="confirmations">
-      <h2>Mail confirmation pending</h2>
-      <p>
-        You need to confirm your email by clicking on the link send on your
-        email address.<br />If you haven't receive the mail you can re-send it
-        by clicking on the button below.
-      </p>
-      <br />
-      <p class="resend">
-        If you have not received the mail you can click on the button below to
-        re-send the email.
-      </p>
-      <button
-        color="primary"
-        mat-raised-button
-        class="submit-button"
-        (click)="resendEmailLink()"
-      >
-        Re-send
-      </button>
-      <p>{{ httpError.error.message }}</p>
-    </div>
-  </ng-template>
-</ng-template>
+<strat-editor-register-form
+  class="register"
+  *ngIf="!userInfos"
+  (register)="onRegister($event)"
+  [httpError]="httpError"
+></strat-editor-register-form>

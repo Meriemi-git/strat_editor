@@ -12,20 +12,9 @@ export class DrawingActionComponent {
   @Input() action: DrawerAction;
   @Output() actionSelected = new EventEmitter<DrawerAction>();
 
-  constructor(
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    public ihs: IconHelperService
-  ) {}
+  constructor() {}
 
-  ngOnInit(): void {
-    this.matIconRegistry.addSvgIcon(
-      this.action.name,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        this.ihs.getSvgIconByName(this.action.name)
-      )
-    );
-  }
+  ngOnInit(): void {}
 
   onClick() {
     this.actionSelected.emit(this.action);

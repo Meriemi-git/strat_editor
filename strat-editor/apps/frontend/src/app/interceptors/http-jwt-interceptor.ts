@@ -42,15 +42,12 @@ export class HttpJwtInterceptor implements HttpInterceptor {
               case 401:
                 return this.handle401Error(request, next);
               case 403:
-                console.log('disconnection');
                 this.store.dispatch(Actions.Disconnect());
                 break;
             }
           }
-          console.log('yolo1');
           throw error;
         } else {
-          console.log('yolo2');
           throw error;
         }
       })
@@ -63,18 +60,15 @@ export class HttpJwtInterceptor implements HttpInterceptor {
       this.refreshTokenSubject.next(null);
       return this.authService.refreshToken().pipe(
         switchMap((token: any) => {
-          console.log('isRefreshing false : ', token);
           this.isRefreshing = false;
           this.refreshTokenSubject.next(token);
           return next.handle(request.clone());
         }),
         catchError((err: HttpErrorResponse) => {
-          console.log('isRefreshing false error', err);
           return throwError(err);
         })
       );
     } else {
-      console.log('piping the request');
       return this.refreshTokenSubject.pipe(
         filter((token) => token != null),
         take(1),

@@ -1,9 +1,9 @@
 <div class="container">
   <button mat-icon-button (click)="onClick()">
-    <mat-icon
-      [svgIcon]="action.name"
+    <strat-editor-svg-icon
+      [name]="action.name"
       [ngClass]="{ active: action.active, inactive: !action.active }"
-    ></mat-icon>
+    ></strat-editor-svg-icon>
   </button>
   <div class="label">
     {{ action.label }}

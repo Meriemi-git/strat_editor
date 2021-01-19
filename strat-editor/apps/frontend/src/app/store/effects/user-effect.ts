@@ -67,4 +67,20 @@ export class UserEffect {
       )
     )
   );
+
+  sendConfirmationEmail$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(actions.SendConfirmationEmail),
+      mergeMap((action) =>
+        this.userService.sendConfirmationEmail(action.userInfos).pipe(
+          map((userInfos) => {
+            return actions.SendConfirmationEmailSuccess({ userInfos });
+          }),
+          catchError((error: HttpErrorResponse) => {
+            return of(actions.SendConfirmationEmailError({ error }));
+          })
+        )
+      )
+    )
+  );
 }

@@ -5,15 +5,38 @@
 
       <mat-tab-group mat-align-tabs="center">
         <mat-tab label="Overview">
-          <span>{{ userInfos.username }}</span>
+          <h2>Hello {{ userInfos.username | titlecase }} !</h2>
+          <span>Your mail : {{ userInfos.userMail }}</span>
           <br />
+          <div *ngIf="userInfos.mailConfirmed" class="verified">
+            <strat-editor-svg-icon [name]="'check'" [width]="'160px'">
+            </strat-editor-svg-icon>
+            Mail verified
+          </div>
           <br />
-          <span>{{ userInfos.userMail }}</span>
-          <br />
-          <br />
-          <span>Mail verified : {{ userInfos.mailConfirmed }}</span>
-          <br />
-          <br />
+          <mat-card class="confirmations" *ngIf="!userInfos.mailConfirmed">
+            <h3>Mail confirmation pending</h3>
+            <p>
+              You need to confirm your email by clicking on the link send on
+              your email address.
+            </p>
+            <br />
+            <p class="resend">
+              If you have not received the mail you can click on the button
+              below to re-send the email.
+            </p>
+            <div *ngIf="httpError" class="error-block">
+              {{ httpError.error.message }}
+            </div>
+            <button
+              color="primary"
+              mat-raised-button
+              class="submit-button"
+              (click)="resendEmailLink(userInfos)"
+            >
+              Re-send
+            </button>
+          </mat-card>
         </mat-tab>
         <mat-tab label="Security" class="secutity">
           <mat-accordion class="headers-align" hideToggle>

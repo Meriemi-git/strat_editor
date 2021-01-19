@@ -7,6 +7,9 @@ import { PasswordChangerModule } from '../../atoms/password-changer/password-cha
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MailChangerModule } from '../../atoms/mail-changer/mail-changer.module';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { SvgIconModule } from '../../atoms/svg-icon/svg-icon.module';
 @NgModule({
   declarations: [AccountComponent],
   imports: [
@@ -17,6 +20,9 @@ import { MailChangerModule } from '../../atoms/mail-changer/mail-changer.module'
     MatExpansionModule,
     MatIconModule,
     MailChangerModule,
+    MatCardModule,
+    MatButtonModule,
+    SvgIconModule,
   ],
 })
 export class AccountModule {}

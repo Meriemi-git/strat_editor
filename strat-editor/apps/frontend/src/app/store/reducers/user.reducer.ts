@@ -1,4 +1,4 @@
-import { UserInfos as userReducer } from '@strat-editor/data';
+import { UserInfos, UserInfos as userReducer } from '@strat-editor/data';
 import * as authActions from '../actions/auth.action';
 import * as userActions from '../actions/user.action';
 
@@ -6,7 +6,7 @@ import { createReducer, on, Action } from '@ngrx/store';
 import { HttpErrorResponse } from '@angular/common/http';
 
 export interface UserState {
-  userInfos: userReducer;
+  userInfos: UserInfos;
   error: HttpErrorResponse;
 }
 
@@ -57,15 +57,16 @@ const authReducer = createReducer(
     userInfos: null,
     error: error,
   })),
-  on(authActions.SendConfirmationEmail, (state, { userInfos }) => ({
+  on(userActions.SendConfirmationEmail, (state, { userInfos }) => ({
     ...state,
     error: null,
   })),
-  on(authActions.SendConfirmationEmailSuccess, (state) => ({
+  on(userActions.SendConfirmationEmailSuccess, (state, { userInfos }) => ({
     ...state,
+    userInfos: userInfos,
     error: null,
   })),
-  on(authActions.SendConfirmationEmailError, (state, { error }) => ({
+  on(userActions.SendConfirmationEmailError, (state, { error }) => ({
     ...state,
     error: error,
   })),
@@ -105,6 +106,19 @@ const authReducer = createReducer(
     error: null,
   })),
   on(userActions.RegisterError, (state, { error }) => ({
+    ...state,
+    error: error,
+  })),
+  on(userActions.GetUserInfos, (state) => ({
+    ...state,
+    error: null,
+  })),
+  on(userActions.GetUserInfosSuccess, (state, { userInfos }) => ({
+    ...state,
+    userInfos: userInfos,
+    error: null,
+  })),
+  on(userActions.GetUserInfosError, (state, { error }) => ({
     ...state,
     error: error,
   }))

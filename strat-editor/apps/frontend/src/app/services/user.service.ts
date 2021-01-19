@@ -102,4 +102,28 @@ export class UserService {
         })
       );
   }
+
+  public sendConfirmationEmail(userInfos: UserInfos): Observable<UserInfos> {
+    return this.http
+      .post<UserInfos>(
+        environment.apiUrl + this.controller + '/send-confirmation-mail',
+        userInfos
+      )
+      .pipe(
+        map((userInfos) => {
+          this.notificationService.displayNotification({
+            message: 'Confirmation mail sent !',
+            type: NotificationType.success,
+          });
+          return userInfos;
+        }),
+        catchError((err) => {
+          this.notificationService.displayNotification({
+            message: err.error.message,
+            type: NotificationType.error,
+          });
+          return throwError(err);
+        })
+      );
+  }
 }
