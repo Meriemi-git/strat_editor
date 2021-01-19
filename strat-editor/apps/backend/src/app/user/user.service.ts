@@ -90,7 +90,7 @@ export class UserService {
             return user
               .save()
               .then(() => {
-                return Promise.resolve();
+                return Promise.resolve(this.getUserInfos(user));
               })
               .catch(() => {
                 this.logger.error('Error during update password');
