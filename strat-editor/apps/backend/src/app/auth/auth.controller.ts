@@ -6,14 +6,11 @@ import {
   Post,
   Req,
   Res,
-  UseInterceptors,
 } from '@nestjs/common';
 import { AuthInfos, User, UserDto, UserInfos } from '@strat-editor/data';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { UserService } from '../user/user.service';
-import { RateLimit } from 'nestjs-rate-limiter';
-import { RateLimiterInterceptor } from 'nestjs-rate-limiter';
 
 @Controller('auth')
 export class AuthController {
@@ -51,37 +48,6 @@ export class AuthController {
         response.clearCookie('X-REFRESH-TOKEN');
         Promise.resolve(response.status(HttpStatus.FORBIDDEN).send());
       });
-  }
-
-  @Post('register')
-  public async register(
-    @Body() userDto: UserDto,
-    @Res() response: Response
-  ): Promise<UserInfos> {
-    return this.userService.addUser(userDto).then((createdUser) => {
-      this.authService.sendConfirmationMail(createdUser);
-      return this.authService.login(userDto).then((authInfos) => {
-        this.setAuthCookies(authInfos, response);
-        response.status(HttpStatus.OK).send(authInfos.userInfos);
-        return Promise.resolve(authInfos.userInfos);
-      });
-    });
-  }
-  @UseInterceptors(RateLimiterInterceptor)
-  @RateLimit({
-    keyPrefix: 'send-confirmation-mail',
-    points: 1,
-    duration: 300,
-    errorMessage:
-      'Confirmation mail cannot be sent more than once in per 5 minutes',
-  })
-  @Post('send-confirmation-mail')
-  public async sendConfirmationEmail(
-    @Body() mailUser: string,
-    @Res() response: Response
-  ): Promise<any> {
-    response.status(HttpStatus.OK).send();
-    return Promise.resolve();
   }
 
   @Post('confirm')

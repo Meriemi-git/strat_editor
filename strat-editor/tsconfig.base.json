@@ -15,6 +15,7 @@
     ],
     "lib": [
       "es2017",
+      "es2015",
       "dom",
       "dom.Iterable"
     ],
@@ -27,9 +28,6 @@
       ],
       "@strat-editor/drawer": [
         "libs/drawer/src/index.ts"
-      ],
-      "@strat-editor/test": [
-        "libs/test/src/index.ts"
       ],
       "@strat-editor/drawing-editor": [
         "libs/drawing-editor/src/index.ts"

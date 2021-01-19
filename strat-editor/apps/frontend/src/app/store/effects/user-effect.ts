@@ -51,4 +51,20 @@ export class UserEffect {
       )
     )
   );
+
+  register$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(actions.Register),
+      mergeMap((action) =>
+        this.userService.register(action.userDto).pipe(
+          map((userInfos) => {
+            return actions.RegisterSuccess({ userInfos });
+          }),
+          catchError((err: HttpErrorResponse) => {
+            return of(actions.RegisterError({ error: err }));
+          })
+        )
+      )
+    )
+  );
 }

@@ -39,22 +39,6 @@ export class AuthEffect {
     )
   );
 
-  register$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(actions.Register),
-      mergeMap((action) =>
-        this.authService.register(action.userDto).pipe(
-          map((userInfos) => {
-            return actions.RegisterSuccess({ userInfos });
-          }),
-          catchError((err: HttpErrorResponse) => {
-            return of(actions.RegisterError({ error: err }));
-          })
-        )
-      )
-    )
-  );
-
   sendConfirmationEmail$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.SendConfirmationEmail),

@@ -1,12 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import {
-  map,
-  catchError,
-  mergeMap,
-  withLatestFrom,
-  filter,
-} from 'rxjs/operators';
+import { map, catchError, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as actions from '../actions/agent.action';
 import { AgentService } from '../../services/agent.service';
@@ -17,11 +11,7 @@ import * as Selectors from '../selectors';
 
 @Injectable()
 export class AgentEffect {
-  constructor(
-    private actions$: Actions,
-    private agentService: AgentService,
-    private store: Store<StratEditorState>
-  ) {}
+  constructor(private actions$: Actions, private agentService: AgentService) {}
 
   fechagents$ = createEffect(() =>
     this.actions$.pipe(

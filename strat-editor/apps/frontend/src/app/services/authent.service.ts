@@ -49,33 +49,6 @@ export class AuthentService {
       );
   }
 
-  public register(userDto: UserDto): Observable<UserInfos> {
-    return this.http
-      .post<UserInfos>(
-        environment.apiUrl + this.controller + '/register',
-        userDto
-      )
-      .pipe(
-        map((userInfos) => {
-          this.notificationService.displayNotification({
-            message: 'You have register successfully',
-            type: NotificationType.success,
-          });
-          localStorage.setItem('userInfos', JSON.stringify(userInfos));
-          return userInfos;
-        }),
-        catchError((err) => {
-          {
-            this.notificationService.displayNotification({
-              message: 'Failed to register',
-              type: NotificationType.error,
-            });
-            return throwError(err);
-          }
-        })
-      );
-  }
-
   public confirmEmail(token: string) {
     return this.http
       .post<any>(environment.apiUrl + this.controller + '/confirm', { token })

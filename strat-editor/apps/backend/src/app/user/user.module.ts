@@ -9,6 +9,7 @@ import { RegisteredStrategy } from '../strategies/registered.strategy';
 
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
+import { RateLimiterModule } from 'nestjs-rate-limiter';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UserService } from './user.service';
     JwtModule.register({
       secret: jwtConstants.secret,
     }),
+    RateLimiterModule.register({}),
   ],
   controllers: [UserController],
   providers: [UserService, AuthService, ConfirmedStrategy, RegisteredStrategy],

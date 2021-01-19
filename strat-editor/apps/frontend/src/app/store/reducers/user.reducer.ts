@@ -30,19 +30,6 @@ const authReducer = createReducer(
     userInfos: null,
     error: error,
   })),
-  on(authActions.Register, (state) => ({
-    ...state,
-    error: null,
-  })),
-  on(authActions.RegisterSuccess, (state, { userInfos }) => ({
-    ...state,
-    userInfos: userInfos,
-    error: null,
-  })),
-  on(authActions.RegisterError, (state, { error }) => ({
-    ...state,
-    error: error,
-  })),
   on(authActions.Disconnect, (state) => ({
     ...state,
   })),
@@ -105,6 +92,19 @@ const authReducer = createReducer(
     error: null,
   })),
   on(userActions.ChangePasswordError, (state, { error }) => ({
+    ...state,
+    error: error,
+  })),
+  on(userActions.Register, (state) => ({
+    ...state,
+    error: null,
+  })),
+  on(userActions.RegisterSuccess, (state, { userInfos }) => ({
+    ...state,
+    userInfos: userInfos,
+    error: null,
+  })),
+  on(userActions.RegisterError, (state, { error }) => ({
     ...state,
     error: error,
   }))

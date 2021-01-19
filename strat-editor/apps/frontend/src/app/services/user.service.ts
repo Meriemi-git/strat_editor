@@ -6,6 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 import {
   NotificationType,
   PasswordChangeWrapper,
+  UserDto,
   UserInfos,
 } from '@strat-editor/data';
 import { NotificationService } from './notifications.service';
@@ -71,6 +72,33 @@ export class UserService {
             type: NotificationType.error,
           });
           return throwError(err);
+        })
+      );
+  }
+
+  public register(userDto: UserDto): Observable<UserInfos> {
+    return this.http
+      .post<UserInfos>(
+        environment.apiUrl + this.controller + '/register',
+        userDto
+      )
+      .pipe(
+        map((userInfos) => {
+          this.notificationService.displayNotification({
+            message: 'You have register successfully',
+            type: NotificationType.success,
+          });
+          localStorage.setItem('userInfos', JSON.stringify(userInfos));
+          return userInfos;
+        }),
+        catchError((err) => {
+          {
+            this.notificationService.displayNotification({
+              message: 'Failed to register',
+              type: NotificationType.error,
+            });
+            return throwError(err);
+          }
         })
       );
   }

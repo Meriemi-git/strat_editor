@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { createAction, props, union } from '@ngrx/store';
-import { PasswordChangeWrapper, UserInfos } from '@strat-editor/data';
+import { PasswordChangeWrapper, UserDto, UserInfos } from '@strat-editor/data';
 
 export const GetUserInfos = createAction(
   '[User] Get User infos',
@@ -43,5 +43,20 @@ export const ChangeMailSuccess = createAction(
 
 export const ChangeMailError = createAction(
   '[User] Change Mail error',
+  props<{ error: HttpErrorResponse }>()
+);
+
+export const Register = createAction(
+  '[User] Register',
+  props<{ userDto: UserDto }>()
+);
+
+export const RegisterSuccess = createAction(
+  '[User] Register Success',
+  props<{ userInfos: UserInfos }>()
+);
+
+export const RegisterError = createAction(
+  '[User] Register Error',
   props<{ error: HttpErrorResponse }>()
 );
