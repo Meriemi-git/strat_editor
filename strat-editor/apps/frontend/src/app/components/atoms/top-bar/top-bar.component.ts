@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { User } from '@strat-editor/data';
-import { AccountPanelComponent } from '../../molecules/account-panel/account-panel.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'strat-editor-top-bar',
@@ -10,9 +8,24 @@ import { AccountPanelComponent } from '../../molecules/account-panel/account-pan
 })
 export class TopBarComponent {
   @Input() username: string;
-  @Output() accountButtonClick = new EventEmitter<void>();
-  constructor() {}
-  onButtonClick() {
-    this.accountButtonClick.emit();
+  @Output() disconnect = new EventEmitter<void>();
+  constructor(private router: Router) {}
+  onAccountClick() {
+    this.router.navigateByUrl('/account');
+  }
+  onDisconnectClick() {
+    this.disconnect.emit();
+  }
+
+  onLoginClick() {
+    this.router.navigateByUrl('/login');
+  }
+
+  onRegisterClick() {
+    this.router.navigateByUrl('/register');
+  }
+
+  onHomeClick() {
+    this.router.navigateByUrl('/');
   }
 }

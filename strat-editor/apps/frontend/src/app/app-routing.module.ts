@@ -37,6 +37,13 @@ const routes: Routes = [
         (mod) => mod.RegisterModule
       ),
   },
+  {
+    path: 'login',
+    loadChildren: () =>
+      import('./components/pages/login/login.module').then(
+        (mod) => mod.LoginModule
+      ),
+  },
 ];
 
 @NgModule({

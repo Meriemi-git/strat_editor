@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { PasswordChangeWrapper, UserDto, UserInfos } from '@strat-editor/data';
+import { NotificationType, UserDto, UserInfos } from '@strat-editor/data';
 import { environment } from '../../environments/environment';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, timeout } from 'rxjs/operators';
+import { NotificationService } from './notifications.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,10 @@ import { catchError, map, timeout } from 'rxjs/operators';
 export class AuthentService {
   private controller = 'auth';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notificationService: NotificationService
+  ) {}
 
   public login(userDto: UserDto): Observable<UserInfos> {
     return this.http
@@ -19,9 +23,17 @@ export class AuthentService {
       .pipe(
         map((userInfos) => {
           localStorage.setItem('userInfos', JSON.stringify(userInfos));
+          this.notificationService.displayNotification({
+            message: 'You are logged in !',
+            type: NotificationType.success,
+          });
           return userInfos;
         }),
         catchError((err) => {
+          this.notificationService.displayNotification({
+            message: 'Error during login',
+            type: NotificationType.error,
+          });
           return throwError(err);
         })
       );
@@ -32,7 +44,6 @@ export class AuthentService {
       .pipe(
         timeout(2000),
         catchError((err) => {
-          console.log('Error refresh');
           return throwError(err);
         })
       );
@@ -46,11 +57,19 @@ export class AuthentService {
       )
       .pipe(
         map((userInfos) => {
+          this.notificationService.displayNotification({
+            message: 'You have register successfully',
+            type: NotificationType.success,
+          });
           localStorage.setItem('userInfos', JSON.stringify(userInfos));
           return userInfos;
         }),
         catchError((err) => {
           {
+            this.notificationService.displayNotification({
+              message: 'Failed to register',
+              type: NotificationType.error,
+            });
             return throwError(err);
           }
         })
@@ -76,8 +95,17 @@ export class AuthentService {
         }
       )
       .pipe(
+        map(() => {
+          this.notificationService.displayNotification({
+            message: 'Confirmation mail sent !',
+            type: NotificationType.success,
+          });
+        }),
         catchError((err) => {
-          console.log('in service err', err);
+          this.notificationService.displayNotification({
+            message: 'Error during confirmation mail sending',
+            type: NotificationType.error,
+          });
           return throwError(err);
         })
       );
@@ -88,6 +116,12 @@ export class AuthentService {
     return this.http
       .get(environment.apiUrl + this.controller + '/disconnect')
       .pipe(
+        map(() => {
+          this.notificationService.displayNotification({
+            message: 'You are disconnected',
+            type: NotificationType.success,
+          });
+        }),
         catchError((err) => {
           return throwError(err);
         })

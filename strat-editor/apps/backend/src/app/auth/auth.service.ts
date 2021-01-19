@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
@@ -22,6 +23,8 @@ import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly mailerService: MailerService,
     private userService: UserService,
@@ -31,6 +34,7 @@ export class AuthService {
   public async login(userDto: UserDto): Promise<AuthInfos> {
     return this.validateUser(userDto).then((user) => {
       if (!user) {
+        this.logger.debug('User was not validated');
         throw new UnauthorizedException();
       }
       return this.generateTokenAndRefreshToken(user);
@@ -49,12 +53,20 @@ export class AuthService {
                 if (matching) {
                   resolve(matchingUser);
                 } else {
+                  this.logger.debug("Passwords doesn't match");
                   reject(new UnauthorizedException('Wrong credentials'));
                 }
+              })
+              .catch((error) => {
+                reject(error);
               });
           } else {
+            this.logger.debug('User was not found for this mail');
             reject(new UnauthorizedException('Wrong credentials'));
           }
+        })
+        .catch((error) => {
+          return error;
         });
     });
   }
@@ -63,6 +75,7 @@ export class AuthService {
     const xAuthToken = request.cookies['X-AUTH-TOKEN'];
     const xRefreshToken = request.cookies['X-REFRESH-TOKEN'];
     if (!this.tokensWasPaired(xAuthToken, xRefreshToken)) {
+      this.logger.debug('Tokens were not paired');
       throw new BadRequestException('Tokens are invalid');
     }
     try {
@@ -96,6 +109,7 @@ export class AuthService {
       const refreshToken = this.jwtService.decode(xRefreshToken);
       return authToken['jti'] === refreshToken['jti'];
     } catch (error) {
+      this.logger.debug('Tokens were invalid');
       return false;
     }
   }
@@ -152,10 +166,8 @@ export class AuthService {
       .updateRefreshToken(user._id, refreshTokenEncrypted)
       .then(() => Promise.resolve(refreshTokenEncrypted))
       .catch((error) => {
-        console.log('Cannot update refresh token', error);
-        throw new InternalServerErrorException(
-          'Cannot update refresh token : '
-        );
+        this.logger.error('Cannot update refresh token');
+        throw new InternalServerErrorException();
       });
   }
 
@@ -188,15 +200,12 @@ export class AuthService {
         html: `<b>Welcome to strat editor ${user.username} !</b><br/>Please click on the following link to confirm your email address and start using Strat Editor.<br/>This link will expire in 30 minutes.<br/> <a href="${link}">${link}</a>`, // HTML body content
       })
       .then(() => {
+        this.logger.debug('Confirmation mail successfully sent');
         Promise.resolve(user);
       })
       .catch((error) => {
-        Promise.reject(
-          new InternalServerErrorException(
-            'Error when sending confirmation mail'
-          )
-        );
-        console.log(error);
+        this.logger.error('Error during confirmation mail sending');
+        throw new InternalServerErrorException();
       });
   }
 
@@ -206,6 +215,7 @@ export class AuthService {
       const jwtInfos = this.jwtService.decode(xAuthToken);
       return jwtInfos['userId'];
     } catch (error) {
+      this.logger.debug('Error in getUserIdFromCookies');
       return null;
     }
   }

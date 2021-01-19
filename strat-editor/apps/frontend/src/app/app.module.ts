@@ -21,8 +21,7 @@ import { LeftPanelModule } from './components/molecules/left-panel/left-panel.mo
 import { RightPanelModule } from './components/molecules/right-panel/right-panel.module';
 import { AppInitService } from './services/app-init.service';
 import { HttpJwtInterceptor } from './interceptors/http-jwt-interceptor';
-import { InfoModalComponent } from './components/modals/info-modal/info-modal.component';
-import { InfoModalModule } from './components/modals/info-modal/info-modal.module';
+import { ToastrModule } from 'ngx-toastr';
 
 export function init_app(appInitService: AppInitService) {
   return () => appInitService.initializeApp();
@@ -47,6 +46,12 @@ export function init_app(appInitService: AppInitService) {
     }),
     EffectsModule.forRoot(effects),
     HttpClientXsrfModule.withOptions(),
+    ToastrModule.forRoot({
+      maxOpened: 2,
+      newestOnTop: true,
+      positionClass: 'toast-bottom-center',
+      preventDuplicates: true,
+    }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HttpJwtInterceptor, multi: true },

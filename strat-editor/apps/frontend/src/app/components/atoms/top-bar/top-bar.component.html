@@ -1,20 +1,26 @@
 <mat-toolbar class="toolbar" color="primary">
-  <button
-    mat-icon-button
-    class="example-icon"
-    aria-label="Example icon-button with menu icon"
-  >
-    <mat-icon>menu</mat-icon>
+  <button mat-icon-button (click)="onHomeClick()">
+    <mat-icon>home</mat-icon>
   </button>
   <span>Strat Editor</span>
   <span class="filler"></span>
   <span class="example-spacer">{{ username | titlecase }}</span>
+  <mat-chip-list *ngIf="!username">
+    <mat-chip color="accent" (click)="onLoginClick()">Login</mat-chip>
+    <span class="choice">or</span>
+    <mat-chip color="primary" (click)="onRegisterClick()">Register</mat-chip>
+  </mat-chip-list>
   <button
+    *ngIf="username"
     mat-icon-button
     class="example-icon"
-    (click)="onButtonClick()"
     aria-label="Example icon-button with account_circle icon"
+    [matMenuTriggerFor]="accountMenu"
   >
     <mat-icon>account_circle</mat-icon>
   </button>
+  <mat-menu #accountMenu="matMenu" xPosition="before">
+    <button mat-menu-item (click)="onAccountClick()">Account</button>
+    <button mat-menu-item (click)="onDisconnectClick()">Disconnect</button>
+  </mat-menu>
 </mat-toolbar>

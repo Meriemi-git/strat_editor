@@ -25,7 +25,10 @@
               "apps/frontend/src/favicon.ico",
               "apps/frontend/src/assets"
             ],
-            "styles": ["apps/frontend/src/styles.scss"],
+            "styles": [
+              "apps/frontend/src/styles.scss",
+              "node_modules/ngx-toastr/toastr.css"
+            ],
             "scripts": ["node_modules/jquery/dist/jquery.min.js"],
             "allowedCommonJsDependencies": ["fabric"]
           },

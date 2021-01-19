@@ -11,7 +11,6 @@ import { UserDto } from '@strat-editor/data';
 export class LoginFormComponent implements OnInit {
   @Input() httpError: HttpErrorResponse;
   @Output() logIn = new EventEmitter<UserDto>();
-  @Output() displayRegisterForm = new EventEmitter<void>();
 
   public authForm = this.formBuilder.group({
     mail: new FormControl('', [Validators.required, Validators.email]),
@@ -32,10 +31,6 @@ export class LoginFormComponent implements OnInit {
       this.logIn.emit(userDto);
       this.isSubmitted = false;
     }
-  }
-
-  onDisplayRegisterForm() {
-    this.displayRegisterForm.emit();
   }
 
   get formControls() {

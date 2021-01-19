@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map, catchError, mergeMap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import * as actions from '../actions/auth.action';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthentService } from '../../services/authent.service';
@@ -16,9 +16,10 @@ export class AuthEffect {
       mergeMap((action) =>
         this.authService.login(action.userDto).pipe(
           map((userInfos) => actions.LogInSuccess({ userInfos })),
-          catchError((err: HttpErrorResponse) =>
-            of(actions.LogInError({ error: err }))
-          )
+          catchError((err) => {
+            console.log('In effect error');
+            return of(actions.LogInError({ error: err }));
+          })
         )
       )
     )

@@ -3,16 +3,12 @@ import { Store } from '@ngrx/store';
 import { UserInfos } from '@strat-editor/data';
 import { StratEditorState } from '../store/reducers';
 import * as Actions from '../store/actions';
-import { AuthentService } from './authent.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppInitService {
-  constructor(
-    private store: Store<StratEditorState>,
-    private authentService: AuthentService
-  ) {}
+  constructor(private store: Store<StratEditorState>) {}
 
   public initializeApp(): void {
     const userInfos: UserInfos = JSON.parse(localStorage.getItem('userInfos'));

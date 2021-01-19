@@ -41,13 +41,14 @@ export class HttpJwtInterceptor implements HttpInterceptor {
             switch (error.status) {
               case 401:
                 return this.handle401Error(request, next);
-                break;
               case 403:
                 this.store.dispatch(Actions.Disconnect());
                 break;
             }
           }
-          return throwError(error);
+          throw error;
+        } else {
+          throw error;
         }
       })
     );

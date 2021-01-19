@@ -4,6 +4,7 @@ import {
   ForbiddenException,
   Injectable,
   InternalServerErrorException,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -22,6 +23,8 @@ import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
+
   constructor(
     @InjectModel('User') private userModel: Model<UserDocument>,
     private readonly jwtService: JwtService
@@ -40,9 +43,8 @@ export class UserService {
     xRefreshToken: string,
     passwords: PasswordChangeWrapper
   ): Promise<any> {
-    console.log('in change password');
     const authToken = this.jwtService.decode(xAuthToken);
-
+    this.logger.debug('Changing password');
     return this.userModel
       .findOne({ _id: authToken['userId'], refreshToken: xRefreshToken })
       .then((user) => {
@@ -51,7 +53,7 @@ export class UserService {
             .compare(passwords.oldPassword, user.password)
             .then((matching) => {
               if (matching) {
-                console.log('password match');
+                this.logger.debug('Passwords match');
                 user.password = passwords.newPassword;
                 return user
                   .save()
@@ -59,16 +61,16 @@ export class UserService {
                     return Promise.resolve();
                   })
                   .catch(() => {
-                    console.log('Error during update');
+                    this.logger.error("'Error during update password");
                     throw new InternalServerErrorException();
                   });
               } else {
-                console.log("Password doesn't match");
+                this.logger.debug("Passwords doesn't match");
                 throw new UnauthorizedException();
               }
             });
         } else {
-          console.log('USer not founded');
+          this.logger.debug('User not founded');
           throw new ForbiddenException();
         }
       });
@@ -87,17 +89,20 @@ export class UserService {
     return new Promise<UserDocument>((resolve, reject) => {
       this.findByMail(userDto.mail).then((existing) => {
         if (existing) {
-          reject(new ConflictException('User already exists'));
+          this.logger.debug('Mail already registered');
+          throw new ConflictException('Mail already registered');
         } else {
           const createdUser = new this.userModel(userDto);
           createdUser.uid = v4();
           createdUser
             .save()
             .then(() => {
+              this.logger.debug(`Add user with mail ${createdUser.mail}`);
               resolve(createdUser);
             })
             .catch((error) => {
-              reject(new InternalServerErrorException());
+              this.logger.debug(`Error when saving user`);
+              throw new InternalServerErrorException();
             });
         }
       });

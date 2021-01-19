@@ -24,11 +24,16 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() userDto: UserDto, @Res() response): Promise<UserInfos> {
-    return this.authService.login(userDto).then((authInfos) => {
-      this.setAuthCookies(authInfos, response);
-      response.status(HttpStatus.OK).send(authInfos.userInfos);
-      return Promise.resolve(authInfos.userInfos);
-    });
+    return this.authService
+      .login(userDto)
+      .then((authInfos) => {
+        this.setAuthCookies(authInfos, response);
+        response.status(HttpStatus.OK).send(authInfos.userInfos);
+        return Promise.resolve(authInfos.userInfos);
+      })
+      .catch((error) => {
+        throw error;
+      });
   }
 
   @Get('refresh')

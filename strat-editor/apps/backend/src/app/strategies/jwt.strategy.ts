@@ -2,6 +2,7 @@ import { Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import {
   Injectable,
+  Logger,
   PreconditionFailedException,
   Req,
   UnauthorizedException,
@@ -12,6 +13,8 @@ import { JwtInfos, User } from '@strat-editor/data';
 import { Request } from 'express';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
+  private readonly logger = new Logger(JwtStrategy.name);
+
   constructor(private userService: UserService) {
     super({
       jwtFromRequest: JwtStrategy.cookieExtractor,
@@ -21,26 +24,27 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtInfos): Promise<User> {
-    console.log('in jwt validate');
+    this.logger.debug('User token validation');
     return this.userService
       .verifyToken(payload)
       .then((user) => {
         if (user) {
           if (user.confirmed) {
+            this.logger.debug('User pass jwtStrategy');
             return Promise.resolve(user);
           } else {
-            console.log('confirm your mail');
+            this.logger.debug('Account not verified');
             throw new PreconditionFailedException(
               'Please confirm your email first'
             );
           }
         } else {
-          console.log('Unknown user');
+          this.logger.debug('Unknown user');
           throw new UnauthorizedException();
         }
       })
       .catch((error) => {
-        console.log('Error inbside verifyToken');
+        this.logger.error('Erro from verify token');
         throw error;
       });
   }

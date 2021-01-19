@@ -4,6 +4,7 @@ import { StratEditorState } from './store/reducers';
 import * as Actions from './store/actions';
 import * as Selectors from './store/selectors';
 import { take } from 'rxjs/operators';
+
 @Component({
   selector: 'strat-editor-root',
   templateUrl: './app.component.html',
@@ -29,8 +30,8 @@ export class AppComponent implements OnInit {
     });
   }
 
-  onAccountButtonClicked() {
-    this.store.dispatch(Actions.showAccountPanel());
+  onDisconnect() {
+    this.store.dispatch(Actions.Disconnect());
   }
 
   onCloseLeftSidenav() {

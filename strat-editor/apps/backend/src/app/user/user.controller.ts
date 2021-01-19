@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  Logger,
   Param,
   Post,
   Req,
@@ -18,6 +19,8 @@ import { RateLimit } from 'nestjs-rate-limiter';
 
 @Controller('user')
 export class UserController {
+  private readonly logger = new Logger(UserController.name);
+
   constructor(
     private readonly userService: UserService,
     private authService: AuthService
@@ -30,8 +33,10 @@ export class UserController {
     @Req() request: Request,
     @Res() response: Response
   ): Promise<any> {
+    this.logger.debug('/user-infos');
     const actualUserId: string = this.authService.getUserIdFromCookies(request);
     if (actualUserId != params.userId) {
+      this.logger.debug('User damanding does not match user from cookie');
       Promise.resolve(response.status(HttpStatus.FORBIDDEN).send());
     } else {
       return this.userService.findUserById(params.userId).then((user) => {
@@ -52,6 +57,7 @@ export class UserController {
     duration: 300,
     errorMessage: 'Password cannot be changed more than once in per 5 minutes',
   })
+  @UseGuards(JwtAuthGuard)
   @Post('change-password')
   public async chnagePassword(
     @Body() passwords: PasswordChangeWrapper,

@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { catchError, map } from 'rxjs/operators';
-import { PasswordChangeWrapper, UserInfos } from '@strat-editor/data';
+import {
+  NotificationType,
+  PasswordChangeWrapper,
+  UserInfos,
+} from '@strat-editor/data';
+import { NotificationService } from './notifications.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +16,10 @@ import { PasswordChangeWrapper, UserInfos } from '@strat-editor/data';
 export class UserService {
   private controller = 'user';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notificationService: NotificationService
+  ) {}
 
   getUserInfos(userId: string) {
     return this.http
@@ -32,6 +40,12 @@ export class UserService {
         passwords
       )
       .pipe(
+        map(() => {
+          this.notificationService.displayNotification({
+            message: 'Password successfully changed !',
+            type: NotificationType.success,
+          });
+        }),
         catchError((err) => {
           return throwError(err);
         })

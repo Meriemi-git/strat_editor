@@ -1,0 +1,7 @@
+<div class="login" *ngIf="!($userInfos | async)">
+  <strat-editor-login-form
+    (logIn)="onLogin($event)"
+    (displayRegisterForm)="onDisplayRegisterForm()"
+    [httpError]="httpError"
+  ></strat-editor-login-form>
+</div>

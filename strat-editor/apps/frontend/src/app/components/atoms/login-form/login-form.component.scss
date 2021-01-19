@@ -1,10 +1,10 @@
 @import '~apps/frontend/src/styles.scss';
 
-.login,
-.disconnect {
+.login {
   width: 300px;
   margin: 16px auto;
   font-size: 16px;
+  text-align: center;
 }
 
 .login input {
