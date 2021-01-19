@@ -17,3 +17,12 @@
   justify-content: space-around;
   margin: 0 auto;
 }
+
+.has-error input {
+  border-color: $warn-lighter-color;
+}
+
+.help-block {
+  font-size: 0.8em;
+  color: $warn-lighter-color;
+}

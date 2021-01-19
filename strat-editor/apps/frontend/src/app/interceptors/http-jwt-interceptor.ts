@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthentService } from '../services/authent.service';
 import { StratEditorState } from '../store/reducers';
@@ -42,12 +42,15 @@ export class HttpJwtInterceptor implements HttpInterceptor {
               case 401:
                 return this.handle401Error(request, next);
               case 403:
+                console.log('disconnection');
                 this.store.dispatch(Actions.Disconnect());
                 break;
             }
           }
+          console.log('yolo1');
           throw error;
         } else {
+          console.log('yolo2');
           throw error;
         }
       })
@@ -66,6 +69,7 @@ export class HttpJwtInterceptor implements HttpInterceptor {
           return next.handle(request.clone());
         }),
         catchError((err: HttpErrorResponse) => {
+          console.log('isRefreshing false error', err);
           return throwError(err);
         })
       );

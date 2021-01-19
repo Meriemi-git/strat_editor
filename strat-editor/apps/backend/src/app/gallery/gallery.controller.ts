@@ -9,18 +9,19 @@ import {
 import { GalleryService } from './gallery.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('gallery')
 export class GalleryController {
   constructor(private readonly galleryService: GalleryService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('ConfirmedStrategy'))
   @Post('images')
   allImages(@Body() userId): Promise<string[]> {
     return this.galleryService.getAllImagesForUser(userId);
   }
 
-  //@UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('ConfirmedStrategy'))
   @Post('upload')
   @UseInterceptors(FileInterceptor('file', { dest: './uploads' }))
   uploadFile(@UploadedFile() file) {

@@ -23,7 +23,8 @@ export class MailChangerComponent implements OnInit {
 
   onSubmit() {
     this.isSubmitted = true;
-    this.mailChange.emit(this.mailForm.get('mail').value);
+    if (this.mailForm.valid)
+      this.mailChange.emit(this.mailForm.get('mail').value);
   }
 
   get formControls() {

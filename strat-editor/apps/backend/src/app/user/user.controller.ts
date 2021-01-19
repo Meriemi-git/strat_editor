@@ -27,7 +27,7 @@ export class UserController {
     private authService: AuthService
   ) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('RegisteredStrategy'))
   @Get('user-infos/:userId')
   public async details(
     @Param() params,
@@ -58,7 +58,7 @@ export class UserController {
     duration: 300,
     errorMessage: 'Password cannot be changed more than once in per 5 minutes',
   })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('RegisteredStrategy'))
   @Post('change-password')
   public async changePassword(
     @Body() passwords: PasswordChangeWrapper,
