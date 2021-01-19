@@ -66,8 +66,7 @@ export class HttpJwtInterceptor implements HttpInterceptor {
           return next.handle(request.clone());
         }),
         catchError((err: HttpErrorResponse) => {
-          console.log('err :', err);
-          return of(err);
+          return throwError(err);
         })
       );
     } else {
@@ -79,11 +78,10 @@ export class HttpJwtInterceptor implements HttpInterceptor {
           return next.handle(request.clone());
         }),
         catchError((error) => {
-          console.log('unsubscribe');
           this.refreshTokenSubject.unsubscribe();
           this.refreshTokenSubject = new BehaviorSubject<any>(null);
           this.isRefreshing = false;
-          return of(error);
+          throw throwError(error);
         })
       );
     }

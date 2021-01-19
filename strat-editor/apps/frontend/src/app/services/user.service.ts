@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { catchError, map } from 'rxjs/operators';
 import {
@@ -21,7 +21,7 @@ export class UserService {
     private notificationService: NotificationService
   ) {}
 
-  getUserInfos(userId: string) {
+  public getUserInfos(userId: string) {
     return this.http
       .get<UserInfos>(
         environment.apiUrl + this.controller + `/user-infos/${userId}`
@@ -47,6 +47,29 @@ export class UserService {
           });
         }),
         catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
+
+  public changeMail(newMail: string): Observable<UserInfos> {
+    return this.http
+      .post<UserInfos>(environment.apiUrl + this.controller + '/change-mail', {
+        newMail,
+      })
+      .pipe(
+        map((userInfos) => {
+          this.notificationService.displayNotification({
+            message: 'Mail successfully changed !',
+            type: NotificationType.success,
+          });
+          return userInfos;
+        }),
+        catchError((err) => {
+          this.notificationService.displayNotification({
+            message: 'Mail change error !',
+            type: NotificationType.error,
+          });
           return throwError(err);
         })
       );

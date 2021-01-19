@@ -18,15 +18,30 @@ export const GetUserInfosError = createAction(
 );
 
 export const ChangePassword = createAction(
-  '[Auth] Change Password',
+  '[User] Change Password',
   props<{ passwords: PasswordChangeWrapper }>()
 );
 
 export const ChangePasswordSuccess = createAction(
-  '[Auth] Change Password success'
+  '[User] Change Password success'
 );
 
 export const ChangePasswordError = createAction(
-  '[Auth] Change Password error',
+  '[User] Change Password error',
+  props<{ error: HttpErrorResponse }>()
+);
+
+export const ChangeMail = createAction(
+  '[User] Change Mail',
+  props<{ newMail: string }>()
+);
+
+export const ChangeMailSuccess = createAction(
+  '[User] Change Mail success',
+  props<{ userInfos: UserInfos }>()
+);
+
+export const ChangeMailError = createAction(
+  '[User] Change Mail error',
   props<{ error: HttpErrorResponse }>()
 );

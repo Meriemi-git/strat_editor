@@ -10,6 +10,7 @@ import { GalleryModule } from './gallery/gallery.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { AuthModule } from './auth/auth.module';
 import { RateLimiterModule } from 'nestjs-rate-limiter';
+
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/strat-editor', {

@@ -20,9 +20,12 @@ async function bootstrap() {
 
   app.enableCors();
   app.use(cookieParser());
+
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
+
   const port = process.env.PORT || 3333;
+
   const csrfProtection = csurf({
     cookie: true,
   });
@@ -38,7 +41,6 @@ async function bootstrap() {
   app.use(function (err, req: Request, res: Response, next) {
     if (err.code !== 'EBADCSRFTOKEN') return next(err);
     console.log('XSRF Error cookies:', req.cookies);
-    // handle CSRF token errors here
     res.status(403);
     res.send('XSRF Error');
   });

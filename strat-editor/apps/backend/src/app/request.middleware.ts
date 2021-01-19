@@ -4,7 +4,6 @@ import { Response, Request, NextFunction } from 'express';
 @Injectable()
 export class RequestMiddleware implements NestMiddleware {
   use(@Req() req: Request, res: Response, next: NextFunction) {
-    console.log('Request Path', req.originalUrl);
     next();
   }
 }

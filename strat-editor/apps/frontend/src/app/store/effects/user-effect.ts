@@ -37,4 +37,18 @@ export class UserEffect {
       )
     )
   );
+
+  changeMail$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(actions.ChangeMail),
+      mergeMap((action) =>
+        this.userService.changeMail(action.newMail).pipe(
+          map((userInfos) => actions.ChangeMailSuccess({ userInfos })),
+          catchError((error: HttpErrorResponse) =>
+            of(actions.ChangeMailError({ error }))
+          )
+        )
+      )
+    )
+  );
 }

@@ -16,6 +16,7 @@ import { Response, Request } from 'express';
 import { AuthService } from '../auth/auth.service';
 import { PasswordChangeWrapper } from '@strat-editor/data';
 import { RateLimit } from 'nestjs-rate-limiter';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
 export class UserController {
@@ -36,7 +37,7 @@ export class UserController {
     this.logger.debug('/user-infos');
     const actualUserId: string = this.authService.getUserIdFromCookies(request);
     if (actualUserId != params.userId) {
-      this.logger.debug('User damanding does not match user from cookie');
+      this.logger.debug('User demanding does not match user from cookie');
       Promise.resolve(response.status(HttpStatus.FORBIDDEN).send());
     } else {
       return this.userService.findUserById(params.userId).then((user) => {
@@ -59,7 +60,7 @@ export class UserController {
   })
   @UseGuards(JwtAuthGuard)
   @Post('change-password')
-  public async chnagePassword(
+  public async changePassword(
     @Body() passwords: PasswordChangeWrapper,
     @Req() request: Request
   ): Promise<any> {
@@ -67,6 +68,24 @@ export class UserController {
     const xAuthToken = request.cookies['X-AUTH-TOKEN'];
     return this.userService
       .changePassword(xAuthToken, xRefreshToken, passwords)
+      .catch((error) => {
+        throw error;
+      });
+  }
+
+  @RateLimit({
+    keyPrefix: 'change-mail',
+    points: 1,
+    duration: 300,
+    errorMessage: 'Mail cannot be changed more than once in per 5 minutes',
+  })
+  @UseGuards(AuthGuard('RegisteredStrategy'))
+  @Post('change-mail')
+  public async changeMail(@Body() data, @Req() request: Request): Promise<any> {
+    const xRefreshToken = request.cookies['X-REFRESH-TOKEN'];
+    const xAuthToken = request.cookies['X-AUTH-TOKEN'];
+    return this.userService
+      .changeMail(xAuthToken, xRefreshToken, data.newMail)
       .catch((error) => {
         throw error;
       });

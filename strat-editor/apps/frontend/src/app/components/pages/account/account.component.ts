@@ -30,5 +30,7 @@ export class AccountComponent implements OnInit {
     this.store.dispatch(Actions.ChangePassword({ passwords }));
   }
 
-  onMailChange(newMail: string) {}
+  onMailChange(newMail: string) {
+    this.store.dispatch(Actions.ChangeMail({ newMail }));
+  }
 }

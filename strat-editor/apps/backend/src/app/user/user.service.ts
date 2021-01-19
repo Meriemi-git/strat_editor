@@ -44,7 +44,6 @@ export class UserService {
     passwords: PasswordChangeWrapper
   ): Promise<any> {
     const authToken = this.jwtService.decode(xAuthToken);
-    this.logger.debug('Changing password');
     return this.userModel
       .findOne({ _id: authToken['userId'], refreshToken: xRefreshToken })
       .then((user) => {
@@ -71,6 +70,40 @@ export class UserService {
             });
         } else {
           this.logger.debug('User not founded');
+          throw new ForbiddenException();
+        }
+      });
+  }
+
+  public changeMail(xAuthToken: any, xRefreshToken: any, newMail: string) {
+    const authToken = this.jwtService.decode(xAuthToken);
+    return this.userModel
+      .findOne({
+        _id: authToken['userId'],
+        refreshToken: xRefreshToken,
+      })
+      .then((user) => {
+        if (user) {
+          if (user.mail !== newMail) {
+            user.mail = newMail;
+            user.confirmed = false;
+            return user
+              .save()
+              .then(() => {
+                return Promise.resolve();
+              })
+              .catch(() => {
+                this.logger.error('Error during update password');
+                throw new InternalServerErrorException();
+              });
+          } else {
+            this.logger.debug('Mail is not different');
+            throw new ForbiddenException(
+              'You must choose a different email address'
+            );
+          }
+        } else {
+          this.logger.debug('User not found');
           throw new ForbiddenException();
         }
       });

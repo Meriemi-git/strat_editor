@@ -11,13 +11,17 @@ import { jwtConstants } from './constants';
 import { UserService } from '../user/user.service';
 import { JwtInfos, User } from '@strat-editor/data';
 import { Request } from 'express';
+
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
-  private readonly logger = new Logger(JwtStrategy.name);
+export class ConfirmedStrategy extends PassportStrategy(
+  Strategy,
+  'ConfirmedStrategy'
+) {
+  private readonly logger = new Logger(ConfirmedStrategy.name);
 
   constructor(private userService: UserService) {
     super({
-      jwtFromRequest: JwtStrategy.cookieExtractor,
+      jwtFromRequest: ConfirmedStrategy.cookieExtractor,
       ignoreExpiration: false,
       secretOrKey: jwtConstants.secret,
     });
@@ -30,7 +34,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       .then((user) => {
         if (user) {
           if (user.confirmed) {
-            this.logger.debug('User pass jwtStrategy');
+            this.logger.debug('User pass ConfirmedStrategy');
             return Promise.resolve(user);
           } else {
             this.logger.debug('Account not verified');
@@ -44,7 +48,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         }
       })
       .catch((error) => {
-        this.logger.error('Erro from verify token');
+        this.logger.error('Error from verify token');
         throw error;
       });
   }

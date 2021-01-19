@@ -1,5 +1,7 @@
 import { UserInfos as userReducer } from '@strat-editor/data';
-import * as actions from '../actions/auth.action';
+import * as authActions from '../actions/auth.action';
+import * as userActions from '../actions/user.action';
+
 import { createReducer, on, Action } from '@ngrx/store';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -15,68 +17,94 @@ export const initialstate: UserState = {
 
 const authReducer = createReducer(
   initialstate,
-  on(actions.LogIn, (state) => ({
+  on(authActions.LogIn, (state) => ({
     ...state,
     error: null,
   })),
-  on(actions.LogInSuccess, (state, { userInfos }) => ({
+  on(authActions.LogInSuccess, (state, { userInfos }) => ({
     ...state,
     userInfos: userInfos,
   })),
-  on(actions.LogInError, (state, { error }) => ({
+  on(authActions.LogInError, (state, { error }) => ({
     ...state,
     userInfos: null,
     error: error,
   })),
-  on(actions.Register, (state) => ({
+  on(authActions.Register, (state) => ({
     ...state,
     error: null,
   })),
-  on(actions.RegisterSuccess, (state, { userInfos }) => ({
-    ...state,
-    userInfos: userInfos,
-    error: null,
-  })),
-  on(actions.RegisterError, (state, { error }) => ({
-    ...state,
-    error: error,
-  })),
-  on(actions.Disconnect, (state) => ({
-    ...state,
-  })),
-  on(actions.DisconnectSuccess, (state) => ({
-    ...state,
-    userInfos: null,
-    error: null,
-  })),
-  on(actions.DisconnectError, (state, { error }) => ({
-    ...state,
-    userInfos: null,
-    error: error,
-  })),
-  on(actions.RefreshTokens, (state) => ({
-    ...state,
-    userInfos: null,
-  })),
-  on(actions.RefreshTokensSuccess, (state, { userInfos }) => ({
+  on(authActions.RegisterSuccess, (state, { userInfos }) => ({
     ...state,
     userInfos: userInfos,
     error: null,
   })),
-  on(actions.RefreshTokensError, (state, { error }) => ({
+  on(authActions.RegisterError, (state, { error }) => ({
+    ...state,
+    error: error,
+  })),
+  on(authActions.Disconnect, (state) => ({
+    ...state,
+  })),
+  on(authActions.DisconnectSuccess, (state) => ({
+    ...state,
+    userInfos: null,
+    error: null,
+  })),
+  on(authActions.DisconnectError, (state, { error }) => ({
     ...state,
     userInfos: null,
     error: error,
   })),
-  on(actions.SendConfirmationEmail, (state, { userInfos }) => ({
+  on(authActions.RefreshTokens, (state) => ({
+    ...state,
+    userInfos: null,
+  })),
+  on(authActions.RefreshTokensSuccess, (state, { userInfos }) => ({
+    ...state,
+    userInfos: userInfos,
+    error: null,
+  })),
+  on(authActions.RefreshTokensError, (state, { error }) => ({
+    ...state,
+    userInfos: null,
+    error: error,
+  })),
+  on(authActions.SendConfirmationEmail, (state, { userInfos }) => ({
     ...state,
     error: null,
   })),
-  on(actions.SendConfirmationEmailSuccess, (state) => ({
+  on(authActions.SendConfirmationEmailSuccess, (state) => ({
     ...state,
     error: null,
   })),
-  on(actions.SendConfirmationEmailError, (state, { error }) => ({
+  on(authActions.SendConfirmationEmailError, (state, { error }) => ({
+    ...state,
+    error: error,
+  })),
+  /// User actions
+  on(userActions.ChangeMail, (state) => ({
+    ...state,
+    error: null,
+  })),
+  on(userActions.ChangeMailSuccess, (state, { userInfos }) => ({
+    ...state,
+    userInfos: userInfos,
+    error: null,
+  })),
+  on(userActions.ChangeMailError, (state, { error }) => ({
+    ...state,
+    error: error,
+  })),
+  on(userActions.ChangePassword, (state) => ({
+    ...state,
+    error: null,
+  })),
+  on(userActions.ChangePasswordSuccess, (state) => ({
+    ...state,
+    error: null,
+  })),
+  on(userActions.ChangePasswordError, (state, { error }) => ({
     ...state,
     error: error,
   }))

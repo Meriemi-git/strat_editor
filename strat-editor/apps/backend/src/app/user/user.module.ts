@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from '@strat-editor/data';
 import { AuthService } from '../auth/auth.service';
 import { jwtConstants } from '../strategies/constants';
-import { JwtStrategy } from '../strategies/jwt.strategy';
+import { ConfirmedStrategy } from '../strategies/confirmed.strategy';
+import { RegisteredStrategy } from '../strategies/registered.strategy';
+
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 
@@ -16,6 +18,6 @@ import { UserService } from './user.service';
     }),
   ],
   controllers: [UserController],
-  providers: [UserService, AuthService, JwtStrategy],
+  providers: [UserService, AuthService, ConfirmedStrategy, RegisteredStrategy],
 })
 export class UserModule {}
