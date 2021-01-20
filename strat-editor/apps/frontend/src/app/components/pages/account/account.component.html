@@ -50,6 +50,7 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
               <strat-editor-mail-changer
+                [oldMail]="userInfos.userMail"
                 [httpError]="$httpError | async"
                 (mailChange)="onMailChange($event)"
               ></strat-editor-mail-changer>

@@ -53,11 +53,13 @@ export class PasswordChangerComponent implements OnInit {
 
   onSubmit() {
     this.isSubmitted = true;
-    const passwords: PasswordChangeWrapper = {
-      oldPassword: this.passwordForm.get('oldPassword').value,
-      newPassword: this.passwordForm.get('password').value,
-    };
-    this.passwordChanged.emit(passwords);
+    if (this.passwordForm.valid) {
+      const passwords: PasswordChangeWrapper = {
+        oldPassword: this.passwordForm.get('oldPassword').value,
+        newPassword: this.passwordForm.get('password').value,
+      };
+      this.passwordChanged.emit(passwords);
+    }
   }
 
   private mustMatch(controlName: string, matchingControlName: string) {

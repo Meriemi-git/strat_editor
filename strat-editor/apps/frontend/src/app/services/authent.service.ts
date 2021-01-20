@@ -64,12 +64,6 @@ export class AuthentService {
     return this.http
       .get(environment.apiUrl + this.controller + '/disconnect')
       .pipe(
-        map(() => {
-          this.notificationService.displayNotification({
-            message: 'You are disconnected',
-            type: NotificationType.success,
-          });
-        }),
         catchError((err) => {
           return throwError(err);
         })

@@ -14,8 +14,6 @@ export class AppInitService {
     const userInfos: UserInfos = JSON.parse(localStorage.getItem('userInfos'));
     if (userInfos) {
       this.store.dispatch(Actions.RefreshTokens());
-    } else {
-      this.store.dispatch(Actions.Disconnect());
     }
   }
 }

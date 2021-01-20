@@ -6,6 +6,9 @@
     </mat-form-field>
   </p>
   <div *ngIf="isSubmitted && formControls.mail.errors" class="help-block">
+    <div *ngIf="formControls.mail.errors.different">
+      Email must be different
+    </div>
     <div *ngIf="formControls.mail.errors.required">Email is required</div>
     <div *ngIf="formControls.mail.errors.email">Email is invalid</div>
   </div>

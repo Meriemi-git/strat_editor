@@ -33,12 +33,12 @@
 }
 
 .has-error input {
-  border-color: $warn-lighter-color;
+  border-color: $warn-color;
 }
 
 .help-block {
   font-size: 0.8em;
-  color: $warn-lighter-color;
+  color: $warn-color;
 }
 
 .error-block {

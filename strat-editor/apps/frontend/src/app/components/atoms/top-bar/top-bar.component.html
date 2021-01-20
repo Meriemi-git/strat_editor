@@ -4,23 +4,21 @@
   </button>
   <span>Strat Editor</span>
   <span class="filler"></span>
-  <div *ngIf="$userInfos | async; let userInfos">
-    <span class="example-spacer">{{ userInfos?.username | titlecase }}</span>
-    <mat-chip-list *ngIf="!userInfos">
-      <mat-chip color="accent" (click)="onLoginClick()">Login</mat-chip>
-      <span class="choice">or</span>
-      <mat-chip color="primary" (click)="onRegisterClick()">Register</mat-chip>
-    </mat-chip-list>
-    <button
-      *ngIf="userInfos"
-      mat-icon-button
-      class="example-icon"
-      aria-label="Example icon-button with account_circle icon"
-      [matMenuTriggerFor]="accountMenu"
-    >
-      <mat-icon>account_circle</mat-icon>
-    </button>
-  </div>
+  <span class="example-spacer">{{ userInfos?.username | titlecase }}</span>
+  <mat-chip-list *ngIf="!userInfos">
+    <mat-chip color="accent" (click)="onLoginClick()">Login</mat-chip>
+    <span class="choice">or</span>
+    <mat-chip color="primary" (click)="onRegisterClick()">Register</mat-chip>
+  </mat-chip-list>
+  <button
+    *ngIf="userInfos"
+    mat-icon-button
+    class="example-icon"
+    aria-label="Example icon-button with account_circle icon"
+    [matMenuTriggerFor]="accountMenu"
+  >
+    <mat-icon>account_circle</mat-icon>
+  </button>
   <mat-menu #accountMenu="matMenu" xPosition="before">
     <button mat-menu-item (click)="onAccountClick()">Account</button>
     <button mat-menu-item (click)="onDisconnectClick()">Disconnect</button>

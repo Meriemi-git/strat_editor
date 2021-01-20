@@ -30,26 +30,26 @@ export class HttpJwtInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((error) => {
-        if (
-          !request.url.endsWith('disconnect') &&
-          !request.url.endsWith('login') &&
-          !request.url.endsWith('register') &&
-          !request.url.endsWith('refresh')
-        ) {
-          console.log('HttpJwtInterceptor request url', request.url);
-          if (error instanceof HttpErrorResponse) {
-            switch (error.status) {
-              case 401:
+        console.log('HttpJwtInterceptor request url', request.url);
+        if (error instanceof HttpErrorResponse) {
+          switch (error.status) {
+            case 401:
+              if (
+                !request.url.endsWith('disconnect') &&
+                !request.url.endsWith('login') &&
+                !request.url.endsWith('register') &&
+                !request.url.endsWith('refresh')
+              ) {
                 return this.handle401Error(request, next);
-              case 403:
-                this.store.dispatch(Actions.Disconnect());
-                break;
-            }
+              } else {
+                throw error;
+              }
+            case 403:
+              this.store.dispatch(Actions.Disconnect());
+              break;
           }
-          throw error;
-        } else {
-          throw error;
         }
+        throw error;
       })
     );
   }
