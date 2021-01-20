@@ -20,10 +20,10 @@ export class AccountComponent implements OnInit {
   ngOnInit(): void {
     this.$userInfos = this.store.select(Selectors.getUserInfos);
     this.$httpError = this.store.select(Selectors.getAuthError);
-    const userInfos: UserInfos = JSON.parse(localStorage.getItem('userInfos'));
-    if (userInfos) {
-      this.store.dispatch(Actions.GetUserInfos({ userId: userInfos.userId }));
-    }
+    // const userInfos: UserInfos = JSON.parse(localStorage.getItem('userInfos'));
+    // if (userInfos) {
+    //   this.store.dispatch(Actions.GetUserInfos({ userId: userInfos.userId }));
+    // }
   }
 
   onPasswordChanged(passwords: PasswordChangeWrapper) {

@@ -2,6 +2,7 @@
   <button mat-icon-button (click)="onClick()">
     <strat-editor-svg-icon
       [name]="action.name"
+      [width]="'28px'"
       [ngClass]="{ active: action.active, inactive: !action.active }"
     ></strat-editor-svg-icon>
   </button>

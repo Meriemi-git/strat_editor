@@ -8,11 +8,39 @@
           <h2>Hello {{ userInfos.username | titlecase }} !</h2>
           <span>Your mail : {{ userInfos.userMail }}</span>
           <br />
-          <div *ngIf="userInfos.mailConfirmed" class="verified">
-            <strat-editor-svg-icon [name]="'check'" [width]="'160px'">
-            </strat-editor-svg-icon>
-            Mail verified
-          </div>
+          <mat-list>
+            <mat-list-item *ngIf="userInfos.mailConfirmed">
+              <div class="verified">
+                <strat-editor-svg-icon [name]="'check'" [width]="'32px'">
+                </strat-editor-svg-icon>
+                Mail verified
+              </div>
+            </mat-list-item>
+            <mat-list-item *ngIf="userInfos.role === 'DONATOR'">
+              <div class="verified">
+                <strat-editor-svg-icon [name]="'donator'" [width]="'32px'">
+                </strat-editor-svg-icon>
+                Donator
+              </div>
+            </mat-list-item>
+            <mat-list-item *ngIf="userInfos.role === 'REGULAR'">
+              <div class="verified">
+                <strat-editor-svg-icon
+                  [name]="'free-account'"
+                  [width]="'32px'"
+                ></strat-editor-svg-icon>
+                Free user
+              </div>
+            </mat-list-item>
+            <mat-list-item *ngIf="userInfos.role === 'TESTER'">
+              <div class="verified">
+                <strat-editor-svg-icon [name]="'tester'" [width]="'32px'">
+                </strat-editor-svg-icon>
+                Tester
+              </div>
+            </mat-list-item>
+          </mat-list>
+
           <br />
           <mat-card class="confirmations" *ngIf="!userInfos.mailConfirmed">
             <h3>Mail confirmation pending</h3>

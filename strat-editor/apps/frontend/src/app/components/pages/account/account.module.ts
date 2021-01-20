@@ -10,6 +10,8 @@ import { MailChangerModule } from '../../atoms/mail-changer/mail-changer.module'
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { SvgIconModule } from '../../atoms/svg-icon/svg-icon.module';
+import { MatListModule } from '@angular/material/list';
+
 @NgModule({
   declarations: [AccountComponent],
   imports: [
@@ -23,6 +25,7 @@ import { SvgIconModule } from '../../atoms/svg-icon/svg-icon.module';
     MatCardModule,
     MatButtonModule,
     SvgIconModule,
+    MatListModule,
   ],
 })
 export class AccountModule {}
