@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcryptjs';
+import { UserRole } from '../helpers/user-role';
 
 export type UserDocument = User & mongoose.Document;
 
@@ -11,6 +12,9 @@ export class User extends mongoose.Document {
   confirmed: boolean;
   uid: string;
   refreshToken: string;
+  role: UserRole;
+  cguAgreement: boolean;
+  cguAgreementDate: Date;
 }
 
 export interface UserDto {
@@ -26,6 +30,20 @@ export const UserSchema = new mongoose.Schema({
   confirmed: Boolean,
   uid: String,
   refreshToken: String,
+  cguAgreement: {
+    type: Boolean,
+    required: true,
+  },
+  cguAgreementDate: {
+    type: Date,
+    required: true,
+  },
+  role: {
+    type: String,
+    enum: Object.values(UserRole),
+    default: UserRole.REGULAR,
+    required: true,
+  },
 });
 
 UserSchema.pre<User>('save', function () {

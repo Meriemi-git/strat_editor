@@ -18,6 +18,7 @@ import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
 import { Request } from 'express';
+import { runInThisContext } from 'vm';
 
 @Injectable()
 export class AuthService {
@@ -119,11 +120,7 @@ export class AuthService {
     return {
       authToken: authToken,
       refreshToken: refreshToken,
-      userInfos: {
-        username: user.username,
-        userMail: user.mail,
-        mailConfirmed: user.confirmed,
-      } as UserInfos,
+      userInfos: this.userService.getUserInfos(user),
     } as AuthInfos;
   }
 
@@ -132,13 +129,7 @@ export class AuthService {
     const authToken = this.generateAuthToken(user, jwtId);
     const refreshToken = await this.generateRefreshToken(user, jwtId);
     const authInfos: AuthInfos = {
-      userInfos: {
-        mailConfirmed: user.confirmed,
-        userMail: user.mail,
-        username: user.username,
-        userId: user._id,
-        stratIds: [],
-      },
+      userInfos: this.userService.getUserInfos(user),
       authToken: authToken,
       refreshToken: refreshToken,
     };

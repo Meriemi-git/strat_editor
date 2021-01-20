@@ -42,7 +42,6 @@ export class AuthentService {
     return this.http
       .get<any>(environment.apiUrl + this.controller + '/refresh')
       .pipe(
-        timeout(2000),
         catchError((err) => {
           return throwError(err);
         })

@@ -6,10 +6,10 @@
       "node"
     ],
     "lib": [
-      "es2015"
+      "es2017"
     ],
     "emitDecoratorMetadata": true,
-    "target": "es2015",
+    "target": "es2017",
   },
   "exclude": [
     "**/*.spec.ts"

@@ -24,7 +24,6 @@ import {
 } from '@strat-editor/data';
 import { RateLimit, RateLimiterInterceptor } from 'nestjs-rate-limiter';
 import { AuthGuard } from '@nestjs/passport';
-import { use } from 'passport';
 
 @Controller('user')
 export class UserController {
@@ -44,6 +43,8 @@ export class UserController {
   ): Promise<any> {
     this.logger.debug('/user-infos');
     const actualUserId: string = this.authService.getUserIdFromCookies(request);
+    this.logger.debug('actualUserId', actualUserId);
+    this.logger.debug('params.userId', params.userId);
     if (actualUserId != params.userId) {
       this.logger.debug('User demanding does not match user from cookie');
       Promise.resolve(response.status(HttpStatus.FORBIDDEN).send());

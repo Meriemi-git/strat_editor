@@ -130,6 +130,8 @@ export class UserService {
         } else {
           const createdUser = new this.userModel(userDto);
           createdUser.uid = v4();
+          createdUser.cguAgreement = true;
+          createdUser.cguAgreementDate = new Date();
           createdUser
             .save()
             .then(() => {
@@ -188,6 +190,7 @@ export class UserService {
       userId: user._id,
       userMail: user.mail,
       username: user.username,
+      role: user.role,
     } as UserInfos;
   }
 
