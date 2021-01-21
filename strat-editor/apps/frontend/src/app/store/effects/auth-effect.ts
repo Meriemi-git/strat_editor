@@ -51,4 +51,18 @@ export class AuthEffect {
       )
     )
   );
+
+  confirmEmail$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(actions.ConfirmEmail),
+      mergeMap((action) =>
+        this.authService.confirmEmail(action.token).pipe(
+          map(() => actions.ConfirmEmailSuccess()),
+          catchError((error: HttpErrorResponse) =>
+            of(actions.ConfirmEmailError({ error }))
+          )
+        )
+      )
+    )
+  );
 }

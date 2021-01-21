@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { GalleryService } from './gallery.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('gallery')

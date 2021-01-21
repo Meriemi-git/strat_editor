@@ -1,1 +1,12 @@
-<p>confirmation works!</p>
+<div class="confirmation-wrapper">
+  <h2 class="mat-h2 title">Email confirmation</h2>
+  <div *ngIf="$httpError | async; let httpError" class="error-block">
+    <span *ngIf="httpError.status === 406">
+      The link sent by email have expired please connect and go to your account
+      to get a fresh one.
+    </span>
+    <span *ngIf="httpError.status !== 406">
+      {{ httpError?.error.message }}
+    </span>
+  </div>
+</div>

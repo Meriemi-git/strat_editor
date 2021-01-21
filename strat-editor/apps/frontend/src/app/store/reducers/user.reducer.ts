@@ -57,6 +57,18 @@ const authReducer = createReducer(
     userInfos: null,
     error: error,
   })),
+  on(authActions.ConfirmEmail, (state) => ({
+    ...state,
+    error: null,
+  })),
+  on(authActions.ConfirmEmailSuccess, (state) => ({
+    ...state,
+    error: null,
+  })),
+  on(authActions.ConfirmEmailError, (state, { error }) => ({
+    ...state,
+    error: error,
+  })),
   on(userActions.SendConfirmationEmail, (state, { userInfos }) => ({
     ...state,
     error: null,

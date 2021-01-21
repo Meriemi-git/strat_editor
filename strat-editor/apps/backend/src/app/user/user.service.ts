@@ -5,6 +5,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotAcceptableException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -155,32 +156,38 @@ export class UserService {
   }
 
   public async confirmEmailAddress(token: string): Promise<any> {
-    const verifyOptions: JwtVerifyOptions = {
-      ignoreExpiration: false,
-    };
-    const payload = this.jwtService.verify(token, verifyOptions);
-    const mail = payload['mail'];
-    const uid = payload['uid'];
-    if (payload) {
-      return this.userModel
-        .findOne({ mail: mail, uid: uid })
-        .exec()
-        .then((user) => {
-          if (user) {
-            if (user.confirmed) {
-              return new BadRequestException('Email address already confirmed');
+    try {
+      const payload = this.jwtService.verify(token);
+      const mail = payload['mail'];
+      const uid = payload['uid'];
+      if (payload) {
+        return this.userModel
+          .findOne({ mail: mail, uid: uid })
+          .exec()
+          .then((user) => {
+            if (user) {
+              if (user.confirmed) {
+                throw new BadRequestException(
+                  'Email address already confirmed'
+                );
+              } else {
+                this.userModel
+                  .updateOne({ uid: uid }, { confirmed: true })
+                  .exec();
+                Promise.resolve();
+              }
             } else {
-              this.userModel
-                .updateOne({ uid: uid }, { confirmed: true })
-                .exec();
-              Promise.resolve();
+              throw new InternalServerErrorException(
+                'Error during email confirmation'
+              );
             }
-          } else {
-            return new BadRequestException('Error during email confirmation');
-          }
-        });
-    } else {
-      return new BadRequestException('Error during decoding token');
+          });
+      } else {
+        throw new BadRequestException('Error during decoding token');
+      }
+    } catch (error) {
+      this.logger.error('Token expired');
+      throw new NotAcceptableException('Confirmation link expired');
     }
   }
 

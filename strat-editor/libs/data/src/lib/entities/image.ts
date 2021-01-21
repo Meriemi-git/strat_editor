@@ -8,6 +8,8 @@ export interface Image {
   size: number;
   guid: string;
   userId: string;
+  description: string;
+  uploadedAt: Date;
 }
 
 export const ImageSchema = new mongoose.Schema({

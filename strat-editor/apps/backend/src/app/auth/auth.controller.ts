@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  Param,
   Post,
   Req,
   Res,
@@ -50,9 +51,9 @@ export class AuthController {
       });
   }
 
-  @Post('confirm')
-  public async confirm(@Body() body: any): Promise<User> {
-    return this.userService.confirmEmailAddress(body.token);
+  @Get('confirm/:token')
+  public async confirm(@Param() param: any): Promise<User> {
+    return this.userService.confirmEmailAddress(param.token);
   }
 
   @Get('disconnect')

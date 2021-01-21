@@ -36,3 +36,14 @@ export const DisconnectError = createAction(
   '[Auth] Disconnect Error',
   props<{ error: HttpErrorResponse }>()
 );
+
+export const ConfirmEmail = createAction(
+  '[Auth] ConfirmEmail ',
+  props<{ token: string }>()
+);
+export const ConfirmEmailSuccess = createAction('[Auth] ConfirmEmail Success');
+
+export const ConfirmEmailError = createAction(
+  '[Auth] ConfirmEmail Error',
+  props<{ error: HttpErrorResponse }>()
+);

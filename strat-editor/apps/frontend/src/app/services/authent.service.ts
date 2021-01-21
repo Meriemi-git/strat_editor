@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NotificationType, UserDto, UserInfos } from '@strat-editor/data';
 import { environment } from '../../environments/environment';
@@ -50,9 +50,19 @@ export class AuthentService {
 
   public confirmEmail(token: string) {
     return this.http
-      .post<any>(environment.apiUrl + this.controller + '/confirm', { token })
+      .get<any>(environment.apiUrl + this.controller + '/confirm/' + token)
       .pipe(
-        catchError((err) => {
+        map(() => {
+          this.notificationService.displayNotification({
+            message: 'Mail confirmation successfull',
+            type: NotificationType.success,
+          });
+        }),
+        catchError((err: HttpErrorResponse) => {
+          this.notificationService.displayNotification({
+            message: err.error.message,
+            type: NotificationType.error,
+          });
           return throwError(err);
         })
       );

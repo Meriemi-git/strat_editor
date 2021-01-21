@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { throwError } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthentService } from '../../../services/authent.service';
+import { StratEditorState } from '../../../store/reducers';
+import * as Actions from '../../../store/actions';
+import * as Selectors from '../../../store/selectors';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'strat-editor-confirmation',
@@ -10,24 +15,18 @@ import { AuthentService } from '../../../services/authent.service';
   styleUrls: ['./confirmation.component.scss'],
 })
 export class ConfirmationComponent implements OnInit {
+  public $httpError: Observable<HttpErrorResponse>;
   constructor(
     private route: ActivatedRoute,
-    private authService: AuthentService
+    private store: Store<StratEditorState>
   ) {}
 
   ngOnInit(): void {
+    this.$httpError = this.store.select(Selectors.getAuthError);
     this.route.params.subscribe((params) => {
-      this.authService
-        .confirmEmail(params.token)
-        .pipe(
-          catchError((err) => {
-            console.log(err);
-            return throwError(err);
-          })
-        )
-        .subscribe((result) => {
-          console.log('Email confirmed !', result);
-        });
+      if (params.token) {
+        this.store.dispatch(Actions.ConfirmEmail({ token: params.token }));
+      }
     });
   }
 }

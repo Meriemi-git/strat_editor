@@ -129,9 +129,6 @@ export class UserController {
     @Body() userInfos: UserInfos,
     @Res() response: Response
   ): Promise<UserInfos> {
-    this.logger.debug(
-      'send-confirmation-mail userInfos :' + JSON.stringify(userInfos)
-    );
     return this.userService.findUserById(userInfos.userId).then((user) => {
       if (user) {
         return this.userService
