@@ -93,7 +93,14 @@ export class UserService {
             return user
               .save()
               .then(() => {
-                return Promise.resolve(this.getUserInfos(user));
+                return this.sendConfirmationMail(user)
+                  .then(() => {
+                    return Promise.resolve(this.getUserInfos(user));
+                  })
+                  .catch((error) => {
+                    this.logger.error('Error during sending confirmation');
+                    throw new InternalServerErrorException();
+                  });
               })
               .catch(() => {
                 this.logger.error('Error during update password');

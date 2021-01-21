@@ -5,6 +5,5 @@ export interface UserInfos {
   userMail: string;
   mailConfirmed: boolean;
   userId: string;
-  stratIds: string[];
   role: UserRole;
 }

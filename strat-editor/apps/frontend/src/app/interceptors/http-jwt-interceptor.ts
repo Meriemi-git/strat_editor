@@ -12,6 +12,7 @@ import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthentService } from '../services/authent.service';
 import { StratEditorState } from '../store/reducers';
 import * as Actions from '../store/actions';
+import { UserInfos } from '@strat-editor/data';
 
 @Injectable()
 export class HttpJwtInterceptor implements HttpInterceptor {
@@ -59,9 +60,10 @@ export class HttpJwtInterceptor implements HttpInterceptor {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
       return this.authService.refreshToken().pipe(
-        switchMap((token: any) => {
+        switchMap((userInfos: UserInfos) => {
+          this.store.dispatch(Actions.RefreshTokensSuccess({ userInfos }));
           this.isRefreshing = false;
-          this.refreshTokenSubject.next(token);
+          this.refreshTokenSubject.next(userInfos);
           return next.handle(request.clone());
         }),
         catchError((err: HttpErrorResponse) => {
