@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { AuthentService } from '../../../services/authent.service';
+import { Observable } from 'rxjs';
 import { StratEditorState } from '../../../store/reducers';
 import * as Actions from '../../../store/actions';
 import * as Selectors from '../../../store/selectors';

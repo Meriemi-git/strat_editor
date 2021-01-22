@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { catchError } from 'rxjs/operators';
-
+import { Image } from '@strat-editor/data';
 @Injectable({
   providedIn: 'root',
 })
@@ -11,9 +11,9 @@ export class GalleryService {
   private controller = 'gallery';
   constructor(private http: HttpClient) {}
 
-  getAllImages(userId: string): Observable<string[]> {
+  getImages(): Observable<Image[]> {
     return this.http
-      .post<string[]>(environment.apiUrl + this.controller + '/images', userId)
+      .get<Image[]>(environment.apiUrl + this.controller + '/images')
       .pipe(
         catchError((err) => {
           console.log(err);
@@ -24,7 +24,7 @@ export class GalleryService {
 
   uploadImage(image: File) {
     let formData = new FormData();
-    formData.append('file', image);
+    formData.append('image', image);
     return this.http
       .post<string[]>(
         environment.apiUrl + this.controller + '/upload',
@@ -35,7 +35,6 @@ export class GalleryService {
           console.log(err);
           return throwError(err);
         })
-      )
-      .subscribe((result) => console.log(result));
+      );
   }
 }

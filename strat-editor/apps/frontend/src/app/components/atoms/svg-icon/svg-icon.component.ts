@@ -30,7 +30,6 @@ export class SvgIconComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('icon name: ', this.name);
     this.matIconRegistry.addSvgIcon(
       this.name,
       this.domSanitizer.bypassSecurityTrustResourceUrl(

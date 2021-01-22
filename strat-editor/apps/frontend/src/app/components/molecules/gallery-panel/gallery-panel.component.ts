@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { StratEditorState } from '../../../store/reducers';
+import { Image } from '@strat-editor/data';
+import * as Selectors from '../../../store/selectors';
+import * as Actions from '../../../store/actions';
 
 @Component({
   selector: 'strat-editor-gallery-panel',
@@ -6,7 +12,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./gallery-panel.component.scss'],
 })
 export class GalleryPanelComponent implements OnInit {
-  constructor() {}
+  public $images: Observable<Image[]>;
+  constructor(private store: Store<StratEditorState>) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.$images = this.store.select(Selectors.getGalleryImages);
+    this.store.dispatch(Actions.GetGalleryImages());
+  }
+
+  onImageUploaded(image: File): void {
+    this.store.dispatch(Actions.UploadGalleryImage({ image }));
+  }
 }

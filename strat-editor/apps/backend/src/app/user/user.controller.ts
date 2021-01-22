@@ -42,7 +42,7 @@ export class UserController {
     @Res() response: Response
   ): Promise<any> {
     this.logger.debug('/user-infos');
-    const actualUserId: string = this.authService.getUserIdFromCookies(request);
+    const actualUserId: string = this.authService.getUserIdFromRequest(request);
     this.logger.debug('actualUserId', actualUserId);
     this.logger.debug('params.userId', params.userId);
     if (actualUserId != params.userId) {

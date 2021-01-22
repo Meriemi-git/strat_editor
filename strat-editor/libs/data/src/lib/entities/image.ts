@@ -4,32 +4,22 @@ export type ImageDocument = Image & mongoose.Document;
 
 export interface Image {
   _id: string;
-  name: string;
+  imageName: string;
   size: number;
-  guid: string;
+  fileName: string;
   userId: string;
   description: string;
   uploadedAt: Date;
 }
 
 export const ImageSchema = new mongoose.Schema({
-  name: {
-    type: {
-      type: String,
-    },
-  },
-  size: {
-    type: {
-      type: String,
-    },
-  },
-  guid: {
+  imageName: String,
+  size: Number,
+  fileName: {
     type: String,
     unique: true,
   },
-  userId: {
-    type: {
-      type: String,
-    },
-  },
+  userId: String,
+  description: String,
+  uploadedAt: Date,
 });

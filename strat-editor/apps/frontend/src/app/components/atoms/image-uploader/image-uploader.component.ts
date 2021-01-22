@@ -1,22 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { GalleryService } from '../../../services/gallery.service';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 @Component({
   selector: 'strat-editor-image-uploader',
   templateUrl: './image-uploader.component.html',
   styleUrls: ['./image-uploader.component.scss'],
 })
 export class ImageUploaderComponent implements OnInit {
-  @Output() imageUploaded = new EventEmitter<string>();
-  @Input() userId: string;
-  constructor(private galleryService: GalleryService) {}
+  @Output() imageUploaded = new EventEmitter<File>();
+  constructor() {}
 
-  ngOnInit(): void {
-    console.log(this.userId);
-  }
+  ngOnInit(): void {}
 
   onFileChange(fileList: FileList) {
     if (fileList.length > 0) {
-      this.galleryService.uploadImage(fileList[0]);
+      if (fileList[0].size / 1024 <= 5120) {
+        this.imageUploaded.emit(fileList[0]);
+      }
     }
   }
 }

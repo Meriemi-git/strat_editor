@@ -15,12 +15,12 @@ export class AgentEffect {
 
   fechagents$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(actions.FetchAgents.type),
+      ofType(actions.FetchAgents),
       mergeMap(() =>
         this.agentService.getAllAgents().pipe(
-          map((agents) => actions.FetchAgentsSuccess({ agents: agents })),
-          catchError((err: HttpErrorResponse) =>
-            of(actions.FetchAgentsError({ error: err.message }))
+          map((agents) => actions.FetchAgentsSuccess({ agents })),
+          catchError((error: HttpErrorResponse) =>
+            of(actions.FetchAgentsError({ error }))
           )
         )
       )

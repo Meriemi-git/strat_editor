@@ -1,0 +1,34 @@
+<div class="grid">
+  <div class="col-1">
+    <div
+      class="image"
+      *ngFor="
+        let image of images.slice(0, images.length / 2)
+          | sortBy: 'asc':'uploadedAt'
+      "
+    >
+      <img
+        mat-image
+        src="{{ 'api/gallery/thumb/' + image.fileName }}"
+        alt="{{ image.imageName }} image"
+        [width]="100"
+      />
+    </div>
+  </div>
+  <div class="col-2">
+    <div
+      class="image"
+      *ngFor="
+        let image of images.slice(images.length / 2, images.length)
+          | sortBy: 'asc':'uploadedAt'
+      "
+    >
+      <img
+        mat-image
+        src="{{ 'api/gallery/thumb/' + image.fileName }}"
+        alt="{{ image.imageName }} image"
+        [width]="100"
+      />
+    </div>
+  </div>
+</div>

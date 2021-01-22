@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  asset_folder: 'assets',
+  assets_folder: 'assets',
   badge_extension: '.webp',
   badges_folder: 'agents/badges',
   map_folder: 'maps',
@@ -10,5 +10,6 @@ export const environment = {
   icon_folder: 'icons',
   icon_extension: '.svg',
   font_folder: 'fonts',
+
   confirmationLink: 'http://localhost:4200/confirmation/',
 };

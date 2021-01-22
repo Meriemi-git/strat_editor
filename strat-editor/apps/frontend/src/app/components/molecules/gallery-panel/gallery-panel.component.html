@@ -1,2 +1,5 @@
 <p>Gallery panel</p>
-<strat-editor-image-uploader [userId]="'666'"></strat-editor-image-uploader>
+<strat-editor-image-uploader
+  (imageUploaded)="onImageUploaded($event)"
+></strat-editor-image-uploader>
+<strat-editor-images-grid [images]="$images | async"></strat-editor-images-grid>

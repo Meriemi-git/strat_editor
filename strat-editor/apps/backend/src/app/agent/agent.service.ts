@@ -6,7 +6,7 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class AgentService {
-  constructor(@InjectModel("Agent") private agentModel: Model<AgentDocument>) {}
+  constructor(@InjectModel('Agent') private agentModel: Model<AgentDocument>) {}
 
   async addAgent(agent: Agent): Promise<Agent> {
     const createdAgent = new this.agentModel(agent);

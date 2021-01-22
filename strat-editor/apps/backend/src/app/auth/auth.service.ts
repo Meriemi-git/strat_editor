@@ -6,19 +6,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import {
-  AuthInfos,
-  JwtInfos,
-  User,
-  UserDocument,
-  UserDto,
-  UserInfos,
-} from '@strat-editor/data';
+import { AuthInfos, JwtInfos, User, UserDto } from '@strat-editor/data';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
 import { Request } from 'express';
-import { runInThisContext } from 'vm';
 
 @Injectable()
 export class AuthService {
@@ -172,7 +164,7 @@ export class AuthService {
     }
   }
 
-  public getUserIdFromCookies(request: Request) {
+  public getUserIdFromRequest(request: Request) {
     const xAuthToken = request.cookies['X-AUTH-TOKEN'];
     try {
       const jwtInfos = this.jwtService.decode(xAuthToken);
