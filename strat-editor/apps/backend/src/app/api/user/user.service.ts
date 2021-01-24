@@ -21,7 +21,7 @@ import { Model } from 'mongoose';
 import { JwtService, JwtSignOptions, JwtVerifyOptions } from '@nestjs/jwt';
 import { v4 } from 'uuid';
 import * as bcrypt from 'bcryptjs';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../../environments/environment.prod';
 import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../../environments/environment.prod';
 import { FontService } from './font.service';
 
 @Controller('font')

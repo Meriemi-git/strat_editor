@@ -1,14 +1,14 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AgentModule } from './agent/agent.module';
-import { MapModule } from './map/map.module';
-import { FloorModule } from './floor/floor.module';
-import { IconModule } from './icon/icon.module';
-import { FontModule } from './fonts/font.module';
-import { UserModule } from './user/user.module';
-import { GalleryModule } from './gallery/gallery.module';
+import { AgentModule } from './api/agent/agent.module';
+import { MapModule } from './api/map/map.module';
+import { FloorModule } from './api/floor/floor.module';
+import { IconModule } from './api/icon/icon.module';
+import { FontModule } from './api/fonts/font.module';
+import { UserModule } from './api/user/user.module';
+import { GalleryModule } from './api/gallery/gallery.module';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './api/auth/auth.module';
 import { RateLimiterModule } from 'nestjs-rate-limiter';
 
 @Module({

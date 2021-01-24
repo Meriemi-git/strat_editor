@@ -8,7 +8,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { jwtConstants } from './constants';
-import { UserService } from '../user/user.service';
+import { UserService } from '../api/user/user.service';
 import { JwtInfos, User } from '@strat-editor/data';
 import { Request } from 'express';
 

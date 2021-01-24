@@ -15,10 +15,10 @@ import { Request } from 'express';
 import { GalleryService } from './gallery.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
-import { imageFileFilter } from '../utils/file-upload.utils';
+import { imageFileFilter } from '../../utils/file-upload.utils';
 import { Image } from '@strat-editor/data';
-import { environment } from '../../environments/environment';
-import { MulterSharpStorage } from '../utils/multer-sharp-storage';
+import { environment } from '../../../environments/environment';
+import { MulterSharpStorage } from '../../utils/multer-sharp-storage';
 
 @Controller('gallery')
 export class GalleryController {

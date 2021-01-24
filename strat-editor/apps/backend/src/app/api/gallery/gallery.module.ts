@@ -4,7 +4,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MulterModule } from '@nestjs/platform-express';
 import { ImageSchema } from '@strat-editor/data';
-import { jwtConstants } from '../strategies/constants';
+import { jwtConstants } from '../../strategies/constants';
 import { GalleryController } from './gallery.controller';
 import { GalleryService } from './gallery.service';
 

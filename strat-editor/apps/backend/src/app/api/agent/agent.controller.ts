@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { Agent } from '@strat-editor/data';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../../environments/environment.prod';
 import { AgentService } from './agent.service';
 
 @Controller('agent')

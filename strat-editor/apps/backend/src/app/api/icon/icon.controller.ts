@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../../environments/environment.prod';
 
 @Controller('icon')
 export class IconController {
