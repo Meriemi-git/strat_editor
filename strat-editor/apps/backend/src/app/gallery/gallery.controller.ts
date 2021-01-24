@@ -15,10 +15,10 @@ import { Request } from 'express';
 import { GalleryService } from './gallery.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
-import { imageFileFilter, imageFileName } from '../utils/file-upload.utils';
+import { imageFileFilter } from '../utils/file-upload.utils';
 import { Image } from '@strat-editor/data';
-import { diskStorage } from 'multer';
 import { environment } from '../../environments/environment';
+import { MulterSharpStorage } from '../utils/multer-sharp-storage';
 
 @Controller('gallery')
 export class GalleryController {
@@ -37,10 +37,11 @@ export class GalleryController {
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads/images',
-        filename: imageFileName,
-      }),
+      storage: new MulterSharpStorage(
+        './uploads/images',
+        './uploads/thumbs',
+        'webp'
+      ),
       limits: { fileSize: 5 * 1024 * 1024, files: 1 },
       fileFilter: imageFileFilter,
     })
@@ -52,6 +53,7 @@ export class GalleryController {
     this.logger.log('Uploading file');
     const userId = this.galleryService.getUserIdFromRequest(request);
     if (file) {
+      console.log('Yo frère ya le ficvhier là !');
       return this.galleryService.saveImage(file, userId);
     } else {
       throw new BadRequestException('No image was provided');

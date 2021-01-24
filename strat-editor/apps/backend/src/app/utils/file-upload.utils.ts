@@ -6,9 +6,10 @@ export const imageMimeTypes: string[] = [
   'image/jpeg',
   'image/png',
   'image/bmp',
+  'image/gif',
 ];
 
-export const imageExtensions: string[] = ['jpg', 'jpeg', 'png', 'bmp'];
+export const imageExtensions: string[] = ['jpg', 'jpeg', 'png', 'bmp','gif'];
 
 export const imageFileFilter = (req, file, callback) => {
   const extension: string = file.originalname.substring(
@@ -23,11 +24,4 @@ export const imageFileFilter = (req, file, callback) => {
     return callback(new BadRequestException('Wrong upload mimtype'), false);
   }
   callback(null, true);
-};
-
-export const imageFileName = (req, file, callback) => {
-  const extension: string = file.originalname.substring(
-    file.originalname.lastIndexOf('.')
-  );
-  return callback(null, `${uuid()}${extension.toLocaleLowerCase()}`);
 };

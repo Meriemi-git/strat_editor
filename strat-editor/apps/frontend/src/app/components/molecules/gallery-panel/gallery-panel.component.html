@@ -1,5 +1,9 @@
-<p>Gallery panel</p>
-<strat-editor-image-uploader
-  (imageUploaded)="onImageUploaded($event)"
-></strat-editor-image-uploader>
-<strat-editor-images-grid [images]="$images | async"></strat-editor-images-grid>
+<div class="container">
+  <h2 class="mat-h1">Drawing</h2>
+  <strat-editor-image-uploader
+    (imageUploaded)="onImageUploaded($event)"
+  ></strat-editor-image-uploader>
+  <strat-editor-images-grid
+    [images]="$images | async"
+  ></strat-editor-images-grid>
+</div>

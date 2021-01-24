@@ -8,7 +8,6 @@ import { Image, ImageDocument } from '@strat-editor/data';
 import { Model } from 'mongoose';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import * as sharp from 'sharp';
 
 @Injectable()
 export class GalleryService {
@@ -24,28 +23,19 @@ export class GalleryService {
   }
 
   public saveImage(file: any, userId: string): Promise<Image> {
-    return sharp(file.path)
-      .resize(100)
-      .toFile('uploads/thumbs/' + 'thumb-' + file.filename.toLocaleLowerCase())
-      .then(() => {
-        const image = {
-          fileName: file.filename,
-          imageName: file.originalname,
-          size: file.size,
-          userId: userId,
-          uploadedAt: new Date(),
-        };
-        const imageDocument = new this.imageModel(image);
-        return imageDocument
-          .save()
-          .then((image) => Promise.resolve(image))
-          .catch(() => {
-            throw new InternalServerErrorException('Cannot save the image');
-          });
-      })
-      .catch((error) => {
-        this.logger.error('Cannot create thumbnails' + error);
-        throw new InternalServerErrorException('Cannot create thumbnails');
+    const image = {
+      fileName: file.filename,
+      imageName: file.originalname,
+      size: file.size,
+      userId: userId,
+      uploadedAt: new Date(),
+    };
+    const imageDocument = new this.imageModel(image);
+    return imageDocument
+      .save()
+      .then((image) => Promise.resolve(image))
+      .catch(() => {
+        throw new InternalServerErrorException('Cannot save the image');
       });
   }
 
