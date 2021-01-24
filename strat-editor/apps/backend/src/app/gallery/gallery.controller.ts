@@ -53,7 +53,6 @@ export class GalleryController {
     this.logger.log('Uploading file');
     const userId = this.galleryService.getUserIdFromRequest(request);
     if (file) {
-      console.log('Yo frère ya le ficvhier là !');
       return this.galleryService.saveImage(file, userId);
     } else {
       throw new BadRequestException('No image was provided');

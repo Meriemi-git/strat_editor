@@ -3,7 +3,6 @@ import * as fs from 'fs';
 import { v4 as uuid } from 'uuid';
 import * as sharp from 'sharp';
 import { Logger } from '@nestjs/common';
-import { Stream } from 'stream';
 
 export class MulterSharpStorage implements StorageEngine {
   private readonly logger = new Logger(MulterSharpStorage.name);
@@ -53,6 +52,10 @@ export class MulterSharpStorage implements StorageEngine {
           .then((output) => {
             cb(null, {
               filename: filename,
+              imageWidth: output[0].width,
+              imageHeight: output[0].height,
+              thumbWidth: output[1].width,
+              thumbHeight: output[1].height,
               originalname: file.originalname,
               path: imageFullPath,
               size: output[0].size,

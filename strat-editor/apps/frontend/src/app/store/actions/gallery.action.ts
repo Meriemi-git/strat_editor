@@ -20,7 +20,8 @@ export const UploadGalleryImage = createAction(
 );
 
 export const UploadGalleryImageSuccess = createAction(
-  '[Gallery] Upload Gallery Image Success'
+  '[Gallery] Upload Gallery Image Success',
+  props<{ image: Image }>()
 );
 
 export const UploadGalleryImageError = createAction(

@@ -32,8 +32,9 @@ const sidenavReducer = createReducer(
     ...state,
     error: null,
   })),
-  on(actions.UploadGalleryImageSuccess, (state) => ({
+  on(actions.UploadGalleryImageSuccess, (state, { image }) => ({
     ...state,
+    images: [image, ...state.images],
     error: null,
   })),
   on(actions.UploadGalleryImageError, (state, { error }) => ({

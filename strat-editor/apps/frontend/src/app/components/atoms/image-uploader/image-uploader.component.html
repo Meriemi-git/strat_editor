@@ -1,1 +1,17 @@
-<input type="file" (change)="onFileChange($event.target.files)" />
+<div class="container">
+  <div class="file-picker">
+    <button mat-raised-button color="primary">
+      <label for="file-input">Select Image</label>
+    </button>
+    <input
+      id="file-input"
+      type="file"
+      style="display: none"
+      (change)="onFileChange($event.target.files)"
+    />
+  </div>
+  <p class="fileName">{{ fileName }}</p>
+  <p class="mentions">
+    Maximum file size 5 Mo<br />Supported format : JPG, PNG,GIF, WEBP
+  </p>
+</div>

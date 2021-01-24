@@ -1,19 +1,43 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Image } from '@strat-editor/data';
+
 @Component({
   selector: 'strat-editor-images-grid',
   templateUrl: './images-grid.component.html',
   styleUrls: ['./images-grid.component.scss'],
 })
-export class ImagesGridComponent implements OnInit {
+export class ImagesGridComponent {
   @Input() images: Image[];
-  public leftImages: Image[];
-  public rightImages: Image[];
+
   constructor() {}
 
-  ngOnInit(): void {
-    let halfLength = Math.floor(this.images.length / 2);
-    this.leftImages = this.images.slice(0, halfLength);
-    this.rightImages = this.images.slice(halfLength, this.images.length);
+  getThirdLength(): number {
+    const thirdHeight = Math.ceil(
+      this.images.reduce((total, image) => total + image.thumbHeight, 0) / 3
+    );
+    let halfLength = 0;
+    let sumHeight = 0;
+    this.images.map((image) => {
+      if (sumHeight < thirdHeight) {
+        halfLength++;
+        sumHeight += image.thumbHeight;
+      }
+    });
+    return halfLength;
+  }
+
+  getTwoThirdLength(): number {
+    const thirdHeight = Math.ceil(
+      this.images.reduce((total, image) => total + image.thumbHeight, 0) / 3
+    );
+    let halfLength = 0;
+    let sumHeight = 0;
+    this.images.map((image) => {
+      if (sumHeight < thirdHeight * 2) {
+        halfLength++;
+        sumHeight += image.thumbHeight;
+      }
+    });
+    return halfLength;
   }
 }

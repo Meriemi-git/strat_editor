@@ -11,7 +11,7 @@ import {
   NgxMatColorPickerModule,
   NGX_MAT_COLOR_FORMATS,
 } from '@angular-material-components/color-picker';
-import { SharedModule } from '../../../shared.module';
+import { PipesModule } from '../../../pipes.module';
 import { ImageUploaderModule } from '../../atoms/image-uploader/image-uploader.module';
 
 @NgModule({
@@ -24,7 +24,7 @@ import { ImageUploaderModule } from '../../atoms/image-uploader/image-uploader.m
     MatInputModule,
     NgxMatColorPickerModule,
     DrawingActionModule,
-    SharedModule,
+    PipesModule,
     MatSelectModule,
     ImageUploaderModule,
   ],

@@ -9,4 +9,4 @@ import { SortPipe } from './helpers/sort-pipe';
   bootstrap: [],
   exports: [FilterPipe, SortPipe],
 })
-export class SharedModule {}
+export class PipesModule {}

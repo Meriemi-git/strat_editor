@@ -32,7 +32,7 @@ export class GalleryEffect {
       ofType(actions.UploadGalleryImage),
       mergeMap((action) =>
         this.galleryService.uploadImage(action.image).pipe(
-          map(() => actions.UploadGalleryImageSuccess()),
+          map((image) => actions.UploadGalleryImageSuccess({ image })),
           catchError((error: HttpErrorResponse) =>
             of(actions.UploadGalleryImageError({ error }))
           )

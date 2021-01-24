@@ -10,8 +10,10 @@ export interface Image {
   userId: string;
   description: string;
   uploadedAt: Date;
-  width: number;
-  height: number;
+  imageWidth: number;
+  imageHeight: number;
+  thumbWidth: number;
+  thumbHeight: number;
 }
 
 export const ImageSchema = new mongoose.Schema({
@@ -24,6 +26,8 @@ export const ImageSchema = new mongoose.Schema({
   userId: String,
   description: String,
   uploadedAt: Date,
-  width: Number,
-  height: Number,
+  imageWidth: Number,
+  imageHeight: Number,
+  thumbWidth: Number,
+  thumbHeight: Number,
 });

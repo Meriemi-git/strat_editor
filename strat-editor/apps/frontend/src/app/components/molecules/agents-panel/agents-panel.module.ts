@@ -4,7 +4,7 @@ import { AgentsGridModule } from '../agents-grid/agents-grid.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AgentsPanelComponent } from './agents-panel.component';
 import { MatIconModule } from '@angular/material/icon';
-import { SharedModule } from '../../../shared.module';
+import { PipesModule } from '../../../pipes.module';
 
 @NgModule({
   declarations: [AgentsPanelComponent],
@@ -13,7 +13,7 @@ import { SharedModule } from '../../../shared.module';
     AgentsGridModule,
     MatIconModule,
     MatTabsModule,
-    SharedModule,
+    PipesModule,
   ],
   exports: [AgentsPanelComponent],
 })

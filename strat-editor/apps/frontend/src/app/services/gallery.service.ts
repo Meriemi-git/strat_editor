@@ -22,14 +22,11 @@ export class GalleryService {
       );
   }
 
-  uploadImage(image: File) {
+  uploadImage(image: File): Observable<Image> {
     let formData = new FormData();
     formData.append('image', image);
     return this.http
-      .post<string[]>(
-        environment.apiUrl + this.controller + '/upload',
-        formData
-      )
+      .post<Image>(environment.apiUrl + this.controller + '/upload', formData)
       .pipe(
         catchError((err) => {
           console.log(err);

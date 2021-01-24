@@ -19,7 +19,10 @@ export class GalleryService {
   ) {}
 
   public getAllImagesForUser(userId: string): Promise<Image[]> {
-    return this.imageModel.find({ userId: userId }).sort('uploadedAt').exec();
+    return this.imageModel
+      .find({ userId: userId })
+      .sort([['uploadedAt', -1]])
+      .exec();
   }
 
   public saveImage(file: any, userId: string): Promise<Image> {
@@ -29,7 +32,11 @@ export class GalleryService {
       size: file.size,
       userId: userId,
       uploadedAt: new Date(),
-    };
+      imageWidth: file.imageWidth,
+      imageHeight: file.imageHeight,
+      thumbWidth: file.thumbWidth,
+      thumbHeight: file.thumbHeight,
+    } as Image;
     const imageDocument = new this.imageModel(image);
     return imageDocument
       .save()
