@@ -5,11 +5,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 export interface GalleryState {
   images: Image[];
+  draggedImage: Image;
   error: HttpErrorResponse;
 }
 
 export const initialstate: GalleryState = {
   images: [],
+  draggedImage: null,
   error: null,
 };
 
@@ -40,6 +42,11 @@ const sidenavReducer = createReducer(
   on(actions.UploadGalleryImageError, (state, { error }) => ({
     ...state,
     error: error,
+  })),
+  on(actions.DragImage, (state, { image }) => ({
+    ...state,
+    draggedImage: image,
+    error: null,
   }))
 );
 

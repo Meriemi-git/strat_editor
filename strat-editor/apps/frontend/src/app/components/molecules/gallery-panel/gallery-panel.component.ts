@@ -23,4 +23,8 @@ export class GalleryPanelComponent implements OnInit {
   onImageUploaded(image: File): void {
     this.store.dispatch(Actions.UploadGalleryImage({ image }));
   }
+
+  onImageDragged(image: Image) {
+    this.store.dispatch(Actions.DragImage({ image }));
+  }
 }

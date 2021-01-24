@@ -28,3 +28,8 @@ export const UploadGalleryImageError = createAction(
   '[Gallery] Upload Gallery Image Error',
   props<{ error: HttpErrorResponse }>()
 );
+
+export const DragImage = createAction(
+  '[Gallery] Image dragged',
+  props<{ image: Image }>()
+);

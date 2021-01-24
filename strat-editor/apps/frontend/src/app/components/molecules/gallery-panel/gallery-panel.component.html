@@ -8,5 +8,6 @@
   <h2 class="mat-h3">Drag & drop image</h2>
   <strat-editor-images-grid
     [images]="$images | async"
+    (imageDragged)="onImageDragged($event)"
   ></strat-editor-images-grid>
 </div>

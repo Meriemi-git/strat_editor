@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Agent, Floor, Map } from '@strat-editor/data';
+import { Agent, Floor, Map, Image } from '@strat-editor/data';
 import * as Actions from '../../../store/actions';
 import * as Selectors from '../../../store/selectors';
 import { StratEditorState } from '../../../store/reducers';
@@ -40,6 +40,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   public height: number;
   private canvasStateLoading: boolean;
   private draggingAgent: Agent;
+  private draggingImage: Image;
 
   private previousAction: DrawerAction;
   private CTRLPressed: boolean;
@@ -97,6 +98,11 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.select(Selectors.getDraggedAgent).subscribe((agent) => {
       if (agent) {
         this.draggingAgent = agent;
+      }
+    });
+    this.store.select(Selectors.getDraggedImage).subscribe((image) => {
+      if (image) {
+        this.draggingImage = image;
       }
     });
   }
@@ -223,6 +229,15 @@ export class EditorComponent implements OnInit, AfterViewInit {
         event.layerX,
         event.layerY
       );
+      this.draggingAgent = null;
+    }
+    if (this.draggingImage) {
+      this.drawerEditor.drawImage(
+        this.draggingImage,
+        event.layerX,
+        event.layerY
+      );
+      this.draggingImage = null;
     }
   }
 

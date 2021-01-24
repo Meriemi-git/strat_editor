@@ -6,7 +6,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { Agent } from '@strat-editor/data';
+import { Agent, Image } from '@strat-editor/data';
 import { fabric } from 'fabric';
 import { DrawerAction } from '../../actions';
 import { CursorMode } from '../../cursor-mode';
@@ -99,6 +99,25 @@ export class DrawingEditorComponent implements OnInit {
     if (agent) {
       fabric.Image.fromURL(
         this.ihs.getAgentImageByName(agent.badge),
+        function (image) {
+          const div = 50 / image.width;
+          image.set({
+            left: x,
+            top: y,
+            scaleX: div,
+            scaleY: div,
+          });
+          this.canvas.add(image);
+          this.canvas.renderAll();
+        }.bind(this)
+      );
+    }
+  }
+
+  public drawImage(draggingImage: Image, x: any, y: any) {
+    if (draggingImage) {
+      fabric.Image.fromURL(
+        this.ihs.getImageByName(draggingImage.fileName),
         function (image) {
           const div = 50 / image.width;
           image.set({

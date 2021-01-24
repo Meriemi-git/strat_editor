@@ -14,6 +14,7 @@ export class RightPanelComponent implements OnInit {
   $isGalleryPanelOpened: Observable<boolean>;
   $isAccountPanelOpened: Observable<boolean>;
   $authInfos: Observable<AuthInfos>;
+
   constructor(private store: Store<StratEditorState>) {}
 
   ngOnInit(): void {

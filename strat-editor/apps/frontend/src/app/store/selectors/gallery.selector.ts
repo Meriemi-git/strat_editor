@@ -17,3 +17,8 @@ export const getGalleryError = createSelector(
   selectGalleryState,
   (state: Gallery.GalleryState) => state.error
 );
+
+export const getDraggedImage = createSelector(
+  selectGalleryState,
+  (state: Gallery.GalleryState) => state.draggedImage
+);

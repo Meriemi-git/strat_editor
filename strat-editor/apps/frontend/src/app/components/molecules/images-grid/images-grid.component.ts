@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Image } from '@strat-editor/data';
 
 @Component({
@@ -8,6 +8,7 @@ import { Image } from '@strat-editor/data';
 })
 export class ImagesGridComponent {
   @Input() images: Image[];
+  @Output() imageDragged = new EventEmitter<Image>();
 
   constructor() {}
 
@@ -39,5 +40,9 @@ export class ImagesGridComponent {
       }
     });
     return halfLength;
+  }
+
+  onImageDragged(image: Image) {
+    this.imageDragged.emit(image);
   }
 }

@@ -3,20 +3,26 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnInit,
   Output,
 } from '@angular/core';
-import { Agent } from '@strat-editor/data';
+import { Image } from '@strat-editor/data';
 
 @Component({
-  selector: 'strat-editor-agent-item',
-  templateUrl: './agent-item.component.html',
-  styleUrls: ['./agent-item.component.scss'],
+  selector: 'strat-editor-images-item',
+  templateUrl: './images-item.component.html',
+  styleUrls: ['./images-item.component.scss'],
 })
-export class AgentBadgeComponent {
-  @Input() agent: Agent;
-  @Output() agentDragged = new EventEmitter<Agent>();
+export class ImagesItemComponent implements OnInit {
+  @Input() image: Image;
+  @Input() width: number;
+  @Output() imageDragged = new EventEmitter<Image>();
 
   private isDown: boolean;
+
+  constructor() {}
+
+  ngOnInit(): void {}
 
   @HostListener('mousedown', ['$event'])
   onMouseDown(event: any) {
@@ -26,7 +32,7 @@ export class AgentBadgeComponent {
   @HostListener('mousemove', ['$event'])
   onMouseMove(event: any) {
     if (this.isDown) {
-      this.agentDragged.emit(this.agent);
+      this.imageDragged.emit(this.image);
       this.isDown = false;
     }
   }
