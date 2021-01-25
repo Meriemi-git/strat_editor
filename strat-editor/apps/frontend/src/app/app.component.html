@@ -1,6 +1,7 @@
 <strat-editor-top-bar
   (disconnect)="onDisconnect()"
   [$userInfos]="$userInfos"
+  [maps]="$maps | async"
 ></strat-editor-top-bar>
 <mat-sidenav-container class="double-sidenav" hasBackdrop="false">
   <mat-sidenav

@@ -4,6 +4,8 @@
   </button>
   <span>Strat Editor</span>
   <span class="filler"></span>
+  <strat-editor-floor-chooser [maps]="maps"> </strat-editor-floor-chooser>
+  <span class="filler"></span>
   <span class="example-spacer">{{ userInfos?.username | titlecase }}</span>
   <mat-chip-list *ngIf="!userInfos">
     <mat-chip color="accent" (click)="onLoginClick()">Login</mat-chip>

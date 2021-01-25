@@ -10,6 +10,8 @@ import { GalleryModule } from './api/gallery/gallery.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { AuthModule } from './api/auth/auth.module';
 import { RateLimiterModule } from 'nestjs-rate-limiter';
+import { StratModule } from './api/strat/strat.module';
+import { RequestMiddleware } from './request.middleware';
 
 @Module({
   imports: [
@@ -32,10 +34,11 @@ import { RateLimiterModule } from 'nestjs-rate-limiter';
     UserModule,
     GalleryModule,
     RateLimiterModule,
+    StratModule,
   ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    //consumer.apply(RequestMiddleware).forRoutes('/');
+    consumer.apply(RequestMiddleware).forRoutes('/');
   }
 }

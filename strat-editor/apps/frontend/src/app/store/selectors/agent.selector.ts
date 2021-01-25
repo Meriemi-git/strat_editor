@@ -11,6 +11,7 @@ export const selectAgentsLoading = createSelector(
   (state: Agent.AgentState) => state.loaded
 );
 export const selectAllAgents = createSelector(agentFeature, Agent.selectAll);
+
 export const selectAgentByName = createSelector(
   selectAllAgents,
   (agents, name) => agents.filter((x) => x.name === name)

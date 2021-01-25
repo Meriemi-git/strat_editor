@@ -51,7 +51,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.$maps = this.store.select(Selectors.selectAllMaps);
+    this.$maps = this.store.select(Selectors.getAllMaps);
     this.store.dispatch(Actions.FetchMaps());
     this.store.dispatch(Actions.FetchAgents());
     this.store.dispatch(Actions.FetchDrawerActions());

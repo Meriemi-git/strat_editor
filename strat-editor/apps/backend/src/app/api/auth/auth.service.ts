@@ -132,7 +132,7 @@ export class AuthService {
     const payload: JwtInfos = { userId: user._id, userMail: user.mail };
     return this.jwtService.sign(payload, {
       jwtid: jwtId,
-      expiresIn: '5s',
+      expiresIn: '5m',
     });
   }
 

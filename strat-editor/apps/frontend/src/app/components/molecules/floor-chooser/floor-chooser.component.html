@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="item">
+    <strat-editor-map-selector
+      (mapSelected)="onMapSelected($event)"
+      [maps]="maps"
+    ></strat-editor-map-selector>
+  </div>
+  <div class="item">
+    <strat-editor-floor-selector
+      (floorSelected)="onFloorSelected($event)"
+      [floors]="floors"
+    ></strat-editor-floor-selector>
+  </div>
+</div>

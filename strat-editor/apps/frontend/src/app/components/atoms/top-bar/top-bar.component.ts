@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserInfos } from '@strat-editor/data';
+import { UserInfos, Map } from '@strat-editor/data';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -10,8 +10,11 @@ import { Observable } from 'rxjs';
 })
 export class TopBarComponent implements OnInit {
   @Input() $userInfos: Observable<UserInfos>;
+  @Input() maps: Map[];
   @Output() disconnect = new EventEmitter<void>();
+
   public userInfos: UserInfos;
+
   constructor(private router: Router) {}
 
   ngOnInit(): void {
