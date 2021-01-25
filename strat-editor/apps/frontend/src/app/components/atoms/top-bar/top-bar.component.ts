@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
-import { UserInfos, Map } from '@strat-editor/data';
+import { NavigationStart, Router } from '@angular/router';
+import { UserInfos, Map, Floor } from '@strat-editor/data';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -11,8 +11,16 @@ import { Observable } from 'rxjs';
 export class TopBarComponent implements OnInit {
   @Input() $userInfos: Observable<UserInfos>;
   @Input() maps: Map[];
-  @Output() disconnect = new EventEmitter<void>();
+  @Input() floors: Floor[];
 
+  @Input() selectedMap: Map;
+  @Input() selectedFloor: Floor;
+
+  @Output() disconnect = new EventEmitter<void>();
+  @Output() mapSelected = new EventEmitter<Map>();
+  @Output() floorSelected = new EventEmitter<Floor>();
+
+  public onEditorPage: boolean;
   public userInfos: UserInfos;
 
   constructor(private router: Router) {}
@@ -20,6 +28,11 @@ export class TopBarComponent implements OnInit {
   ngOnInit(): void {
     this.$userInfos.subscribe((userInfos) => {
       this.userInfos = userInfos;
+    });
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        this.onEditorPage = event.url.includes('editor');
+      }
     });
   }
 
@@ -40,5 +53,13 @@ export class TopBarComponent implements OnInit {
 
   onHomeClick() {
     this.router.navigateByUrl('/');
+  }
+
+  onMapSelected(map: Map) {
+    this.mapSelected.emit(map);
+  }
+
+  onFloorSelected(floor: Floor) {
+    this.floorSelected.emit(floor);
   }
 }

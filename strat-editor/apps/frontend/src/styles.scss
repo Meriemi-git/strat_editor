@@ -17,6 +17,7 @@ body {
   margin: 0;
   background-color: #3a3a3a;
   font-family: 'Roboto';
+  overflow-y: hidden;
 }
 
 /* Overwrite the styles of the mat-dialog-container element globally, but only for those

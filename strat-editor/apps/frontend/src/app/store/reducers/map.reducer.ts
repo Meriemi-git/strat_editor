@@ -1,50 +1,55 @@
-import {Map} from "@strat-editor/data"
+import { Floor, Map } from '@strat-editor/data';
 import * as actions from '../actions/map.action';
 import { createReducer, on, Action } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from "@ngrx/entity"
+import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 
-export interface MapState extends EntityState<Map>{
+export interface MapState extends EntityState<Map> {
   loaded: boolean;
   error: string;
-  selectedMap : Map;
+  selectedMap: Map;
+  selectedFloor: Floor;
 }
 
-export const adapter : EntityAdapter<Map> =
-   createEntityAdapter<Map>({
-    sortComparer: sortByName,
-    selectId: (map: Map) => map._id
-  });
+export const adapter: EntityAdapter<Map> = createEntityAdapter<Map>({
+  sortComparer: sortByName,
+  selectId: (map: Map) => map._id,
+});
 
 export function sortByName(a: Map, b: Map): number {
   return a.name.localeCompare(b.name);
 }
 
 export const initialstate: MapState = adapter.getInitialState({
-  error : null,
-  loaded : false,
-  selectedMap : null
+  error: null,
+  loaded: false,
+  selectedMap: null,
+  selectedFloor: null,
 });
 
 const mapReducer = createReducer(
   initialstate,
-  on(actions.FetchMaps, state => ({
+  on(actions.FetchMaps, (state) => ({
     ...state,
-    loaded: true
+    loaded: true,
   })),
   on(actions.FetchMapsSuccess, (state, { maps }) => {
     return adapter.addMany(maps, { ...state, loading: false, error: null });
   }),
   on(actions.FetchMapsError, (state, { error }) => ({
     ...state,
-    loading : false,
-    isLoaded : false,
-    error: error
+    loading: false,
+    isLoaded: false,
+    error: error,
   })),
-  on(actions.SelectMap, (state, { selectedMap }) => ({
+  on(actions.SelectMap, (state, { map }) => ({
     ...state,
-    selectedMap: selectedMap
+    selectedMap: map,
   })),
-)
+  on(actions.SelectFloor, (state, { floor }) => ({
+    ...state,
+    selectedFloor: floor,
+  }))
+);
 
 export function reducer(state: MapState | undefined, action: Action) {
   return mapReducer(state, action);
@@ -55,8 +60,6 @@ export const {
   selectEntities,
   selectIds,
   selectTotal,
-
 } = adapter.getSelectors();
 
 export const selectAllMaps = selectAll;
-

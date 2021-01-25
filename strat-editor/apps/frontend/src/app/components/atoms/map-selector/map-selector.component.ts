@@ -8,6 +8,7 @@ import { Map } from '@strat-editor/data';
 })
 export class MapSelectorComponent implements OnInit {
   @Input() maps: Map[];
+  @Input() selectedMap: Map;
   @Output() mapSelected = new EventEmitter<Map>();
   constructor() {}
 

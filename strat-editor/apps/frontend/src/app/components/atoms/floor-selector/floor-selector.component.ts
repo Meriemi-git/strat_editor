@@ -6,18 +6,15 @@ import { Floor } from '@strat-editor/data';
   templateUrl: './floor-selector.component.html',
   styleUrls: ['./floor-selector.component.scss'],
 })
-export class FloorSelectorComponent implements OnInit {
+export class FloorSelectorComponent {
   @Input() floors: Floor[];
+  @Input() selectedFloor: Floor;
   @Output() floorSelected = new EventEmitter<Floor>();
-  constructor() {}
+  public selected: Floor;
 
-  ngOnInit(): void {}
+  constructor() {}
 
   onFloorSelected(floor: Floor) {
     this.floorSelected.emit(floor);
-  }
-
-  getDefaultFloor(): Floor {
-    return this.floors ? this.floors[0] : null;
   }
 }

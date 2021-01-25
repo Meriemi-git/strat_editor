@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Floor, Map } from '@strat-editor/data';
 
 @Component({
@@ -6,17 +6,22 @@ import { Floor, Map } from '@strat-editor/data';
   templateUrl: './floor-chooser.component.html',
   styleUrls: ['./floor-chooser.component.scss'],
 })
-export class FloorChooserComponent implements OnInit {
+export class FloorChooserComponent {
   @Input() maps: Map[];
-  public floors: Floor[];
+  @Input() floors: Floor[];
+  @Input() selectedMap: Map;
+  @Input() selectedFloor: Floor;
+
+  @Output() mapSelected = new EventEmitter<Map>();
+  @Output() floorSelected = new EventEmitter<Floor>();
 
   constructor() {}
 
-  ngOnInit(): void {}
-
   onMapSelected(map: Map) {
-    this.floors = map.floors;
+    this.mapSelected.emit(map);
   }
 
-  onFloorSelected(floor: Floor) {}
+  onFloorSelected(floor: Floor) {
+    this.floorSelected.emit(floor);
+  }
 }

@@ -1,9 +1,7 @@
 import { createAction, props, union } from '@ngrx/store';
-import { Map } from '@strat-editor/data';
+import { Floor, Map } from '@strat-editor/data';
 
-export const FetchMaps = createAction(
-  '[Map] Fetch Maps'
-);
+export const FetchMaps = createAction('[Map] Fetch Maps');
 
 export const FetchMapsSuccess = createAction(
   '[Map] Fetch Maps Success',
@@ -17,15 +15,10 @@ export const FetchMapsError = createAction(
 
 export const SelectMap = createAction(
   '[Map] Select Map',
-  props<{ selectedMap: Map }>()
+  props<{ map: Map }>()
 );
 
-const actions = union({
-  FetchMaps,
-  FetchMapsSuccess,
-  FetchMapsError,
-  SelectMap
-});
-
-
-export type MapActions = typeof actions;
+export const SelectFloor = createAction(
+  '[Map] Select Floor',
+  props<{ floor: Floor }>()
+);

@@ -4,7 +4,7 @@ import { StratEditorState } from './store/reducers';
 import * as Actions from './store/actions';
 import * as Selectors from './store/selectors';
 import { take } from 'rxjs/operators';
-import { UserInfos, Map } from '@strat-editor/data';
+import { UserInfos, Map, Floor } from '@strat-editor/data';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -17,11 +17,24 @@ export class AppComponent implements OnInit {
   public rightIsOpened: boolean;
   public $userInfos: Observable<UserInfos>;
   public $maps: Observable<Map[]>;
+  public floors: Floor[];
+
+  public $selectedMap: Observable<Map>;
+  public $selectedFloor: Observable<Floor>;
+
   constructor(private store: Store<StratEditorState>) {}
 
   ngOnInit(): void {
     this.$userInfos = this.store.select(Selectors.getUserInfos);
     this.$maps = this.store.select(Selectors.getAllMaps);
+    this.$selectedMap = this.store.select(Selectors.getSelectedMap);
+    this.$selectedFloor = this.store.select(Selectors.getSelectedFloor);
+
+    this.$selectedMap.subscribe((selectedMap) => {
+      if (selectedMap) {
+        this.floors = selectedMap.floors;
+      }
+    });
     this.store.select(Selectors.isLeftSidenavOpened).subscribe((isOpened) => {
       this.leftIsOpened = isOpened;
     });
@@ -54,6 +67,14 @@ export class AppComponent implements OnInit {
           this.store.dispatch(Actions.closeRight());
         }
       });
+  }
+
+  onMapSelected(map: Map) {
+    this.store.dispatch(Actions.SelectMap({ map }));
+  }
+
+  onFloorSelected(floor: Floor) {
+    this.store.dispatch(Actions.SelectFloor({ floor }));
   }
 
   toggleLeftSidenav() {

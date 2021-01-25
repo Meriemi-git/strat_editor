@@ -105,13 +105,22 @@ export class EditorComponent implements OnInit, AfterViewInit {
         this.draggingImage = image;
       }
     });
+    this.store.select(Selectors.getSelectedMap).subscribe((map) => {
+      if (map) {
+        this.selectedMap = map;
+        this.store.dispatch(Actions.SelectFloor({ floor: map.floors[0] }));
+      }
+    });
+    this.store.select(Selectors.getSelectedFloor).subscribe((floor) => {
+      if (floor) {
+        this.selectedFloor = floor;
+        this.displayCanvas();
+      }
+    });
   }
 
   onMapSelected(map: Map) {
-    this.selectedMap = map;
-    this.selectedFloor = map.floors[1];
-    this.store.dispatch(Actions.SelectMap({ selectedMap: map }));
-    this.displayCanvas();
+    this.store.dispatch(Actions.SelectMap({ map: map }));
   }
 
   onDrawingActionSelected(action: DrawerAction) {

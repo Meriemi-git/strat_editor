@@ -1,7 +1,12 @@
 <strat-editor-top-bar
   (disconnect)="onDisconnect()"
+  (mapSelected)="onMapSelected($event)"
+  (floorSelected)="onFloorSelected($event)"
   [$userInfos]="$userInfos"
   [maps]="$maps | async"
+  [floors]="floors"
+  [selectedMap]="$selectedMap | async"
+  [selectedFloor]="$selectedFloor | async"
 ></strat-editor-top-bar>
 <mat-sidenav-container class="double-sidenav" hasBackdrop="false">
   <mat-sidenav

@@ -3,12 +3,14 @@
     <strat-editor-map-selector
       (mapSelected)="onMapSelected($event)"
       [maps]="maps"
+      [selectedMap]="selectedMap"
     ></strat-editor-map-selector>
   </div>
   <div class="item">
     <strat-editor-floor-selector
       (floorSelected)="onFloorSelected($event)"
       [floors]="floors"
+      [selectedFloor]="selectedFloor"
     ></strat-editor-floor-selector>
   </div>
 </div>

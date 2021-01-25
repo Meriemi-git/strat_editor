@@ -18,3 +18,7 @@ export const getSelectedMap = createSelector(
   getMapState,
   (state: Map.MapState) => state.selectedMap
 );
+export const getSelectedFloor = createSelector(
+  getMapState,
+  (state: Map.MapState) => state.selectedFloor
+);

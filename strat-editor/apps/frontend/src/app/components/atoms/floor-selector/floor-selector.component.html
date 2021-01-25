@@ -1,7 +1,10 @@
 <mat-form-field appearance="fill" class="field">
   <mat-label>Floor</mat-label>
-  <mat-select (selectionChange)="onFloorSelected($event.value)">
-    <mat-option *ngFor="let floor of floors" [value]="floor">
+  <mat-select
+    (selectionChange)="onFloorSelected($event.value)"
+    [(value)]="selectedFloor"
+  >
+    <mat-option *ngFor="let floor of floors; let idx = index" [value]="floor">
       {{ floor.name }}
     </mat-option>
   </mat-select>

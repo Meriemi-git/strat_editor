@@ -1,6 +1,9 @@
 <mat-form-field appearance="fill" class="field">
   <mat-label>Map</mat-label>
-  <mat-select (selectionChange)="onMapSelected($event.value)">
+  <mat-select
+    (selectionChange)="onMapSelected($event.value)"
+    [(value)]="selectedMap"
+  >
     <mat-option *ngFor="let map of maps" [value]="map">
       {{ map.name }}
     </mat-option>
