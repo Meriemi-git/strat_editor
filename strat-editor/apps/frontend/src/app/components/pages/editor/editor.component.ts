@@ -38,6 +38,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   public $maps: Observable<Map[]>;
   public width: number;
   public height: number;
+  public imageNotFounded: boolean;
   private canvasStateLoading: boolean;
   private draggingAgent: Agent;
   private draggingImage: Image;
@@ -138,24 +139,28 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   displayCanvas() {
+    this.resizeCanvas();
+    try {
+      this.drawerEditor.setBackgroundImageFromUrl(
+        environment.floorImageApiUrl + this.selectedFloor.image
+      );
+      this.imageNotFounded = false;
+    } catch (error) {
+      console.log('error sdqsd', error);
+      this.imageNotFounded = true;
+      this.drawerEditor.clear();
+    }
+  }
+
+  resizeCanvas() {
     this.width = (window.innerWidth * 98) / 100;
     this.height = this.container.nativeElement.clientHeight;
     this.drawerEditor.resize(this.width, this.height);
-    this.drawerEditor.setBackgroundImageFromUrl(
-      environment.floorImageApiUrl + this.selectedFloor.image
-    );
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event?) {
-    this.width = window.innerWidth;
-    this.height = this.container.nativeElement.clientHeight;
-    this.drawerEditor.resize(this.width, this.height);
-    if (this.selectedFloor) {
-      this.drawerEditor.setBackgroundImageFromUrl(
-        environment.floorImageApiUrl + this.selectedFloor.image
-      );
-    }
+    this.displayCanvas();
   }
 
   @HostListener('document:keyup', ['$event'])

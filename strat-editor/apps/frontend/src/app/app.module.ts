@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { TopBarModule } from '../app/components/atoms/top-bar/top-bar.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,6 +22,7 @@ import { RightPanelModule } from './components/molecules/right-panel/right-panel
 import { AppInitService } from './services/app-init.service';
 import { HttpJwtInterceptor } from './interceptors/http-jwt-interceptor';
 import { ToastrModule } from 'ngx-toastr';
+import { GlobalErrorHandler } from './global-error-handler';
 
 export function init_app(appInitService: AppInitService) {
   return () => appInitService.initializeApp();
@@ -61,6 +62,10 @@ export function init_app(appInitService: AppInitService) {
       deps: [AppInitService],
       multi: true,
     },
+    // {
+    //   provide: ErrorHandler,
+    //   useClass: GlobalErrorHandler,
+    // },
   ],
   bootstrap: [AppComponent],
 })

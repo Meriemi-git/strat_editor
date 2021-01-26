@@ -21,7 +21,15 @@
       (selectMap)="onMapSelected($event)"
     ></strat-editor-map-grid>
   </div>
+  <div *ngIf="imageNotFounded">
+    <h2>Image not found</h2>
+    <strat-editor-svg-icon
+      [name]="error"
+      [width]="'100px'"
+    ></strat-editor-svg-icon>
+  </div>
   <strat-editor-drawing-editor
+    *ngIf="!imageNotFounded"
     class="editor"
     #drawerEditor
     [canvasWidth]="width"

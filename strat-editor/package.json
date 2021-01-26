@@ -59,7 +59,7 @@
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.5",
     "csurf": "^1.11.0",
-    "fabric": "^4.2.0",
+    "fabric": "^4.3.0",
     "jquery": "^3.5.1",
     "lodash-es": "^4.17.15",
     "moment": "^2.29.1",

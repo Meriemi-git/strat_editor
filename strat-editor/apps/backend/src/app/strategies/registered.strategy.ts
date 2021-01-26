@@ -1,12 +1,6 @@
 import { Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import {
-  Injectable,
-  Logger,
-  PreconditionFailedException,
-  Req,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, Logger, Req, UnauthorizedException } from '@nestjs/common';
 import { jwtConstants } from './constants';
 import { UserService } from '../api/user/user.service';
 import { JwtInfos, User } from '@strat-editor/data';

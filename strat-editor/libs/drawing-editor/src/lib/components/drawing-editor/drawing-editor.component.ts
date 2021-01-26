@@ -1,12 +1,5 @@
-import {
-  Component,
-  EventEmitter,
-  InjectionToken,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { Agent, Image } from '@strat-editor/data';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Agent, DrawingError, Image } from '@strat-editor/data';
 import { fabric } from 'fabric';
 import { DrawerAction } from '../../actions';
 import { CursorMode } from '../../cursor-mode';
@@ -112,6 +105,11 @@ export class DrawingEditorComponent implements OnInit {
         }.bind(this)
       );
     }
+  }
+
+  public clear() {
+    console.log('clear canvas');
+    this.canvas.clear();
   }
 
   public drawImage(draggingImage: Image, x: any, y: any) {
@@ -244,27 +242,31 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.loadFromJSON(canvasState, this.canvasStateIsLoaded);
   }
 
-  public setBackgroundImageFromUrl(imageUrl: string) {
+  public setBackgroundImageFromUrl(imageUrl: string): any {
     fabric.Image.fromURL(
       imageUrl,
       function (image) {
-        const scale =
-          this.canvas.width < this.canvas.height
-            ? this.canvas.width / image.width
-            : this.canvas.height / image.height;
-        image.set({
-          top: this.canvas.getCenter().top,
-          left: this.canvas.getCenter().left,
-          originX: 'center',
-          originY: 'center',
-          scaleX: scale,
-          scaleY: scale,
-          selectable: false,
-          name: 'map',
-        });
-        this.canvas.add(image);
-        this.canvas.renderAll();
-        this.stateModified.emit(this.getCanvasState());
+        if (image._element) {
+          const scale =
+            this.canvas.width < this.canvas.height
+              ? this.canvas.width / image.width
+              : this.canvas.height / image.height;
+          image.set({
+            top: this.canvas.getCenter().top,
+            left: this.canvas.getCenter().left,
+            originX: 'center',
+            originY: 'center',
+            scaleX: scale,
+            scaleY: scale,
+            selectable: false,
+            name: 'map',
+          });
+          this.canvas.add(image);
+          this.canvas.renderAll();
+          this.stateModified.emit(this.getCanvasState());
+        } else {
+          throw new DrawingError('Cannot load backgroung image');
+        }
       }.bind(this)
     );
   }
