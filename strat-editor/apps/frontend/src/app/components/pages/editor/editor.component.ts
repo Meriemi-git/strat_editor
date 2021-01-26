@@ -38,7 +38,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
   public $maps: Observable<Map[]>;
   public width: number;
   public height: number;
-  public imageNotFounded: boolean;
   private canvasStateLoading: boolean;
   private draggingAgent: Agent;
   private draggingImage: Image;
@@ -107,11 +106,12 @@ export class EditorComponent implements OnInit, AfterViewInit {
       }
     });
     this.store.select(Selectors.getSelectedMap).subscribe((map) => {
-      if (map) {
-        this.selectedMap = map;
-        this.store.dispatch(Actions.SelectFloor({ floor: map.floors[0] }));
-      }
+      this.selectedMap = map;
+      this.store.dispatch(
+        Actions.SelectFloor({ floor: map ? map.floors[0] : null })
+      );
     });
+
     this.store.select(Selectors.getSelectedFloor).subscribe((floor) => {
       if (floor) {
         this.selectedFloor = floor;
@@ -139,17 +139,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   displayCanvas() {
+    console.log('display canvas');
     this.resizeCanvas();
-    try {
-      this.drawerEditor.setBackgroundImageFromUrl(
-        environment.floorImageApiUrl + this.selectedFloor.image
-      );
-      this.imageNotFounded = false;
-    } catch (error) {
-      console.log('error sdqsd', error);
-      this.imageNotFounded = true;
-      this.drawerEditor.clear();
-    }
+    this.drawerEditor.setBackgroundImageFromUrl(this.selectedFloor);
   }
 
   resizeCanvas() {

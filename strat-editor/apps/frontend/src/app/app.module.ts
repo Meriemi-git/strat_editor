@@ -23,6 +23,7 @@ import { AppInitService } from './services/app-init.service';
 import { HttpJwtInterceptor } from './interceptors/http-jwt-interceptor';
 import { ToastrModule } from 'ngx-toastr';
 import { GlobalErrorHandler } from './global-error-handler';
+import { NotificationService } from './services/notifications.service';
 
 export function init_app(appInitService: AppInitService) {
   return () => appInitService.initializeApp();
@@ -62,10 +63,11 @@ export function init_app(appInitService: AppInitService) {
       deps: [AppInitService],
       multi: true,
     },
-    // {
-    //   provide: ErrorHandler,
-    //   useClass: GlobalErrorHandler,
-    // },
+    NotificationService,
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler,
+    },
   ],
   bootstrap: [AppComponent],
 })

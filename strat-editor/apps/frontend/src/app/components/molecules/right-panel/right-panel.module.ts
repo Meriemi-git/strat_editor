@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RightPanelComponent } from './right-panel.component';
 import { DrawingPanelModule } from '../drawing-panel/drawing-panel.module';
 import { GalleryPanelModule } from '../gallery-panel/gallery-panel.module';
-import { IconHelperService } from '@strat-editor/drawing-editor';
+import { ImageHelperService } from '@strat-editor/drawing-editor';
 
 @NgModule({
   declarations: [RightPanelComponent],
   imports: [CommonModule, DrawingPanelModule, GalleryPanelModule],
-  providers: [IconHelperService],
+  providers: [ImageHelperService],
   exports: [RightPanelComponent],
 })
 export class RightPanelModule {}

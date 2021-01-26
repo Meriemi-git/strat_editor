@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Agent, DrawingError, Image } from '@strat-editor/data';
+import { Agent, MapLoadingError, Image, Floor } from '@strat-editor/data';
 import { fabric } from 'fabric';
 import { DrawerAction } from '../../actions';
 import { CursorMode } from '../../cursor-mode';
@@ -14,7 +14,7 @@ import { LineArrow } from '../../fabricjs/line-arrow';
 import { TriangleArrow } from '../../fabricjs/triangle-arrow';
 import { DrawerActionType } from '../../models';
 import { DrawerColor } from '../../models/drawer-color';
-import { IconHelperService } from '../../services/icon-helper.service';
+import { ImageHelperService } from '../../services/image-helper.service';
 
 @Component({
   selector: 'strat-editor-drawing-editor',
@@ -47,7 +47,7 @@ export class DrawingEditorComponent implements OnInit {
   private lastPosX: number = 0;
   private lastPosY: number = 0;
 
-  constructor(private ihs: IconHelperService) {
+  constructor(private ihs: ImageHelperService) {
     this.addAvalaibleDrawers();
   }
 
@@ -115,7 +115,7 @@ export class DrawingEditorComponent implements OnInit {
   public drawImage(draggingImage: Image, x: any, y: any) {
     if (draggingImage) {
       fabric.Image.fromURL(
-        this.ihs.getImageByName(draggingImage.fileName),
+        this.ihs.getGalleryImageByName(draggingImage.fileName),
         function (image) {
           const div = 50 / image.width;
           image.set({
@@ -242,9 +242,9 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.loadFromJSON(canvasState, this.canvasStateIsLoaded);
   }
 
-  public setBackgroundImageFromUrl(imageUrl: string): any {
+  public setBackgroundImageFromUrl(floor: Floor): any {
     fabric.Image.fromURL(
-      imageUrl,
+      this.ihs.getFloorImage(floor),
       function (image) {
         if (image._element) {
           const scale =
@@ -265,7 +265,9 @@ export class DrawingEditorComponent implements OnInit {
           this.canvas.renderAll();
           this.stateModified.emit(this.getCanvasState());
         } else {
-          throw new DrawingError('Cannot load backgroung image');
+          throw new MapLoadingError(
+            'Cannot load backgroung image for ' + floor.name
+          );
         }
       }.bind(this)
     );

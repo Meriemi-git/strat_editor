@@ -33,6 +33,8 @@ export class AppComponent implements OnInit {
     this.$selectedMap.subscribe((selectedMap) => {
       if (selectedMap) {
         this.floors = selectedMap.floors;
+      } else {
+        this.floors = [];
       }
     });
     this.store.select(Selectors.isLeftSidenavOpened).subscribe((isOpened) => {

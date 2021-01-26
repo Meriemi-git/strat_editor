@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { IconHelperService } from '@strat-editor/drawing-editor';
+import { ImageHelperService } from '@strat-editor/drawing-editor';
 
 @Component({
   selector: 'strat-editor-svg-icon',
@@ -25,7 +25,7 @@ export class SvgIconComponent implements OnInit, AfterViewInit {
   constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    public ihs: IconHelperService,
+    public ihs: ImageHelperService,
     private renderer: Renderer2
   ) {}
 

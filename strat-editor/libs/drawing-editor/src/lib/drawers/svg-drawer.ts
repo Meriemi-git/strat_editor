@@ -2,7 +2,7 @@ import { fabric } from 'fabric';
 import { ObjectDrawer } from './object-drawer';
 import { DrawingMode } from './drawing-mode';
 import { Injectable } from '@angular/core';
-import { IconHelperService } from '../services/icon-helper.service';
+import { ImageHelperService } from '../services/image-helper.service';
 
 @Injectable()
 export class SvgDrawer implements ObjectDrawer {
@@ -10,7 +10,7 @@ export class SvgDrawer implements ObjectDrawer {
   private svgName: string;
   origX: number;
   origY: number;
-  constructor(svgName: string, private ihs: IconHelperService) {
+  constructor(svgName: string, private ihs: ImageHelperService) {
     this.svgName = svgName;
   }
 

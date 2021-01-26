@@ -1,14 +1,21 @@
-import { ErrorHandler, Injectable } from '@angular/core';
+import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DrawingError } from '@strat-editor/data';
+import { MapLoadingError, NotificationType } from '@strat-editor/data';
+import { Store } from '@ngrx/store';
+import { NotificationService } from './services/notifications.service';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
-  constructor() {}
+  constructor(private injector: Injector) {}
 
   handleError(error: Error | HttpErrorResponse) {
-    if (error instanceof DrawingError) {
-      console.error('It happens: ', error);
+    const store = this.injector.get(Store);
+    const notificationService = this.injector.get(NotificationService);
+    if (error instanceof MapLoadingError) {
+      notificationService.displayNotification({
+        message: error.message,
+        type: NotificationType.error,
+      });
     }
   }
 }

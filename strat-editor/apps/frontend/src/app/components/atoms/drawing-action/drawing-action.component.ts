@@ -1,8 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
 import { DrawerAction } from '@strat-editor/drawing-editor';
-import { IconHelperService } from '@strat-editor/drawing-editor';
 @Component({
   selector: 'strat-editor-drawing-action',
   templateUrl: './drawing-action.component.html',
