@@ -174,17 +174,6 @@ $mat-dark-theme-background: (
 // Compute font config
 @include mat-core($fontConfig);
 
-// Theme Config
-
-body {
-  --primary-color: #5533cc;
-  --primary-lighter-color: #ccc2f0;
-  --primary-darker-color: #3b20b9;
-  --text-primary-color: #{$light-primary-text};
-  --text-primary-lighter-color: #{$dark-primary-text};
-  --text-primary-darker-color: #{$light-primary-text};
-}
-
 $primaryColor: #327eff;
 $primaryLightColor: #79adff;
 $primaryDarkColor: #0053cb;

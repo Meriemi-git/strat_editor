@@ -15,6 +15,7 @@ import {
   Image,
   UserInfos,
   DrawerColor,
+  DrawingMode,
 } from '@strat-editor/data';
 import * as Actions from '../../../store/actions';
 import * as Selectors from '../../../store/selectors';
@@ -39,17 +40,18 @@ export class EditorComponent implements OnInit, AfterViewInit {
   @ViewChild('container') container: ElementRef;
   @ViewChild('drawerEditor') drawerEditor: DrawingEditorComponent;
 
-  public selectedMap: Map;
   public selectedFloor: Floor;
   public $maps: Observable<Map[]>;
-  public width: number;
-  public height: number;
+  public width: number = 0;
+  public height: number = 0;
   private canvasStateLoading: boolean;
   private draggingAgent: Agent;
   private draggingImage: Image;
 
   private previousAction: DrawerAction;
   private CTRLPressed: boolean;
+
+  public $drawingMode: Observable<DrawingMode>;
 
   constructor(
     private store: Store<StratEditorState>,
@@ -58,6 +60,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.$maps = this.store.select(Selectors.getAllMaps);
+    this.$drawingMode = this.store.select(Selectors.getDrawingMode);
     this.store.dispatch(Actions.FetchMaps());
     this.store.dispatch(Actions.FetchAgents());
     this.store.dispatch(Actions.FetchDrawerActions());
@@ -70,7 +73,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.store.select(Selectors.getSelectedAction).subscribe((selected) => {
-      if (this.selectedMap) {
+      if (this.selectedFloor) {
         this.store.dispatch(Actions.closeRight());
       }
       if (
@@ -112,16 +115,17 @@ export class EditorComponent implements OnInit, AfterViewInit {
       }
     });
     this.store.select(Selectors.getSelectedMap).subscribe((map) => {
-      this.selectedMap = map;
       this.store.dispatch(
         Actions.SelectFloor({ floor: map ? map.floors[0] : null })
       );
     });
 
     this.store.select(Selectors.getSelectedFloor).subscribe((floor) => {
+      this.selectedFloor = floor;
       if (floor) {
-        this.selectedFloor = floor;
         this.displayCanvas();
+      } else {
+        this.drawerEditor.close();
       }
     });
   }
@@ -142,6 +146,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   onCanvasStateLoaded() {
     this.canvasStateLoading = false;
+  }
+
+  onDrawingModeChanged(drawingMode: DrawingMode) {
+    this.store.dispatch(Actions.SetDrawingMode({ drawingMode }));
   }
 
   displayCanvas() {

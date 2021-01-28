@@ -1,12 +1,12 @@
 import { fabric } from 'fabric';
 import { ObjectDrawer } from './object-drawer';
-import { DrawingMode } from './drawing-mode';
+import { LineMode } from './line-mode';
 import { Injectable } from '@angular/core';
 import { ImageHelperService } from '../services/image-helper.service';
 
 @Injectable()
 export class SvgDrawer implements ObjectDrawer {
-  drawingMode: DrawingMode = DrawingMode.Svg;
+  drawingMode: LineMode = LineMode.Svg;
   private svgName: string;
   origX: number;
   origY: number;

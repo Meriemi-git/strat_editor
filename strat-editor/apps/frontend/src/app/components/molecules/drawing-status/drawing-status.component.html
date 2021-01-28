@@ -1,13 +1,19 @@
-<div>
-  <mat-label>Status</mat-label>
-  <button
-    mat-raised-button
-    color="primary"
-    *ngIf="status === CursorModeEnum.Selection"
-  ></button>
-  <button
-    mat-raised-button
-    color="warning"
-    *ngIf="status === CursorModeEnum.Draw"
-  ></button>
+<div class="drawing-status">
+  <div class="container">
+    <h3>Drawing Mode</h3>
+    <mat-chip-list aria-label="Status">
+      <mat-chip
+        *ngIf="drawingMode === DrawingModeEnum.Selection"
+        color="primary"
+      >
+        {{ drawingMode }}
+      </mat-chip>
+      <mat-chip *ngIf="drawingMode === DrawingModeEnum.Draw" color="warning">
+        {{ drawingMode }}
+      </mat-chip>
+      <mat-chip *ngIf="drawingMode === DrawingModeEnum.Dragging" color="accent">
+        {{ drawingMode }}
+      </mat-chip>
+    </mat-chip-list>
+  </div>
 </div>

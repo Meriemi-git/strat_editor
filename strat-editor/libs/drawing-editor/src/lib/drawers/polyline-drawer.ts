@@ -1,9 +1,9 @@
 import { fabric } from 'fabric';
 import { ObjectDrawer } from './object-drawer';
-import { DrawingMode } from './drawing-mode';
+import { LineMode } from './line-mode';
 
 export class PolyLineDrawer implements ObjectDrawer {
-  drawingMode: DrawingMode = DrawingMode.Polyline;
+  drawingMode: LineMode = LineMode.Polyline;
 
   make(
     x: number,

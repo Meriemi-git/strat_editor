@@ -1,9 +1,9 @@
 import { fabric } from 'fabric';
-import { DrawingMode } from './drawing-mode';
+import { LineMode } from './line-mode';
 import { ObjectDrawer } from './object-drawer';
 
 export class RectangleDrawer extends ObjectDrawer {
-  drawingMode: DrawingMode = DrawingMode.Rectangle;
+  drawingMode: LineMode = LineMode.Rectangle;
 
   private origX: number = 0;
   private origY: number = 0;

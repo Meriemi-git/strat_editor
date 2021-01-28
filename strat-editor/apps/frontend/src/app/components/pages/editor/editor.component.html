@@ -1,4 +1,4 @@
-<div class="icons-left" *ngIf="selectedMap">
+<div class="icons-left" *ngIf="selectedFloor">
   <div (click)="openAgentsPanel()">
     <span class="first">Agents</span>
   </div>
@@ -6,7 +6,7 @@
     <span class="second">Gadgets</span>
   </div>
 </div>
-<div class="icons-right" *ngIf="selectedMap">
+<div class="icons-right" *ngIf="selectedFloor">
   <div (click)="openDrawingPanel()">
     <span class="first">Drawing</span>
   </div>
@@ -15,7 +15,7 @@
   </div>
 </div>
 <div #container class="map-container">
-  <div class="map-selector" *ngIf="!selectedMap">
+  <div class="map-selector" *ngIf="!selectedFloor">
     <strat-editor-map-grid
       [maps]="$maps | async"
       (selectMap)="onMapSelected($event)"
@@ -28,5 +28,8 @@
     [canvasHeight]="height"
     (stateModified)="onStateModified($event)"
     (stateLoaded)="onCanvasStateLoaded()"
+    (drawingModeChanged)="onDrawingModeChanged($event)"
   ></strat-editor-drawing-editor>
+  <strat-editor-drawing-status [drawingMode]="$drawingMode | async">
+  </strat-editor-drawing-status>
 </div>

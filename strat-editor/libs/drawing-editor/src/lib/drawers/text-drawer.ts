@@ -1,8 +1,8 @@
 import { fabric } from 'fabric';
-import { ObjectDrawer, DrawingMode } from '.';
+import { ObjectDrawer, LineMode } from '.';
 
 export class TextDrawer implements ObjectDrawer {
-  drawingMode: DrawingMode = DrawingMode.Text;
+  drawingMode: LineMode = LineMode.Text;
 
   make(
     x: number,

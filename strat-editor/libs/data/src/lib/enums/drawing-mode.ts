@@ -1,4 +1,4 @@
-export enum CursorMode {
+export enum DrawingMode {
   Undefined = 'Undefined',
   Draw = 'Draw',
   Selection = 'Selection',

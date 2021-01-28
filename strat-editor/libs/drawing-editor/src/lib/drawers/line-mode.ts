@@ -1,4 +1,4 @@
-export enum DrawingMode {
+export enum LineMode {
   Line,
   Triangle,
   Rectangle,

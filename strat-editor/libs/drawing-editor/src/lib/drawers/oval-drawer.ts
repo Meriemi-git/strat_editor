@@ -1,11 +1,11 @@
 import { fabric } from 'fabric';
-import { ObjectDrawer, DrawingMode } from '.';
+import { ObjectDrawer, LineMode } from '.';
 
 export class OvalDrawer implements ObjectDrawer {
   private origX: number;
   private origY: number;
 
-  drawingMode: DrawingMode = DrawingMode.Oval;
+  drawingMode: LineMode = LineMode.Oval;
 
   make(
     x: number,

@@ -4,7 +4,7 @@ import {
   MapLoadingError,
   Image,
   Floor,
-  CursorMode,
+  DrawingMode,
   DrawerActionType,
   DrawerColor,
 } from '@strat-editor/data';
@@ -29,10 +29,13 @@ import { ImageHelperService } from '../../services/image-helper.service';
 export class DrawingEditorComponent implements OnInit {
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
+  @Input() isLocked: boolean;
   @Output() stateModified = new EventEmitter<string>();
   @Output() stateLoaded = new EventEmitter<void>();
+  @Output() drawingModeChanged = new EventEmitter<DrawingMode>();
+  public DrawingModeEnum = DrawingMode;
 
-  private cursorMode: CursorMode;
+  public drawingMode: DrawingMode;
 
   private canvas: fabric.Canvas;
 
@@ -57,8 +60,10 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('Init drawing-Editor, isLocked:', this.isLocked);
     this.isDown = false;
-    this.cursorMode = CursorMode.Undefined;
+    this.drawingMode = DrawingMode.Undefined;
+    this.drawingModeChanged.emit(DrawingMode.Undefined);
     this.canvas = new fabric.Canvas('canvas', {
       selection: false,
     });
@@ -112,6 +117,11 @@ export class DrawingEditorComponent implements OnInit {
     }
   }
 
+  public close() {
+    this.clear();
+    this.resize(0, 0);
+  }
+
   public clear() {
     console.log('clear canvas');
     this.canvas.clear();
@@ -141,7 +151,8 @@ export class DrawingEditorComponent implements OnInit {
       this.dispatchActionByType(action);
     } else {
       this.drawer = null;
-      this.cursorMode = CursorMode.Selection;
+      this.drawingMode = DrawingMode.Selection;
+      this.drawingModeChanged.emit(DrawingMode.Selection);
     }
   }
 
@@ -151,7 +162,8 @@ export class DrawingEditorComponent implements OnInit {
       case DrawerActionType.TEXT:
       case DrawerActionType.FORM:
         this.canvas.forEachObject((object) => (object.selectable = false));
-        this.cursorMode = CursorMode.Draw;
+        this.drawingMode = DrawingMode.Draw;
+        this.drawingModeChanged.emit(DrawingMode.Draw);
         this.drawer = this.avalaibleDrawers.get(action.name);
         break;
       case DrawerActionType.TOOL:
@@ -165,14 +177,16 @@ export class DrawingEditorComponent implements OnInit {
   private manageToolsActions(action: DrawerAction) {
     switch (action.name) {
       case 'selection':
-        this.cursorMode = CursorMode.Selection;
+        this.drawingMode = DrawingMode.Selection;
+        this.drawingModeChanged.emit(DrawingMode.Selection);
         this.drawer = null;
         this.canvas.forEachObject(
           (object) => (object.selectable = object.name !== 'map')
         );
         break;
       case 'dragging':
-        this.cursorMode = CursorMode.Dragging;
+        this.drawingMode = DrawingMode.Dragging;
+        this.drawingModeChanged.emit(DrawingMode.Dragging);
         this.drawer = null;
         break;
       default:
@@ -329,13 +343,15 @@ export class DrawingEditorComponent implements OnInit {
     });
 
     this.canvas.on('object:scaling', () => {
-      this.cursorMode = CursorMode.Selection;
+      this.drawingMode = DrawingMode.Selection;
+      this.drawingModeChanged.emit(DrawingMode.Selection);
     });
 
     this.canvas.on('object:modified', (event: fabric.IEvent) => {
       if (event.target instanceof fabric.Textbox) {
         this.editingText = true;
-        this.cursorMode = CursorMode.Draw;
+        this.drawingMode = DrawingMode.Draw;
+        this.drawingModeChanged.emit(DrawingMode.Draw);
       }
     });
 
@@ -351,7 +367,7 @@ export class DrawingEditorComponent implements OnInit {
     this.selectedObjects = this.canvas.getActiveObjects();
     this.isDown = true;
     if (
-      this.cursorMode !== CursorMode.Draw ||
+      this.drawingMode !== DrawingMode.Draw ||
       this.editingText ||
       this.selectedObjects.length > 0
     ) {
@@ -368,10 +384,10 @@ export class DrawingEditorComponent implements OnInit {
 
   private mouseMove(event: fabric.IEvent): void {
     const pointer = this.canvas.getPointer(event.e);
-    if (this.cursorMode === CursorMode.Draw && this.isDown) {
+    if (this.drawingMode === DrawingMode.Draw && this.isDown) {
       this.drawer.resize(this.object, pointer.x, pointer.y);
       this.canvas.renderAll();
-    } else if (this.cursorMode === CursorMode.Dragging && this.isDown) {
+    } else if (this.drawingMode === DrawingMode.Dragging && this.isDown) {
       let vpt = this.canvas.viewportTransform;
 
       vpt[4] += (event.e as any).clientX - this.lastPosX;
@@ -394,7 +410,8 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   private selectionCreated(event: fabric.IEvent) {
-    this.cursorMode = CursorMode.Selection;
+    this.drawingMode = DrawingMode.Selection;
+    this.drawingModeChanged.emit(DrawingMode.Selection);
     this.object = event.target;
     let selection: fabric.ActiveSelection;
     if ((event.target as LineArrow).triangle) {

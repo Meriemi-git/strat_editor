@@ -3,7 +3,7 @@ import { createReducer, on, Action } from '@ngrx/store';
 import { DrawerAction } from '@strat-editor/drawing-editor';
 import { createEntityAdapter, EntityAdapter } from '@ngrx/entity';
 import { DrawerColor, DrawerActionType } from '@strat-editor/data';
-import { DrawingActionState } from '../states/drawer.state';
+import { DrawerState } from '../states/drawer.state';
 
 export const adapter: EntityAdapter<DrawerAction> = createEntityAdapter<
   DrawerAction
@@ -16,13 +16,14 @@ export function sortByName(a: DrawerAction, b: DrawerAction): number {
   return a.name.localeCompare(b.name);
 }
 
-export const initialstate: DrawingActionState = adapter.getInitialState({
+export const initialstate: DrawerState = adapter.getInitialState({
   drawerAction: null,
   optionAction: null,
   color: new DrawerColor(),
   fontNames: [],
   fontFamily: 'Amiri',
   fontSize: 80,
+  drawingMode: null,
 });
 
 const drawingActionReducer = createReducer(
@@ -107,10 +108,14 @@ const drawingActionReducer = createReducer(
         .selectAll(state)
         .find((action) => action.name === 'selection'),
     });
-  })
+  }),
+  on(actions.SetDrawingMode, (state, { drawingMode }) => ({
+    ...state,
+    drawingMode: drawingMode,
+  }))
 );
 
-export function reducer(state: DrawingActionState | undefined, action: Action) {
+export function reducer(state: DrawerState | undefined, action: Action) {
   return drawingActionReducer(state, action);
 }
 

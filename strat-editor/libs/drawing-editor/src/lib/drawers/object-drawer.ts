@@ -1,8 +1,8 @@
 import { fabric } from 'fabric';
-import { DrawingMode } from './drawing-mode';
+import { LineMode } from './line-mode';
 
 export class ObjectDrawer {
-  drawingMode: DrawingMode;
+  drawingMode: LineMode;
   // Makes the current object
   readonly make: (
     x: number, // Horizontal starting point

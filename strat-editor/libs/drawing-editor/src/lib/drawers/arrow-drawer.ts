@@ -1,6 +1,6 @@
 import { fabric } from 'fabric';
 import { ObjectDrawer } from './object-drawer';
-import { DrawingMode } from './drawing-mode';
+import { LineMode } from './line-mode';
 import { LineArrow } from '../fabricjs/line-arrow';
 import { TriangleArrow } from '../fabricjs/triangle-arrow';
 import * as uuid from 'uuid';
@@ -9,7 +9,7 @@ export class ArrowDrawer implements ObjectDrawer {
   private originX: number;
   private originY: number;
 
-  drawingMode: DrawingMode = DrawingMode.Line;
+  drawingMode: LineMode = LineMode.Line;
 
   make(
     x: number,
