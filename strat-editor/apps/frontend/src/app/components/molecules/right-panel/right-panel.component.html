@@ -2,5 +2,7 @@
   <strat-editor-drawing-panel> </strat-editor-drawing-panel>
 </div>
 <div *ngIf="$isGalleryPanelOpened | async">
-  <strat-editor-gallery-panel></strat-editor-gallery-panel>
+  <strat-editor-gallery-panel
+    [userInfos]="$userInfos | async"
+  ></strat-editor-gallery-panel>
 </div>

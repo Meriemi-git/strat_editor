@@ -3,6 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MapLoadingError, NotificationType } from '@strat-editor/data';
 import { Store } from '@ngrx/store';
 import { NotificationService } from './services/notifications.service';
+import * as Actions from './store/actions';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
@@ -12,6 +13,7 @@ export class GlobalErrorHandler implements ErrorHandler {
     const store = this.injector.get(Store);
     const notificationService = this.injector.get(NotificationService);
     if (error instanceof MapLoadingError) {
+      store.dispatch(Actions.SelectMap({ map: null }));
       notificationService.displayNotification({
         message: error.message,
         type: NotificationType.error,

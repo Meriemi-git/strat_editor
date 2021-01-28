@@ -1,13 +1,20 @@
 <div class="container">
-  <h2 class="mat-h1">Drawing</h2>
-  <h2 class="mat-h3">Add image to your gallery</h2>
-  <strat-editor-image-uploader
-    (imageUploaded)="onImageUploaded($event)"
-  ></strat-editor-image-uploader>
-  <hr />
-  <h2 class="mat-h3">Drag & drop image</h2>
-  <strat-editor-images-grid
-    [images]="$images | async"
-    (imageDragged)="onImageDragged($event)"
-  ></strat-editor-images-grid>
+  <h2 class="mat-h1">Gallery</h2>
+  <div *ngIf="userInfos; else notConnected">
+    <h2 class="mat-h3">Add image to the gallery</h2>
+    <strat-editor-image-uploader
+      (imageUploaded)="onImageUploaded($event)"
+    ></strat-editor-image-uploader>
+    <hr />
+    <h2 class="mat-h3">Drag your image</h2>
+    <strat-editor-images-grid
+      [images]="$images | async"
+      (imageDragged)="onImageDragged($event)"
+    ></strat-editor-images-grid>
+  </div>
+  <ng-template #notConnected>
+    <div class="not-connected">
+      You must be connected to use gallery an add images to the strat
+    </div>
+  </ng-template>
 </div>

@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Agent, Floor, Map, Image } from '@strat-editor/data';
+import { Agent, Floor, Map, Image, UserInfos } from '@strat-editor/data';
 import * as Actions from '../../../store/actions';
 import * as Selectors from '../../../store/selectors';
 import { StratEditorState } from '../../../store/reducers';
@@ -139,7 +139,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   displayCanvas() {
-    console.log('display canvas');
     this.resizeCanvas();
     this.drawerEditor.setBackgroundImageFromUrl(this.selectedFloor);
   }

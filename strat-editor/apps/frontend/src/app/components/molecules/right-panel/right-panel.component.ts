@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AuthInfos } from '@strat-editor/data';
+import { AuthInfos, UserInfos } from '@strat-editor/data';
 import { Observable } from 'rxjs';
 import { StratEditorState } from '../../../store/reducers';
 import * as Selectors from '../../../store/selectors';
@@ -10,11 +10,11 @@ import * as Selectors from '../../../store/selectors';
   styleUrls: ['./right-panel.component.scss'],
 })
 export class RightPanelComponent implements OnInit {
-  $isDrawingPanelOpened: Observable<boolean>;
-  $isGalleryPanelOpened: Observable<boolean>;
-  $isAccountPanelOpened: Observable<boolean>;
-  $authInfos: Observable<AuthInfos>;
-
+  public $isDrawingPanelOpened: Observable<boolean>;
+  public $isGalleryPanelOpened: Observable<boolean>;
+  public $isAccountPanelOpened: Observable<boolean>;
+  public $authInfos: Observable<AuthInfos>;
+  public $userInfos: Observable<UserInfos>;
   constructor(private store: Store<StratEditorState>) {}
 
   ngOnInit(): void {
@@ -27,5 +27,6 @@ export class RightPanelComponent implements OnInit {
     this.$isAccountPanelOpened = this.store.select(
       Selectors.isAccountPanelOpened
     );
+    this.$userInfos = this.store.select(Selectors.getUserInfos);
   }
 }
