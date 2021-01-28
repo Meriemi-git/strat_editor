@@ -1,14 +1,8 @@
 import { Agent } from '@strat-editor/data';
 import * as actions from '../actions/agent.action';
 import { createReducer, on, Action } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { HttpErrorResponse } from '@angular/common/http';
-
-export interface AgentState extends EntityState<Agent> {
-  loaded: boolean;
-  error: HttpErrorResponse;
-  dragged: Agent;
-}
+import { EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { AgentState } from '../states/agent.state';
 
 export const adapter: EntityAdapter<Agent> = createEntityAdapter<Agent>({
   sortComparer: sortByName,

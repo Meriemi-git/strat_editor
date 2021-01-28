@@ -1,5 +1,6 @@
 import { createAction, props, union } from '@ngrx/store';
-import { DrawerColor, DrawerAction } from '@strat-editor/drawing-editor';
+import { DrawerColor } from '@strat-editor/data';
+import { DrawerAction } from '@strat-editor/drawing-editor';
 
 export const UnSelectDrawerAction = createAction(
   '[DrawerAction] Unselect Drawer Action'
@@ -45,15 +46,3 @@ export const SetColor = createAction(
   '[DrawerAction] Select Color Action',
   props<{ color: DrawerColor }>()
 );
-
-const actions = union({
-  FetchDrawerActions,
-  FetchFontNames,
-  SetDrawerAction,
-  FetchFontNamesSuccess,
-  SetColor,
-  SetFontFamily,
-  SetFontSize,
-});
-
-export type DrawerActions = typeof actions;

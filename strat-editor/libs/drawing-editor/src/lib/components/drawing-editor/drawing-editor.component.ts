@@ -1,8 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Agent, MapLoadingError, Image, Floor } from '@strat-editor/data';
+import {
+  Agent,
+  MapLoadingError,
+  Image,
+  Floor,
+  CursorMode,
+  DrawerActionType,
+  DrawerColor,
+} from '@strat-editor/data';
 import { fabric } from 'fabric';
 import { DrawerAction } from '../../actions';
-import { CursorMode } from '../../cursor-mode';
 import { ObjectDrawer, LineDrawer, RectangleDrawer } from '../../drawers';
 import { ArrowDrawer } from '../../drawers/arrow-drawer';
 import { OvalDrawer } from '../../drawers/oval-drawer';
@@ -12,8 +19,6 @@ import { TextDrawer } from '../../drawers/text-drawer';
 import { TriangleDrawer } from '../../drawers/triangle-drawer';
 import { LineArrow } from '../../fabricjs/line-arrow';
 import { TriangleArrow } from '../../fabricjs/triangle-arrow';
-import { DrawerActionType } from '../../models';
-import { DrawerColor } from '../../models/drawer-color';
 import { ImageHelperService } from '../../services/image-helper.service';
 
 @Component({

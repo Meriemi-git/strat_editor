@@ -1,14 +1,8 @@
-import { UserInfos, UserInfos as userReducer } from '@strat-editor/data';
 import * as authActions from '../actions/auth.action';
 import * as userActions from '../actions/user.action';
 
 import { createReducer, on, Action } from '@ngrx/store';
-import { HttpErrorResponse } from '@angular/common/http';
-
-export interface UserState {
-  userInfos: UserInfos;
-  error: HttpErrorResponse;
-}
+import { UserState } from '../states/user.state';
 
 export const initialstate: UserState = {
   userInfos: null,

@@ -1,16 +1,17 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-import * as Agent from '../reducers/agent.reducer';
+import { selectAll } from '../reducers/agent.reducer';
+import { AgentState } from '../states/agent.state';
 
-const agentFeature = createFeatureSelector<Agent.AgentState>('AgentState');
+const agentFeature = createFeatureSelector<AgentState>('AgentState');
 export const selectAgentState = createSelector(
   agentFeature,
-  (state: Agent.AgentState) => state
+  (state: AgentState) => state
 );
 export const selectAgentsLoading = createSelector(
   selectAgentState,
-  (state: Agent.AgentState) => state.loaded
+  (state: AgentState) => state.loaded
 );
-export const selectAllAgents = createSelector(agentFeature, Agent.selectAll);
+export const selectAllAgents = createSelector(agentFeature, selectAll);
 
 export const selectAgentByName = createSelector(
   selectAllAgents,
@@ -18,5 +19,5 @@ export const selectAgentByName = createSelector(
 );
 export const getDraggedAgent = createSelector(
   selectAgentState,
-  (state: Agent.AgentState) => state.dragged
+  (state: AgentState) => state.dragged
 );

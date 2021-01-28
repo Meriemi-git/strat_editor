@@ -1,0 +1,13 @@
+<div>
+  <mat-label>Status</mat-label>
+  <button
+    mat-raised-button
+    color="primary"
+    *ngIf="status === CursorModeEnum.Selection"
+  ></button>
+  <button
+    mat-raised-button
+    color="warning"
+    *ngIf="status === CursorModeEnum.Draw"
+  ></button>
+</div>

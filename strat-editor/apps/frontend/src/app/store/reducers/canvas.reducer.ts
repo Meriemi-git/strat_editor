@@ -1,15 +1,6 @@
 import * as actions from '../actions/canvas.action';
 import { createReducer, on, Action } from '@ngrx/store';
-
-import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
-
-export interface CanvasState {
-  history: string[];
-  historyIndex: number;
-  currentState: string;
-  backgroundImage: string;
-  zoom: number;
-}
+import { CanvasState } from '../states/canvas.state';
 
 export const initialstate: CanvasState = {
   history: [],

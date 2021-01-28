@@ -1,4 +1,4 @@
-import { DrawerActionType } from '../models/drawer-action-type';
+import { DrawerActionType } from '@strat-editor/data';
 import { DrawerAction } from './drawer-action';
 
 export class LineAction extends DrawerAction {

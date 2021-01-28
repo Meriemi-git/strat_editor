@@ -1,14 +1,8 @@
-import { Floor, Map } from '@strat-editor/data';
+import { Map } from '@strat-editor/data';
 import * as actions from '../actions/map.action';
 import { createReducer, on, Action } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-
-export interface MapState extends EntityState<Map> {
-  loaded: boolean;
-  error: string;
-  selectedMap: Map;
-  selectedFloor: Floor;
-}
+import { EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { MapState } from '../states/map.state';
 
 export const adapter: EntityAdapter<Map> = createEntityAdapter<Map>({
   sortComparer: sortByName,

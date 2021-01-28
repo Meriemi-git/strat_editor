@@ -4,4 +4,3 @@ export { ImageHelperService } from './lib/services/image-helper.service';
 
 export * from './lib/actions';
 export * from './lib/drawers';
-export * from './lib/models';

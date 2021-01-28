@@ -1,42 +1,43 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-import * as Drawer from '../reducers/drawer.reducer';
+import { selectAll } from '../reducers/drawer.reducer';
+import { DrawingActionState } from '../states/drawer.state';
 
-const drawingActionFeature = createFeatureSelector<Drawer.DrawingActionState>(
+const drawingActionFeature = createFeatureSelector<DrawingActionState>(
   'DrawerState'
 );
 export const selectDrawerState = createSelector(
   drawingActionFeature,
-  (state: Drawer.DrawingActionState) => state
+  (state: DrawingActionState) => state
 );
 export const selectAllDrawerActions = createSelector(
   drawingActionFeature,
-  Drawer.selectAll
+  selectAll
 );
 export const getSelectedAction = createSelector(
   selectDrawerState,
-  (state: Drawer.DrawingActionState) => state.drawerAction
+  (state: DrawingActionState) => state.drawerAction
 );
 export const getSelectedOption = createSelector(
   selectDrawerState,
-  (state: Drawer.DrawingActionState) => state.optionAction
+  (state: DrawingActionState) => state.optionAction
 );
 
 export const getColor = createSelector(
   drawingActionFeature,
-  (state: Drawer.DrawingActionState) => state.color
+  (state: DrawingActionState) => state.color
 );
 
 export const getFontNames = createSelector(
   drawingActionFeature,
-  (state: Drawer.DrawingActionState) => state.fontNames
+  (state: DrawingActionState) => state.fontNames
 );
 
 export const getFontFamily = createSelector(
   drawingActionFeature,
-  (state: Drawer.DrawingActionState) => state.fontFamily
+  (state: DrawingActionState) => state.fontFamily
 );
 
 export const getFontSize = createSelector(
   drawingActionFeature,
-  (state: Drawer.DrawingActionState) => state.fontSize
+  (state: DrawingActionState) => state.fontSize
 );

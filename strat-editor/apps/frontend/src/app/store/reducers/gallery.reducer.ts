@@ -1,13 +1,6 @@
 import * as actions from '../actions/gallery.action';
 import { createReducer, on, Action } from '@ngrx/store';
-import { Image } from '@strat-editor/data';
-import { HttpErrorResponse } from '@angular/common/http';
-
-export interface GalleryState {
-  images: Image[];
-  draggedImage: Image;
-  error: HttpErrorResponse;
-}
+import { GalleryState } from '../states/gallery.state';
 
 export const initialstate: GalleryState = {
   images: [],

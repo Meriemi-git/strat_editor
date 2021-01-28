@@ -1,20 +1,9 @@
 import * as actions from '../actions/drawer.action';
 import { createReducer, on, Action } from '@ngrx/store';
-import {
-  DrawerColor,
-  DrawerAction,
-  DrawerActionType,
-} from '@strat-editor/drawing-editor';
-import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
-
-export interface DrawingActionState extends EntityState<DrawerAction> {
-  color: DrawerColor;
-  drawerAction: DrawerAction | null;
-  optionAction: DrawerAction | null;
-  fontNames: string[];
-  fontFamily: string;
-  fontSize: number;
-}
+import { DrawerAction } from '@strat-editor/drawing-editor';
+import { createEntityAdapter, EntityAdapter } from '@ngrx/entity';
+import { DrawerColor, DrawerActionType } from '@strat-editor/data';
+import { DrawingActionState } from '../states/drawer.state';
 
 export const adapter: EntityAdapter<DrawerAction> = createEntityAdapter<
   DrawerAction

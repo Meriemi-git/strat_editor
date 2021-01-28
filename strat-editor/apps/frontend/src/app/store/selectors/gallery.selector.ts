@@ -1,24 +1,22 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-import * as Gallery from '../reducers/gallery.reducer';
+import { GalleryState } from '../states/gallery.state';
 
-const galleryFeature = createFeatureSelector<Gallery.GalleryState>(
-  'GalleryState'
-);
+const galleryFeature = createFeatureSelector<GalleryState>('GalleryState');
 export const selectGalleryState = createSelector(
   galleryFeature,
-  (state: Gallery.GalleryState) => state
+  (state: GalleryState) => state
 );
 export const getGalleryImages = createSelector(
   selectGalleryState,
-  (state: Gallery.GalleryState) => state.images
+  (state: GalleryState) => state.images
 );
 
 export const getGalleryError = createSelector(
   selectGalleryState,
-  (state: Gallery.GalleryState) => state.error
+  (state: GalleryState) => state.error
 );
 
 export const getDraggedImage = createSelector(
   selectGalleryState,
-  (state: Gallery.GalleryState) => state.draggedImage
+  (state: GalleryState) => state.draggedImage
 );

@@ -1,5 +1,5 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-import { SidenavState } from '../reducers/sidenav.reducer';
+import { SidenavState } from '../states/sidenav.state';
 
 const sidenavFeature = createFeatureSelector<SidenavState>('SidenavState');
 export const selectSidenavState = createSelector(

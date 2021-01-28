@@ -1,16 +1,6 @@
 import * as actions from '../actions/sidenav.action';
 import { createReducer, on, Action } from '@ngrx/store';
-
-export interface SidenavState {
-  rightIsOpen: boolean;
-  leftIsOpen: boolean;
-  agentsPanelIsOpen: boolean;
-  gadgetsPanelIsOpen: boolean;
-  drawingPanelIsOpen: boolean;
-  galleryPanelIsOpen: boolean;
-  mainMenuPanelIsOpen: boolean;
-  accountPanelIsOpen: boolean;
-}
+import { SidenavState } from '../states/sidenav.state';
 
 export const initialstate: SidenavState = {
   rightIsOpen: false,

@@ -1,6 +1,5 @@
+import { DrawerActionType, DrawerOption } from '@strat-editor/data';
 import { environment } from '../../environments/environment';
-import { DrawerActionType } from '../models/drawer-action-type';
-import { DrawerOption } from '../models/drawer-option';
 
 export abstract class DrawerAction {
   name: string;
