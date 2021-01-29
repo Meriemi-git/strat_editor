@@ -7,6 +7,6 @@ export class VideoAction extends DrawerAction {
     this.name = 'video';
     this.label = 'Video';
     this.order = 4;
-    this.type = DrawerActionType.TOOL;
+    this.type = DrawerActionType.FORM;
   }
 }

@@ -5,9 +5,6 @@ import { of } from 'rxjs';
 import * as actions from '../actions/agent.action';
 import { AgentService } from '../../services/agent.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { StratEditorState } from '../reducers';
-import { Store } from '@ngrx/store';
-import * as Selectors from '../selectors';
 
 @Injectable()
 export class AgentEffect {

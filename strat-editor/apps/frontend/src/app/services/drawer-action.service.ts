@@ -3,7 +3,6 @@ import { Observable, of } from 'rxjs';
 import {
   ArrowAction,
   BoldAction,
-  DraggingAction,
   DrawerAction,
   ItalicAction,
   LineAction,
@@ -12,7 +11,6 @@ import {
   PictureAction,
   PolyLineAction,
   RectangleAction,
-  SelectionAction,
   StarAction,
   TextAction,
   TimeAction,
@@ -45,8 +43,6 @@ export class DrawerActionService {
 
     this.actions.push(new PictureAction());
     this.actions.push(new VideoAction());
-    this.actions.push(new SelectionAction());
-    this.actions.push(new DraggingAction());
   }
 
   getAllDrawerActions(): Observable<DrawerAction[]> {

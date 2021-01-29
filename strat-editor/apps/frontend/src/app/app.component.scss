@@ -17,7 +17,12 @@
   width: 100vw !important;
   margin: 0 auto;
   text-align: center;
-  padding: 15px;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.container::-webkit-scrollbar {
+  display: none;
 }
 
 .double-sidenav {

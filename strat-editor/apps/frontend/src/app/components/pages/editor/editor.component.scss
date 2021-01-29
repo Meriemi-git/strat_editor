@@ -12,25 +12,6 @@
   position: relative;
   top: 50%;
 }
-.container {
-  height: 100%;
-  width: 100vw !important;
-}
-
-.double-sidenav {
-  height: 94vh;
-  margin: 0 auto;
-}
-
-.left-sidenav-content {
-  padding: 10px;
-  text-align: center;
-}
-
-.right-sidenav-content {
-  padding: 10px;
-  text-align: center;
-}
 
 .mat-h2 {
   margin: 0;
@@ -48,10 +29,6 @@
   text-align: center;
 }
 
-.double-arrow-icon-left > .first {
-  color: black !important;
-}
-
 .first {
   background-color: $primaryDarkColor;
   color: $lighter;
@@ -67,31 +44,4 @@
   direction: rtl;
   scrollbar-width: thin;
   scrollbar-color: $primaryColor black;
-}
-
-.mat-sidenav {
-  margin: 0 auto;
-  text-align: center;
-}
-
-.map-panel {
-  cursor: grab;
-}
-
-.map-container {
-  width: 100%;
-  height: 100%;
-  display: block;
-  margin: 0 auto;
-}
-
-.assets-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-.drawing-close {
-  position: absolute;
-  top: 10px;
-  left: 10px;
 }

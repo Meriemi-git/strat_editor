@@ -3,6 +3,20 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "types": [],
+    "target": "es2017",
+    "declaration": true,
+    "declarationMap": true,
+    "inlineSources": true,
+    "lib": [
+      "dom",
+      "es2017"
+    ]
   },
-  "files": ["src/main.ts", "src/polyfills.ts"]
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "**/*.ts"
+  ]
 }

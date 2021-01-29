@@ -7,6 +7,6 @@ export class PictureAction extends DrawerAction {
     this.name = 'picture';
     this.label = 'Picture';
     this.order = 3;
-    this.type = DrawerActionType.TOOL;
+    this.type = DrawerActionType.FORM;
   }
 }

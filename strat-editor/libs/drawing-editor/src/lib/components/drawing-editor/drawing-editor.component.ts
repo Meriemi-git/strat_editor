@@ -1,11 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import {
   Agent,
   MapLoadingError,
   Image,
   Floor,
   DrawingMode,
-  DrawerActionType,
   DrawerColor,
 } from '@strat-editor/data';
 import { fabric } from 'fabric';
@@ -33,9 +41,14 @@ export class DrawingEditorComponent implements OnInit {
   @Output() stateModified = new EventEmitter<string>();
   @Output() stateLoaded = new EventEmitter<void>();
   @Output() drawingModeChanged = new EventEmitter<DrawingMode>();
+
+  @ViewChild('toolbar') toolbar: ElementRef;
+  @ViewChild('toolbarIcon') toolbarIcon: ElementRef;
   public DrawingModeEnum = DrawingMode;
 
   public drawingMode: DrawingMode;
+
+  public toolbarIconName: string = 'keyboard_arrow_up';
 
   private canvas: fabric.Canvas;
 
@@ -55,7 +68,9 @@ export class DrawingEditorComponent implements OnInit {
   private lastPosX: number = 0;
   private lastPosY: number = 0;
 
-  constructor(private ihs: ImageHelperService) {
+  private toolbarOpened: boolean = false;
+
+  constructor(private ihs: ImageHelperService, private renderer: Renderer2) {
     this.addAvalaibleDrawers();
   }
 
@@ -123,7 +138,6 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   public clear() {
-    console.log('clear canvas');
     this.canvas.clear();
   }
 
@@ -148,7 +162,8 @@ export class DrawingEditorComponent implements OnInit {
 
   public callAction(action: DrawerAction) {
     if (action) {
-      this.dispatchActionByType(action);
+      this.drawer = this.avalaibleDrawers.get(action.name);
+      this.enableDrawMode();
     } else {
       this.drawer = null;
       this.drawingMode = DrawingMode.Selection;
@@ -156,42 +171,24 @@ export class DrawingEditorComponent implements OnInit {
     }
   }
 
-  private dispatchActionByType(action: DrawerAction) {
-    switch (action.type) {
-      case DrawerActionType.SHAPE:
-      case DrawerActionType.TEXT:
-      case DrawerActionType.FORM:
-        this.canvas.forEachObject((object) => (object.selectable = false));
-        this.drawingMode = DrawingMode.Draw;
-        this.drawingModeChanged.emit(DrawingMode.Draw);
-        this.drawer = this.avalaibleDrawers.get(action.name);
-        break;
-      case DrawerActionType.TOOL:
-        this.manageToolsActions(action);
-        break;
-      default:
-        console.log('Action type not managed');
-    }
+  private enableSelectionMode() {
+    this.drawingMode = DrawingMode.Selection;
+    this.canvas.forEachObject(
+      (object) => (object.selectable = object.name !== 'map')
+    );
+    this.drawingModeChanged.emit(DrawingMode.Selection);
   }
 
-  private manageToolsActions(action: DrawerAction) {
-    switch (action.name) {
-      case 'selection':
-        this.drawingMode = DrawingMode.Selection;
-        this.drawingModeChanged.emit(DrawingMode.Selection);
-        this.drawer = null;
-        this.canvas.forEachObject(
-          (object) => (object.selectable = object.name !== 'map')
-        );
-        break;
-      case 'dragging':
-        this.drawingMode = DrawingMode.Dragging;
-        this.drawingModeChanged.emit(DrawingMode.Dragging);
-        this.drawer = null;
-        break;
-      default:
-        console.log('Tool action name not managed :', action.name);
-    }
+  private enableDraggingMode() {
+    this.canvas.forEachObject((object) => (object.selectable = false));
+    this.drawingMode = DrawingMode.Dragging;
+    this.drawingModeChanged.emit(DrawingMode.Dragging);
+  }
+
+  private enableDrawMode() {
+    this.canvas.forEachObject((object) => (object.selectable = false));
+    this.drawingMode = DrawingMode.Draw;
+    this.drawingModeChanged.emit(DrawingMode.Draw);
   }
 
   public setDrawerOptions(action: DrawerAction) {
@@ -270,6 +267,7 @@ export class DrawingEditorComponent implements OnInit {
             this.canvas.width < this.canvas.height
               ? this.canvas.width / image.width
               : this.canvas.height / image.height;
+          console.log('scale', scale);
           image.set({
             top: this.canvas.getCenter().top,
             left: this.canvas.getCenter().left,
@@ -279,7 +277,7 @@ export class DrawingEditorComponent implements OnInit {
             scaleY: scale,
             selectable: false,
             name: 'map',
-          });
+          }).setCoords;
           this.canvas.add(image);
           this.canvas.renderAll();
           this.stateModified.emit(this.getCanvasState());
@@ -465,5 +463,35 @@ export class DrawingEditorComponent implements OnInit {
 
   public resetView() {
     this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+  }
+
+  public toogleToolbar() {
+    this.toolbarOpened = !this.toolbarOpened;
+    if (this.toolbarOpened) {
+      this.renderer.removeClass(
+        this.toolbar.nativeElement,
+        'toolbar-invisible'
+      );
+      this.toolbarIconName = 'keyboard_arrow_down';
+      this.renderer.addClass(this.toolbar.nativeElement, 'toolbar-visible');
+      this.renderer.addClass(this.toolbarIcon.nativeElement, 'icon-rotated');
+    } else {
+      this.toolbarIconName = 'keyboard_arrow_up';
+      this.renderer.removeClass(this.toolbar.nativeElement, 'toolbar-visible');
+      this.renderer.addClass(this.toolbar.nativeElement, 'toolbar-invisible');
+      this.renderer.removeClass(this.toolbarIcon.nativeElement, 'icon-rotated');
+    }
+  }
+
+  public onSelect() {
+    this.enableSelectionMode();
+  }
+
+  public onDrag() {
+    this.enableDraggingMode();
+  }
+
+  public onDraw() {
+    this.enableDrawMode();
   }
 }

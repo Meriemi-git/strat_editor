@@ -1,19 +1,25 @@
 <div class="drawing-status">
-  <div class="container">
-    <h3>Drawing Mode</h3>
-    <mat-chip-list aria-label="Status">
-      <mat-chip
-        *ngIf="drawingMode === DrawingModeEnum.Selection"
-        color="primary"
-      >
-        {{ drawingMode }}
-      </mat-chip>
-      <mat-chip *ngIf="drawingMode === DrawingModeEnum.Draw" color="warning">
-        {{ drawingMode }}
-      </mat-chip>
-      <mat-chip *ngIf="drawingMode === DrawingModeEnum.Dragging" color="accent">
-        {{ drawingMode }}
-      </mat-chip>
-    </mat-chip-list>
-  </div>
+  <mat-chip-list aria-label="Status">
+    <mat-chip
+      *ngIf="drawingMode === DrawingModeEnum.Selection"
+      color="primary"
+      selected="true"
+    >
+      {{ drawingMode }} Mode
+    </mat-chip>
+    <mat-chip
+      *ngIf="drawingMode === DrawingModeEnum.Draw"
+      color="accent"
+      selected="true"
+    >
+      {{ drawingMode }} Mode
+    </mat-chip>
+    <mat-chip
+      *ngIf="drawingMode === DrawingModeEnum.Dragging"
+      color="warn"
+      selected="true"
+    >
+      {{ drawingMode }} Mode
+    </mat-chip>
+  </mat-chip-list>
 </div>

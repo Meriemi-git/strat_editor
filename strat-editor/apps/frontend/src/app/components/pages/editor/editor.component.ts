@@ -13,7 +13,6 @@ import {
   Floor,
   Map,
   Image,
-  UserInfos,
   DrawerColor,
   DrawingMode,
 } from '@strat-editor/data';
@@ -24,11 +23,8 @@ import {
   DrawerAction,
   DrawingEditorComponent,
   PolyLineAction,
-  SelectionAction,
-  DraggingAction,
 } from '@strat-editor/drawing-editor';
 import { KEY_CODE } from '../../../helpers/key_code';
-import { environment } from 'apps/frontend/src/environments/environment';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -75,12 +71,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.select(Selectors.getSelectedAction).subscribe((selected) => {
       if (this.selectedFloor) {
         this.store.dispatch(Actions.closeRight());
-      }
-      if (
-        !(selected instanceof SelectionAction) &&
-        !(selected instanceof DraggingAction)
-      ) {
-        this.previousAction = selected;
       }
       this.drawerEditor.callAction(selected);
     });
@@ -158,8 +148,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   resizeCanvas() {
-    this.width = (window.innerWidth * 98) / 100;
-    this.height = this.container.nativeElement.clientHeight;
+    this.width = window.innerWidth;
+    this.height = window.innerHeight - 60;
     this.drawerEditor.resize(this.width, this.height);
   }
 
@@ -179,14 +169,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
           Actions.SetDrawerAction({ action: this.previousAction })
         );
         this.drawerEditor.resetView();
-        break;
-      case KEY_CODE.CTRL:
-        if (this.CTRLPressed) {
-          this.store.dispatch(
-            Actions.SetDrawerAction({ action: this.previousAction })
-          );
-        }
-        this.CTRLPressed = false;
         break;
       case KEY_CODE.A:
         if (this.CTRLPressed) {
@@ -211,20 +193,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
         }
         break;
       default:
-    }
-  }
-
-  @HostListener('document:keydown', ['$event'])
-  keyDown(event: KeyboardEvent) {
-    switch (event.key.toLocaleLowerCase()) {
-      case KEY_CODE.CTRL:
-        if (!this.CTRLPressed) {
-          this.store.dispatch(
-            Actions.SetDrawerAction({ action: new SelectionAction() })
-          );
-        }
-        this.CTRLPressed = true;
-        break;
     }
   }
 
