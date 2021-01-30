@@ -1,0 +1,49 @@
+<div class="toolbar-wrapper">
+  <div #toolbarIcon>
+    <mat-icon class="toolbar-button" (click)="toogleToolbar()">
+      {{ toolbarIconName }}</mat-icon
+    >
+  </div>
+  <div #toolbar class="toolbar">
+    <button
+      mat-mini-fab
+      color="primary"
+      matTooltip="Switch to draw mode"
+      (click)="onDraw()"
+    >
+      <mat-icon>create</mat-icon>
+    </button>
+    <button
+      mat-mini-fab
+      color="warn"
+      matTooltip="Switch to selection mode"
+      (click)="onSelect()"
+    >
+      <mat-icon>select_all</mat-icon>
+    </button>
+    <button
+      mat-mini-fab
+      color="accent"
+      matTooltip="Switch to dragging mode"
+      (click)="onDrag()"
+    >
+      <mat-icon>open_with</mat-icon>
+    </button>
+    <button
+      mat-mini-fab
+      color="primary"
+      matTooltip="Save your strat"
+      (click)="onSave()"
+    >
+      <mat-icon>save</mat-icon>
+    </button>
+    <button
+      mat-mini-fab
+      color="warn"
+      matTooltip="Show strat infos"
+      (click)="onShowInfos()"
+    >
+      <mat-icon>info</mat-icon>
+    </button>
+  </div>
+</div>

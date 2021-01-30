@@ -1,20 +1,42 @@
 <div class="icons-left" *ngIf="selectedFloor">
   <div (click)="openAgentsPanel()">
-    <span class="first">Agents</span>
+    <span
+      class="first"
+      matTooltip="Open Agent Panel"
+      [matTooltipPosition]="'right'"
+    >
+      Agents
+    </span>
   </div>
   <div (click)="openGadgetsPanel()">
-    <span class="second">Gadgets</span>
+    <span
+      class="second"
+      matTooltip="Open Gadget Panel"
+      [matTooltipPosition]="'right'"
+    >
+      Gadgets
+    </span>
   </div>
 </div>
 <div class="icons-right" *ngIf="selectedFloor">
   <div (click)="openDrawingPanel()">
-    <span class="first">Drawing</span>
+    <span
+      class="first"
+      matTooltip="Open Drawing Panel"
+      [matTooltipPosition]="'left'"
+      >Drawing</span
+    >
   </div>
   <div (click)="openGalleryPanel()">
-    <span class="second">Gallery</span>
+    <span
+      class="second"
+      matTooltip="Open Gallery Panel"
+      [matTooltipPosition]="'left'"
+      >Gallery</span
+    >
   </div>
 </div>
-<div #container class="map-container">
+<div class="map-container">
   <div class="map-selector" *ngIf="!selectedFloor">
     <strat-editor-map-grid
       [maps]="$maps | async"
@@ -29,7 +51,23 @@
     (stateModified)="onStateModified($event)"
     (stateLoaded)="onCanvasStateLoaded()"
     (drawingModeChanged)="onDrawingModeChanged($event)"
+    (saveStrat)="onSaveStrat()"
   ></strat-editor-drawing-editor>
-  <strat-editor-drawing-status [drawingMode]="$drawingMode | async">
+  <strat-editor-drawing-status
+    *ngIf="selectedFloor"
+    [drawingMode]="$drawingMode | async"
+  >
   </strat-editor-drawing-status>
+  <strat-editor-drawing-toolbar
+    *ngIf="selectedFloor"
+    (enableSelectMode)="onSelect()"
+    (enableDrawingMode)="onDraw()"
+    (enableDraggingMode)="onDrag()"
+    (saveStrat)="onSave()"
+  >
+  </strat-editor-drawing-toolbar>
+  <strat-editor-strat-title
+    *ngIf="selectedFloor"
+    [stratTitle]="'Example Title'"
+  ></strat-editor-strat-title>
 </div>

@@ -1,0 +1,33 @@
+.toolbar {
+  width: 250px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: absolute;
+  right: calc(50vw - 125px);
+}
+
+.toolbar-button {
+  width: 40px;
+  position: absolute;
+  bottom: 10px;
+  right: calc(50vw - 20px);
+  background-color: rgba(50, 126, 255, 0.7);
+  border-radius: 14%;
+  margin-bottom: 12px;
+}
+
+.toolbar-visible {
+  transform: translateY(-50px);
+  transition: all 0.3s ease-in-out;
+}
+
+.toolbar-invisible {
+  transform: translateY(50px);
+  transition: all 0.3s ease-in-out;
+}
+
+.icon-rotated {
+  transform: translateY(-40px);
+  transition: all 0.3s ease-in-out;
+}

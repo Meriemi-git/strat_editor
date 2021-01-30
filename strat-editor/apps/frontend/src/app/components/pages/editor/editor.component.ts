@@ -5,6 +5,7 @@ import {
   ElementRef,
   HostListener,
   OnInit,
+  Renderer2,
   ViewChild,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -15,6 +16,7 @@ import {
   Image,
   DrawerColor,
   DrawingMode,
+  Strat,
 } from '@strat-editor/data';
 import * as Actions from '../../../store/actions';
 import * as Selectors from '../../../store/selectors';
@@ -33,7 +35,6 @@ import { Observable } from 'rxjs';
   styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent implements OnInit, AfterViewInit {
-  @ViewChild('container') container: ElementRef;
   @ViewChild('drawerEditor') drawerEditor: DrawingEditorComponent;
 
   public selectedFloor: Floor;
@@ -48,6 +49,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   private CTRLPressed: boolean;
 
   public $drawingMode: Observable<DrawingMode>;
+  public $strat: Observable<Strat>;
 
   constructor(
     private store: Store<StratEditorState>,
@@ -56,6 +58,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.$maps = this.store.select(Selectors.getAllMaps);
+    // TODO get strat
     this.$drawingMode = this.store.select(Selectors.getDrawingMode);
     this.store.dispatch(Actions.FetchMaps());
     this.store.dispatch(Actions.FetchAgents());
@@ -152,6 +155,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.height = window.innerHeight - 60;
     this.drawerEditor.resize(this.width, this.height);
   }
+
+  onSaveStrat() {}
 
   @HostListener('window:resize', ['$event'])
   onResize(event?) {
@@ -255,4 +260,18 @@ export class EditorComponent implements OnInit, AfterViewInit {
   openGalleryPanel() {
     this.store.dispatch(Actions.showGalleryPanel());
   }
+
+  public onSelect() {
+    this.drawerEditor.enableSelectionMode();
+  }
+
+  public onDrag() {
+    this.drawerEditor.enableDraggingMode();
+  }
+
+  public onDraw() {
+    this.drawerEditor.enableDrawMode();
+  }
+
+  public onSave() {}
 }

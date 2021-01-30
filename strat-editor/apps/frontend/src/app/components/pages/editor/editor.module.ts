@@ -6,7 +6,9 @@ import { MapGridModule } from '../../molecules/map-grid/map-grid.module';
 import { DrawingEditorModule } from '@strat-editor/drawing-editor';
 import { EditorRoutingModule } from './editor-routing.module';
 import { DrawingStatusModule } from '../../molecules/drawing-status/drawing-status.module';
-import { MatButtonModule } from '@angular/material/button';
+import { DrawingToolbarModule } from '../../molecules/drawing-toolbar/drawing-toolbar.module';
+import { StratTitleModule } from '../../atoms/strat-title/strat-title.module';
+
 @NgModule({
   declarations: [EditorComponent],
   imports: [
@@ -15,7 +17,9 @@ import { MatButtonModule } from '@angular/material/button';
     EditorRoutingModule,
     DrawingEditorModule,
     DrawingStatusModule,
-    MatButtonModule,
+    DrawingEditorModule,
+    DrawingToolbarModule,
+    StratTitleModule,
   ],
   providers: [ImageHelperService],
   exports: [EditorComponent],

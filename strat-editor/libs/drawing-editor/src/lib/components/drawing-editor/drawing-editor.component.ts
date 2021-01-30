@@ -37,18 +37,11 @@ import { ImageHelperService } from '../../services/image-helper.service';
 export class DrawingEditorComponent implements OnInit {
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
-  @Input() isLocked: boolean;
   @Output() stateModified = new EventEmitter<string>();
   @Output() stateLoaded = new EventEmitter<void>();
   @Output() drawingModeChanged = new EventEmitter<DrawingMode>();
 
-  @ViewChild('toolbar') toolbar: ElementRef;
-  @ViewChild('toolbarIcon') toolbarIcon: ElementRef;
-  public DrawingModeEnum = DrawingMode;
-
   public drawingMode: DrawingMode;
-
-  public toolbarIconName: string = 'keyboard_arrow_up';
 
   private canvas: fabric.Canvas;
 
@@ -68,9 +61,7 @@ export class DrawingEditorComponent implements OnInit {
   private lastPosX: number = 0;
   private lastPosY: number = 0;
 
-  private toolbarOpened: boolean = false;
-
-  constructor(private ihs: ImageHelperService, private renderer: Renderer2) {
+  constructor(private ihs: ImageHelperService) {
     this.addAvalaibleDrawers();
   }
 
@@ -170,7 +161,7 @@ export class DrawingEditorComponent implements OnInit {
     }
   }
 
-  private enableSelectionMode() {
+  public enableSelectionMode() {
     this.canvas.hoverCursor = 'grab';
     this.canvas.moveCursor = 'grabbing';
 
@@ -181,7 +172,7 @@ export class DrawingEditorComponent implements OnInit {
     this.drawingModeChanged.emit(DrawingMode.Selection);
   }
 
-  private enableDraggingMode() {
+  public enableDraggingMode() {
     this.canvas.hoverCursor = 'move';
     this.canvas.moveCursor = 'move';
 
@@ -190,7 +181,7 @@ export class DrawingEditorComponent implements OnInit {
     this.drawingModeChanged.emit(DrawingMode.Dragging);
   }
 
-  private enableDrawMode() {
+  public enableDrawMode() {
     this.canvas.hoverCursor = 'crosshair';
     this.canvas.moveCursor = 'crosshair';
 
@@ -470,35 +461,5 @@ export class DrawingEditorComponent implements OnInit {
 
   public resetView() {
     this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
-  }
-
-  public toogleToolbar() {
-    this.toolbarOpened = !this.toolbarOpened;
-    if (this.toolbarOpened) {
-      this.renderer.removeClass(
-        this.toolbar.nativeElement,
-        'toolbar-invisible'
-      );
-      this.toolbarIconName = 'keyboard_arrow_down';
-      this.renderer.addClass(this.toolbar.nativeElement, 'toolbar-visible');
-      this.renderer.addClass(this.toolbarIcon.nativeElement, 'icon-rotated');
-    } else {
-      this.toolbarIconName = 'keyboard_arrow_up';
-      this.renderer.removeClass(this.toolbar.nativeElement, 'toolbar-visible');
-      this.renderer.addClass(this.toolbar.nativeElement, 'toolbar-invisible');
-      this.renderer.removeClass(this.toolbarIcon.nativeElement, 'icon-rotated');
-    }
-  }
-
-  public onSelect() {
-    this.enableSelectionMode();
-  }
-
-  public onDrag() {
-    this.enableDraggingMode();
-  }
-
-  public onDraw() {
-    this.enableDrawMode();
   }
 }

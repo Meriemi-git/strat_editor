@@ -44,6 +44,10 @@
   cursor: pointer;
 }
 
+.map-container {
+  min-height: 100vh;
+}
+
 ::ng-deep.mat-drawer-inner-container {
   overflow-x: hidden !important;
   direction: rtl;
