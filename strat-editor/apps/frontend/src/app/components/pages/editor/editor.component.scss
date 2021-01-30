@@ -20,13 +20,14 @@
 .first,
 .second {
   font-family: 'Amiko';
-  background-color: yellow;
-  padding: 10px 10px 10px 10px;
+  padding: 10px;
   margin: 10px;
   border-radius: 5px;
   display: inline-block;
   width: 80px;
   text-align: center;
+  color: white;
+  cursor: pointer;
 }
 
 .first {
@@ -37,6 +38,10 @@
 .second {
   background-color: $primaryLightColor;
   color: $secondaryDarkColor;
+}
+
+.editor {
+  cursor: pointer;
 }
 
 ::ng-deep.mat-drawer-inner-container {

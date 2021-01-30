@@ -24,7 +24,6 @@ import { HttpJwtInterceptor } from './interceptors/http-jwt-interceptor';
 import { ToastrModule } from 'ngx-toastr';
 import { GlobalErrorHandler } from './global-error-handler';
 import { NotificationService } from './services/notifications.service';
-
 export function init_app(appInitService: AppInitService) {
   return () => appInitService.initializeApp();
 }
@@ -44,7 +43,7 @@ export function init_app(appInitService: AppInitService) {
     MatButtonModule,
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({
-      maxAge: 40,
+      maxAge: 100,
     }),
     EffectsModule.forRoot(effects),
     HttpClientXsrfModule.withOptions(),

@@ -87,28 +87,6 @@ const sidenavReducer = createReducer(
     galleryPanelIsOpen: true,
     mainMenuPanelIsOpen: false,
     accountPanelIsOpen: false,
-  })),
-  on(actions.showMainMenuPanel, (state) => ({
-    ...state,
-    leftIsOpen: true,
-    rightIsOpen: false,
-    agentsPanelIsOpen: false,
-    gadgetsPanelIsOpen: false,
-    drawingPanelIsOpen: false,
-    galleryPanelIsOpen: false,
-    mainMenuPanelIsOpen: true,
-    accountPanelIsOpen: false,
-  })),
-  on(actions.showAccountPanel, (state) => ({
-    ...state,
-    leftIsOpen: false,
-    rightIsOpen: true,
-    agentsPanelIsOpen: false,
-    gadgetsPanelIsOpen: false,
-    drawingPanelIsOpen: false,
-    galleryPanelIsOpen: false,
-    mainMenuPanelIsOpen: false,
-    accountPanelIsOpen: true,
   }))
 );
 

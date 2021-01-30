@@ -9,15 +9,16 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AgentService {
-  private controller = "agent"
-  constructor(private http : HttpClient) {
-  }
+  private controller = 'agent';
+  constructor(private http: HttpClient) {}
 
-  getAllAgents(): Observable<Agent[]>{
-    return this.http.get<Agent[]>(environment.apiUrl + this.controller + "/all").pipe(
-      catchError((err) => {
-        console.log(err)
-        return throwError(err);
-    }));
+  getAllAgents(): Observable<Agent[]> {
+    return this.http
+      .get<Agent[]>(environment.apiUrl + this.controller + '/all')
+      .pipe(
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
   }
 }

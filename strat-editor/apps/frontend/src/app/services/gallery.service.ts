@@ -16,7 +16,6 @@ export class GalleryService {
       .get<Image[]>(environment.apiUrl + this.controller + '/images')
       .pipe(
         catchError((err) => {
-          console.log(err);
           return throwError(err);
         })
       );
@@ -29,7 +28,6 @@ export class GalleryService {
       .post<Image>(environment.apiUrl + this.controller + '/upload', formData)
       .pipe(
         catchError((err) => {
-          console.log(err);
           return throwError(err);
         })
       );

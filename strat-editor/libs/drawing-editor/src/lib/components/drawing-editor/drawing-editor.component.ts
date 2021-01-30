@@ -75,7 +75,6 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('Init drawing-Editor, isLocked:', this.isLocked);
     this.isDown = false;
     this.drawingMode = DrawingMode.Undefined;
     this.drawingModeChanged.emit(DrawingMode.Undefined);
@@ -172,6 +171,9 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   private enableSelectionMode() {
+    this.canvas.hoverCursor = 'grab';
+    this.canvas.moveCursor = 'grabbing';
+
     this.drawingMode = DrawingMode.Selection;
     this.canvas.forEachObject(
       (object) => (object.selectable = object.name !== 'map')
@@ -180,12 +182,18 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   private enableDraggingMode() {
+    this.canvas.hoverCursor = 'move';
+    this.canvas.moveCursor = 'move';
+
     this.canvas.forEachObject((object) => (object.selectable = false));
     this.drawingMode = DrawingMode.Dragging;
     this.drawingModeChanged.emit(DrawingMode.Dragging);
   }
 
   private enableDrawMode() {
+    this.canvas.hoverCursor = 'crosshair';
+    this.canvas.moveCursor = 'crosshair';
+
     this.canvas.forEachObject((object) => (object.selectable = false));
     this.drawingMode = DrawingMode.Draw;
     this.drawingModeChanged.emit(DrawingMode.Draw);
@@ -267,7 +275,6 @@ export class DrawingEditorComponent implements OnInit {
             this.canvas.width < this.canvas.height
               ? this.canvas.width / image.width
               : this.canvas.height / image.height;
-          console.log('scale', scale);
           image.set({
             top: this.canvas.getCenter().top,
             left: this.canvas.getCenter().left,

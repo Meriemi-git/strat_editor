@@ -192,7 +192,19 @@ export class EditorComponent implements OnInit, AfterViewInit {
           this.store.dispatch(Actions.RedoCanvasState());
         }
         break;
+      case KEY_CODE.CTRL:
+        this.CTRLPressed = false;
+        break;
       default:
+    }
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  keyDown(event: KeyboardEvent) {
+    switch (event.key.toLocaleLowerCase()) {
+      case KEY_CODE.CTRL:
+        this.CTRLPressed = true;
+        break;
     }
   }
 

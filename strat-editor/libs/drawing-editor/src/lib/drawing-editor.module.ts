@@ -4,6 +4,7 @@ import { DrawingEditorComponent } from './components/drawing-editor/drawing-edit
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
@@ -11,6 +12,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatButtonModule,
     MatIconModule,
     MatButtonToggleModule,
+    MatTooltipModule,
   ],
   declarations: [DrawingEditorComponent],
   exports: [DrawingEditorComponent],

@@ -6,16 +6,29 @@
     >
   </div>
   <div #toolbar class="toolbar">
-    <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-      <mat-button-toggle value="draw" (click)="onDraw()">
-        <mat-icon>create</mat-icon></mat-button-toggle
-      >
-      <mat-button-toggle value="select" (click)="onSelect()">
-        <mat-icon>select_all</mat-icon></mat-button-toggle
-      >
-      <mat-button-toggle value="drag" (click)="onDrag()">
-        <mat-icon>open_with</mat-icon></mat-button-toggle
-      >
-    </mat-button-toggle-group>
+    <button
+      mat-mini-fab
+      color="primary"
+      matTooltip="Switch to draw mode"
+      (click)="onDraw()"
+    >
+      <mat-icon>create</mat-icon>
+    </button>
+    <button
+      mat-mini-fab
+      color="warn"
+      matTooltip="Switch to selection mode"
+      (click)="onSelect()"
+    >
+      <mat-icon>select_all</mat-icon>
+    </button>
+    <button
+      mat-mini-fab
+      color="accent"
+      matTooltip="Switch to dragging mode"
+      (click)="onDrag()"
+    >
+      <mat-icon>open_with</mat-icon>
+    </button>
   </div>
 </div>

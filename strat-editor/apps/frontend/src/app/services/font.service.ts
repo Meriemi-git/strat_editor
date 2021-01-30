@@ -16,7 +16,6 @@ export class FontService {
       .get<string[]>(environment.apiUrl + this.controller + '/all')
       .pipe(
         catchError((err) => {
-          console.log(err);
           return throwError(err);
         })
       );

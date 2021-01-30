@@ -1,22 +1,26 @@
 <div class="drawing-status">
-  <mat-chip-list aria-label="Status">
+  <mat-chip-list
+    aria-label="Status"
+    matTooltip="Current editing mode"
+    [matTooltipPosition]="'left'"
+  >
     <mat-chip
       *ngIf="drawingMode === DrawingModeEnum.Selection"
-      color="primary"
+      color="warn"
       selected="true"
     >
       {{ drawingMode }} Mode
     </mat-chip>
     <mat-chip
       *ngIf="drawingMode === DrawingModeEnum.Draw"
-      color="accent"
+      color="primary"
       selected="true"
     >
       {{ drawingMode }} Mode
     </mat-chip>
     <mat-chip
       *ngIf="drawingMode === DrawingModeEnum.Dragging"
-      color="warn"
+      color="accent"
       selected="true"
     >
       {{ drawingMode }} Mode
