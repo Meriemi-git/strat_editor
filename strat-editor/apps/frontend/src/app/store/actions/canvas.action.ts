@@ -8,11 +8,3 @@ export const SaveCanvasState = createAction(
 export const UndoCanvasState = createAction('[Canvas] Undo canvas state');
 
 export const RedoCanvasState = createAction('[Canvas] Redo canvas state');
-
-const actions = union({
-  SaveCanvasState,
-  UndoCanvasState,
-  RedoCanvasState,
-});
-
-export type CanvasActions = typeof actions;

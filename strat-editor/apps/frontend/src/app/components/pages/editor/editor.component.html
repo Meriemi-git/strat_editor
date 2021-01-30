@@ -48,10 +48,9 @@
     #drawerEditor
     [canvasWidth]="width"
     [canvasHeight]="height"
-    (stateModified)="onStateModified($event)"
+    (stateModified)="onCanvasStateModified($event)"
     (stateLoaded)="onCanvasStateLoaded()"
     (drawingModeChanged)="onDrawingModeChanged($event)"
-    (saveStrat)="onSaveStrat()"
   ></strat-editor-drawing-editor>
   <strat-editor-drawing-status
     *ngIf="selectedFloor"

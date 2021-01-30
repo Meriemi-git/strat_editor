@@ -4,9 +4,7 @@ import { MapItemComponent } from './map-item.component';
 
 @NgModule({
   declarations: [MapItemComponent],
-  imports: [
-    CommonModule
-  ],
-  exports : [MapItemComponent]
+  imports: [CommonModule],
+  exports: [MapItemComponent],
 })
-export class MapPanelModule { }
+export class MapItemModule {}

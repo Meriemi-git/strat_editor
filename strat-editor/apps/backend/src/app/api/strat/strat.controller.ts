@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+} from '@nestjs/common';
 import { Strat } from '@strat-editor/data';
 import { AuthService } from '../auth/auth.service';
 import { StratService } from './strat.service';
@@ -18,5 +27,15 @@ export class StratController {
   @Post()
   async addstrat(@Body() strat: Strat): Promise<Strat> {
     return this.stratService.addStrat(strat);
+  }
+
+  @Patch()
+  async updateStrat(@Body() strat: Strat): Promise<Strat> {
+    return this.stratService.updateStrat(strat);
+  }
+
+  @Delete(':stratId')
+  async deleteStrat(@Param() stratId: string): Promise<any> {
+    return this.stratService.deleteStrat(stratId);
   }
 }

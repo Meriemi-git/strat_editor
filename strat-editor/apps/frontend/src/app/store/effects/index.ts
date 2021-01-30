@@ -4,6 +4,7 @@ import { DrawerEffect } from './drawer-effect';
 import { AuthEffect } from './auth-effect';
 import { UserEffect } from './user-effect';
 import { GalleryEffect } from './gallery-effect';
+import { StratEffect } from './strat-effect';
 
 export const effects = [
   AgentEffect,
@@ -12,4 +13,5 @@ export const effects = [
   AuthEffect,
   UserEffect,
   GalleryEffect,
+  StratEffect,
 ];

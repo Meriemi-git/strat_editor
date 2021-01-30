@@ -4,9 +4,9 @@ import { CanvasState } from '../states/canvas.state';
 
 export const initialstate: CanvasState = {
   history: [],
-  currentState: '',
+  currentState: null,
   historyIndex: -1,
-  backgroundImage: 'string',
+  backgroundImage: null,
   zoom: 0,
 };
 

@@ -8,6 +8,7 @@ import { EditorRoutingModule } from './editor-routing.module';
 import { DrawingStatusModule } from '../../molecules/drawing-status/drawing-status.module';
 import { DrawingToolbarModule } from '../../molecules/drawing-toolbar/drawing-toolbar.module';
 import { StratTitleModule } from '../../atoms/strat-title/strat-title.module';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [EditorComponent],
@@ -20,6 +21,7 @@ import { StratTitleModule } from '../../atoms/strat-title/strat-title.module';
     DrawingEditorModule,
     DrawingToolbarModule,
     StratTitleModule,
+    MatDialogModule,
   ],
   providers: [ImageHelperService],
   exports: [EditorComponent],

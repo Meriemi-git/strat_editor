@@ -8,6 +8,7 @@ import { Model } from 'mongoose';
 @Injectable()
 export class StratService {
   private readonly logger = new Logger(StratService.name);
+
   constructor(
     @InjectModel('Strat') private stratModel: Model<StratDocument>,
     private readonly jwtService: JwtService
@@ -31,5 +32,13 @@ export class StratService {
       this.logger.debug('Error in getUserIdFromCookies');
       return null;
     }
+  }
+
+  public updateStrat(strat: Strat): Promise<Strat> {
+    return this.stratModel.updateOne(strat).exec();
+  }
+
+  public deleteStrat(stratId: string): any {
+    return this.stratModel.findByIdAndDelete(stratId).exec();
   }
 }

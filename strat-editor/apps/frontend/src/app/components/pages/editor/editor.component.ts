@@ -17,6 +17,7 @@ import {
   DrawerColor,
   DrawingMode,
   Strat,
+  UserInfos,
 } from '@strat-editor/data';
 import * as Actions from '../../../store/actions';
 import * as Selectors from '../../../store/selectors';
@@ -28,6 +29,8 @@ import {
 } from '@strat-editor/drawing-editor';
 import { KEY_CODE } from '../../../helpers/key_code';
 import { Observable } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { StratSavingDialogComponent } from '../../modals/strat-saving-dialog/strat-saving-dialog.component';
 
 @Component({
   selector: 'strat-editor-editor',
@@ -37,8 +40,10 @@ import { Observable } from 'rxjs';
 export class EditorComponent implements OnInit, AfterViewInit {
   @ViewChild('drawerEditor') drawerEditor: DrawingEditorComponent;
 
+  public selectedMap: Map;
   public selectedFloor: Floor;
   public $maps: Observable<Map[]>;
+  public userInfos: UserInfos;
   public width: number = 0;
   public height: number = 0;
   private canvasStateLoading: boolean;
@@ -48,18 +53,24 @@ export class EditorComponent implements OnInit, AfterViewInit {
   private previousAction: DrawerAction;
   private CTRLPressed: boolean;
 
+  public editingStrat: Strat;
+
   public $drawingMode: Observable<DrawingMode>;
   public $strat: Observable<Strat>;
 
   constructor(
     private store: Store<StratEditorState>,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.$maps = this.store.select(Selectors.getAllMaps);
     // TODO get strat
     this.$drawingMode = this.store.select(Selectors.getDrawingMode);
+    this.store.select(Selectors.getEditingStrat).subscribe((editingstrat) => {
+      this.editingStrat = editingstrat;
+    });
     this.store.dispatch(Actions.FetchMaps());
     this.store.dispatch(Actions.FetchAgents());
     this.store.dispatch(Actions.FetchDrawerActions());
@@ -108,11 +119,12 @@ export class EditorComponent implements OnInit, AfterViewInit {
       }
     });
     this.store.select(Selectors.getSelectedMap).subscribe((map) => {
+      // TODO Ask to save the strat before leave
+      this.selectedMap = map;
       this.store.dispatch(
         Actions.SelectFloor({ floor: map ? map.floors[0] : null })
       );
     });
-
     this.store.select(Selectors.getSelectedFloor).subscribe((floor) => {
       this.selectedFloor = floor;
       if (floor) {
@@ -120,6 +132,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
       } else {
         this.drawerEditor.close();
       }
+    });
+    this.store.select(Selectors.getUserInfos).subscribe((userInfos) => {
+      this.userInfos = userInfos;
     });
   }
 
@@ -132,7 +147,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.dispatch(Actions.closeRight());
   }
 
-  onStateModified(state: string) {
+  onCanvasStateModified(state: string) {
     const canvasState = JSON.stringify(state);
     this.store.dispatch(Actions.SaveCanvasState({ canvasState }));
   }
@@ -155,8 +170,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.height = window.innerHeight - 60;
     this.drawerEditor.resize(this.width, this.height);
   }
-
-  onSaveStrat() {}
 
   @HostListener('window:resize', ['$event'])
   onResize(event?) {
@@ -273,5 +286,35 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.drawerEditor.enableDrawMode();
   }
 
-  public onSave() {}
+  public onSave() {
+    if (this.editingStrat) {
+      if (this.editingStrat._id) {
+        this.store.dispatch(Actions.UpdateStrat({ strat: this.editingStrat }));
+      } else {
+        this.store.dispatch(Actions.UploadStrat({ strat: this.editingStrat }));
+      }
+    } else {
+      const strat: Strat = {
+        createdAt: new Date(),
+        name: `${this.selectedMap.name} - ${new Date().toLocaleDateString()}`,
+        description: '',
+        lastModifiedAt: new Date(),
+        createdBy: this.userInfos.userId,
+        votes: 0,
+        layers: [],
+        mapId: this.selectedMap._id,
+        isPublic: false,
+      };
+      const dialogRef = this.dialog.open(StratSavingDialogComponent, {
+        width: '400px',
+        data: { strat },
+      });
+
+      dialogRef.afterClosed().subscribe((strat) => {
+        if (strat) {
+          this.store.dispatch(Actions.UploadStrat({ strat }));
+        }
+      });
+    }
+  }
 }

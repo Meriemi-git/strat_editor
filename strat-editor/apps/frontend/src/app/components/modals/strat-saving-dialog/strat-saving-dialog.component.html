@@ -1,0 +1,40 @@
+<div class="modal-content-wrapper">
+  <header class="modal-header">
+    <h1 class="modal-title">Strat informations</h1>
+  </header>
+  <section class="modal-body">
+    <form [formGroup]="stratForm" class="login-container">
+      <p [ngClass]="{ 'has-error': isSubmitted && fc.name.errors }">
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input
+            matInput
+            type="text"
+            [(ngModel)]="strat.name"
+            formControlName="name"
+            class="strat-input"
+          />
+        </mat-form-field>
+      </p>
+      <div *ngIf="isSubmitted && fc.name.errors" class="help-block">
+        <div *ngIf="fc.name.errors.required">Name is required</div>
+        <div *ngIf="fc.name.errors.minlength">Name is required</div>
+      </div>
+      <mat-form-field>
+        <mat-label>Description</mat-label>
+        <textarea
+          matInput
+          [(ngModel)]="strat.description"
+          class="strat-input"
+        ></textarea>
+      </mat-form-field>
+      <mat-slide-toggle color="primary" [checked]="isPublic">
+        Make your strat public ?
+      </mat-slide-toggle>
+    </form>
+  </section>
+  <footer class="modal-footer">
+    <button color="warn" mat-raised-button (click)="onClose()">Close</button>
+    <button color="primary" mat-raised-button (click)="onSubmit()">Save</button>
+  </footer>
+</div>
