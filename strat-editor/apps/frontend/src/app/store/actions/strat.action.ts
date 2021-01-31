@@ -2,17 +2,17 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { createAction, props } from '@ngrx/store';
 import { Strat } from '@strat-editor/data';
 
-export const GetStrats = createAction(
+export const GetMyStrats = createAction(
   '[Strats] Get Strats',
   props<{ userId: string }>()
 );
 
-export const GetStratsSuccess = createAction(
+export const GetMyStratsSuccess = createAction(
   '[Strats] Get Strats Success',
   props<{ strats: Strat[] }>()
 );
 
-export const GetStratsError = createAction(
+export const GetMyStratsError = createAction(
   '[Strats] Get Strats Error',
   props<{ error: HttpErrorResponse }>()
 );

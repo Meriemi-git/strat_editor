@@ -44,6 +44,13 @@ const routes: Routes = [
         (mod) => mod.LoginModule
       ),
   },
+  {
+    path: 'my-strats',
+    loadChildren: () =>
+      import('./components/pages/my-strats/my-strats.module').then(
+        (mod) => mod.MyStratsModule
+      ),
+  },
 ];
 
 @NgModule({

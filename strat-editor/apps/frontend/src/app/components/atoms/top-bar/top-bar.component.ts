@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 export class TopBarComponent implements OnInit {
   @Input() $userInfos: Observable<UserInfos>;
   @Output() disconnect = new EventEmitter<void>();
+  @Output() openMyStrat = new EventEmitter<void>();
 
   public onEditorPage: boolean;
   public userInfos: UserInfos;
@@ -31,9 +32,6 @@ export class TopBarComponent implements OnInit {
   onAccountClick() {
     this.router.navigateByUrl('/account');
   }
-  onDisconnectClick() {
-    this.disconnect.emit();
-  }
 
   onLoginClick() {
     this.router.navigateByUrl('/login');
@@ -45,5 +43,9 @@ export class TopBarComponent implements OnInit {
 
   onHomeClick() {
     this.router.navigateByUrl('/');
+  }
+
+  onMyStratClick() {
+    this.router.navigateByUrl('/my-strats');
   }
 }

@@ -186,9 +186,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
         this.drawerEditor.deleteActiveObject();
         break;
       case KEY_CODE.ESCAPE:
-        this.store.dispatch(
-          Actions.SetDrawerAction({ action: this.previousAction })
-        );
         this.drawerEditor.resetView();
         break;
       case KEY_CODE.A:
@@ -309,6 +306,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
         votes: 0,
         layers: [],
         mapId: this.selectedMap._id,
+        mapName: this.selectedMap.name,
         isPublic: false,
       };
       const dialogRef = this.dialog.open(StratSavingDialogComponent, {

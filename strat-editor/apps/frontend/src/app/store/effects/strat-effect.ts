@@ -12,12 +12,12 @@ export class StratEffect {
 
   getStrats$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(actions.GetStrats),
+      ofType(actions.GetMyStrats),
       mergeMap((action) =>
         this.stratService.getAllStrats(action.userId).pipe(
-          map((strats) => actions.GetStratsSuccess({ strats })),
+          map((strats) => actions.GetMyStratsSuccess({ strats })),
           catchError((error: HttpErrorResponse) =>
-            of(actions.GetStratsError({ error }))
+            of(actions.GetMyStratsError({ error }))
           )
         )
       )

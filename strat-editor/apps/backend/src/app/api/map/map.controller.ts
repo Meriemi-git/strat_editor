@@ -12,9 +12,9 @@ export class MapController {
     return this.mapService.findAll();
   }
 
-  @Get('image/:imageName')
-  async getMapImage(@Param('imageName') imageName: string, @Res() res) {
-    const imgPath = this.getImgPath(imageName);
+  @Get('image/:imageId')
+  async getMapImage(@Param('imageId') imageId: string, @Res() res) {
+    const imgPath = this.getImgPath(imageId);
     return res.sendFile(imgPath, { root: 'assets' });
   }
 
@@ -23,9 +23,7 @@ export class MapController {
     this.mapService.addMap(map);
   }
 
-  private getImgPath(imageName): string {
-    return (
-      environment.map_folder + '/' + imageName + environment.map_extensions
-    );
+  private getImgPath(imageId): string {
+    return environment.map_folder + '/' + imageId + environment.map_extensions;
   }
 }

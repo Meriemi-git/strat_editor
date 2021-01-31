@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -9,7 +10,6 @@ import {
   Req,
 } from '@nestjs/common';
 import { Strat } from '@strat-editor/data';
-import { AuthService } from '../auth/auth.service';
 import { StratService } from './strat.service';
 import { Request } from 'express';
 
@@ -17,11 +17,17 @@ import { Request } from 'express';
 export class StratController {
   constructor(private readonly stratService: StratService) {}
 
-  @Get('all')
-  async findAll(@Req() request: Request): Promise<Strat[]> {
-    return this.stratService.findAllStratForUser(
-      this.stratService.getUserIdFromRequest(request)
-    );
+  @Get('all/:userId')
+  async findAll(
+    @Param('userId') userId: string,
+    @Req() request: Request
+  ): Promise<Strat[]> {
+    const userIdFromRequest = this.stratService.getUserIdFromRequest(request);
+    if (userIdFromRequest === userId) {
+      return this.stratService.findAllStratForUser(userId);
+    } else {
+      throw new BadRequestException();
+    }
   }
 
   @Post()

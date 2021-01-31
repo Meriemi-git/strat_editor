@@ -23,6 +23,7 @@
   </button>
   <mat-menu #accountMenu="matMenu" xPosition="before">
     <button mat-menu-item (click)="onAccountClick()">Account</button>
-    <button mat-menu-item (click)="onDisconnectClick()">Disconnect</button>
+    <button mat-menu-item (click)="onMyStratClick()">My Strats</button>
+    <button mat-menu-item (click)="disconnect.emit()">Disconnect</button>
   </mat-menu>
 </mat-toolbar>

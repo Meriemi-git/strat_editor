@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="grid">
+    <div
+      fxFlex="25%"
+      *ngFor="let strat of strats"
+      (click)="onSelectStrat(strat)"
+    >
+      <strat-editor-strat-item [strat]="strat"> </strat-editor-strat-item>
+    </div>
+  </div>
+</div>

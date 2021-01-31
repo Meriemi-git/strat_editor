@@ -1,0 +1,17 @@
+<div class="strat-container mat-elevation-z10">
+  <img
+    mat-image
+    src="{{ 'api/map/image/' + strat.mapId }}"
+    alt="Strat map image"
+    [width]="350"
+    class="map-image"
+  />
+  <div class="headers">
+    <h3>{{ strat.name }}</h3>
+  </div>
+  <div class="description">{{ strat.description | slice: 0:150 }} [...]</div>
+  <div class="buttons">
+    <button mat-raised-button color="primary">LIKE</button>
+    <button mat-raised-button color="primary">SHARE</button>
+  </div>
+</div>

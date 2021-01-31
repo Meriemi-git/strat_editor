@@ -1,5 +1,4 @@
 import { Layer, LayerSchema } from './layer';
-import { Map, MapSchema } from './map';
 import * as mongoose from 'mongoose';
 
 export type StratDocument = Strat & mongoose.Document;
@@ -14,6 +13,7 @@ export interface Strat {
   votes: number;
   layers: Layer[];
   mapId: string;
+  mapName: string;
   isPublic: boolean;
 }
 export const StratSchema = new mongoose.Schema({
@@ -23,12 +23,16 @@ export const StratSchema = new mongoose.Schema({
   lastModifiedAt: Date,
   createdBy: String,
   votes: Number,
-  mapId: String,
+  mapId: {
+    type: String,
+    required: true,
+  },
   layers: [
     {
       type: LayerSchema,
       ref: 'Layer',
     },
   ],
+  mapName: String,
   isPublic: Boolean,
 });

@@ -20,13 +20,13 @@ export const initialstate: StratState = adapter.getInitialState({
 
 const stratReducer = createReducer(
   initialstate,
-  on(actions.GetStrats, (state) => ({
+  on(actions.GetMyStrats, (state) => ({
     ...state,
   })),
-  on(actions.GetStratsSuccess, (state, { strats }) => {
+  on(actions.GetMyStratsSuccess, (state, { strats }) => {
     return adapter.addMany(strats, { ...state, error: null });
   }),
-  on(actions.GetStratsError, (state, { error }) => ({
+  on(actions.GetMyStratsError, (state, { error }) => ({
     ...state,
     error: error,
   })),
@@ -78,5 +78,3 @@ export const {
   selectIds,
   selectTotal,
 } = adapter.getSelectors();
-
-export const selectAllStrats = selectAll;
