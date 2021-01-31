@@ -10,15 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class TopBarComponent implements OnInit {
   @Input() $userInfos: Observable<UserInfos>;
-  @Input() maps: Map[];
-  @Input() floors: Floor[];
-
-  @Input() selectedMap: Map;
-  @Input() selectedFloor: Floor;
-
   @Output() disconnect = new EventEmitter<void>();
-  @Output() mapSelected = new EventEmitter<Map>();
-  @Output() floorSelected = new EventEmitter<Floor>();
 
   public onEditorPage: boolean;
   public userInfos: UserInfos;
@@ -53,13 +45,5 @@ export class TopBarComponent implements OnInit {
 
   onHomeClick() {
     this.router.navigateByUrl('/');
-  }
-
-  onMapSelected(map: Map) {
-    this.mapSelected.emit(map);
-  }
-
-  onFloorSelected(floor: Floor) {
-    this.floorSelected.emit(floor);
   }
 }

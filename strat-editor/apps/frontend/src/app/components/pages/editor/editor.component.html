@@ -37,12 +37,27 @@
   </div>
 </div>
 <div class="map-container">
+
   <div class="map-selector" *ngIf="!selectedFloor">
     <strat-editor-map-grid
       [maps]="$maps | async"
       (selectMap)="onMapSelected($event)"
     ></strat-editor-map-grid>
   </div>
+  <div class="map-header">
+    <strat-editor-floor-chooser
+    *ngIf="selectedFloor"
+    (mapSelected)="onMapSelected($event)"
+    (floorSelected)="onFloorSelected($event)"
+    [maps]="$maps|async"
+    [selectedMap]="selectedMap"
+    [selectedFloor]="selectedFloor">
+  </strat-editor-floor-chooser>
+  <strat-editor-strat-title
+      *ngIf="selectedFloor"
+      [stratTitle]="'Example Title'">
+  </strat-editor-strat-title>
+</div>
   <strat-editor-drawing-editor
     class="editor"
     #drawerEditor
@@ -58,15 +73,16 @@
   >
   </strat-editor-drawing-status>
   <strat-editor-drawing-toolbar
+    class="strat-editor-drawing-toolbar"
     *ngIf="selectedFloor"
     (enableSelectMode)="onSelect()"
     (enableDrawingMode)="onDraw()"
     (enableDraggingMode)="onDrag()"
     (saveStrat)="onSave()"
+    (showInfos)="onShowInfos()"
+    (openStrat)="onOpenStrat()"
+    (deleteStrat)="onDeleteStrat()"
   >
   </strat-editor-drawing-toolbar>
-  <strat-editor-strat-title
-    *ngIf="selectedFloor"
-    [stratTitle]="'Example Title'"
-  ></strat-editor-strat-title>
+
 </div>

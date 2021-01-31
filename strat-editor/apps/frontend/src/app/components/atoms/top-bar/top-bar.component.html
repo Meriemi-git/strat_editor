@@ -4,16 +4,7 @@
   </button>
   <span>Strat Editor</span>
   <span class="filler"></span>
-  <strat-editor-floor-chooser
-    (mapSelected)="onMapSelected($event)"
-    (floorSelected)="onFloorSelected($event)"
-    *ngIf="onEditorPage"
-    [maps]="maps"
-    [floors]="floors"
-    [selectedMap]="selectedMap"
-    [selectedFloor]="selectedFloor"
-  >
-  </strat-editor-floor-chooser>
+
   <span class="filler"></span>
   <span class="example-spacer">{{ userInfos?.username | titlecase }}</span>
   <mat-chip-list *ngIf="!userInfos">

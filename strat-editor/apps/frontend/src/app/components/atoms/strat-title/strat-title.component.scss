@@ -1,8 +1,11 @@
-.container {
-  width: 200px;
-  position: absolute;
-  top: 0;
-  right: calc(50vw - 100px);
-  background-color: rgba(255, 255, 255, 0.3);
+.subheading-1 {
+  //background-color: rgba(255, 255, 255, 0.3);
+  //background-color: rgba(0, 83, 203, 0.5);
   font-family: 'RobotoMono';
+  width: max-content;
+  padding: 0px 20px 0px 20px;
+  font-size: 1.5em;
+  margin: 0 auto;
+  border-radius: 7px;
+  text-decoration: underline;
 }

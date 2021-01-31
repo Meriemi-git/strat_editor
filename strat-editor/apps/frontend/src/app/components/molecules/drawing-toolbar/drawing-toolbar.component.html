@@ -4,46 +4,83 @@
       {{ toolbarIconName }}</mat-icon
     >
   </div>
-  <div #toolbar class="toolbar">
-    <button
-      mat-mini-fab
-      color="primary"
-      matTooltip="Switch to draw mode"
-      (click)="onDraw()"
-    >
-      <mat-icon>create</mat-icon>
-    </button>
-    <button
-      mat-mini-fab
-      color="warn"
-      matTooltip="Switch to selection mode"
-      (click)="onSelect()"
-    >
-      <mat-icon>select_all</mat-icon>
-    </button>
-    <button
-      mat-mini-fab
-      color="accent"
-      matTooltip="Switch to dragging mode"
-      (click)="onDrag()"
-    >
-      <mat-icon>open_with</mat-icon>
-    </button>
-    <button
-      mat-mini-fab
-      color="primary"
-      matTooltip="Save your strat"
-      (click)="onSave()"
-    >
-      <mat-icon>save</mat-icon>
-    </button>
-    <button
-      mat-mini-fab
-      color="warn"
-      matTooltip="Show strat infos"
-      (click)="onShowInfos()"
-    >
-      <mat-icon>info</mat-icon>
-    </button>
+  <div #toolbar class="toolbar-buttons">
+    <div class="button">
+      <button
+        mat-mini-fab
+        color="primary"
+        matTooltip="Switch to draw mode"
+        (click)="enableDrawingMode.emit()"
+      >
+        <mat-icon>create</mat-icon>
+      </button>
+      <mat-label>Draw</mat-label>
+    </div>
+    <div class="button">
+      <button
+        mat-mini-fab
+        color="warn"
+        matTooltip="Switch to selection mode"
+        (click)="enableSelectMode.emit()"
+      >
+        <mat-icon>select_all</mat-icon>
+      </button>
+      <mat-label>Select</mat-label>
+    </div>
+    <div class="button">
+      <button
+        mat-mini-fab
+        color="accent"
+        matTooltip="Switch to dragging mode"
+        (click)="enableDraggingMode.emit()"
+      >
+        <mat-icon>open_with</mat-icon>
+      </button>
+      <mat-label>Drag</mat-label>
+    </div>
+    <div class="button">
+      <button
+        mat-mini-fab
+        color="primary"
+        matTooltip="Save your strat"
+        (click)="saveStrat.emit()"
+      >
+        <mat-icon>save</mat-icon>
+      </button>
+      <mat-label>Save</mat-label>
+    </div>
+    <div class="button">
+      <button
+        mat-mini-fab
+        color="warn"
+        matTooltip="Open existing strat"
+        (click)="openStrat.emit()"
+      >
+        <mat-icon>folder_open</mat-icon>
+      </button>
+      <mat-label>Open</mat-label>
+    </div>
+    <div class="button">
+      <button
+        mat-mini-fab
+        color="accent"
+        matTooltip="Show strat infos"
+        (click)="showInfos.emit()"
+      >
+        <mat-icon>info</mat-icon>
+      </button>
+      <mat-label>Infos</mat-label>
+    </div>
+    <div class="button">
+      <button
+        mat-mini-fab
+        color="warn"
+        matTooltip="Delete this strat"
+        (click)="deleteStrat.emit()"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+      <mat-label>Delete</mat-label>
+    </div>
   </div>
 </div>

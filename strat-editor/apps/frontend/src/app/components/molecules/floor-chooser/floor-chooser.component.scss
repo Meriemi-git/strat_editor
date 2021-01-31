@@ -5,7 +5,10 @@
 }
 
 .item {
-  margin: 10px;
-  font-size: 0.7em;
-  height: 50px;
+  margin: 10px 10px 0px 10px;
+  height: max-content;
+}
+
+::ng-deep.mat-form-field {
+  padding-bottom: 0 !important;
 }

@@ -48,9 +48,37 @@
   min-height: 100vh;
 }
 
+.map-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: max-content;
+  z-index: 999;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.strat-editor-drawing-toolbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: max-content;
+  z-index: 999;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 ::ng-deep.mat-drawer-inner-container {
   overflow-x: hidden !important;
   direction: rtl;
   scrollbar-width: thin;
   scrollbar-color: $primaryColor black;
+}
+
+.strat-saving-dialog {
+  border-radius: 50%;
 }

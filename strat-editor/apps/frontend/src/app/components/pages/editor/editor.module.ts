@@ -9,6 +9,8 @@ import { DrawingStatusModule } from '../../molecules/drawing-status/drawing-stat
 import { DrawingToolbarModule } from '../../molecules/drawing-toolbar/drawing-toolbar.module';
 import { StratTitleModule } from '../../atoms/strat-title/strat-title.module';
 import { MatDialogModule } from '@angular/material/dialog';
+import { FloorChooserModule } from '../../molecules/floor-chooser/floor-chooser.module';
+import { StratSavingDialogModule } from '../../molecules/strat-saving-dialog/strat-saving-dialog.module';
 
 @NgModule({
   declarations: [EditorComponent],
@@ -22,6 +24,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     DrawingToolbarModule,
     StratTitleModule,
     MatDialogModule,
+    FloorChooserModule,
+    StratSavingDialogModule,
   ],
   providers: [ImageHelperService],
   exports: [EditorComponent],

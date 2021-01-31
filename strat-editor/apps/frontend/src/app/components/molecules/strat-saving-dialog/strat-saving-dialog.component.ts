@@ -28,6 +28,7 @@ export class StratSavingDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.strat = this.data.strat;
+    console.log('init modal');
   }
 
   onSubmit() {
@@ -37,11 +38,12 @@ export class StratSavingDialogComponent implements OnInit {
       this.strat.name = this.stratForm.get('name').value;
       this.strat.description = this.stratForm.get('description').value;
       this.strat.isPublic = this.isPublic;
+      this.dialogRef.close(this.strat);
     }
-    this.dialogRef.close(this.strat);
   }
 
   onClose() {
+    console.log('close modal');
     this.dialogRef.close();
   }
 

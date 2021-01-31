@@ -30,7 +30,7 @@ import {
 import { KEY_CODE } from '../../../helpers/key_code';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { StratSavingDialogComponent } from '../../modals/strat-saving-dialog/strat-saving-dialog.component';
+import { StratSavingDialogComponent } from '../../molecules/strat-saving-dialog/strat-saving-dialog.component';
 
 @Component({
   selector: 'strat-editor-editor',
@@ -142,6 +142,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.dispatch(Actions.SelectMap({ map: map }));
   }
 
+  onFloorSelected(floor: Floor) {
+    this.store.dispatch(Actions.SelectFloor({ floor: floor }));
+  }
   onDrawingActionSelected(action: DrawerAction) {
     this.store.dispatch(Actions.SetDrawerAction({ action }));
     this.store.dispatch(Actions.closeRight());
@@ -287,6 +290,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   public onSave() {
+    console.log('this.editingStrat', this.editingStrat);
     if (this.editingStrat) {
       if (this.editingStrat._id) {
         this.store.dispatch(Actions.UpdateStrat({ strat: this.editingStrat }));
@@ -294,12 +298,14 @@ export class EditorComponent implements OnInit, AfterViewInit {
         this.store.dispatch(Actions.UploadStrat({ strat: this.editingStrat }));
       }
     } else {
+      console.log('opening save dialog', this.userInfos);
+
       const strat: Strat = {
         createdAt: new Date(),
         name: `${this.selectedMap.name} - ${new Date().toLocaleDateString()}`,
         description: '',
         lastModifiedAt: new Date(),
-        createdBy: this.userInfos.userId,
+        createdBy: this.userInfos?.userId,
         votes: 0,
         layers: [],
         mapId: this.selectedMap._id,
@@ -307,7 +313,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
       };
       const dialogRef = this.dialog.open(StratSavingDialogComponent, {
         width: '400px',
+        hasBackdrop: true,
         data: { strat },
+        panelClass: ['strat-saving-dialog'],
+        disableClose: true,
       });
 
       dialogRef.afterClosed().subscribe((strat) => {
@@ -317,4 +326,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
       });
     }
   }
+
+  public onShowInfos() {}
+
+  public onOpenStrat() {}
+
+  public onDeleteStrat() {}
 }

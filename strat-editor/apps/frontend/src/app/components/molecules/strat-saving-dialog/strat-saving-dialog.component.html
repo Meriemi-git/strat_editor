@@ -26,6 +26,7 @@
           matInput
           [(ngModel)]="strat.description"
           class="strat-input"
+          rows="4" cols="50"
         ></textarea>
       </mat-form-field>
       <mat-slide-toggle color="primary" [checked]="isPublic">
@@ -34,7 +35,7 @@
     </form>
   </section>
   <footer class="modal-footer">
-    <button color="warn" mat-raised-button (click)="onClose()">Close</button>
+    <button color="warn" mat-raised-button (click)="onClose()">Cancel</button>
     <button color="primary" mat-raised-button (click)="onSubmit()">Save</button>
   </footer>
 </div>

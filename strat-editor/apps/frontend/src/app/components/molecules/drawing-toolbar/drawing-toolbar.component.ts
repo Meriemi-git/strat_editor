@@ -23,7 +23,8 @@ export class DrawingToolbarComponent {
   @Output() enableDraggingMode = new EventEmitter<void>();
   @Output() saveStrat = new EventEmitter<void>();
   @Output() showInfos = new EventEmitter<void>();
-
+  @Output() openStrat = new EventEmitter<void>();
+  @Output() deleteStrat = new EventEmitter<void>();
   public toolbarIconName: string = 'keyboard_arrow_up';
   private toolbarOpened: boolean = false;
   public DrawingModeEnum = DrawingMode;
@@ -46,25 +47,5 @@ export class DrawingToolbarComponent {
       this.renderer.addClass(this.toolbar.nativeElement, 'toolbar-invisible');
       this.renderer.removeClass(this.toolbarIcon.nativeElement, 'icon-rotated');
     }
-  }
-
-  public onSelect() {
-    this.enableSelectMode.emit();
-  }
-
-  public onDrag() {
-    this.enableDraggingMode.emit();
-  }
-
-  public onDraw() {
-    this.enableDrawingMode.emit();
-  }
-
-  public onSave() {
-    this.saveStrat.emit();
-  }
-
-  public onShowInfos() {
-    this.showInfos.emit();
   }
 }
