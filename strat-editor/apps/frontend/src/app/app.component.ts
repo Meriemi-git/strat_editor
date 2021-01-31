@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
   constructor(private store: Store<StratEditorState>) {}
 
   ngOnInit(): void {
+    this.$userInfos = this.store.select(Selectors.getUserInfos);
     this.store.select(Selectors.isLeftSidenavOpened).subscribe((isOpened) => {
       this.leftIsOpened = isOpened;
     });

@@ -1,7 +1,13 @@
+@import '~apps/frontend/src/styles.scss';
+
 .grid {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 30px;
   justify-content: space-evenly;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: $primaryColor black;
+  height: max-content;
 }

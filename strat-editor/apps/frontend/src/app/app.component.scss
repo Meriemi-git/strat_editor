@@ -13,13 +13,12 @@
   top: 50%;
 }
 .container {
-  height: 100%;
   width: 100vw !important;
   margin: 0 auto;
+  height: calc(100vh - 60px);
   text-align: center;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
-  overflow: hidden;
 }
 
 .container::-webkit-scrollbar {
@@ -48,7 +47,6 @@
 .first,
 .second {
   font-family: 'Amiko';
-  background-color: yellow;
   padding: 10px 10px 10px 10px;
   margin: 10px;
   border-radius: 5px;

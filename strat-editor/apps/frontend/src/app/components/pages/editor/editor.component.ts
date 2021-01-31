@@ -332,4 +332,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
   public onOpenStrat() {}
 
   public onDeleteStrat() {}
+
+  public stopWheelEvent($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+  }
 }
