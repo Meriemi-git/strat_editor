@@ -6,11 +6,8 @@ import { Strat } from '@strat-editor/data';
   templateUrl: './strat-item.component.html',
   styleUrls: ['./strat-item.component.scss'],
 })
-export class StratItemComponent implements OnInit {
+export class StratItemComponent {
   @Input() strat: Strat;
+  public onHover: boolean;
   constructor() {}
-
-  ngOnInit(): void {
-    console.log('StratItemComponent strat:', this.strat);
-  }
 }

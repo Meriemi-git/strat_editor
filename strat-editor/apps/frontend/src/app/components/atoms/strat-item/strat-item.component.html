@@ -1,17 +1,28 @@
-<div class="strat-container mat-elevation-z10">
-  <img
-    mat-image
-    src="{{ 'api/map/image/' + strat.mapId }}"
-    alt="Strat map image"
-    [width]="350"
-    class="map-image"
-  />
-  <div class="headers">
-    <h3>{{ strat.name }}</h3>
+<div
+  class="strat-container"
+  [class.mat-elevation-z2]="!onHover"
+  [class.mat-elevation-z8]="onHover"
+  (mouseover)="onHover = true"
+  (mouseout)="onHover = false"
+>
+  <div class="content">
+    <img
+      mat-image
+      src="{{ 'api/map/image/' + strat.mapId }}"
+      alt="Strat map image"
+      [width]="350"
+      class="map-image"
+    />
+    <div class="headers">
+      <h3>{{ strat.name | slice: 0:30 }}</h3>
+      <h4>{{ strat.mapName }}</h4>
+    </div>
+    <div class="description">{{ strat.description | slice: 0:150 }}...</div>
   </div>
-  <div class="description">{{ strat.description | slice: 0:150 }} [...]</div>
   <div class="buttons">
-    <button mat-raised-button color="primary">LIKE</button>
-    <button mat-raised-button color="primary">SHARE</button>
+    <button mat-mini-fab color="primary">
+      <mat-icon>thumb_up</mat-icon>
+    </button>
+    <button mat-mini-fab color="warn"><mat-icon>delete</mat-icon></button>
   </div>
 </div>

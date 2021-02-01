@@ -1,22 +1,29 @@
 .strat-container {
+  border-radius: 10px 10px 10px 10px;
+  cursor: pointer;
+}
+
+.content {
   width: 350px;
   text-align: center;
   position: relative;
   margin: 0 auto;
+  height: fit-content;
+  border-radius: 10px 10px 0px 0px;
 }
 
 .description {
   position: absolute;
   top: 50%;
-
-  width: 350px;
-  margin: 0px 10px 0px 10px;
+  width: 330px;
+  padding: 0px 10px 0px 10px;
   color: white;
   text-align: justify;
 }
 
 .map-image {
-  opacity: 0.3;
+  opacity: 0.5;
+  border-radius: 10px 10px 0px 0px;
 }
 .headers {
   position: absolute;
@@ -27,9 +34,8 @@
 }
 
 .buttons {
-  position: absolute;
-  bottom: 0;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  padding: 5px;
 }

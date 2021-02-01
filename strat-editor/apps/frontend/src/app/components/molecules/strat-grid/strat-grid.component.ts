@@ -9,6 +9,7 @@ import { Strat } from '@strat-editor/data';
 export class StratGridComponent implements OnInit {
   @Input() strats: Strat[];
   @Output() selectStrat = new EventEmitter<Strat>();
+
   ngOnInit(): void {}
   onSelectMap(strat: Strat) {
     this.selectStrat.emit(strat);
