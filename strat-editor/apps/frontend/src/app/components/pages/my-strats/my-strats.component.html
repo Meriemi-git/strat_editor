@@ -1,7 +1,12 @@
 <div *ngIf="$userInfos | async; else notConnected">
   <strat-editor-strat-filters (filter)="onFilterStrat($event)">
   </strat-editor-strat-filters>
-  <strat-editor-strat-grid [strats]="$strats | async"></strat-editor-strat-grid>
+  <strat-editor-strat-grid
+    [strats]="$strats | async"
+    (selectStrat)="onSelectStrat($event)"
+    (upVoteStrat)="onUpVoteStrat($event)"
+    (deleteStrat)="onDeleteStrat($event)"
+  ></strat-editor-strat-grid>
 </div>
 <ng-template #notConnected>
   <div class="not-connected">

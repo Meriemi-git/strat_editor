@@ -58,3 +58,8 @@ export const DeleteStratError = createAction(
   '[Strats] Delete Strat Error',
   props<{ error: HttpErrorResponse }>()
 );
+
+export const EditStrat = createAction(
+  '[Strats] Edit Strat',
+  props<{ strat: Strat }>()
+);

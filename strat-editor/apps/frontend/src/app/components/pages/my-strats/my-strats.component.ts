@@ -6,6 +6,8 @@ import { StratEditorState } from '../../../store/reducers';
 import * as Actions from '../../../store/actions';
 import * as Selectors from '../../../store/selectors';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { runInThisContext } from 'vm';
 
 @Component({
   selector: 'strat-editor-my-strats',
@@ -16,7 +18,7 @@ export class MyStratsComponent implements OnInit {
   public $strats: Observable<Strat[]>;
   public $userInfos: Observable<UserInfos>;
 
-  constructor(private store: Store<StratEditorState>) {}
+  constructor(private store: Store<StratEditorState>, private router: Router) {}
 
   ngOnInit(): void {
     this.$strats = this.store.select(Selectors.selectAllStrats);
@@ -33,8 +35,13 @@ export class MyStratsComponent implements OnInit {
   }
 
   private filter(strats: Strat[], filters: any): Strat[] {
-    // TODO filter strat
-    console.log('filters');
     return strats;
   }
+
+  onSelectStrat(strat: Strat) {
+    this.store.dispatch(Actions.EditStrat({ strat }));
+    this.router.navigateByUrl('editor');
+  }
+  onUpVoteStrat(strat: Strat) {}
+  onUDeleteStrat(strat: Strat) {}
 }

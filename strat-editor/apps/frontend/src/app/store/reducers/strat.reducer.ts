@@ -65,6 +65,11 @@ const stratReducer = createReducer(
   on(actions.DeleteStratError, (state, { error }) => ({
     ...state,
     error: error,
+  })),
+  on(actions.EditStrat, (state, { strat }) => ({
+    ...state,
+    editing: strat,
+    error: null,
   }))
 );
 
