@@ -17,7 +17,7 @@ export const GetMyStratsError = createAction(
   props<{ error: HttpErrorResponse }>()
 );
 
-export const UploadStrat = createAction(
+export const SaveStrat = createAction(
   '[Strats] Upload Strat',
   props<{ strat: Strat }>()
 );
@@ -61,5 +61,10 @@ export const DeleteStratError = createAction(
 
 export const EditStrat = createAction(
   '[Strats] Edit Strat',
+  props<{ strat: Strat }>()
+);
+
+export const LoadStrat = createAction(
+  '[Strats] Load Strat',
   props<{ strat: Strat }>()
 );

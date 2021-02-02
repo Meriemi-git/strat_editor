@@ -4,8 +4,7 @@ import { TopBarModule } from '../app/components/atoms/top-bar/top-bar.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
-import { reducers } from '@strat-editor/store';
-import { effects } from '@strat-editor/store';
+import * as StratStore from '@strat-editor/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import {
@@ -41,11 +40,11 @@ export function init_app(appInitService: AppInitService) {
     RightPanelModule,
     LeftPanelModule,
     MatButtonModule,
-    StoreModule.forRoot(reducers),
+    StoreModule.forRoot(StratStore.reducers),
     StoreDevtoolsModule.instrument({
       maxAge: 100,
     }),
-    EffectsModule.forRoot(effects),
+    EffectsModule.forRoot(StratStore.effects),
     HttpClientXsrfModule.withOptions(),
     ToastrModule.forRoot({
       maxOpened: 2,

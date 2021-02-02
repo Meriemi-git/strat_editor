@@ -2,9 +2,7 @@ import * as Ngx from '@angular-material-components/color-picker';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, AbstractControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { StratEditorState } from '@strat-editor/store';
-import * as Actions from '@strat-editor/store';
-import * as Selectors from '@strat-editor/store';
+import * as StratStore from '@strat-editor/store';
 import { Observable } from 'rxjs';
 import {
   DrawerActionType,
@@ -31,44 +29,44 @@ export class DrawingPanelComponent implements OnInit {
   colorCtr: AbstractControl = new FormControl('');
   selectedSize: number;
   selectedFont: string;
-  constructor(private store: Store<StratEditorState>) {
+  constructor(private store: Store<StratStore.StratEditorState>) {
     this.fontSizes = Array(100)
       .fill(0)
       .map((x, i) => i + 1);
   }
 
   ngOnInit(): void {
-    this.$color = this.store.select(Selectors.getColor);
-    this.$drawerActions = this.store.select(Selectors.selectAllDrawerActions);
-    this.$fontNames = this.store.select(Selectors.getFontNames);
+    this.$color = this.store.select(StratStore.getColor);
+    this.$drawerActions = this.store.select(StratStore.selectAllDrawerActions);
+    this.$fontNames = this.store.select(StratStore.getFontNames);
     this.store
-      .select(Selectors.getFontFamily)
+      .select(StratStore.getFontFamily)
       .subscribe((font) => (this.selectedFont = font));
     this.store
-      .select(Selectors.getFontSize)
+      .select(StratStore.getFontSize)
       .subscribe((size) => (this.selectedSize = size));
   }
 
   onSelectColor(event: any) {
     let color = new DrawerColor();
     Object.assign(color, event);
-    this.store.dispatch(Actions.SetColor({ color }));
+    this.store.dispatch(StratStore.SetColor({ color }));
   }
 
   onActionSelected(action: DrawerAction) {
     if (action.type !== DrawerActionType.SETTING) {
-      this.store.dispatch(Actions.SetDrawerAction({ action }));
+      this.store.dispatch(StratStore.SetDrawerAction({ action }));
     } else {
-      this.store.dispatch(Actions.SetOptions({ optionAction: action }));
+      this.store.dispatch(StratStore.SetOptions({ optionAction: action }));
     }
   }
 
   onFontFamilySelected(font: string) {
-    this.store.dispatch(Actions.SetFontFamily({ fontFamily: font }));
+    this.store.dispatch(StratStore.SetFontFamily({ fontFamily: font }));
   }
 
   onFontSizeSelected(fontSize: number) {
-    this.store.dispatch(Actions.SetFontSize({ fontSize }));
+    this.store.dispatch(StratStore.SetFontSize({ fontSize }));
   }
 
   getNgxColor(color: DrawerColor): Ngx.Color {

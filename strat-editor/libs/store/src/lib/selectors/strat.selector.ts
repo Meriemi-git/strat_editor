@@ -12,3 +12,8 @@ export const getEditingStrat = createSelector(
   getStratState,
   (state: StratState) => state.editing
 );
+
+export const getLoadedStrat = createSelector(
+  getStratState,
+  (state: StratState) => state.loaded
+);

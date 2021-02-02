@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { StratEditorState } from '@strat-editor/store';
-import * as Selectors from '@strat-editor/store';
-import * as Actions from '@strat-editor/store';
+import * as StratStore from '@strat-editor/store';
 import { Agent } from '@strat-editor/data';
 
 @Component({
@@ -16,19 +14,19 @@ export class LeftPanelComponent implements OnInit {
   $isGadgetsPanelOpened: Observable<boolean>;
   $agents: Observable<Agent[]>;
 
-  constructor(private store: Store<StratEditorState>) {}
+  constructor(private store: Store<StratStore.StratEditorState>) {}
 
   ngOnInit(): void {
-    this.$agents = this.store.select(Selectors.selectAllAgents);
+    this.$agents = this.store.select(StratStore.selectAllAgents);
     this.$isAgentsPanelOpened = this.store.select(
-      Selectors.isAgentsPanelOpened
+      StratStore.isAgentsPanelOpened
     );
     this.$isGadgetsPanelOpened = this.store.select(
-      Selectors.isGadgetsPanelOpened
+      StratStore.isGadgetsPanelOpened
     );
   }
 
   onAgentDragged(agent: Agent) {
-    this.store.dispatch(Actions.DragAgent({ agent }));
+    this.store.dispatch(StratStore.DragAgent({ agent }));
   }
 }

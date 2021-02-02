@@ -14,11 +14,12 @@ import {
   DrawingMode,
   DrawerColor,
   DrawerAction,
+  Strat,
 } from '@strat-editor/data';
 import { Store } from '@ngrx/store';
 
-import { StratEditorState } from '@strat-editor/store';
-import * as Selectors from '@strat-editor/store';
+import * as StratStore from '@strat-editor/store';
+
 import { fabric } from 'fabric';
 import { ObjectDrawer, LineDrawer, RectangleDrawer } from '../drawers';
 import { ArrowDrawer } from '../drawers/arrow-drawer';
@@ -39,9 +40,8 @@ import { ImageHelperService } from '../services/image-helper.service';
 export class DrawingEditorComponent implements OnInit {
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
-  @Output() stateModified = new EventEmitter<string>();
+  @Input() loadedStrat: Strat;
   @Output() stateLoaded = new EventEmitter<void>();
-  @Output() drawingModeChanged = new EventEmitter<DrawingMode>();
 
   public drawingMode: DrawingMode;
 
@@ -65,18 +65,57 @@ export class DrawingEditorComponent implements OnInit {
 
   constructor(
     private ihs: ImageHelperService,
-    private store: Store<StratEditorState>
+    private store: Store<StratStore.StratEditorState>
   ) {
     this.addAvalaibleDrawers();
   }
 
   ngOnInit(): void {
-    this.store.select(Selectors.getSelectedMap).subscribe((map) => {
-      console.log('Youppppppiiiiii ! ', map);
+    this.initCanvas();
+    this.initializeCanvasEvents();
+
+    this.store.select(StratStore.getColor).subscribe((color) => {
+      this.setColor(color);
     });
+    this.store.select(StratStore.getSelectedOption).subscribe((option) => {
+      this.setDrawerOptions(option);
+    });
+    this.store.select(StratStore.getFontFamily).subscribe((fontFamily) => {
+      this.setFontFamily(fontFamily);
+    });
+    this.store.select(StratStore.getFontSize).subscribe((fontSize) => {
+      this.setFontSize(fontSize);
+    });
+
+    // For undo/redo last canvas state
+    this.store
+      .select(StratStore.getCurrentCanvasState)
+      .subscribe((canvasState) => {
+        if (canvasState) {
+          const state = JSON.parse(canvasState);
+          this.setCanvasState(state);
+        } else {
+          this.store.dispatch(StratStore.LoadingCanvasStateDone());
+        }
+      });
+
+    this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
+      if (floor) {
+        this.resize(window.innerWidth, window.innerHeight - 60);
+        this.setBackgroundImageFromUrl(floor);
+      } else {
+        this.close();
+      }
+    });
+
+    this.store.select(StratStore.getSelectedAction).subscribe((selected) => {
+      this.doAction(selected);
+    });
+  }
+
+  private initCanvas() {
     this.isDown = false;
     this.drawingMode = DrawingMode.Undefined;
-    this.drawingModeChanged.emit(DrawingMode.Undefined);
     this.canvas = new fabric.Canvas('canvas', {
       selection: false,
     });
@@ -89,42 +128,9 @@ export class DrawingEditorComponent implements OnInit {
       selectable: true,
       strokeUniform: true,
     };
-    this.initializeCanvasEvents();
-
-    this.store.select(Selectors.getColor).subscribe((color) => {
-      this.setColor(color);
-    });
-    this.store.select(Selectors.getSelectedOption).subscribe((option) => {
-      this.setDrawerOptions(option);
-    });
-    this.store.select(Selectors.getFontFamily).subscribe((fontFamily) => {
-      this.setFontFamily(fontFamily);
-    });
-    this.store.select(Selectors.getFontSize).subscribe((fontSize) => {
-      this.setFontSize(fontSize);
-    });
-
-    this.store
-      .select(Selectors.getCurrentCanvasState)
-      .subscribe((canvasState) => {
-        if (canvasState) {
-          const state = JSON.parse(canvasState);
-          this.setCanvasState(state);
-        }
-      });
-
-    this.store.select(Selectors.getSelectedFloor).subscribe((floor) => {
-      if (floor) {
-        this.resize(window.innerWidth, window.innerHeight - 60);
-        this.setBackgroundImageFromUrl(floor);
-      } else {
-        this.close();
-      }
-    });
-
-    this.store.select(Selectors.getSelectedAction).subscribe((selected) => {
-      this.callAction(selected);
-    });
+    this.store.dispatch(
+      StratStore.SetDrawingMode({ drawingMode: this.drawingMode })
+    );
   }
 
   private addAvalaibleDrawers() {
@@ -193,14 +199,12 @@ export class DrawingEditorComponent implements OnInit {
     }
   }
 
-  public callAction(action: DrawerAction) {
+  public doAction(action: DrawerAction) {
     if (action) {
       this.drawer = this.avalaibleDrawers.get(action.name);
       this.enableDrawMode();
     } else {
-      this.drawer = null;
-      this.drawingMode = DrawingMode.Selection;
-      this.drawingModeChanged.emit(DrawingMode.Selection);
+      this.enableSelectionMode();
     }
   }
 
@@ -208,11 +212,14 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.hoverCursor = 'grab';
     this.canvas.moveCursor = 'grabbing';
 
+    this.canvas.forEachObject((object) => {
+      console.log('object', object);
+      object.selectable = object.name !== 'map';
+    });
     this.drawingMode = DrawingMode.Selection;
-    this.canvas.forEachObject(
-      (object) => (object.selectable = object.name !== 'map')
+    this.store.dispatch(
+      StratStore.SetDrawingMode({ drawingMode: this.drawingMode })
     );
-    this.drawingModeChanged.emit(DrawingMode.Selection);
   }
 
   public enableDraggingMode() {
@@ -221,16 +228,19 @@ export class DrawingEditorComponent implements OnInit {
 
     this.canvas.forEachObject((object) => (object.selectable = false));
     this.drawingMode = DrawingMode.Dragging;
-    this.drawingModeChanged.emit(DrawingMode.Dragging);
+    this.store.dispatch(
+      StratStore.SetDrawingMode({ drawingMode: this.drawingMode })
+    );
   }
 
   public enableDrawMode() {
     this.canvas.hoverCursor = 'crosshair';
     this.canvas.moveCursor = 'crosshair';
-
     this.canvas.forEachObject((object) => (object.selectable = false));
     this.drawingMode = DrawingMode.Draw;
-    this.drawingModeChanged.emit(DrawingMode.Draw);
+    this.store.dispatch(
+      StratStore.SetDrawingMode({ drawingMode: this.drawingMode })
+    );
   }
 
   public setDrawerOptions(action: DrawerAction) {
@@ -276,8 +286,9 @@ export class DrawingEditorComponent implements OnInit {
       }
     });
     this.canvas.discardActiveObject();
-    this.stateModified.emit(this.getCanvasState());
     this.canvas.renderAll();
+    const canvasState = JSON.stringify(this.getCanvasState());
+    this.store.dispatch(StratStore.SaveCanvasState({ canvasState }));
   }
 
   public selectAllObjects() {
@@ -293,7 +304,14 @@ export class DrawingEditorComponent implements OnInit {
 
   public getCanvasState(): string {
     this.updateNestedObjects();
-    return this.canvas.toJSON(['line', 'triangle', 'type', 'uid', 'name']);
+    return this.canvas.toJSON([
+      'line',
+      'triangle',
+      'type',
+      'uid',
+      'name',
+      'selectable',
+    ]);
   }
 
   public setCanvasState(canvasState: string): void {
@@ -321,7 +339,8 @@ export class DrawingEditorComponent implements OnInit {
           }).setCoords;
           this.canvas.add(image);
           this.canvas.renderAll();
-          this.stateModified.emit(this.getCanvasState());
+          const canvasState = JSON.stringify(this.getCanvasState());
+          this.store.dispatch(StratStore.SaveCanvasState({ canvasState }));
         } else {
           throw new MapLoadingError(
             'Cannot load backgroung image for ' + floor.name
@@ -333,10 +352,10 @@ export class DrawingEditorComponent implements OnInit {
 
   private canvasStateIsLoaded = (): void => {
     this.updateNestedObjects();
-    this.stateLoaded.emit();
+    this.store.dispatch(StratStore.LoadingCanvasStateDone());
   };
 
-  updateNestedObjects() {
+  private updateNestedObjects() {
     this.canvas._objects.forEach((object) => {
       let triangleArrow = (object as LineArrow).triangle;
       let lineArrow = (object as TriangleArrow).line;
@@ -354,7 +373,7 @@ export class DrawingEditorComponent implements OnInit {
     });
   }
 
-  getFabricObjectByUidAndType(uid: string, type: string): any {
+  private getFabricObjectByUidAndType(uid: string, type: string): any {
     return this.canvas._objects.find(
       (object) => (object as any).uid === uid && (object as any).name === type
     );
@@ -378,19 +397,18 @@ export class DrawingEditorComponent implements OnInit {
     });
 
     this.canvas.on('selection:created', (event: fabric.IEvent) => {
-      this.selectionCreated(event);
-    });
-
-    this.canvas.on('object:scaling', () => {
-      this.drawingMode = DrawingMode.Selection;
-      this.drawingModeChanged.emit(DrawingMode.Selection);
+      if (this.drawingMode == DrawingMode.Selection) {
+        this.selectionCreated(event);
+      }
     });
 
     this.canvas.on('object:modified', (event: fabric.IEvent) => {
       if (event.target instanceof fabric.Textbox) {
         this.editingText = true;
         this.drawingMode = DrawingMode.Draw;
-        this.drawingModeChanged.emit(DrawingMode.Draw);
+        this.store.dispatch(
+          StratStore.SetDrawingMode({ drawingMode: this.drawingMode })
+        );
       }
     });
 
@@ -403,7 +421,9 @@ export class DrawingEditorComponent implements OnInit {
     const pointer = this.canvas.getPointer(event.e);
     this.lastPosX = (event.e as any).clientX;
     this.lastPosY = (event.e as any).clientY;
-    this.selectedObjects = this.canvas.getActiveObjects();
+    this.selectedObjects = this.canvas
+      .getActiveObjects()
+      .filter((object) => object.name !== 'map');
     this.isDown = true;
     if (
       this.drawingMode !== DrawingMode.Draw ||
@@ -421,7 +441,7 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.renderAll();
   }
 
-  private mouseMove(event: fabric.IEvent): void {
+  private async mouseMove(event: fabric.IEvent): Promise<void> {
     const pointer = this.canvas.getPointer(event.e);
     if (this.drawingMode === DrawingMode.Draw && this.isDown) {
       this.drawer.resize(this.object, pointer.x, pointer.y);
@@ -437,7 +457,7 @@ export class DrawingEditorComponent implements OnInit {
     }
   }
 
-  private async mouseUp(event: fabric.IEvent) {
+  private async mouseUp(event: fabric.IEvent): Promise<void> {
     if (this.isMoving) {
       this.canvas.discardActiveObject();
     }
@@ -445,12 +465,11 @@ export class DrawingEditorComponent implements OnInit {
     this.isMoving = false;
     this.canvas.setViewportTransform(this.canvas.viewportTransform);
     this.canvas.renderAll();
-    this.stateModified.emit(this.getCanvasState());
+    const canvasState = JSON.stringify(this.getCanvasState());
+    this.store.dispatch(StratStore.SaveCanvasState({ canvasState }));
   }
 
   private selectionCreated(event: fabric.IEvent) {
-    this.drawingMode = DrawingMode.Selection;
-    this.drawingModeChanged.emit(DrawingMode.Selection);
     this.object = event.target;
     let selection: fabric.ActiveSelection;
     if ((event.target as LineArrow).triangle) {
@@ -470,7 +489,7 @@ export class DrawingEditorComponent implements OnInit {
     }
     if (selection) {
       this.canvas.setActiveObject(selection);
-    } else {
+    } else if (this.object.name !== 'map') {
       this.canvas.setActiveObject(this.object);
     }
     this.canvas.renderAll();
@@ -495,11 +514,6 @@ export class DrawingEditorComponent implements OnInit {
     if (this.drawer) {
       return await this.drawer.make(x, y, this.drawerOptions);
     }
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event?) {
-    this.resize(window.innerWidth, window.innerHeight - 60);
   }
 
   private resizeAllObjects(newWidth) {
@@ -527,5 +541,10 @@ export class DrawingEditorComponent implements OnInit {
 
   public resetView() {
     this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event?) {
+    this.resize(window.innerWidth, window.innerHeight - 60);
   }
 }

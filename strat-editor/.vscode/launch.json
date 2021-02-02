@@ -9,6 +9,10 @@
       "webRoot": "${workspaceFolder}",
       "pathMappings": [
         {
+          "url": "webpack:///libs",
+          "path": "${workspaceFolder}/libs"
+        }
+        {
           "url": "webpack:///src",
           "path": "${workspaceFolder}/apps/frontend/src"
         }
@@ -28,7 +32,7 @@
         "-r",
         "ts-node/register",
         "-r",
-        "tsconfig-paths/register",
+        "tsconfig-paths/register"
       ],
       "sourceMaps": true,
       "envFile": "${workspaceFolder}/.env",
@@ -47,7 +51,7 @@
       "program": "${workspaceFolder}/apps/backend/src/main.ts",
       "outFiles": [
         "${workspaceFolder}/dist/**/*.js"
-      ],
+      ]
     }
   ]
 }

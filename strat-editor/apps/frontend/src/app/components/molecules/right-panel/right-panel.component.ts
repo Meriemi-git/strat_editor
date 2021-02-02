@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AuthInfos, UserInfos } from '@strat-editor/data';
 import { Observable } from 'rxjs';
-import { StratEditorState } from '@strat-editor/store';
-import * as Selectors from '@strat-editor/store';
+import * as StratStore from '@strat-editor/store';
 @Component({
   selector: 'strat-editor-right-panel',
   templateUrl: './right-panel.component.html',
@@ -15,18 +14,18 @@ export class RightPanelComponent implements OnInit {
   public $isAccountPanelOpened: Observable<boolean>;
   public $authInfos: Observable<AuthInfos>;
   public $userInfos: Observable<UserInfos>;
-  constructor(private store: Store<StratEditorState>) {}
+  constructor(private store: Store<StratStore.StratEditorState>) {}
 
   ngOnInit(): void {
     this.$isDrawingPanelOpened = this.store.select(
-      Selectors.isDrawingPanelOpened
+      StratStore.isDrawingPanelOpened
     );
     this.$isGalleryPanelOpened = this.store.select(
-      Selectors.isGalleryPanelOpened
+      StratStore.isGalleryPanelOpened
     );
     this.$isAccountPanelOpened = this.store.select(
-      Selectors.isAccountPanelOpened
+      StratStore.isAccountPanelOpened
     );
-    this.$userInfos = this.store.select(Selectors.getUserInfos);
+    this.$userInfos = this.store.select(StratStore.getUserInfos);
   }
 }

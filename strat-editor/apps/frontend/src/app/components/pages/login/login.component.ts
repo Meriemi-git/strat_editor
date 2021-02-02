@@ -4,9 +4,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { UserDto, UserInfos } from '@strat-editor/data';
 import { Observable } from 'rxjs';
-import * as Actions from '@strat-editor/store';
-import { StratEditorState } from '@strat-editor/store';
-import * as Selectors from '@strat-editor/store';
+import * as StratStore from '@strat-editor/store';
 
 @Component({
   selector: 'strat-editor-login',
@@ -16,28 +14,31 @@ import * as Selectors from '@strat-editor/store';
 export class LoginComponent implements OnInit {
   public $userInfos: Observable<UserInfos>;
   public httpError: HttpErrorResponse;
-  constructor(private store: Store<StratEditorState>, private router: Router) {}
+  constructor(
+    private store: Store<StratStore.StratEditorState>,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.$userInfos = this.store.select(Selectors.getUserInfos);
+    this.$userInfos = this.store.select(StratStore.getUserInfos);
     this.$userInfos.subscribe((userInfos) => {
       if (userInfos) {
         this.httpError = null;
         this.router.navigateByUrl('/');
       }
     });
-    this.store.select(Selectors.getAuthError).subscribe((error) => {
+    this.store.select(StratStore.getAuthError).subscribe((error) => {
       this.httpError = error;
     });
   }
 
   onLogin(userDto: UserDto) {
-    this.store.dispatch(Actions.LogIn({ userDto }));
+    this.store.dispatch(StratStore.LogIn({ userDto }));
   }
 
   onDisplayRegisterForm() {
     this.httpError = null;
-    this.store.dispatch(Actions.closeRight());
+    this.store.dispatch(StratStore.closeRight());
     this.router.navigateByUrl('/register');
   }
 }

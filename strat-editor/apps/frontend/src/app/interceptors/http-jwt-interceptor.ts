@@ -10,8 +10,7 @@ import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthentService } from '@strat-editor/services';
-import { StratEditorState } from '@strat-editor/store';
-import * as Actions from '@strat-editor/store';
+import * as StratStore from '@strat-editor/store';
 import { UserInfos } from '@strat-editor/data';
 
 @Injectable()
@@ -22,7 +21,7 @@ export class HttpJwtInterceptor implements HttpInterceptor {
   );
   constructor(
     private authService: AuthentService,
-    private store: Store<StratEditorState>
+    private store: Store<StratStore.StratEditorState>
   ) {}
 
   intercept(
@@ -46,7 +45,7 @@ export class HttpJwtInterceptor implements HttpInterceptor {
                 throw error;
               }
             case 403:
-              this.store.dispatch(Actions.Disconnect());
+              this.store.dispatch(StratStore.Disconnect());
               break;
           }
         }
@@ -61,7 +60,7 @@ export class HttpJwtInterceptor implements HttpInterceptor {
       this.refreshTokenSubject.next(null);
       return this.authService.refreshToken().pipe(
         switchMap((userInfos: UserInfos) => {
-          this.store.dispatch(Actions.RefreshTokensSuccess({ userInfos }));
+          this.store.dispatch(StratStore.RefreshTokensSuccess({ userInfos }));
           this.isRefreshing = false;
           this.refreshTokenSubject.next(userInfos);
           return next.handle(request.clone());

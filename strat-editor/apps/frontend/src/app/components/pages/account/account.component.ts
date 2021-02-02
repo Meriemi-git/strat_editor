@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PasswordChangeWrapper, UserInfos } from '@strat-editor/data';
 import { Observable } from 'rxjs';
-import { StratEditorState } from '@strat-editor/store';
-import * as Actions from '@strat-editor/store';
-import * as Selectors from '@strat-editor/store';
+import * as StratStore from '@strat-editor/store';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -15,22 +13,22 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class AccountComponent implements OnInit {
   $userInfos: Observable<UserInfos>;
   $httpError: Observable<HttpErrorResponse>;
-  constructor(private store: Store<StratEditorState>) {}
+  constructor(private store: Store<StratStore.StratEditorState>) {}
 
   ngOnInit(): void {
-    this.$userInfos = this.store.select(Selectors.getUserInfos);
-    this.$httpError = this.store.select(Selectors.getAuthError);
+    this.$userInfos = this.store.select(StratStore.getUserInfos);
+    this.$httpError = this.store.select(StratStore.getAuthError);
   }
 
   onPasswordChanged(passwords: PasswordChangeWrapper) {
-    this.store.dispatch(Actions.ChangePassword({ passwords }));
+    this.store.dispatch(StratStore.ChangePassword({ passwords }));
   }
 
   onMailChange(newMail: string) {
-    this.store.dispatch(Actions.ChangeMail({ newMail }));
+    this.store.dispatch(StratStore.ChangeMail({ newMail }));
   }
 
   resendEmailLink(userInfos: UserInfos) {
-    this.store.dispatch(Actions.SendConfirmationEmail({ userInfos }));
+    this.store.dispatch(StratStore.SendConfirmationEmail({ userInfos }));
   }
 }

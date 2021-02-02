@@ -2,12 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Strat, UserInfos } from '@strat-editor/data';
 import { Observable } from 'rxjs';
-import { StratEditorState } from '@strat-editor/store';
-import * as Actions from '@strat-editor/store';
-import * as Selectors from '@strat-editor/store';
+import * as StratStore from '@strat-editor/store';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { runInThisContext } from 'vm';
 
 @Component({
   selector: 'strat-editor-my-strats',
@@ -18,14 +15,19 @@ export class MyStratsComponent implements OnInit {
   public $strats: Observable<Strat[]>;
   public $userInfos: Observable<UserInfos>;
 
-  constructor(private store: Store<StratEditorState>, private router: Router) {}
+  constructor(
+    private store: Store<StratStore.StratEditorState>,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.$strats = this.store.select(Selectors.selectAllStrats);
-    this.$userInfos = this.store.select(Selectors.getUserInfos);
+    this.$strats = this.store.select(StratStore.selectAllStrats);
+    this.$userInfos = this.store.select(StratStore.getUserInfos);
     this.$userInfos.subscribe((userInfos) => {
       if (userInfos) {
-        this.store.dispatch(Actions.GetMyStrats({ userId: userInfos.userId }));
+        this.store.dispatch(
+          StratStore.GetMyStrats({ userId: userInfos.userId })
+        );
       }
     });
   }
@@ -39,7 +41,7 @@ export class MyStratsComponent implements OnInit {
   }
 
   onSelectStrat(strat: Strat) {
-    this.store.dispatch(Actions.EditStrat({ strat }));
+    this.store.dispatch(StratStore.LoadStrat({ strat }));
     this.router.navigateByUrl('editor');
   }
   onUpVoteStrat(strat: Strat) {}

@@ -16,6 +16,7 @@ export function sortByName(a: Strat, b: Strat): number {
 export const initialstate: StratState = adapter.getInitialState({
   editing: null,
   error: null,
+  loaded: null,
 });
 
 const stratReducer = createReducer(
@@ -30,7 +31,7 @@ const stratReducer = createReducer(
     ...state,
     error: error,
   })),
-  on(actions.UploadStrat, (state, { strat }) => ({
+  on(actions.SaveStrat, (state, { strat }) => ({
     ...state,
     error: null,
     editing: strat,
@@ -70,6 +71,11 @@ const stratReducer = createReducer(
     ...state,
     editing: strat,
     error: null,
+  })),
+  on(actions.LoadStrat, (state, { strat }) => ({
+    ...state,
+    error: null,
+    loaded: strat,
   }))
 );
 

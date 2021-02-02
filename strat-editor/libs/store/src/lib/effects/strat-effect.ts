@@ -26,7 +26,7 @@ export class StratEffect {
 
   uploadStrat$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(actions.UploadStrat),
+      ofType(actions.SaveStrat),
       mergeMap((action) =>
         this.stratService.uploadStrat(action.strat).pipe(
           map((strat) => actions.UploadStratSuccess({ strat })),

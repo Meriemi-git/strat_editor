@@ -16,20 +16,15 @@ import {
   DrawingMode,
   Strat,
   UserInfos,
-  NotificationType,
   DrawerAction,
   PolyLineAction,
 } from '@strat-editor/data';
-import * as Actions from '@strat-editor/store';
-import * as Selectors from '@strat-editor/store';
-import { StratEditorState } from '@strat-editor/store';
+import * as StratStore from '@strat-editor/store';
 import { DrawingEditorComponent } from '@strat-editor/drawing-editor';
 import { KEY_CODE } from '../../../helpers/key_code';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { StratSavingDialogComponent } from '../../molecules/strat-saving-dialog/strat-saving-dialog.component';
-import { map } from 'rxjs/operators';
-import { NotificationService } from '@strat-editor/services';
 
 @Component({
   selector: 'strat-editor-editor',
@@ -46,126 +41,86 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   public width: number = 0;
   public height: number = 0;
-  private canvasStateLoading: boolean;
   private draggingAgent: Agent;
   private draggingImage: Image;
 
   private CTRLPressed: boolean;
-  public editingStrat: Strat;
+  public savedStrat: Strat;
 
   public $drawingMode: Observable<DrawingMode>;
-  public $strat: Observable<Strat>;
+  public $loadedStrat: Observable<Strat>;
+  private canvasLoading: boolean;
 
   constructor(
-    private store: Store<StratEditorState>,
-    private notificationService: NotificationService,
+    private store: Store<StratStore.StratEditorState>,
     private cdr: ChangeDetectorRef,
     public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.$maps = this.store.select(Selectors.getAllMaps);
-    this.$drawingMode = this.store.select(Selectors.getDrawingMode);
-    this.store.dispatch(Actions.FetchMaps());
-    this.store.dispatch(Actions.FetchAgents());
-    this.store.dispatch(Actions.FetchDrawerActions());
-    this.store.dispatch(Actions.FetchFontNames());
-    this.store.dispatch(Actions.SetColor({ color: new DrawerColor() }));
+    this.$maps = this.store.select(StratStore.getAllMaps);
+    this.$drawingMode = this.store.select(StratStore.getDrawingMode);
+    this.$loadedStrat = this.store.select(StratStore.getLoadedStrat);
+    this.store.dispatch(StratStore.FetchMaps());
+    this.store.dispatch(StratStore.FetchAgents());
+    this.store.dispatch(StratStore.FetchDrawerActions());
+    this.store.dispatch(StratStore.FetchFontNames());
+    this.store.dispatch(StratStore.SetColor({ color: new DrawerColor() }));
     this.store.dispatch(
-      Actions.SetDrawerAction({ action: new PolyLineAction() })
+      StratStore.SetDrawerAction({ action: new PolyLineAction() })
     );
+    this.store
+      .select(StratStore.canvasStateIsLoading)
+      .subscribe((canvasLoading) => {
+        console.log('canvasLoading : ', canvasLoading);
+        this.canvasLoading = canvasLoading;
+      });
   }
 
   ngAfterViewInit(): void {
-    this.store.select(Selectors.getSelectedAction).subscribe((selected) => {
+    this.store.select(StratStore.getSelectedAction).subscribe((selected) => {
       if (this.selectedFloor) {
-        this.store.dispatch(Actions.closeRight());
+        this.store.dispatch(StratStore.closeRight());
       }
     });
-    this.store.select(Selectors.getDraggedAgent).subscribe((agent) => {
+    this.store.select(StratStore.getDraggedAgent).subscribe((agent) => {
       if (agent) {
         this.draggingAgent = agent;
       }
     });
-    this.store.select(Selectors.getDraggedImage).subscribe((image) => {
+    this.store.select(StratStore.getDraggedImage).subscribe((image) => {
       if (image) {
         this.draggingImage = image;
       }
     });
-    this.store.select(Selectors.getSelectedMap).subscribe((map) => {
+    this.store.select(StratStore.getSelectedMap).subscribe((map) => {
       // TODO Ask to save the strat before leave
       this.selectedMap = map;
       this.store.dispatch(
-        Actions.SelectFloor({ floor: map ? map.floors[0] : null })
+        StratStore.SelectFloor({ floor: map ? map.floors[0] : null })
       );
     });
 
-    this.store.select(Selectors.getSelectedFloor).subscribe((floor) => {
+    this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
       this.selectedFloor = floor;
     });
 
-    this.store.select(Selectors.getUserInfos).subscribe((userInfos) => {
+    this.store.select(StratStore.getUserInfos).subscribe((userInfos) => {
       this.userInfos = userInfos;
-    });
-
-    this.store.select(Selectors.getEditingStrat).subscribe((editingStrat) => {
-      this.editingStrat = editingStrat;
-      if (editingStrat) {
-        if (editingStrat.layers[0]) {
-          this.store
-            .select(Selectors.getAllMaps)
-            .pipe(
-              map((maps) => maps.find((map) => map._id === editingStrat.mapId))
-            )
-            .subscribe((map) => {
-              this.store.dispatch(Actions.SelectMap({ map }));
-
-              this.store.dispatch(
-                Actions.SelectFloor({
-                  floor: map.floors.find(
-                    (floor) => floor._id === editingStrat.layers[0]?.floorId
-                  ),
-                })
-              );
-              const canvasState = JSON.stringify(
-                editingStrat.layers[0]?.fabricCanvas
-              );
-              this.store.dispatch(Actions.SaveCanvasState({ canvasState }));
-            });
-        } else {
-          this.notificationService.displayNotification({
-            message: 'Cannot load this strat',
-            type: NotificationType.error,
-          });
-        }
-      }
     });
   }
 
   onMapSelected(map: Map) {
-    this.store.dispatch(Actions.SelectMap({ map: map }));
+    this.store.dispatch(StratStore.SelectMap({ map: map }));
   }
 
   onFloorSelected(floor: Floor) {
-    this.store.dispatch(Actions.SelectFloor({ floor: floor }));
+    this.store.dispatch(StratStore.SelectFloor({ floor: floor }));
   }
 
   onDrawingActionSelected(action: DrawerAction) {
-    this.store.dispatch(Actions.SetDrawerAction({ action }));
-    this.store.dispatch(Actions.closeRight());
-  }
-
-  onCanvasStateModified(state: string) {
-    const canvasState = JSON.stringify(state);
-    this.store.dispatch(Actions.SaveCanvasState({ canvasState }));
-  }
-
-  onCanvasStateLoaded() {
-    this.canvasStateLoading = false;
-  }
-
-  onDrawingModeChanged(drawingMode: DrawingMode) {
-    this.store.dispatch(Actions.SetDrawingMode({ drawingMode }));
+    this.store.dispatch(StratStore.SetDrawerAction({ action }));
+    this.store.dispatch(StratStore.closeRight());
   }
 
   @HostListener('document:keyup', ['$event'])
@@ -190,13 +145,13 @@ export class EditorComponent implements OnInit, AfterViewInit {
         }
         break;
       case KEY_CODE.Z:
-        if (this.CTRLPressed && !this.canvasStateLoading) {
-          this.store.dispatch(Actions.UndoCanvasState());
+        if (this.CTRLPressed && !this.canvasLoading) {
+          this.store.dispatch(StratStore.UndoCanvasState());
         }
         break;
       case KEY_CODE.Y:
-        if (this.CTRLPressed && !this.canvasStateLoading) {
-          this.store.dispatch(Actions.RedoCanvasState());
+        if (this.CTRLPressed && !this.canvasLoading) {
+          this.store.dispatch(StratStore.RedoCanvasState());
         }
         break;
       case KEY_CODE.CTRL:
@@ -248,19 +203,19 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   openAgentsPanel() {
-    this.store.dispatch(Actions.showAgentsPanel());
+    this.store.dispatch(StratStore.showAgentsPanel());
   }
 
   openGadgetsPanel() {
-    this.store.dispatch(Actions.showGadgetsPanel());
+    this.store.dispatch(StratStore.showGadgetsPanel());
   }
 
   openDrawingPanel() {
-    this.store.dispatch(Actions.showDrawingPanel());
+    this.store.dispatch(StratStore.showDrawingPanel());
   }
 
   openGalleryPanel() {
-    this.store.dispatch(Actions.showGalleryPanel());
+    this.store.dispatch(StratStore.showGalleryPanel());
   }
 
   public onSelect() {
@@ -276,16 +231,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   public onSave() {
-    console.log('this.editingStrat', this.editingStrat);
-    if (this.editingStrat) {
-      if (this.editingStrat._id) {
-        this.store.dispatch(Actions.UpdateStrat({ strat: this.editingStrat }));
-      } else {
-        this.store.dispatch(Actions.UploadStrat({ strat: this.editingStrat }));
-      }
+    if (this.savedStrat) {
     } else {
-      console.log('opening save dialog', this.userInfos);
-
       const strat: Strat = {
         createdAt: new Date(),
         name: `${this.selectedMap.name} - ${new Date().toLocaleDateString()}`,
@@ -308,7 +255,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
       dialogRef.afterClosed().subscribe((strat) => {
         if (strat) {
-          this.store.dispatch(Actions.UploadStrat({ strat }));
+          this.store.dispatch(StratStore.SaveStrat({ strat }));
         }
       });
     }

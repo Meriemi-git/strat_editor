@@ -8,3 +8,7 @@ export const SaveCanvasState = createAction(
 export const UndoCanvasState = createAction('[Canvas] Undo canvas state');
 
 export const RedoCanvasState = createAction('[Canvas] Redo canvas state');
+
+export const LoadingCanvasStateDone = createAction(
+  '[Canvas] Loading canvas state done'
+);
