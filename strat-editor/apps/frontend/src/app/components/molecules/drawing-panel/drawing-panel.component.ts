@@ -2,12 +2,15 @@ import * as Ngx from '@angular-material-components/color-picker';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, AbstractControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { DrawerAction } from '@strat-editor/drawing-editor';
-import { StratEditorState } from '../../../store/reducers';
-import * as Actions from '../../../store/actions';
-import * as Selectors from '../../../store/selectors';
+import { StratEditorState } from '@strat-editor/store';
+import * as Actions from '@strat-editor/store';
+import * as Selectors from '@strat-editor/store';
 import { Observable } from 'rxjs';
-import { DrawerActionType, DrawerColor } from '@strat-editor/data';
+import {
+  DrawerActionType,
+  DrawerColor,
+  DrawerAction,
+} from '@strat-editor/data';
 
 @Component({
   selector: 'strat-editor-drawing-panel',

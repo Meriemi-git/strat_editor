@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { StratEditorState } from '../../../store/reducers';
+import { StratEditorState } from '@strat-editor/store';
 import { Image, UserInfos } from '@strat-editor/data';
-import * as Selectors from '../../../store/selectors';
-import * as Actions from '../../../store/actions';
+import * as Selectors from '@strat-editor/store';
+import * as Actions from '@strat-editor/store';
 
 @Component({
   selector: 'strat-editor-gallery-panel',

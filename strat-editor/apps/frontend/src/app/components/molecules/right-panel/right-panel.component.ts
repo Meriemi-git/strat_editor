@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AuthInfos, UserInfos } from '@strat-editor/data';
 import { Observable } from 'rxjs';
-import { StratEditorState } from '../../../store/reducers';
-import * as Selectors from '../../../store/selectors';
+import { StratEditorState } from '@strat-editor/store';
+import * as Selectors from '@strat-editor/store';
 @Component({
   selector: 'strat-editor-right-panel',
   templateUrl: './right-panel.component.html',

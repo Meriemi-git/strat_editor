@@ -4,8 +4,8 @@ import { TopBarModule } from '../app/components/atoms/top-bar/top-bar.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
-import { reducers } from './store/reducers';
-import { effects } from './store/effects';
+import { reducers } from '@strat-editor/store';
+import { effects } from '@strat-editor/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import {
@@ -23,7 +23,7 @@ import { AppInitService } from './services/app-init.service';
 import { HttpJwtInterceptor } from './interceptors/http-jwt-interceptor';
 import { ToastrModule } from 'ngx-toastr';
 import { GlobalErrorHandler } from './global-error-handler';
-import { NotificationService } from './services/notifications.service';
+import { NotificationService } from '@strat-editor/services';
 export function init_app(appInitService: AppInitService) {
   return () => appInitService.initializeApp();
 }

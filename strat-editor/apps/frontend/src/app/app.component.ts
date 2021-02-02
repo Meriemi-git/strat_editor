@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { StratEditorState } from './store/reducers';
-import * as Actions from './store/actions';
-import * as Selectors from './store/selectors';
+import { StratEditorState } from '@strat-editor/store';
+import * as Actions from '@strat-editor/store';
+import * as Selectors from '@strat-editor/store';
 import { take } from 'rxjs/operators';
-import { UserInfos, Map, Floor } from '@strat-editor/data';
+import { UserInfos } from '@strat-editor/data';
 import { Observable } from 'rxjs';
 
 @Component({

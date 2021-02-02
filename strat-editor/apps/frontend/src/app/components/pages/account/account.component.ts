@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PasswordChangeWrapper, UserInfos } from '@strat-editor/data';
 import { Observable } from 'rxjs';
-import { StratEditorState } from '../../../store/reducers';
-import * as Actions from '../../../store/actions';
-import * as Selectors from '../../../store/selectors';
+import { StratEditorState } from '@strat-editor/store';
+import * as Actions from '@strat-editor/store';
+import * as Selectors from '@strat-editor/store';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -20,10 +20,6 @@ export class AccountComponent implements OnInit {
   ngOnInit(): void {
     this.$userInfos = this.store.select(Selectors.getUserInfos);
     this.$httpError = this.store.select(Selectors.getAuthError);
-    // const userInfos: UserInfos = JSON.parse(localStorage.getItem('userInfos'));
-    // if (userInfos) {
-    //   this.store.dispatch(Actions.GetUserInfos({ userId: userInfos.userId }));
-    // }
   }
 
   onPasswordChanged(passwords: PasswordChangeWrapper) {

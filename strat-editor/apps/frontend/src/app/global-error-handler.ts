@@ -2,8 +2,8 @@ import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MapLoadingError, NotificationType } from '@strat-editor/data';
 import { Store } from '@ngrx/store';
-import { NotificationService } from './services/notifications.service';
-import * as Actions from './store/actions';
+import { NotificationService } from '@strat-editor/services';
+import * as Actions from '@strat-editor/store';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {

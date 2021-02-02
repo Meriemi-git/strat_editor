@@ -34,6 +34,12 @@
     },
     "drawing-editor": {
       "tags": ["scope:front"]
+    },
+    "store": {
+      "tags": []
+    },
+    "services": {
+      "tags": []
     }
   }
 }

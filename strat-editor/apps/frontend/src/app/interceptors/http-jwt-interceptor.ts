@@ -9,9 +9,9 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
-import { AuthentService } from '../services/authent.service';
-import { StratEditorState } from '../store/reducers';
-import * as Actions from '../store/actions';
+import { AuthentService } from '@strat-editor/services';
+import { StratEditorState } from '@strat-editor/store';
+import * as Actions from '@strat-editor/store';
 import { UserInfos } from '@strat-editor/data';
 
 @Injectable()

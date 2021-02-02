@@ -17,21 +17,19 @@ import {
   Strat,
   UserInfos,
   NotificationType,
-} from '@strat-editor/data';
-import * as Actions from '../../../store/actions';
-import * as Selectors from '../../../store/selectors';
-import { StratEditorState } from '../../../store/reducers';
-import {
   DrawerAction,
-  DrawingEditorComponent,
   PolyLineAction,
-} from '@strat-editor/drawing-editor';
+} from '@strat-editor/data';
+import * as Actions from '@strat-editor/store';
+import * as Selectors from '@strat-editor/store';
+import { StratEditorState } from '@strat-editor/store';
+import { DrawingEditorComponent } from '@strat-editor/drawing-editor';
 import { KEY_CODE } from '../../../helpers/key_code';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { StratSavingDialogComponent } from '../../molecules/strat-saving-dialog/strat-saving-dialog.component';
 import { map } from 'rxjs/operators';
-import { NotificationService } from '../../../services/notifications.service';
+import { NotificationService } from '@strat-editor/services';
 
 @Component({
   selector: 'strat-editor-editor',

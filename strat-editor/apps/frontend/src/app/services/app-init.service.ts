@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { UserInfos } from '@strat-editor/data';
-import { StratEditorState } from '../store/reducers';
-import * as Actions from '../store/actions';
+import { StratEditorState } from '@strat-editor/store';
+import * as Actions from '@strat-editor/store';
 
 @Injectable({
   providedIn: 'root',

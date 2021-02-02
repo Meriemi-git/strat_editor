@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { StratEditorState } from '../../../store/reducers';
-import * as Actions from '../../../store/actions';
-import * as Selectors from '../../../store/selectors';
+import { StratEditorState } from '@strat-editor/store';
+import * as Actions from '@strat-editor/store';
+import * as Selectors from '@strat-editor/store';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserDto, UserInfos } from '@strat-editor/data';
-import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 

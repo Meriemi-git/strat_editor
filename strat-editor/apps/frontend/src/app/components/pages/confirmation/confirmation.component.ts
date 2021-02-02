@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { StratEditorState } from '../../../store/reducers';
-import * as Actions from '../../../store/actions';
-import * as Selectors from '../../../store/selectors';
+import { StratEditorState } from '@strat-editor/store';
+import * as Actions from '@strat-editor/store';
+import * as Selectors from '@strat-editor/store';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({

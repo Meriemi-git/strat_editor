@@ -1,13 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   Agent,
   MapLoadingError,
@@ -15,9 +6,13 @@ import {
   Floor,
   DrawingMode,
   DrawerColor,
+  DrawerAction,
 } from '@strat-editor/data';
+import { Store } from '@ngrx/store';
+
+import { StratEditorState } from '@strat-editor/store';
+import * as Selectors from '@strat-editor/store';
 import { fabric } from 'fabric';
-import { DrawerAction } from '../../actions';
 import { ObjectDrawer, LineDrawer, RectangleDrawer } from '../../drawers';
 import { ArrowDrawer } from '../../drawers/arrow-drawer';
 import { OvalDrawer } from '../../drawers/oval-drawer';
@@ -61,11 +56,17 @@ export class DrawingEditorComponent implements OnInit {
   private lastPosX: number = 0;
   private lastPosY: number = 0;
 
-  constructor(private ihs: ImageHelperService) {
+  constructor(
+    private ihs: ImageHelperService,
+    private store: Store<StratEditorState>
+  ) {
     this.addAvalaibleDrawers();
   }
 
   ngOnInit(): void {
+    this.store.select(Selectors.getSelectedMap).subscribe((map) => {
+      console.log('Youppppppiiiiii ! ', map);
+    });
     this.isDown = false;
     this.drawingMode = DrawingMode.Undefined;
     this.drawingModeChanged.emit(DrawingMode.Undefined);
