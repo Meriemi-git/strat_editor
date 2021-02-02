@@ -15,6 +15,7 @@ export class StratService {
   ) {}
 
   async addStrat(strat: Strat): Promise<Strat> {
+    console.log('addStrat', strat);
     const createdStrat = new this.stratModel(strat);
     return createdStrat.save();
   }

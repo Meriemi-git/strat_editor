@@ -2,10 +2,8 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   HostListener,
   OnInit,
-  Renderer2,
   ViewChild,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -18,6 +16,7 @@ import {
   DrawingMode,
   Strat,
   UserInfos,
+  NotificationType,
 } from '@strat-editor/data';
 import * as Actions from '../../../store/actions';
 import * as Selectors from '../../../store/selectors';
@@ -31,6 +30,8 @@ import { KEY_CODE } from '../../../helpers/key_code';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { StratSavingDialogComponent } from '../../molecules/strat-saving-dialog/strat-saving-dialog.component';
+import { map } from 'rxjs/operators';
+import { NotificationService } from '../../../services/notifications.service';
 
 @Component({
   selector: 'strat-editor-editor',
@@ -40,19 +41,18 @@ import { StratSavingDialogComponent } from '../../molecules/strat-saving-dialog/
 export class EditorComponent implements OnInit, AfterViewInit {
   @ViewChild('drawerEditor') drawerEditor: DrawingEditorComponent;
 
+  public $maps: Observable<Map[]>;
   public selectedMap: Map;
   public selectedFloor: Floor;
-  public $maps: Observable<Map[]>;
   public userInfos: UserInfos;
+
   public width: number = 0;
   public height: number = 0;
   private canvasStateLoading: boolean;
   private draggingAgent: Agent;
   private draggingImage: Image;
 
-  private previousAction: DrawerAction;
   private CTRLPressed: boolean;
-
   public editingStrat: Strat;
 
   public $drawingMode: Observable<DrawingMode>;
@@ -60,17 +60,14 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   constructor(
     private store: Store<StratEditorState>,
+    private notificationService: NotificationService,
     private cdr: ChangeDetectorRef,
     public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.$maps = this.store.select(Selectors.getAllMaps);
-    // TODO get strat
     this.$drawingMode = this.store.select(Selectors.getDrawingMode);
-    this.store.select(Selectors.getEditingStrat).subscribe((editingstrat) => {
-      this.editingStrat = editingstrat;
-    });
     this.store.dispatch(Actions.FetchMaps());
     this.store.dispatch(Actions.FetchAgents());
     this.store.dispatch(Actions.FetchDrawerActions());
@@ -136,6 +133,39 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.select(Selectors.getUserInfos).subscribe((userInfos) => {
       this.userInfos = userInfos;
     });
+
+    this.store.select(Selectors.getEditingStrat).subscribe((editingStrat) => {
+      this.editingStrat = editingStrat;
+      if (editingStrat) {
+        if (editingStrat.layers[0]) {
+          this.store
+            .select(Selectors.getAllMaps)
+            .pipe(
+              map((maps) => maps.find((map) => map._id === editingStrat.mapId))
+            )
+            .subscribe((map) => {
+              this.store.dispatch(Actions.SelectMap({ map }));
+
+              this.store.dispatch(
+                Actions.SelectFloor({
+                  floor: map.floors.find(
+                    (floor) => floor._id === editingStrat.layers[0]?.floorId
+                  ),
+                })
+              );
+              const canvasState = JSON.stringify(
+                editingStrat.layers[0]?.fabricCanvas
+              );
+              this.store.dispatch(Actions.SaveCanvasState({ canvasState }));
+            });
+        } else {
+          this.notificationService.displayNotification({
+            message: 'Cannot load this strat',
+            type: NotificationType.error,
+          });
+        }
+      }
+    });
   }
 
   onMapSelected(map: Map) {
@@ -145,6 +175,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   onFloorSelected(floor: Floor) {
     this.store.dispatch(Actions.SelectFloor({ floor: floor }));
   }
+
   onDrawingActionSelected(action: DrawerAction) {
     this.store.dispatch(Actions.SetDrawerAction({ action }));
     this.store.dispatch(Actions.closeRight());
