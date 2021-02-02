@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   Agent,
   MapLoadingError,
@@ -13,16 +20,16 @@ import { Store } from '@ngrx/store';
 import { StratEditorState } from '@strat-editor/store';
 import * as Selectors from '@strat-editor/store';
 import { fabric } from 'fabric';
-import { ObjectDrawer, LineDrawer, RectangleDrawer } from '../../drawers';
-import { ArrowDrawer } from '../../drawers/arrow-drawer';
-import { OvalDrawer } from '../../drawers/oval-drawer';
-import { PolyLineDrawer } from '../../drawers/polyline-drawer';
-import { SvgDrawer } from '../../drawers/svg-drawer';
-import { TextDrawer } from '../../drawers/text-drawer';
-import { TriangleDrawer } from '../../drawers/triangle-drawer';
-import { LineArrow } from '../../fabricjs/line-arrow';
-import { TriangleArrow } from '../../fabricjs/triangle-arrow';
-import { ImageHelperService } from '../../services/image-helper.service';
+import { ObjectDrawer, LineDrawer, RectangleDrawer } from '../drawers';
+import { ArrowDrawer } from '../drawers/arrow-drawer';
+import { OvalDrawer } from '../drawers/oval-drawer';
+import { PolyLineDrawer } from '../drawers/polyline-drawer';
+import { SvgDrawer } from '../drawers/svg-drawer';
+import { TextDrawer } from '../drawers/text-drawer';
+import { TriangleDrawer } from '../drawers/triangle-drawer';
+import { LineArrow } from '../fabricjs/line-arrow';
+import { TriangleArrow } from '../fabricjs/triangle-arrow';
+import { ImageHelperService } from '../services/image-helper.service';
 
 @Component({
   selector: 'strat-editor-drawing-editor',
@@ -83,6 +90,41 @@ export class DrawingEditorComponent implements OnInit {
       strokeUniform: true,
     };
     this.initializeCanvasEvents();
+
+    this.store.select(Selectors.getColor).subscribe((color) => {
+      this.setColor(color);
+    });
+    this.store.select(Selectors.getSelectedOption).subscribe((option) => {
+      this.setDrawerOptions(option);
+    });
+    this.store.select(Selectors.getFontFamily).subscribe((fontFamily) => {
+      this.setFontFamily(fontFamily);
+    });
+    this.store.select(Selectors.getFontSize).subscribe((fontSize) => {
+      this.setFontSize(fontSize);
+    });
+
+    this.store
+      .select(Selectors.getCurrentCanvasState)
+      .subscribe((canvasState) => {
+        if (canvasState) {
+          const state = JSON.parse(canvasState);
+          this.setCanvasState(state);
+        }
+      });
+
+    this.store.select(Selectors.getSelectedFloor).subscribe((floor) => {
+      if (floor) {
+        this.resize(window.innerWidth, window.innerHeight - 60);
+        this.setBackgroundImageFromUrl(floor);
+      } else {
+        this.close();
+      }
+    });
+
+    this.store.select(Selectors.getSelectedAction).subscribe((selected) => {
+      this.callAction(selected);
+    });
   }
 
   private addAvalaibleDrawers() {
@@ -455,9 +497,32 @@ export class DrawingEditorComponent implements OnInit {
     }
   }
 
-  public resize(screenWidth: number, canvasHeight: number) {
-    this.canvas.setWidth(screenWidth);
-    this.canvas.setHeight(canvasHeight);
+  @HostListener('window:resize', ['$event'])
+  onResize(event?) {
+    this.resize(window.innerWidth, window.innerHeight - 60);
+  }
+
+  private resizeAllObjects(newWidth) {
+    if (this.canvas.width != newWidth) {
+      var scaleMultiplier = newWidth / this.canvas.width;
+      var objects = this.canvas.getObjects();
+      for (var i in objects) {
+        objects[i].scaleX = objects[i].scaleX * scaleMultiplier;
+        objects[i].scaleY = objects[i].scaleY * scaleMultiplier;
+        objects[i].left = objects[i].left * scaleMultiplier;
+        objects[i].top = objects[i].top * scaleMultiplier;
+        objects[i].setCoords();
+      }
+      this.canvas.discardActiveObject();
+      this.canvas.renderAll();
+      this.canvas.calcOffset();
+    }
+  }
+
+  private resize(width: number, height: number) {
+    this.resizeAllObjects(width);
+    this.canvas.setWidth(width);
+    this.canvas.setHeight(height);
   }
 
   public resetView() {

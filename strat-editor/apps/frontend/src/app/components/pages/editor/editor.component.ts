@@ -81,28 +81,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
       if (this.selectedFloor) {
         this.store.dispatch(Actions.closeRight());
       }
-      this.drawerEditor.callAction(selected);
     });
-    this.store.select(Selectors.getColor).subscribe((color) => {
-      this.drawerEditor.setColor(color);
-    });
-    this.store.select(Selectors.getSelectedOption).subscribe((option) => {
-      this.drawerEditor.setDrawerOptions(option);
-    });
-    this.store.select(Selectors.getFontFamily).subscribe((fontFamily) => {
-      this.drawerEditor.setFontFamily(fontFamily);
-    });
-    this.store.select(Selectors.getFontSize).subscribe((fontSize) => {
-      this.drawerEditor.setFontSize(fontSize);
-    });
-    this.store
-      .select(Selectors.getCurrentCanvasState)
-      .subscribe((canvasState) => {
-        if (canvasState) {
-          const state = JSON.parse(canvasState);
-          this.drawerEditor.setCanvasState(state);
-        }
-      });
     this.store.select(Selectors.getDraggedAgent).subscribe((agent) => {
       if (agent) {
         this.draggingAgent = agent;
@@ -120,14 +99,11 @@ export class EditorComponent implements OnInit, AfterViewInit {
         Actions.SelectFloor({ floor: map ? map.floors[0] : null })
       );
     });
+
     this.store.select(Selectors.getSelectedFloor).subscribe((floor) => {
       this.selectedFloor = floor;
-      if (floor) {
-        this.displayCanvas();
-      } else {
-        this.drawerEditor.close();
-      }
     });
+
     this.store.select(Selectors.getUserInfos).subscribe((userInfos) => {
       this.userInfos = userInfos;
     });
@@ -190,22 +166,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   onDrawingModeChanged(drawingMode: DrawingMode) {
     this.store.dispatch(Actions.SetDrawingMode({ drawingMode }));
-  }
-
-  displayCanvas() {
-    this.resizeCanvas();
-    this.drawerEditor.setBackgroundImageFromUrl(this.selectedFloor);
-  }
-
-  resizeCanvas() {
-    this.width = window.innerWidth;
-    this.height = window.innerHeight - 60;
-    this.drawerEditor.resize(this.width, this.height);
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event?) {
-    this.displayCanvas();
   }
 
   @HostListener('document:keyup', ['$event'])
