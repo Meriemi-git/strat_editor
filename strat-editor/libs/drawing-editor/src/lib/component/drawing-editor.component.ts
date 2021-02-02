@@ -213,7 +213,6 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.moveCursor = 'grabbing';
 
     this.canvas.forEachObject((object) => {
-      console.log('object', object);
       object.selectable = object.name !== 'map';
     });
     this.drawingMode = DrawingMode.Selection;

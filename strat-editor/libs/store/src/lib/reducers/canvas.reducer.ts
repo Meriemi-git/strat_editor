@@ -22,10 +22,10 @@ const drawingActionReducer = createReducer(
     historyIndex:
       state.historyIndex > 0 ? state.historyIndex - 1 : state.historyIndex,
     currentState:
-      state.historyIndex >= 0 && state.history.length >= 0
+      state.historyIndex > 0 && state.history.length > 0
         ? state.history[state.historyIndex - 1]
-        : null,
-    canvasLoading: state.historyIndex >= 0 && state.history.length >= 0,
+        : state.currentState,
+    canvasLoading: state.historyIndex > 0 && state.history.length > 0,
   })),
   on(actions.RedoCanvasState, (state) => ({
     ...state,
@@ -34,11 +34,11 @@ const drawingActionReducer = createReducer(
         ? state.historyIndex + 1
         : state.historyIndex,
     currentState:
-      state.history.length > state.historyIndex && state.history.length >= 0
+      state.history.length > state.historyIndex + 1 && state.history.length > 0
         ? state.history[state.historyIndex + 1]
-        : null,
+        : state.currentState,
     canvasLoading:
-      state.history.length > state.historyIndex && state.history.length >= 0,
+      state.history.length > state.historyIndex + 1 && state.history.length > 0,
   })),
   on(actions.LoadingCanvasStateDone, (state) => ({
     ...state,
