@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  HostListener,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import {
   Agent,
   MapLoadingError,
@@ -15,9 +8,9 @@ import {
   DrawerColor,
   DrawerAction,
   Strat,
+  Map as _Map,
 } from '@strat-editor/data';
 import { Store } from '@ngrx/store';
-
 import * as StratStore from '@strat-editor/store';
 
 import { fabric } from 'fabric';
@@ -41,7 +34,6 @@ export class DrawingEditorComponent implements OnInit {
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
   @Input() loadedStrat: Strat;
-  @Output() stateLoaded = new EventEmitter<void>();
 
   public drawingMode: DrawingMode;
 
@@ -63,6 +55,8 @@ export class DrawingEditorComponent implements OnInit {
   private lastPosX: number = 0;
   private lastPosY: number = 0;
 
+  private map: _Map;
+  private floor: Floor;
   constructor(
     private ihs: ImageHelperService,
     private store: Store<StratStore.StratEditorState>
@@ -100,6 +94,7 @@ export class DrawingEditorComponent implements OnInit {
       });
 
     this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
+      this.floor = floor;
       if (floor) {
         this.resize(window.innerWidth, window.innerHeight - 60);
         this.setBackgroundImageFromUrl(floor);

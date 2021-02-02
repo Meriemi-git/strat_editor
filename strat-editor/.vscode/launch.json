@@ -9,9 +9,13 @@
       "webRoot": "${workspaceFolder}",
       "pathMappings": [
         {
+          "url": "webpack:///apps/frontend/src",
+          "path": "${workspaceFolder}/apps/frontend/src"
+        },
+        {
           "url": "webpack:///libs",
           "path": "${workspaceFolder}/libs"
-        }
+        },
         {
           "url": "webpack:///src",
           "path": "${workspaceFolder}/apps/frontend/src"

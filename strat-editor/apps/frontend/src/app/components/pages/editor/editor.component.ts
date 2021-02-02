@@ -25,6 +25,10 @@ import { KEY_CODE } from '../../../helpers/key_code';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { StratSavingDialogComponent } from '../../molecules/strat-saving-dialog/strat-saving-dialog.component';
+import {
+  DualChoiceDialogComponent,
+  DualChoiceDialogData,
+} from '../../molecules/dual-choice-dialog/dual-choice-dialog.component';
 
 @Component({
   selector: 'strat-editor-editor',
@@ -35,8 +39,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
   @ViewChild('drawerEditor') drawerEditor: DrawingEditorComponent;
 
   public $maps: Observable<Map[]>;
-  public selectedMap: Map;
-  public selectedFloor: Floor;
+  public currentMap: Map;
+  public currentFloor: Floor;
   public userInfos: UserInfos;
 
   public width: number = 0;
@@ -72,14 +76,13 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store
       .select(StratStore.canvasStateIsLoading)
       .subscribe((canvasLoading) => {
-        console.log('canvasLoading : ', canvasLoading);
         this.canvasLoading = canvasLoading;
       });
   }
 
   ngAfterViewInit(): void {
     this.store.select(StratStore.getSelectedAction).subscribe((selected) => {
-      if (this.selectedFloor) {
+      if (this.currentFloor) {
         this.store.dispatch(StratStore.closeRight());
       }
     });
@@ -93,20 +96,48 @@ export class EditorComponent implements OnInit, AfterViewInit {
         this.draggingImage = image;
       }
     });
-    this.store.select(StratStore.getSelectedMap).subscribe((map) => {
-      // TODO Ask to save the strat before leave
-      this.selectedMap = map;
-      this.store.dispatch(
-        StratStore.SelectFloor({ floor: map ? map.floors[0] : null })
-      );
-    });
-
-    this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
-      this.selectedFloor = floor;
-    });
 
     this.store.select(StratStore.getUserInfos).subscribe((userInfos) => {
       this.userInfos = userInfos;
+    });
+
+    this.store.select(StratStore.getSelectedMap).subscribe((selectedMap) => {
+      if (this.currentMap && selectedMap && this.currentMap != selectedMap) {
+        const dialogRef = this.dialog.open(DualChoiceDialogComponent, {
+          width: '400px',
+          hasBackdrop: true,
+          data: {
+            title: 'Changing Map',
+            description:
+              'You have unsave changes for this map, you will loose them if you continue.',
+            cancelButtonText: 'Cancel',
+            confirmButtonText: 'Continue',
+          } as DualChoiceDialogData,
+          panelClass: ['strat-saving-dialog'],
+          disableClose: true,
+        });
+
+        dialogRef.afterClosed().subscribe((confirm) => {
+          if (confirm) {
+            this.store.dispatch(
+              StratStore.SelectFloor({
+                floor: selectedMap ? selectedMap.floors[0] : null,
+              })
+            );
+          }
+        });
+      } else {
+        this.store.dispatch(
+          StratStore.SelectFloor({
+            floor: selectedMap ? selectedMap.floors[0] : null,
+          })
+        );
+        this.currentMap = selectedMap;
+      }
+    });
+
+    this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
+      this.currentFloor = floor;
     });
   }
 
@@ -235,14 +266,14 @@ export class EditorComponent implements OnInit, AfterViewInit {
     } else {
       const strat: Strat = {
         createdAt: new Date(),
-        name: `${this.selectedMap.name} - ${new Date().toLocaleDateString()}`,
+        name: `${this.currentMap.name} - ${new Date().toLocaleDateString()}`,
         description: '',
         lastModifiedAt: new Date(),
         createdBy: this.userInfos?.userId,
         votes: 0,
         layers: [],
-        mapId: this.selectedMap._id,
-        mapName: this.selectedMap.name,
+        mapId: this.currentMap._id,
+        mapName: this.currentMap.name,
         isPublic: false,
       };
       const dialogRef = this.dialog.open(StratSavingDialogComponent, {

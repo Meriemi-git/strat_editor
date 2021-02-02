@@ -1,4 +1,4 @@
-<div class="icons-left" *ngIf="selectedFloor">
+<div class="icons-left" *ngIf="currentFloor">
   <div (click)="openAgentsPanel()">
     <span
       class="first"
@@ -18,7 +18,7 @@
     </span>
   </div>
 </div>
-<div class="icons-right" *ngIf="selectedFloor">
+<div class="icons-right" *ngIf="currentFloor">
   <div (click)="openDrawingPanel()">
     <span
       class="first"
@@ -37,7 +37,7 @@
   </div>
 </div>
 <div class="map-container">
-  <div class="map-selector" *ngIf="!selectedFloor">
+  <div class="map-selector" *ngIf="!currentFloor">
     <strat-editor-map-grid
       [maps]="$maps | async"
       (selectMap)="onMapSelected($event)"
@@ -45,16 +45,16 @@
   </div>
   <div class="map-header">
     <strat-editor-floor-chooser
-      *ngIf="selectedFloor"
+      *ngIf="currentFloor"
       (mapSelected)="onMapSelected($event)"
       (floorSelected)="onFloorSelected($event)"
       [maps]="$maps | async"
-      [selectedMap]="selectedMap"
-      [selectedFloor]="selectedFloor"
+      [selectedMap]="currentMap"
+      [selectedFloor]="currentFloor"
     >
     </strat-editor-floor-chooser>
     <strat-editor-strat-title
-      *ngIf="selectedFloor"
+      *ngIf="currentFloor"
       [stratTitle]="'Example Title'"
     >
     </strat-editor-strat-title>
@@ -67,13 +67,13 @@
     [loadedStrat]="$loadedStrat | async"
   ></strat-editor-drawing-editor>
   <strat-editor-drawing-status
-    *ngIf="selectedFloor"
+    *ngIf="currentFloor"
     [drawingMode]="$drawingMode | async"
   >
   </strat-editor-drawing-status>
   <strat-editor-drawing-toolbar
     class="strat-editor-drawing-toolbar"
-    *ngIf="selectedFloor"
+    *ngIf="currentFloor"
     (enableSelectMode)="onSelect()"
     (enableDrawingMode)="onDraw()"
     (enableDraggingMode)="onDrag()"
