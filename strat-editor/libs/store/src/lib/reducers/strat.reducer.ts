@@ -3,7 +3,6 @@ import * as actions from '../actions/strat.action';
 import { createReducer, on, Action } from '@ngrx/store';
 import { EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { StratState } from '../states/strat.state';
-import { ToastrComponentlessModule } from 'ngx-toastr';
 
 export const adapter: EntityAdapter<Strat> = createEntityAdapter<Strat>({
   sortComparer: sortByName,
@@ -73,16 +72,21 @@ const stratReducer = createReducer(
     ...state,
     error: error,
   })),
+  on(actions.LoadStrat, (state, {}) => ({
+    ...state,
+    error: null,
+  })),
   on(actions.LoadStratSuccess, (state, { strat }) => ({
     ...state,
-    error: null,
-    loadedStrat: strat,
     currentStrat: strat,
-  })),
-  on(actions.LoadStrat, (state, { stratId }) => ({
-    ...state,
+    loadedStrat: strat,
     error: null,
+  })),
+  on(actions.LoadStratError, (state, { error }) => ({
+    ...state,
+    error: error,
     loadedStrat: null,
+    currentStrat: null,
   })),
   on(actions.CreateStrat, (state, { strat }) => ({
     ...state,

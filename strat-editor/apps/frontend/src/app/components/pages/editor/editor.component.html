@@ -1,4 +1,4 @@
-<div class="icons-left" *ngIf="currentFloor">
+<div class="icons-left" *ngIf="currentMap">
   <div (click)="openAgentsPanel()">
     <span
       class="first"
@@ -18,7 +18,7 @@
     </span>
   </div>
 </div>
-<div class="icons-right" *ngIf="currentFloor">
+<div class="icons-right" *ngIf="currentMap">
   <div (click)="openDrawingPanel()">
     <span
       class="first"
@@ -37,7 +37,7 @@
   </div>
 </div>
 <div class="map-container">
-  <div class="map-selector" *ngIf="!currentFloor">
+  <div class="map-selector" *ngIf="!currentMap">
     <strat-editor-map-grid
       [maps]="$maps | async"
       (selectMap)="onMapSelected($event)"
@@ -63,7 +63,7 @@
     class="editor"
     [canvasWidth]="width"
     [canvasHeight]="height"
-    [currentStrat]="currentStrat"
+    [currentFloor]="currentFloor"
   ></strat-editor-drawing-editor>
   <strat-editor-drawing-status
     *ngIf="currentFloor"

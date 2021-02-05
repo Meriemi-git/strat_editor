@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   Floor,
@@ -53,21 +53,37 @@ export class EditorComponent implements OnInit {
   ngOnInit(): void {
     this.$maps = this.store.select(StratStore.getAllMaps);
     this.$drawingMode = this.store.select(StratStore.getDrawingMode);
+    this.store.dispatch(StratStore.FetchMaps());
+    this.store.dispatch(StratStore.FetchAgents());
+    this.store.dispatch(StratStore.FetchDrawerActions());
+    this.store.dispatch(StratStore.FetchFontNames());
+    this.store.dispatch(StratStore.SetColor({ color: new DrawerColor() }));
+    this.store.dispatch(
+      StratStore.SetDrawerAction({ action: new PolyLineAction() })
+    );
+
     this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
+      console.log('e getSelectedFloor', floor);
       this.currentFloor = floor;
     });
+
     this.store.select(StratStore.getSelectedAction).subscribe((selected) => {
       if (this.currentFloor) {
         this.store.dispatch(StratStore.closeRight());
       }
     });
+
     this.store.select(StratStore.getUserInfos).subscribe((userInfos) => {
       this.userInfos = userInfos;
     });
+
     this.store.select(StratStore.getCurrentStrat).subscribe((currentStrat) => {
+      console.log('e getCurrentStrat', currentStrat);
       this.currentStrat = currentStrat;
     });
+
     this.store.select(StratStore.getLoadedStrat).subscribe((loadedStrat) => {
+      console.log('e getLoadedStrat', loadedStrat);
       this.loadedStrat = loadedStrat;
       if (loadedStrat) {
         this.store
@@ -78,15 +94,6 @@ export class EditorComponent implements OnInit {
       }
     });
 
-    this.store.dispatch(StratStore.FetchMaps());
-    this.store.dispatch(StratStore.FetchAgents());
-    this.store.dispatch(StratStore.FetchDrawerActions());
-    this.store.dispatch(StratStore.FetchFontNames());
-    this.store.dispatch(StratStore.SetColor({ color: new DrawerColor() }));
-    this.store.dispatch(
-      StratStore.SetDrawerAction({ action: new PolyLineAction() })
-    );
-
     this.activatedRoute.params.subscribe((params) => {
       if (params.stratId) {
         this.loadStrat(params.stratId);
@@ -96,6 +103,8 @@ export class EditorComponent implements OnInit {
     });
 
     this.store.select(StratStore.getSelectedMap).subscribe((selectedMap) => {
+      console.log('e getSelectedMap', selectedMap);
+
       if (selectedMap) {
         if (this.loadedStrat) {
           if (this.currentMap && this.currentMap !== selectedMap) {
@@ -267,11 +276,8 @@ export class EditorComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe((stratInfos: StratInfosDialogData) => {
         if (stratInfos) {
-          console.log('UpdateStratInfos', stratInfos);
           this.store.dispatch(StratStore.UpdateStratInfos(stratInfos));
           this.store.select(StratStore.getCurrentStrat).subscribe((strat) => {
-            console.log('getCurrentStrat SaveStrat', strat);
-
             this.store.dispatch(StratStore.SaveStrat({ strat }));
           });
         }

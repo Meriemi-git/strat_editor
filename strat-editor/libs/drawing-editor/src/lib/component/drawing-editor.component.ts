@@ -40,8 +40,7 @@ import { ImageHelperService } from '../services/image-helper.service';
 export class DrawingEditorComponent implements OnInit {
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
-  @Input() currentStrat: Strat;
-
+  @Input() currentFloor: Floor;
   public drawingMode: DrawingMode;
 
   private canvas: fabric.Canvas;
@@ -94,16 +93,8 @@ export class DrawingEditorComponent implements OnInit {
 
     // For undo/redo last canvas state
     this.store.select(StratStore.getCurrentCanvas).subscribe((canvasState) => {
+      console.log('d getCurrentCanvas', canvasState);
       this.loadCanvas(canvasState);
-    });
-
-    this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
-      if (floor) {
-        this.resize(window.innerWidth, window.innerHeight - 60);
-        this.setBackgroundImageFromUrl(floor);
-      } else {
-        this.close();
-      }
     });
 
     this.store.select(StratStore.getSelectedAction).subscribe((selected) => {
@@ -126,9 +117,14 @@ export class DrawingEditorComponent implements OnInit {
       }
     });
 
-    this.store.select(StratStore.getLoadedStrat).subscribe((loadedStrat) => {
-      if (loadedStrat) {
-        this.loadCanvas(loadedStrat.layers[0].canvasState);
+    this.store.select(StratStore.getCurrentStrat).subscribe((currentStrat) => {
+      console.log('d getCurrentStrat', currentStrat);
+
+      if (currentStrat) {
+        const canvasState = currentStrat.layers[0]?.canvasState;
+        if (canvasState) {
+          this.loadCanvas(canvasState);
+        }
       }
     });
   }
@@ -162,6 +158,7 @@ export class DrawingEditorComponent implements OnInit {
     this.drawingMode = DrawingMode.Undefined;
     this.canvas = new fabric.Canvas('canvas', {
       selection: false,
+      preserveObjectStacking: true,
     });
     this.canvas.setWidth(this.canvasWidth);
     this.canvas.setHeight(this.canvasHeight);
@@ -346,11 +343,21 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   public setCanvasState(canvasState: string): void {
-    this.canvas.loadFromJSON(canvasState, this.canvasStateIsLoaded);
+    console.log('setCanvasState', canvasState);
+    this.canvas.loadFromJSON(
+      canvasState,
+      this.canvasStateIsLoaded,
+      (o, object: fabric.Object) => {
+        if (object.name === 'map') {
+          console.log('reviver', object);
+        }
+      }
+    );
     this.canvas.renderAll();
   }
 
   public setBackgroundImageFromUrl(floor: Floor): any {
+    console.log('setBackgroundImageFromUrl');
     fabric.Image.fromURL(
       this.ihs.getFloorImage(floor),
       function (image) {
