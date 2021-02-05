@@ -1,4 +1,10 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  Input,
+  OnInit,
+} from '@angular/core';
 import {
   Agent,
   MapLoadingError,
@@ -8,6 +14,8 @@ import {
   DrawerColor,
   DrawerAction,
   Map as _Map,
+  KEY_CODE,
+  Strat,
 } from '@strat-editor/data';
 import { Store } from '@ngrx/store';
 import * as StratStore from '@strat-editor/store';
@@ -32,6 +40,7 @@ import { ImageHelperService } from '../services/image-helper.service';
 export class DrawingEditorComponent implements OnInit {
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
+  @Input() currentStrat: Strat;
 
   public drawingMode: DrawingMode;
 
@@ -53,7 +62,13 @@ export class DrawingEditorComponent implements OnInit {
   private lastPosX: number = 0;
   private lastPosY: number = 0;
 
+  private draggingAgent: Agent;
+  private draggingImage: Image;
+  private CTRLPressed: boolean;
+  private canvasLoading: boolean;
+
   constructor(
+    private cdr: ChangeDetectorRef,
     private ihs: ImageHelperService,
     private store: Store<StratStore.StratEditorState>
   ) {
@@ -103,21 +118,33 @@ export class DrawingEditorComponent implements OnInit {
     this.store.select(StratStore.getDrawingMode).subscribe((drawingMode) => {
       this.manageDrawingMode(drawingMode);
     });
+
+    this.store.select(StratStore.getDraggedAgent).subscribe((agent) => {
+      if (agent) {
+        this.draggingAgent = agent;
+      }
+    });
+    this.store.select(StratStore.getDraggedImage).subscribe((image) => {
+      if (image) {
+        this.draggingImage = image;
+      }
+    });
   }
 
-  private manageDrawingMode(drawingMode: DrawingMode) {
-    switch (drawingMode) {
-      case DrawingMode.Selection:
-        this.enableSelectionMode();
-        break;
-      case DrawingMode.Dragging:
-        this.enableDraggingMode();
-        break;
-      case DrawingMode.Drawing:
-        this.enableDrawingMode();
-        break;
-      default:
-        this.enableDrawingMode();
+  private manageDrawingMode(newDrawingMode: DrawingMode) {
+    if (this.drawingMode != newDrawingMode) {
+      switch (newDrawingMode) {
+        case DrawingMode.Selection:
+          this.enableSelectionMode();
+          break;
+        case DrawingMode.Dragging:
+          this.enableDraggingMode();
+          break;
+        case DrawingMode.Drawing:
+          this.enableDrawingMode();
+          break;
+        default:
+      }
     }
   }
 
@@ -136,9 +163,6 @@ export class DrawingEditorComponent implements OnInit {
       selectable: true,
       strokeUniform: true,
     };
-    this.store.dispatch(
-      StratStore.SetDrawingMode({ drawingMode: this.drawingMode })
-    );
   }
 
   private addAvalaibleDrawers() {
@@ -210,6 +234,7 @@ export class DrawingEditorComponent implements OnInit {
   public doAction(action: DrawerAction) {
     if (action) {
       this.drawer = this.avalaibleDrawers.get(action.name);
+      console.log('doAction call enableDrawingMode');
       this.enableDrawingMode();
     } else {
       this.enableSelectionMode();
@@ -241,6 +266,7 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   private enableDrawingMode() {
+    console.log('Drawwing-Editor enableDrawingMode');
     this.canvas.hoverCursor = 'crosshair';
     this.canvas.moveCursor = 'crosshair';
     this.canvas.forEachObject((object) => (object.selectable = false));
@@ -359,7 +385,7 @@ export class DrawingEditorComponent implements OnInit {
 
   private canvasStateIsLoaded = (): void => {
     this.updateNestedObjects();
-    this.store.dispatch(StratStore.LoadingCanvasStateDone());
+    this.canvasLoading = false;
   };
 
   private updateNestedObjects() {
@@ -411,6 +437,7 @@ export class DrawingEditorComponent implements OnInit {
 
     this.canvas.on('object:modified', (event: fabric.IEvent) => {
       if (event.target instanceof fabric.Textbox) {
+        console.log('Drawwing-Editor object:modified');
         this.editingText = true;
         this.drawingMode = DrawingMode.Drawing;
         this.store.dispatch(
@@ -557,5 +584,76 @@ export class DrawingEditorComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event?) {
     this.resize(window.innerWidth, window.innerHeight - 60);
+  }
+
+  @HostListener('dragstart', ['$event'])
+  onWindowDragStart(event: any) {
+    this.cdr.detach();
+  }
+
+  @HostListener('dragend', ['$event'])
+  onWindowDragEnd(event: any) {
+    this.cdr.reattach();
+  }
+
+  @HostListener('drop', ['$event'])
+  onwindowDrop(event: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this.draggingAgent) {
+      this.drawAgent(this.draggingAgent, event.layerX, event.layerY);
+      this.draggingAgent = null;
+    }
+    if (this.draggingImage) {
+      this.drawImage(this.draggingImage, event.layerX, event.layerY);
+      this.draggingImage = null;
+    }
+  }
+
+  @HostListener('document:keyup', ['$event'])
+  keyUp(event: KeyboardEvent) {
+    switch (event.key.toLocaleLowerCase()) {
+      case KEY_CODE.DELETE:
+        this.deleteActiveObject();
+        break;
+      case KEY_CODE.ESCAPE:
+        this.resetView();
+        break;
+      case KEY_CODE.A:
+        if (this.CTRLPressed) {
+          this.selectAllObjects();
+          if (window.getSelection) {
+            if (window.getSelection().empty) {
+              window.getSelection().empty();
+            } else if (window.getSelection().removeAllRanges) {
+              window.getSelection().removeAllRanges();
+            }
+          }
+        }
+        break;
+      case KEY_CODE.Z:
+        if (this.CTRLPressed && !this.canvasLoading) {
+          this.store.dispatch(StratStore.UndoCanvasState());
+        }
+        break;
+      case KEY_CODE.Y:
+        if (this.CTRLPressed && !this.canvasLoading) {
+          this.store.dispatch(StratStore.RedoCanvasState());
+        }
+        break;
+      case KEY_CODE.CTRL:
+        this.CTRLPressed = false;
+        break;
+      default:
+    }
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  keyDown(event: KeyboardEvent) {
+    switch (event.key.toLocaleLowerCase()) {
+      case KEY_CODE.CTRL:
+        this.CTRLPressed = true;
+        break;
+    }
   }
 }

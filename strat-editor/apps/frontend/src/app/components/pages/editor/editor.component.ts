@@ -8,10 +8,8 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  Agent,
   Floor,
   Map,
-  Image,
   DrawerColor,
   DrawingMode,
   Strat,
@@ -22,7 +20,6 @@ import {
 } from '@strat-editor/data';
 import * as StratStore from '@strat-editor/store';
 import { DrawingEditorComponent } from '@strat-editor/drawing-editor';
-import { KEY_CODE } from '../../../helpers/key_code';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { StratSavingDialogComponent } from '../../molecules/strat-saving-dialog/strat-saving-dialog.component';
@@ -30,16 +27,13 @@ import {
   DualChoiceDialogComponent,
   DualChoiceDialogData,
 } from '../../molecules/dual-choice-dialog/dual-choice-dialog.component';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'strat-editor-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
 })
-export class EditorComponent implements OnInit, AfterViewInit {
-  @ViewChild('drawerEditor') drawerEditor: DrawingEditorComponent;
-
+export class EditorComponent implements OnInit {
   public $maps: Observable<Map[]>;
 
   public currentMap: Map;
@@ -49,18 +43,13 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   public width: number = 0;
   public height: number = 0;
-  private draggingAgent: Agent;
-  private draggingImage: Image;
-
-  private CTRLPressed: boolean;
 
   public $drawingMode: Observable<DrawingMode>;
   public $loadedStrat: Observable<Strat>;
-  private canvasLoading: boolean;
 
   constructor(
     private store: Store<StratStore.StratEditorState>,
-    private cdr: ChangeDetectorRef,
+
     public dialog: MatDialog
   ) {}
 
@@ -76,12 +65,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.dispatch(
       StratStore.SetDrawerAction({ action: new PolyLineAction() })
     );
-
-    this.store
-      .select(StratStore.canvasStateIsLoading)
-      .subscribe((canvasLoading) => {
-        this.canvasLoading = canvasLoading;
-      });
 
     this.store.select(StratStore.getSelectedMap).subscribe((selectedMap) => {
       if (selectedMap) {
@@ -118,16 +101,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
         this.store.dispatch(StratStore.closeRight());
       }
     });
-    this.store.select(StratStore.getDraggedAgent).subscribe((agent) => {
-      if (agent) {
-        this.draggingAgent = agent;
-      }
-    });
-    this.store.select(StratStore.getDraggedImage).subscribe((image) => {
-      if (image) {
-        this.draggingImage = image;
-      }
-    });
 
     this.store.select(StratStore.getUserInfos).subscribe((userInfos) => {
       this.userInfos = userInfos;
@@ -136,12 +109,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.select(StratStore.getCurrentStrat).subscribe((currentStrat) => {
       this.currentStrat = currentStrat;
       if (currentStrat) {
-        console.log('currentStrat map id', currentStrat.mapId);
-
         this.store
           .select(StratStore.getMapById, currentStrat.mapId)
           .subscribe((map) => {
-            console.log('SelectMAp', map);
             this.store.dispatch(StratStore.SelectMap({ map }));
           });
       }
@@ -150,11 +120,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store
       .select(StratStore.getCurrentCanvasState)
       .subscribe((canvasState) => {
-        this.updateStratFromCanvasState(canvasState);
+        //this.updateStratFromCanvasState(canvasState);
       });
   }
-
-  ngAfterViewInit(): void {}
 
   updateStratFromCanvasState(currentCanvasState: string): void {
     console.log('updateStratFromCanvasState');
@@ -234,85 +202,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.store.dispatch(StratStore.closeRight());
   }
 
-  @HostListener('document:keyup', ['$event'])
-  keyUp(event: KeyboardEvent) {
-    switch (event.key.toLocaleLowerCase()) {
-      case KEY_CODE.DELETE:
-        this.drawerEditor.deleteActiveObject();
-        break;
-      case KEY_CODE.ESCAPE:
-        this.drawerEditor.resetView();
-        break;
-      case KEY_CODE.A:
-        if (this.CTRLPressed) {
-          this.drawerEditor.selectAllObjects();
-          if (window.getSelection) {
-            if (window.getSelection().empty) {
-              window.getSelection().empty();
-            } else if (window.getSelection().removeAllRanges) {
-              window.getSelection().removeAllRanges();
-            }
-          }
-        }
-        break;
-      case KEY_CODE.Z:
-        if (this.CTRLPressed && !this.canvasLoading) {
-          this.store.dispatch(StratStore.UndoCanvasState());
-        }
-        break;
-      case KEY_CODE.Y:
-        if (this.CTRLPressed && !this.canvasLoading) {
-          this.store.dispatch(StratStore.RedoCanvasState());
-        }
-        break;
-      case KEY_CODE.CTRL:
-        this.CTRLPressed = false;
-        break;
-      default:
-    }
-  }
-
-  @HostListener('document:keydown', ['$event'])
-  keyDown(event: KeyboardEvent) {
-    switch (event.key.toLocaleLowerCase()) {
-      case KEY_CODE.CTRL:
-        this.CTRLPressed = true;
-        break;
-    }
-  }
-
-  @HostListener('dragstart', ['$event'])
-  onWindowDragStart(event: any) {
-    this.cdr.detach();
-  }
-
-  @HostListener('dragend', ['$event'])
-  onWindowDragEnd(event: any) {
-    this.cdr.reattach();
-  }
-
-  @HostListener('drop', ['$event'])
-  onwindowDrop(event: any) {
-    event.preventDefault();
-    event.stopPropagation();
-    if (this.draggingAgent) {
-      this.drawerEditor.drawAgent(
-        this.draggingAgent,
-        event.layerX,
-        event.layerY
-      );
-      this.draggingAgent = null;
-    }
-    if (this.draggingImage) {
-      this.drawerEditor.drawImage(
-        this.draggingImage,
-        event.layerX,
-        event.layerY
-      );
-      this.draggingImage = null;
-    }
-  }
-
   public openAgentsPanel() {
     this.store.dispatch(StratStore.showAgentsPanel());
   }
@@ -342,6 +231,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   public onDraw() {
+    console.log('in editor on draw');
     this.store.dispatch(
       StratStore.SetDrawingMode({ drawingMode: DrawingMode.Drawing })
     );

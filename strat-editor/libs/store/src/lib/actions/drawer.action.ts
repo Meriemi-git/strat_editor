@@ -47,6 +47,6 @@ export const SetColor = createAction(
 );
 
 export const SetDrawingMode = createAction(
-  '[DrawerAction] Set Drawing State',
+  '[DrawerAction] Set Drawing Mode',
   props<{ drawingMode: DrawingMode }>()
 );

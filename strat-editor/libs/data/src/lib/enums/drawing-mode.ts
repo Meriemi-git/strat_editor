@@ -1,6 +1,6 @@
 export enum DrawingMode {
   Undefined = 'Undefined',
-  Drawing = 'Draw',
+  Drawing = 'Drawing',
   Selection = 'Selection',
   Dragging = 'Dragging',
 }

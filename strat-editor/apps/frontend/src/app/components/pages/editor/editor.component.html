@@ -61,9 +61,9 @@
   </div>
   <strat-editor-drawing-editor
     class="editor"
-    #drawerEditor
     [canvasWidth]="width"
     [canvasHeight]="height"
+    [currentStrat]="currentStrat"
   ></strat-editor-drawing-editor>
   <strat-editor-drawing-status
     *ngIf="currentFloor"

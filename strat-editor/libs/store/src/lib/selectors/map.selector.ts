@@ -18,8 +18,6 @@ export const getMapByName = createSelector(getAllMaps, (maps, name) =>
 );
 
 export const getMapById = createSelector(getAllMaps, (maps, id) => {
-  console.log('in selector maps', maps);
-  console.log('in selector id', id);
   return maps.find((x) => x._id === id);
 });
 export const getSelectedMap = createSelector(

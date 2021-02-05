@@ -11,8 +11,3 @@ export const getCurrentCanvasState = createSelector(
   getCanvasState,
   (state: CanvasState) => state.currentState
 );
-
-export const canvasStateIsLoading = createSelector(
-  getCanvasState,
-  (state: CanvasState) => state.canvasLoading
-);

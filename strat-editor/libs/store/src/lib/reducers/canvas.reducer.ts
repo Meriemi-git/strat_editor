@@ -6,7 +6,6 @@ export const initialstate: CanvasState = {
   history: [],
   currentState: null,
   historyIndex: -1,
-  canvasLoading: false,
 };
 
 const drawingActionReducer = createReducer(
@@ -15,7 +14,6 @@ const drawingActionReducer = createReducer(
     ...state,
     historyIndex: state.historyIndex + 1,
     history: [...state.history.slice(0, state.historyIndex + 1), canvasState],
-    canvasLoading: false,
     currentState: canvasState,
   })),
   on(actions.UndoCanvasState, (state) => ({
@@ -26,7 +24,6 @@ const drawingActionReducer = createReducer(
       state.historyIndex > 0 && state.history.length > 0
         ? state.history[state.historyIndex - 1]
         : state.currentState,
-    canvasLoading: state.historyIndex > 0 && state.history.length > 0,
   })),
   on(actions.RedoCanvasState, (state) => ({
     ...state,
@@ -38,12 +35,6 @@ const drawingActionReducer = createReducer(
       state.history.length > state.historyIndex + 1 && state.history.length > 0
         ? state.history[state.historyIndex + 1]
         : state.currentState,
-    canvasLoading:
-      state.history.length > state.historyIndex + 1 && state.history.length > 0,
-  })),
-  on(actions.LoadingCanvasStateDone, (state) => ({
-    ...state,
-    canvasLoading: false,
   }))
 );
 
