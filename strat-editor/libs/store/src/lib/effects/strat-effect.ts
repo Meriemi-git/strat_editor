@@ -13,11 +13,25 @@ export class StratEffect {
   getStrats$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.GetMyStrats),
-      mergeMap((action) =>
-        this.stratService.getAllStrats(action.userId).pipe(
+      mergeMap(() =>
+        this.stratService.getAllStrats().pipe(
           map((strats) => actions.GetMyStratsSuccess({ strats })),
           catchError((error: HttpErrorResponse) =>
             of(actions.GetMyStratsError({ error }))
+          )
+        )
+      )
+    )
+  );
+
+  getStratsById$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(actions.LoadStrat),
+      mergeMap((action) =>
+        this.stratService.loadStratById(action.stratId).pipe(
+          map((strat) => actions.LoadStratSuccess({ strat })),
+          catchError((error: HttpErrorResponse) =>
+            of(actions.LoadStratError({ error }))
           )
         )
       )

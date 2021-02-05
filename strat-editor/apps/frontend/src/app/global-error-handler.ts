@@ -19,7 +19,7 @@ export class GlobalErrorHandler implements ErrorHandler {
         type: NotificationType.error,
       });
     } else {
-      console.log(error);
+      console.error(error);
     }
   }
 }

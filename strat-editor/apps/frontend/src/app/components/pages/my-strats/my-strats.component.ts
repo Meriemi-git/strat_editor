@@ -23,13 +23,7 @@ export class MyStratsComponent implements OnInit {
   ngOnInit(): void {
     this.$strats = this.store.select(StratStore.selectAllStrats);
     this.$userInfos = this.store.select(StratStore.getUserInfos);
-    this.$userInfos.subscribe((userInfos) => {
-      if (userInfos) {
-        this.store.dispatch(
-          StratStore.GetMyStrats({ userId: userInfos.userId })
-        );
-      }
-    });
+    this.store.dispatch(StratStore.GetMyStrats());
   }
 
   onFilterStrat(filters: any) {
@@ -41,8 +35,8 @@ export class MyStratsComponent implements OnInit {
   }
 
   onSelectStrat(strat: Strat) {
-    this.store.dispatch(StratStore.LoadStrat({ strat }));
-    this.router.navigateByUrl('editor');
+    this.store.dispatch(StratStore.LoadStratSuccess({ strat }));
+    this.router.navigateByUrl('editor/' + strat._id);
   }
   onUpVoteStrat(strat: Strat) {}
   onUDeleteStrat(strat: Strat) {}

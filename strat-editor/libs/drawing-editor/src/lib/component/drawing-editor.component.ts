@@ -93,14 +93,9 @@ export class DrawingEditorComponent implements OnInit {
     });
 
     // For undo/redo last canvas state
-    this.store
-      .select(StratStore.getCurrentCanvasState)
-      .subscribe((canvasState) => {
-        if (canvasState) {
-          const state = JSON.parse(canvasState);
-          this.setCanvasState(state);
-        }
-      });
+    this.store.select(StratStore.getCurrentCanvas).subscribe((canvasState) => {
+      this.loadCanvas(canvasState);
+    });
 
     this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
       if (floor) {
@@ -124,11 +119,25 @@ export class DrawingEditorComponent implements OnInit {
         this.draggingAgent = agent;
       }
     });
+
     this.store.select(StratStore.getDraggedImage).subscribe((image) => {
       if (image) {
         this.draggingImage = image;
       }
     });
+
+    this.store.select(StratStore.getLoadedStrat).subscribe((loadedStrat) => {
+      if (loadedStrat) {
+        this.loadCanvas(loadedStrat.layers[0].canvasState);
+      }
+    });
+  }
+
+  private loadCanvas(canvasState: string): void {
+    if (canvasState) {
+      const state = JSON.parse(canvasState);
+      this.setCanvasState(state);
+    }
   }
 
   private manageDrawingMode(newDrawingMode: DrawingMode) {
@@ -203,15 +212,6 @@ export class DrawingEditorComponent implements OnInit {
     }
   }
 
-  public close() {
-    this.clear();
-    this.resize(0, 0);
-  }
-
-  public clear() {
-    this.canvas.clear();
-  }
-
   public drawImage(draggingImage: Image, x: any, y: any) {
     if (draggingImage) {
       fabric.Image.fromURL(
@@ -234,7 +234,6 @@ export class DrawingEditorComponent implements OnInit {
   public doAction(action: DrawerAction) {
     if (action) {
       this.drawer = this.avalaibleDrawers.get(action.name);
-      console.log('doAction call enableDrawingMode');
       this.enableDrawingMode();
     } else {
       this.enableSelectionMode();
@@ -266,7 +265,6 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   private enableDrawingMode() {
-    console.log('Drawwing-Editor enableDrawingMode');
     this.canvas.hoverCursor = 'crosshair';
     this.canvas.moveCursor = 'crosshair';
     this.canvas.forEachObject((object) => (object.selectable = false));
@@ -349,6 +347,7 @@ export class DrawingEditorComponent implements OnInit {
 
   public setCanvasState(canvasState: string): void {
     this.canvas.loadFromJSON(canvasState, this.canvasStateIsLoaded);
+    this.canvas.renderAll();
   }
 
   public setBackgroundImageFromUrl(floor: Floor): any {
@@ -579,6 +578,15 @@ export class DrawingEditorComponent implements OnInit {
 
   public resetView() {
     this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+  }
+
+  public close() {
+    this.clear();
+    this.resize(0, 0);
+  }
+
+  public clear() {
+    this.canvas.clear();
   }
 
   @HostListener('window:resize', ['$event'])

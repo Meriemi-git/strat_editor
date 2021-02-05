@@ -1,8 +1,9 @@
-import { Strat } from '@strat-editor/data';
+import { Layer, Strat } from '@strat-editor/data';
 import * as actions from '../actions/strat.action';
 import { createReducer, on, Action } from '@ngrx/store';
 import { EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { StratState } from '../states/strat.state';
+import { ToastrComponentlessModule } from 'ngx-toastr';
 
 export const adapter: EntityAdapter<Strat> = createEntityAdapter<Strat>({
   sortComparer: sortByName,
@@ -16,6 +17,7 @@ export function sortByName(a: Strat, b: Strat): number {
 export const initialstate: StratState = adapter.getInitialState({
   error: null,
   currentStrat: null,
+  loadedStrat: null,
   modified: false,
 });
 
@@ -71,22 +73,74 @@ const stratReducer = createReducer(
     ...state,
     error: error,
   })),
-  on(actions.EditStrat, (state, { strat }) => ({
+  on(actions.LoadStratSuccess, (state, { strat }) => ({
     ...state,
-    currentStrat: strat,
     error: null,
+    loadedStrat: strat,
+    currentStrat: strat,
   })),
-  on(actions.LoadStrat, (state, { strat }) => ({
+  on(actions.LoadStrat, (state, { stratId }) => ({
     ...state,
     error: null,
-    currentStrat: strat,
+    loadedStrat: null,
   })),
   on(actions.CreateStrat, (state, { strat }) => ({
     ...state,
     error: null,
     currentStrat: strat,
+    loadedStrat: null,
+  })),
+  /// Strat modifications
+  on(actions.UpdateStratLayer, (state, { canvas, floorId, floorName }) => {
+    return {
+      ...state,
+      currentStrat: {
+        ...state.currentStrat,
+        layers: mergeLayers(
+          state.currentStrat.layers,
+          canvas,
+          floorId,
+          floorName
+        ),
+      },
+      error: null,
+    };
+  }),
+  on(actions.UpdateStratInfos, (state, { name, description, isPublic }) => ({
+    ...state,
+    currentStrat: {
+      ...state.currentStrat,
+      name: name,
+      description: description,
+      isPublic: isPublic,
+    },
   }))
 );
+
+function mergeLayers(
+  layers: Layer[],
+  canvasState: string,
+  floorId: string,
+  floorName: string
+): Layer[] {
+  const layersCopy: Layer[] = [];
+  if (layers.length > 0) {
+    layers.forEach((layer) => {
+      const layerCopy: Layer = Object.assign({}, layer);
+      if (layerCopy.floorId === floorId) {
+        layerCopy.canvasState = canvasState;
+      }
+      layersCopy.push(layerCopy);
+    });
+  } else {
+    layersCopy.push({
+      canvasState,
+      floorId,
+      floorName,
+    } as Layer);
+  }
+  return layersCopy;
+}
 
 export function reducer(state: StratState | undefined, action: Action) {
   return stratReducer(state, action);

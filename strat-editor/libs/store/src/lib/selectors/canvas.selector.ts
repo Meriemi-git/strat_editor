@@ -7,7 +7,7 @@ export const getCanvasState = createSelector(
   (state: CanvasState) => state
 );
 
-export const getCurrentCanvasState = createSelector(
+export const getCurrentCanvas = createSelector(
   getCanvasState,
   (state: CanvasState) => state.currentState
 );

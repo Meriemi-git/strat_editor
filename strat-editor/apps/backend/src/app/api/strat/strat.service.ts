@@ -20,11 +20,15 @@ export class StratService {
     return createdStrat.save();
   }
 
-  async findAllStratForUser(userId: string): Promise<Strat[]> {
+  async findAllStrats(userId: string): Promise<Strat[]> {
     return this.stratModel.find({ userId: userId }).exec();
   }
 
-  public getUserIdFromRequest(request: Request) {
+  findStratById(userId: string, stratId: string): Promise<Strat> {
+    return this.stratModel.findOne({ userId: userId, _id: stratId }).exec();
+  }
+
+  public getUserIdFromCookies(request: Request) {
     const xAuthToken = request.cookies['X-AUTH-TOKEN'];
     try {
       const jwtInfos = this.jwtService.decode(xAuthToken);

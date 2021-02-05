@@ -2,18 +2,15 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { createAction, props } from '@ngrx/store';
 import { Strat } from '@strat-editor/data';
 
-export const GetMyStrats = createAction(
-  '[Strats] Get Strats',
-  props<{ userId: string }>()
-);
+export const GetMyStrats = createAction('[Strats] Get My Strats');
 
 export const GetMyStratsSuccess = createAction(
-  '[Strats] Get Strats Success',
+  '[Strats] Get My Strats Success',
   props<{ strats: Strat[] }>()
 );
 
 export const GetMyStratsError = createAction(
-  '[Strats] Get Strats Error',
+  '[Strats] Get My Strats Error',
   props<{ error: HttpErrorResponse }>()
 );
 
@@ -64,12 +61,27 @@ export const DeleteStratError = createAction(
   props<{ error: HttpErrorResponse }>()
 );
 
-export const EditStrat = createAction(
-  '[Strats] Edit Strat',
+export const LoadStrat = createAction(
+  '[Strats] Load Strat',
+  props<{ stratId: string }>()
+);
+
+export const LoadStratSuccess = createAction(
+  '[Strats] Load Strat success',
   props<{ strat: Strat }>()
 );
 
-export const LoadStrat = createAction(
-  '[Strats] Load Strat',
-  props<{ strat: Strat }>()
+export const LoadStratError = createAction(
+  '[Strats] Load Strat error',
+  props<{ error: HttpErrorResponse }>()
+);
+
+export const UpdateStratLayer = createAction(
+  '[Strats] Update Strat layer',
+  props<{ canvas: string; floorId: string; floorName: string }>()
+);
+
+export const UpdateStratInfos = createAction(
+  '[Strats] Update Strat layer',
+  props<{ name: string; description: string; isPublic: boolean }>()
 );

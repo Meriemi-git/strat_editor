@@ -17,6 +17,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'editor/:stratId',
+    loadChildren: () =>
+      import('./components/pages/editor/editor.module').then(
+        (mod) => mod.EditorModule
+      ),
+  },
+  {
     path: 'confirmation/:token',
     loadChildren: () =>
       import('./components/pages/confirmation/confirmation.module').then(

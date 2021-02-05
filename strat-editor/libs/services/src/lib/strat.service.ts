@@ -16,9 +16,9 @@ export class StratService {
     private notificationService: NotificationService
   ) {}
 
-  public getAllStrats(userId: string): Observable<Strat[]> {
+  public getAllStrats(): Observable<Strat[]> {
     return this.http
-      .get<Strat[]>(environment.apiUrl + this.controller + '/all/' + userId)
+      .get<Strat[]>(environment.apiUrl + this.controller + '/all')
       .pipe(
         catchError((err) => {
           this.notificationService.displayNotification({
@@ -65,6 +65,20 @@ export class StratService {
         catchError((err) => {
           this.notificationService.displayNotification({
             message: 'Cannot update your strat',
+            type: NotificationType.error,
+          });
+          return throwError(err);
+        })
+      );
+  }
+
+  public loadStratById(stratId: string): Observable<Strat> {
+    return this.http
+      .get<Strat>(environment.apiUrl + this.controller + '/' + stratId)
+      .pipe(
+        catchError((err) => {
+          this.notificationService.displayNotification({
+            message: 'Cannot get this strat',
             type: NotificationType.error,
           });
           return throwError(err);

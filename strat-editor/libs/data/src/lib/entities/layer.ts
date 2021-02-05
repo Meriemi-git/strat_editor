@@ -10,5 +10,5 @@ export interface Layer {
 export const LayerSchema = new mongoose.Schema({
   floorId: String,
   floorName: String,
-  fabricCanvas: String,
+  canvasState: String,
 });

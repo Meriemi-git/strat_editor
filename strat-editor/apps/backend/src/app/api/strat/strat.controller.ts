@@ -19,18 +19,21 @@ import { AuthGuard } from '@nestjs/passport';
 export class StratController {
   constructor(private readonly stratService: StratService) {}
 
-  @Get('all/:userId')
+  @Get('all')
   @UseGuards(AuthGuard('ConfirmedStrategy'))
-  async findAll(
-    @Param('userId') userId: string,
+  async findAll(@Req() request: Request): Promise<Strat[]> {
+    const userIdFromCookies = this.stratService.getUserIdFromCookies(request);
+    return this.stratService.findAllStrats(userIdFromCookies);
+  }
+
+  @Get(':stratId')
+  @UseGuards(AuthGuard('ConfirmedStrategy'))
+  async getById(
+    @Param('stratId') stratId: string,
     @Req() request: Request
-  ): Promise<Strat[]> {
-    const userIdFromRequest = this.stratService.getUserIdFromRequest(request);
-    if (userIdFromRequest === userId) {
-      return this.stratService.findAllStratForUser(userId);
-    } else {
-      throw new BadRequestException();
-    }
+  ): Promise<Strat> {
+    const userIdFromCookies = this.stratService.getUserIdFromCookies(request);
+    return this.stratService.findStratById(userIdFromCookies, stratId);
   }
 
   @Post()
