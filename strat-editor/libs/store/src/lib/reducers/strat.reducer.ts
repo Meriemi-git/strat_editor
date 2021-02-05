@@ -14,9 +14,9 @@ export function sortByName(a: Strat, b: Strat): number {
 }
 
 export const initialstate: StratState = adapter.getInitialState({
-  editing: null,
   error: null,
-  loaded: null,
+  currentStrat: null,
+  modified: false,
 });
 
 const stratReducer = createReducer(
@@ -34,22 +34,26 @@ const stratReducer = createReducer(
   on(actions.SaveStrat, (state, { strat }) => ({
     ...state,
     error: null,
-    editing: strat,
+    currentStrat: strat,
   })),
-  on(actions.UploadStratSuccess, (state, { strat }) => {
+  on(actions.SaveStratSuccess, (state, { strat }) => {
     return adapter.addOne(strat, { ...state, editing: strat, error: null });
   }),
-  on(actions.UploadStratError, (state, { error }) => ({
+  on(actions.SaveStratError, (state, { error }) => ({
     ...state,
     error: error,
   })),
   on(actions.UpdateStrat, (state, { strat }) => ({
     ...state,
     error: null,
-    editing: strat,
+    currentStrat: strat,
   })),
   on(actions.UpdateStratSuccess, (state, { strat }) => {
-    return adapter.addOne(strat, { ...state, editing: strat, error: null });
+    return adapter.addOne(strat, {
+      ...state,
+      currentStrat: strat,
+      error: null,
+    });
   }),
   on(actions.UpdateStratError, (state, { error }) => ({
     ...state,
@@ -61,7 +65,7 @@ const stratReducer = createReducer(
   })),
   on(actions.DeleteStratSuccess, (state) => ({
     ...state,
-    editing: null,
+    currentStrat: null,
   })),
   on(actions.DeleteStratError, (state, { error }) => ({
     ...state,
@@ -69,13 +73,18 @@ const stratReducer = createReducer(
   })),
   on(actions.EditStrat, (state, { strat }) => ({
     ...state,
-    editing: strat,
+    currentStrat: strat,
     error: null,
   })),
   on(actions.LoadStrat, (state, { strat }) => ({
     ...state,
     error: null,
-    loaded: strat,
+    currentStrat: strat,
+  })),
+  on(actions.CreateStrat, (state, { strat }) => ({
+    ...state,
+    error: null,
+    currentStrat: strat,
   }))
 );
 

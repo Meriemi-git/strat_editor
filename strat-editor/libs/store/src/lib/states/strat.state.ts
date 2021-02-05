@@ -4,6 +4,6 @@ import { Strat } from '@strat-editor/data';
 
 export interface StratState extends EntityState<Strat> {
   error: HttpErrorResponse;
-  editing: Strat;
-  loaded: Strat;
+  currentStrat: Strat;
+  modified: boolean;
 }

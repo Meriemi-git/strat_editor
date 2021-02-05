@@ -21,7 +21,7 @@ export class StratService {
   }
 
   async findAllStratForUser(userId: string): Promise<Strat[]> {
-    return this.stratModel.find({ createdBy: userId }).exec();
+    return this.stratModel.find({ userId: userId }).exec();
   }
 
   public getUserIdFromRequest(request: Request) {

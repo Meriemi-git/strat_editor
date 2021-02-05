@@ -17,18 +17,23 @@ export const GetMyStratsError = createAction(
   props<{ error: HttpErrorResponse }>()
 );
 
+export const CreateStrat = createAction(
+  '[Strats] Create Strat',
+  props<{ strat: Strat }>()
+);
+
 export const SaveStrat = createAction(
-  '[Strats] Upload Strat',
+  '[Strats] Save Strat',
   props<{ strat: Strat }>()
 );
 
-export const UploadStratSuccess = createAction(
-  '[Strats] Upload Strat Success',
+export const SaveStratSuccess = createAction(
+  '[Strats] Save Strat Success',
   props<{ strat: Strat }>()
 );
 
-export const UploadStratError = createAction(
-  '[Strats] Upload Strat Error',
+export const SaveStratError = createAction(
+  '[Strats] Save Strat Error',
   props<{ error: HttpErrorResponse }>()
 );
 

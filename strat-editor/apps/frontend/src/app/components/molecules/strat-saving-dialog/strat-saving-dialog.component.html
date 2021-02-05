@@ -10,7 +10,7 @@
           <input
             matInput
             type="text"
-            [(ngModel)]="strat.name"
+            [(value)]="strat.name"
             formControlName="name"
             class="strat-input"
           />
@@ -26,7 +26,8 @@
           matInput
           [(ngModel)]="strat.description"
           class="strat-input"
-          rows="4" cols="50"
+          rows="4"
+          cols="50"
         ></textarea>
       </mat-form-field>
       <mat-slide-toggle color="primary" [checked]="isPublic">

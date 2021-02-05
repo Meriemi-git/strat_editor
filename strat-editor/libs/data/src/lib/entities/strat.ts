@@ -9,7 +9,7 @@ export interface Strat {
   description: string;
   createdAt: Date;
   lastModifiedAt: Date;
-  createdBy: string;
+  userId: string;
   votes: number;
   layers: Layer[];
   mapId: string;
@@ -21,7 +21,10 @@ export const StratSchema = new mongoose.Schema({
   description: String,
   createdAt: Date,
   lastModifiedAt: Date,
-  createdBy: String,
+  userId: {
+    type: String,
+    required: true,
+  },
   votes: Number,
   mapId: {
     type: String,

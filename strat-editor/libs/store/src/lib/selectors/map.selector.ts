@@ -12,9 +12,16 @@ export const getMapsLoading = createSelector(
   (state: MapState) => state.loaded
 );
 export const getAllMaps = createSelector(mapFeature, selectAll);
+
 export const getMapByName = createSelector(getAllMaps, (maps, name) =>
   maps.filter((x) => x.name === name)
 );
+
+export const getMapById = createSelector(getAllMaps, (maps, id) => {
+  console.log('in selector maps', maps);
+  console.log('in selector id', id);
+  return maps.find((x) => x._id === id);
+});
 export const getSelectedMap = createSelector(
   getMapState,
   (state: MapState) => state.selectedMap

@@ -32,12 +32,18 @@ export class StratSavingDialogComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('In submit');
     this.isSubmitted = true;
     if (this.stratForm.valid) {
+      console.log('In submit valid 1');
       this.isSubmitted = false;
+      console.log('In submit valid 2');
       this.strat.name = this.stratForm.get('name').value;
+      console.log('In submit valid 3');
       this.strat.description = this.stratForm.get('description').value;
+      console.log('In submit valid 4');
       this.strat.isPublic = this.isPublic;
+      console.log('In submit valid 5');
       this.dialogRef.close(this.strat);
     }
   }

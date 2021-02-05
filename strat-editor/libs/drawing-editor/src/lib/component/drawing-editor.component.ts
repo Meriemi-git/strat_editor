@@ -7,7 +7,6 @@ import {
   DrawingMode,
   DrawerColor,
   DrawerAction,
-  Strat,
   Map as _Map,
 } from '@strat-editor/data';
 import { Store } from '@ngrx/store';
@@ -33,7 +32,6 @@ import { ImageHelperService } from '../services/image-helper.service';
 export class DrawingEditorComponent implements OnInit {
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
-  @Input() loadedStrat: Strat;
 
   public drawingMode: DrawingMode;
 
@@ -55,8 +53,6 @@ export class DrawingEditorComponent implements OnInit {
   private lastPosX: number = 0;
   private lastPosY: number = 0;
 
-  private map: _Map;
-  private floor: Floor;
   constructor(
     private ihs: ImageHelperService,
     private store: Store<StratStore.StratEditorState>
@@ -88,13 +84,10 @@ export class DrawingEditorComponent implements OnInit {
         if (canvasState) {
           const state = JSON.parse(canvasState);
           this.setCanvasState(state);
-        } else {
-          this.store.dispatch(StratStore.LoadingCanvasStateDone());
         }
       });
 
     this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
-      this.floor = floor;
       if (floor) {
         this.resize(window.innerWidth, window.innerHeight - 60);
         this.setBackgroundImageFromUrl(floor);
@@ -106,6 +99,26 @@ export class DrawingEditorComponent implements OnInit {
     this.store.select(StratStore.getSelectedAction).subscribe((selected) => {
       this.doAction(selected);
     });
+
+    this.store.select(StratStore.getDrawingMode).subscribe((drawingMode) => {
+      this.manageDrawingMode(drawingMode);
+    });
+  }
+
+  private manageDrawingMode(drawingMode: DrawingMode) {
+    switch (drawingMode) {
+      case DrawingMode.Selection:
+        this.enableSelectionMode();
+        break;
+      case DrawingMode.Dragging:
+        this.enableDraggingMode();
+        break;
+      case DrawingMode.Drawing:
+        this.enableDrawingMode();
+        break;
+      default:
+        this.enableDrawingMode();
+    }
   }
 
   private initCanvas() {
@@ -197,13 +210,13 @@ export class DrawingEditorComponent implements OnInit {
   public doAction(action: DrawerAction) {
     if (action) {
       this.drawer = this.avalaibleDrawers.get(action.name);
-      this.enableDrawMode();
+      this.enableDrawingMode();
     } else {
       this.enableSelectionMode();
     }
   }
 
-  public enableSelectionMode() {
+  private enableSelectionMode() {
     this.canvas.hoverCursor = 'grab';
     this.canvas.moveCursor = 'grabbing';
 
@@ -216,7 +229,7 @@ export class DrawingEditorComponent implements OnInit {
     );
   }
 
-  public enableDraggingMode() {
+  private enableDraggingMode() {
     this.canvas.hoverCursor = 'move';
     this.canvas.moveCursor = 'move';
 
@@ -227,11 +240,11 @@ export class DrawingEditorComponent implements OnInit {
     );
   }
 
-  public enableDrawMode() {
+  private enableDrawingMode() {
     this.canvas.hoverCursor = 'crosshair';
     this.canvas.moveCursor = 'crosshair';
     this.canvas.forEachObject((object) => (object.selectable = false));
-    this.drawingMode = DrawingMode.Draw;
+    this.drawingMode = DrawingMode.Drawing;
     this.store.dispatch(
       StratStore.SetDrawingMode({ drawingMode: this.drawingMode })
     );
@@ -399,7 +412,7 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.on('object:modified', (event: fabric.IEvent) => {
       if (event.target instanceof fabric.Textbox) {
         this.editingText = true;
-        this.drawingMode = DrawingMode.Draw;
+        this.drawingMode = DrawingMode.Drawing;
         this.store.dispatch(
           StratStore.SetDrawingMode({ drawingMode: this.drawingMode })
         );
@@ -420,7 +433,7 @@ export class DrawingEditorComponent implements OnInit {
       .filter((object) => object.name !== 'map');
     this.isDown = true;
     if (
-      this.drawingMode !== DrawingMode.Draw ||
+      this.drawingMode !== DrawingMode.Drawing ||
       this.editingText ||
       this.selectedObjects.length > 0
     ) {
@@ -437,7 +450,7 @@ export class DrawingEditorComponent implements OnInit {
 
   private async mouseMove(event: fabric.IEvent): Promise<void> {
     const pointer = this.canvas.getPointer(event.e);
-    if (this.drawingMode === DrawingMode.Draw && this.isDown) {
+    if (this.drawingMode === DrawingMode.Drawing && this.isDown) {
       this.drawer.resize(this.object, pointer.x, pointer.y);
       this.canvas.renderAll();
     } else if (this.drawingMode === DrawingMode.Dragging && this.isDown) {
@@ -460,7 +473,11 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.setViewportTransform(this.canvas.viewportTransform);
     this.canvas.renderAll();
     const canvasState = JSON.stringify(this.getCanvasState());
-    this.store.dispatch(StratStore.SaveCanvasState({ canvasState }));
+    this.store.dispatch(
+      StratStore.SaveCanvasState({
+        canvasState,
+      })
+    );
   }
 
   private selectionCreated(event: fabric.IEvent) {

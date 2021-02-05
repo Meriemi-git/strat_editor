@@ -18,6 +18,8 @@ export class GlobalErrorHandler implements ErrorHandler {
         message: error.message,
         type: NotificationType.error,
       });
+    } else {
+      console.log(error);
     }
   }
 }

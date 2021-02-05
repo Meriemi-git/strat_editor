@@ -8,12 +8,8 @@ export const getStratState = createSelector(
   (state: StratState) => state
 );
 export const selectAllStrats = createSelector(stratFeature, selectAll);
-export const getEditingStrat = createSelector(
-  getStratState,
-  (state: StratState) => state.editing
-);
 
-export const getLoadedStrat = createSelector(
+export const getCurrentStrat = createSelector(
   getStratState,
-  (state: StratState) => state.loaded
+  (state: StratState) => state.currentStrat
 );

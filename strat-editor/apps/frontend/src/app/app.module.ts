@@ -23,6 +23,7 @@ import { HttpJwtInterceptor } from './interceptors/http-jwt-interceptor';
 import { ToastrModule } from 'ngx-toastr';
 import { GlobalErrorHandler } from './global-error-handler';
 import { NotificationService } from '@strat-editor/services';
+
 export function init_app(appInitService: AppInitService) {
   return () => appInitService.initializeApp();
 }

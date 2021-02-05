@@ -18,6 +18,7 @@ import {
   UserInfos,
   DrawerAction,
   PolyLineAction,
+  Layer,
 } from '@strat-editor/data';
 import * as StratStore from '@strat-editor/store';
 import { DrawingEditorComponent } from '@strat-editor/drawing-editor';
@@ -29,6 +30,7 @@ import {
   DualChoiceDialogComponent,
   DualChoiceDialogData,
 } from '../../molecules/dual-choice-dialog/dual-choice-dialog.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'strat-editor-editor',
@@ -39,8 +41,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
   @ViewChild('drawerEditor') drawerEditor: DrawingEditorComponent;
 
   public $maps: Observable<Map[]>;
+
   public currentMap: Map;
   public currentFloor: Floor;
+  public currentStrat: Strat;
   public userInfos: UserInfos;
 
   public width: number = 0;
@@ -49,7 +53,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
   private draggingImage: Image;
 
   private CTRLPressed: boolean;
-  public savedStrat: Strat;
 
   public $drawingMode: Observable<DrawingMode>;
   public $loadedStrat: Observable<Strat>;
@@ -64,23 +67,52 @@ export class EditorComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.$maps = this.store.select(StratStore.getAllMaps);
     this.$drawingMode = this.store.select(StratStore.getDrawingMode);
-    this.$loadedStrat = this.store.select(StratStore.getLoadedStrat);
     this.store.dispatch(StratStore.FetchMaps());
     this.store.dispatch(StratStore.FetchAgents());
     this.store.dispatch(StratStore.FetchDrawerActions());
     this.store.dispatch(StratStore.FetchFontNames());
     this.store.dispatch(StratStore.SetColor({ color: new DrawerColor() }));
+
     this.store.dispatch(
       StratStore.SetDrawerAction({ action: new PolyLineAction() })
     );
+
     this.store
       .select(StratStore.canvasStateIsLoading)
       .subscribe((canvasLoading) => {
         this.canvasLoading = canvasLoading;
       });
-  }
 
-  ngAfterViewInit(): void {
+    this.store.select(StratStore.getSelectedMap).subscribe((selectedMap) => {
+      if (selectedMap) {
+        if (this.currentMap) {
+          if (this.currentMap !== selectedMap) {
+            this.openConfirmationDialog(selectedMap);
+          } else {
+          }
+        } else {
+          this.currentStrat = this.createNewStrat(selectedMap);
+          this.store.dispatch(
+            StratStore.SelectFloor({
+              floor: selectedMap ? selectedMap.floors[0] : null,
+            })
+          );
+        }
+      } else {
+        this.store.dispatch(
+          StratStore.SelectFloor({
+            floor: selectedMap ? selectedMap.floors[0] : null,
+          })
+        );
+        this.store.dispatch(StratStore.CreateStrat({ strat: null }));
+      }
+      this.currentMap = selectedMap;
+    });
+
+    this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
+      this.currentFloor = floor;
+    });
+
     this.store.select(StratStore.getSelectedAction).subscribe((selected) => {
       if (this.currentFloor) {
         this.store.dispatch(StratStore.closeRight());
@@ -101,44 +133,92 @@ export class EditorComponent implements OnInit, AfterViewInit {
       this.userInfos = userInfos;
     });
 
-    this.store.select(StratStore.getSelectedMap).subscribe((selectedMap) => {
-      if (this.currentMap && selectedMap && this.currentMap != selectedMap) {
-        const dialogRef = this.dialog.open(DualChoiceDialogComponent, {
-          width: '400px',
-          hasBackdrop: true,
-          data: {
-            title: 'Changing Map',
-            description:
-              'You have unsave changes for this map, you will loose them if you continue.',
-            cancelButtonText: 'Cancel',
-            confirmButtonText: 'Continue',
-          } as DualChoiceDialogData,
-          panelClass: ['strat-saving-dialog'],
-          disableClose: true,
-        });
+    this.store.select(StratStore.getCurrentStrat).subscribe((currentStrat) => {
+      this.currentStrat = currentStrat;
+      if (currentStrat) {
+        console.log('currentStrat map id', currentStrat.mapId);
 
-        dialogRef.afterClosed().subscribe((confirm) => {
-          if (confirm) {
-            this.store.dispatch(
-              StratStore.SelectFloor({
-                floor: selectedMap ? selectedMap.floors[0] : null,
-              })
-            );
-          }
-        });
+        this.store
+          .select(StratStore.getMapById, currentStrat.mapId)
+          .subscribe((map) => {
+            console.log('SelectMAp', map);
+            this.store.dispatch(StratStore.SelectMap({ map }));
+          });
+      }
+    });
+
+    this.store
+      .select(StratStore.getCurrentCanvasState)
+      .subscribe((canvasState) => {
+        this.updateStratFromCanvasState(canvasState);
+      });
+  }
+
+  ngAfterViewInit(): void {}
+
+  updateStratFromCanvasState(currentCanvasState: string): void {
+    console.log('updateStratFromCanvasState');
+    if (this.currentStrat && currentCanvasState && this.currentFloor) {
+      console.log('In first if');
+      const layer = this.currentStrat.layers.find(
+        (layer) => layer.floorId === this.currentFloor._id
+      );
+      if (layer) {
+        console.log('In first layer');
+        layer.canvasState = currentCanvasState;
       } else {
+        console.log('In else layer');
+        // ReadOnly
+        this.currentStrat.layers.push({
+          canvasState: currentCanvasState,
+          floorId: this.currentFloor._id,
+        } as Layer);
+      }
+    }
+  }
+
+  openConfirmationDialog(selectedMap: Map): void {
+    const dialogRef = this.dialog.open(DualChoiceDialogComponent, {
+      width: '400px',
+      hasBackdrop: true,
+      data: {
+        title: 'Changing Map',
+        description:
+          'You have unsave changes for this map, you will loose them if you continue.',
+        cancelButtonText: 'Cancel',
+        confirmButtonText: 'Continue',
+      } as DualChoiceDialogData,
+      panelClass: ['strat-saving-dialog'],
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((confirm) => {
+      if (confirm) {
         this.store.dispatch(
           StratStore.SelectFloor({
             floor: selectedMap ? selectedMap.floors[0] : null,
           })
         );
-        this.currentMap = selectedMap;
       }
     });
+  }
 
-    this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
-      this.currentFloor = floor;
-    });
+  /**
+   * Create new Strat for this map
+   */
+  createNewStrat(selectedMap: Map): Strat {
+    return {
+      createdAt: new Date(),
+      name: `${selectedMap.name} - ${new Date().toLocaleDateString()}`,
+      description: '',
+      lastModifiedAt: new Date(),
+      userId: this.userInfos?.userId,
+      votes: 0,
+      layers: [],
+      mapId: selectedMap._id,
+      mapName: selectedMap.name,
+      isPublic: false,
+    };
   }
 
   onMapSelected(map: Map) {
@@ -233,59 +313,55 @@ export class EditorComponent implements OnInit, AfterViewInit {
     }
   }
 
-  openAgentsPanel() {
+  public openAgentsPanel() {
     this.store.dispatch(StratStore.showAgentsPanel());
   }
 
-  openGadgetsPanel() {
+  public openGadgetsPanel() {
     this.store.dispatch(StratStore.showGadgetsPanel());
   }
 
-  openDrawingPanel() {
+  public openDrawingPanel() {
     this.store.dispatch(StratStore.showDrawingPanel());
   }
 
-  openGalleryPanel() {
+  public openGalleryPanel() {
     this.store.dispatch(StratStore.showGalleryPanel());
   }
 
   public onSelect() {
-    this.drawerEditor.enableSelectionMode();
+    this.store.dispatch(
+      StratStore.SetDrawingMode({ drawingMode: DrawingMode.Selection })
+    );
   }
 
   public onDrag() {
-    this.drawerEditor.enableDraggingMode();
+    this.store.dispatch(
+      StratStore.SetDrawingMode({ drawingMode: DrawingMode.Dragging })
+    );
   }
 
   public onDraw() {
-    this.drawerEditor.enableDrawMode();
+    this.store.dispatch(
+      StratStore.SetDrawingMode({ drawingMode: DrawingMode.Drawing })
+    );
   }
 
   public onSave() {
-    if (this.savedStrat) {
-    } else {
-      const strat: Strat = {
-        createdAt: new Date(),
-        name: `${this.currentMap.name} - ${new Date().toLocaleDateString()}`,
-        description: '',
-        lastModifiedAt: new Date(),
-        createdBy: this.userInfos?.userId,
-        votes: 0,
-        layers: [],
-        mapId: this.currentMap._id,
-        mapName: this.currentMap.name,
-        isPublic: false,
-      };
+    if (this.currentStrat) {
       const dialogRef = this.dialog.open(StratSavingDialogComponent, {
         width: '400px',
         hasBackdrop: true,
-        data: { strat },
+        data: { strat: this.currentStrat },
         panelClass: ['strat-saving-dialog'],
         disableClose: true,
       });
 
       dialogRef.afterClosed().subscribe((strat) => {
+        console.log('afterClosed', strat);
+
         if (strat) {
+          this.currentStrat = strat;
           this.store.dispatch(StratStore.SaveStrat({ strat }));
         }
       });

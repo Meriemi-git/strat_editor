@@ -16,6 +16,7 @@ const drawingActionReducer = createReducer(
     historyIndex: state.historyIndex + 1,
     history: [...state.history.slice(0, state.historyIndex + 1), canvasState],
     canvasLoading: false,
+    currentState: canvasState,
   })),
   on(actions.UndoCanvasState, (state) => ({
     ...state,

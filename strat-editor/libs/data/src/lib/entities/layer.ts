@@ -5,7 +5,7 @@ export type LayerDocument = Layer & mongoose.Document;
 export interface Layer {
   floorId: string;
   floorName: string;
-  fabricCanvas: string;
+  canvasState: string;
 }
 export const LayerSchema = new mongoose.Schema({
   floorId: String,

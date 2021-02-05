@@ -28,10 +28,10 @@ export class StratEffect {
     this.actions$.pipe(
       ofType(actions.SaveStrat),
       mergeMap((action) =>
-        this.stratService.uploadStrat(action.strat).pipe(
-          map((strat) => actions.UploadStratSuccess({ strat })),
+        this.stratService.saveStrat(action.strat).pipe(
+          map((strat) => actions.SaveStratSuccess({ strat })),
           catchError((error: HttpErrorResponse) =>
-            of(actions.UploadStratError({ error }))
+            of(actions.SaveStratError({ error }))
           )
         )
       )
@@ -43,9 +43,9 @@ export class StratEffect {
       ofType(actions.UpdateStrat),
       mergeMap((action) =>
         this.stratService.updateStrat(action.strat).pipe(
-          map((strat) => actions.UploadStratSuccess({ strat })),
+          map((strat) => actions.SaveStratSuccess({ strat })),
           catchError((error: HttpErrorResponse) =>
-            of(actions.UploadStratError({ error }))
+            of(actions.SaveStratError({ error }))
           )
         )
       )
