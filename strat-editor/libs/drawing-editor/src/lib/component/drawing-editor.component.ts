@@ -94,6 +94,7 @@ export class DrawingEditorComponent implements OnInit {
     // For undo/redo last canvas state
     this.store.select(StratStore.getCurrentCanvas).subscribe((canvasState) => {
       console.log('d getCurrentCanvas', canvasState);
+      this.resize(window.innerWidth, window.innerHeight - 60);
       this.loadCanvas(canvasState);
     });
 
@@ -119,13 +120,21 @@ export class DrawingEditorComponent implements OnInit {
 
     this.store.select(StratStore.getCurrentStrat).subscribe((currentStrat) => {
       console.log('d getCurrentStrat', currentStrat);
-
       if (currentStrat) {
         const canvasState = currentStrat.layers[0]?.canvasState;
         if (canvasState) {
           this.loadCanvas(canvasState);
         }
       }
+    });
+
+    this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
+      console.log('d getSelectedFloor', floor);
+      if (this.currentFloor && floor && this.currentFloor._id !== floor._id) {
+        this.clear();
+        this.setFloorImage(floor);
+      }
+      this.currentFloor = floor;
     });
   }
 
@@ -356,7 +365,7 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.renderAll();
   }
 
-  public setBackgroundImageFromUrl(floor: Floor): any {
+  public setFloorImage(floor: Floor): any {
     console.log('setBackgroundImageFromUrl');
     fabric.Image.fromURL(
       this.ihs.getFloorImage(floor),

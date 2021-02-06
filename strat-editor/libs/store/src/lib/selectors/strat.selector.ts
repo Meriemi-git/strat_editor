@@ -14,11 +14,6 @@ export const getCurrentStrat = createSelector(
   (state: StratState) => state.currentStrat
 );
 
-export const getLoadedStrat = createSelector(
-  getStratState,
-  (state: StratState) => state.loadedStrat
-);
-
 export const getStratById = createSelector(
   selectAllStrats,
   (strats, stratId) => {

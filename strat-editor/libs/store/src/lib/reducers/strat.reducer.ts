@@ -16,7 +16,6 @@ export function sortByName(a: Strat, b: Strat): number {
 export const initialstate: StratState = adapter.getInitialState({
   error: null,
   currentStrat: null,
-  loadedStrat: null,
   modified: false,
 });
 
@@ -79,20 +78,17 @@ const stratReducer = createReducer(
   on(actions.LoadStratSuccess, (state, { strat }) => ({
     ...state,
     currentStrat: strat,
-    loadedStrat: strat,
     error: null,
   })),
   on(actions.LoadStratError, (state, { error }) => ({
     ...state,
     error: error,
-    loadedStrat: null,
     currentStrat: null,
   })),
   on(actions.CreateStrat, (state, { strat }) => ({
     ...state,
     error: null,
     currentStrat: strat,
-    loadedStrat: null,
   })),
   /// Strat modifications
   on(actions.UpdateStratLayer, (state, { canvas, floorId, floorName }) => {
