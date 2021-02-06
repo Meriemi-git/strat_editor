@@ -82,21 +82,26 @@ export class EditorComponent implements OnInit {
     });
 
     this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
-      console.log('e getSelectedFloor', floor);
+      console.log('e getSelectedFloor', floor?.name);
       this.currentFloor = floor;
     });
 
     this.store.select(StratStore.getCurrentStrat).subscribe((currentStrat) => {
-      console.log('e getCurrentStrat', currentStrat);
+      console.log('e getCurrentStrat', currentStrat?.name);
       this.currentStrat = currentStrat;
       // Strat exists
       if (currentStrat) {
         // Strat contains layers
-        if (currentStrat.layers.length > 0) {
-          // Load the map linked tio this strat
+        console.log('e getCurrentStrat currentMap', this.currentMap);
+        if (
+          currentStrat.layers.length > 0 &&
+          this.currentMap?._id != currentStrat.mapId
+        ) {
+          // Load the map linked to this strat
           this.store
             .select(StratStore.getMapById, currentStrat.mapId)
             .subscribe((map) => {
+              console.log('e Dispatch SelectMap');
               this.store.dispatch(StratStore.SelectMap({ map }));
             });
         }
@@ -104,42 +109,19 @@ export class EditorComponent implements OnInit {
     });
 
     this.store.select(StratStore.getSelectedMap).subscribe((selectedMap) => {
-      console.log('e getSelectedMap', selectedMap);
-      // if (selectedMap) {
-      //   if (this.currentStrat) {
-      //     if (this.currentMap && this.currentMap !== selectedMap) {
-      //       this.openConfirmationDialog(selectedMap);
-      //     } else {
-      //       console.log('dispatch floor', this.currentStrat.layers[0]);
-      //       this.store.dispatch(
-      //         StratStore.SelectFloor({
-      //           floor: selectedMap
-      //             ? selectedMap.floors.find(
-      //                 (floor) =>
-      //                   floor._id === this.currentStrat.layers[0]?.floorId
-      //               )
-      //             : null,
-      //         })
-      //       );
-      //     }
-      //   }
-      // }
-      // this.currentMap = selectedMap;
-
+      console.log('e getSelectedMap', selectedMap?.name);
       // There is a map
       if (selectedMap) {
         if (this.currentStrat) {
-          console.log('e There is a strat', selectedMap);
+          console.log('e There is a strat', this.currentStrat?.name);
           if (this.currentStrat.layers.length > 0) {
-            console.log('e This strat contains a layer', selectedMap);
+            console.log('e This strat contains a layer');
             if (selectedMap._id != this.currentStrat.mapId) {
-              console.log(
-                'e SelectedMap and layer map doesnt match',
-                selectedMap
-              );
+              console.log('e SelectedMap and layer map doesnt match');
               this.openConfirmationDialog(selectedMap);
             } else {
-              console.log('e SelectedMap and layer map match', selectedMap);
+              console.log('e SelectedMap and layer map match');
+              console.log('e Dispatch SelectFloor');
               this.store.dispatch(
                 StratStore.SelectFloor({
                   floor: selectedMap
@@ -153,6 +135,8 @@ export class EditorComponent implements OnInit {
             }
             // Ther is no layers in the current srat load first floor
           } else {
+            console.log('e This strat doesnt contains a layer');
+            console.log('e Dispatch SelectFloor');
             this.store.dispatch(
               StratStore.SelectFloor({
                 floor: selectedMap.floors[0],
@@ -168,6 +152,8 @@ export class EditorComponent implements OnInit {
       .select(StratStore.getCurrentCanvas)
       .subscribe((currentCanvas) => {
         if (currentCanvas) {
+          console.log('e getCurrentCanvas', currentCanvas.length);
+          console.log('e Dispatch UpdateStratLayer');
           this.store.dispatch(
             StratStore.UpdateStratLayer({
               canvas: currentCanvas,

@@ -43,10 +43,9 @@ const stratReducer = createReducer(
     ...state,
     error: error,
   })),
-  on(actions.UpdateStrat, (state, { strat }) => ({
+  on(actions.UpdateStrat, (state) => ({
     ...state,
     error: null,
-    currentStrat: strat,
   })),
   on(actions.UpdateStratSuccess, (state, { strat }) => {
     return adapter.addOne(strat, {

@@ -41,6 +41,7 @@ export class DrawingEditorComponent implements OnInit {
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
   @Input() currentFloor: Floor;
+  private currentStrat: Strat;
   public drawingMode: DrawingMode;
 
   private canvas: fabric.Canvas;
@@ -91,13 +92,6 @@ export class DrawingEditorComponent implements OnInit {
       this.setFontSize(fontSize);
     });
 
-    // For undo/redo last canvas state
-    this.store.select(StratStore.getCurrentCanvas).subscribe((canvasState) => {
-      console.log('d getCurrentCanvas', canvasState);
-      this.resize(window.innerWidth, window.innerHeight - 60);
-      this.loadCanvas(canvasState);
-    });
-
     this.store.select(StratStore.getSelectedAction).subscribe((selected) => {
       this.doAction(selected);
     });
@@ -119,22 +113,30 @@ export class DrawingEditorComponent implements OnInit {
     });
 
     this.store.select(StratStore.getCurrentStrat).subscribe((currentStrat) => {
-      console.log('d getCurrentStrat', currentStrat);
+      console.log('d getCurrentStrat', currentStrat?.name);
       if (currentStrat) {
         const canvasState = currentStrat.layers[0]?.canvasState;
         if (canvasState) {
+          console.log('d Strat contain layer', currentStrat);
           this.loadCanvas(canvasState);
         }
       }
     });
 
     this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
-      console.log('d getSelectedFloor', floor);
-      if (this.currentFloor && floor && this.currentFloor._id !== floor._id) {
+      console.log('d getSelectedFloor', floor?._id);
+      if (this.currentStrat?.layers.length > 0 && floor) {
         this.clear();
         this.setFloorImage(floor);
       }
       this.currentFloor = floor;
+    });
+
+    // For undo/redo last canvas state
+    this.store.select(StratStore.getCurrentCanvas).subscribe((canvasState) => {
+      console.log('d getCurrentCanvas lenght', canvasState?.length);
+      this.resize(window.innerWidth, window.innerHeight - 60);
+      this.loadCanvas(canvasState);
     });
   }
 
@@ -325,6 +327,7 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.discardActiveObject();
     this.canvas.renderAll();
     const canvasState = JSON.stringify(this.getCanvasState());
+    console.log('d Dispatch SaveCanvasState');
     this.store.dispatch(StratStore.SaveCanvasState({ canvasState }));
   }
 
@@ -352,7 +355,7 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   public setCanvasState(canvasState: string): void {
-    console.log('setCanvasState', canvasState);
+    console.log('loadFromJSON', canvasState);
     this.canvas.loadFromJSON(
       canvasState,
       this.canvasStateIsLoaded,
@@ -366,7 +369,7 @@ export class DrawingEditorComponent implements OnInit {
   }
 
   public setFloorImage(floor: Floor): any {
-    console.log('setBackgroundImageFromUrl');
+    console.log('setFloorImage', floor);
     fabric.Image.fromURL(
       this.ihs.getFloorImage(floor),
       function (image) {
@@ -388,6 +391,7 @@ export class DrawingEditorComponent implements OnInit {
           this.canvas.add(image);
           this.canvas.renderAll();
           const canvasState = JSON.stringify(this.getCanvasState());
+          console.log('d Dispatch SaveCanvasState');
           this.store.dispatch(StratStore.SaveCanvasState({ canvasState }));
         } else {
           throw new MapLoadingError(
@@ -603,6 +607,7 @@ export class DrawingEditorComponent implements OnInit {
 
   public clear() {
     this.canvas.clear();
+    this.canvas.renderAll();
   }
 
   @HostListener('window:resize', ['$event'])
