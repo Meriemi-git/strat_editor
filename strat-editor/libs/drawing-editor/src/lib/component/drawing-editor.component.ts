@@ -16,6 +16,8 @@ import {
   Map as _Map,
   KEY_CODE,
   Strat,
+  Layer,
+  StratAction,
 } from '@strat-editor/data';
 import { Store } from '@ngrx/store';
 import * as StratStore from '@strat-editor/store';
@@ -31,6 +33,7 @@ import { TriangleDrawer } from '../drawers/triangle-drawer';
 import { LineArrow } from '../fabricjs/line-arrow';
 import { TriangleArrow } from '../fabricjs/triangle-arrow';
 import { ImageHelperService } from '../services/image-helper.service';
+import { skip } from 'rxjs/operators';
 
 @Component({
   selector: 'strat-editor-drawing-editor',
@@ -40,8 +43,7 @@ import { ImageHelperService } from '../services/image-helper.service';
 export class DrawingEditorComponent implements OnInit {
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
-  @Input() currentFloor: Floor;
-  private currentStrat: Strat;
+
   public drawingMode: DrawingMode;
 
   private canvas: fabric.Canvas;
@@ -78,7 +80,7 @@ export class DrawingEditorComponent implements OnInit {
   ngOnInit(): void {
     this.initCanvas();
     this.initializeCanvasEvents();
-
+    this.resize(window.innerWidth, window.innerHeight - 60);
     this.store.select(StratStore.getColor).subscribe((color) => {
       this.setColor(color);
     });
@@ -112,31 +114,23 @@ export class DrawingEditorComponent implements OnInit {
       }
     });
 
-    this.store.select(StratStore.getCurrentStrat).subscribe((currentStrat) => {
-      console.log('d getCurrentStrat', currentStrat?.name);
-      if (currentStrat) {
-        const canvasState = currentStrat.layers[0]?.canvasState;
-        if (canvasState) {
-          console.log('d Strat contain layer', currentStrat);
-          this.loadCanvas(canvasState);
+    this.store.select(StratStore.getCanvas).subscribe((canvas) => {
+      this.loadCanvas(canvas);
+    });
+
+    this.store.select(StratStore.getCurrentLayer).subscribe((layer) => {
+      if (layer) {
+        this.clear();
+        if (layer.canvasState) {
+          this.loadCanvas(layer.canvasState);
+        } else {
+          this.store
+            .select(StratStore.getFloorById, layer.floorId)
+            .subscribe((floor) => {
+              this.setFloorImage(floor);
+            });
         }
       }
-    });
-
-    this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
-      console.log('d getSelectedFloor', floor?._id);
-      if (this.currentStrat?.layers.length > 0 && floor) {
-        this.clear();
-        this.setFloorImage(floor);
-      }
-      this.currentFloor = floor;
-    });
-
-    // For undo/redo last canvas state
-    this.store.select(StratStore.getCurrentCanvas).subscribe((canvasState) => {
-      console.log('d getCurrentCanvas lenght', canvasState?.length);
-      this.resize(window.innerWidth, window.innerHeight - 60);
-      this.loadCanvas(canvasState);
     });
   }
 
@@ -326,9 +320,9 @@ export class DrawingEditorComponent implements OnInit {
     });
     this.canvas.discardActiveObject();
     this.canvas.renderAll();
-    const canvasState = JSON.stringify(this.getCanvasState());
+    const canvas = JSON.stringify(this.getCanvasState());
     console.log('d Dispatch SaveCanvasState');
-    this.store.dispatch(StratStore.SaveCanvasState({ canvasState }));
+    this.store.dispatch(StratStore.SaveCanvas({ canvas: canvas }));
   }
 
   public selectAllObjects() {
@@ -392,7 +386,7 @@ export class DrawingEditorComponent implements OnInit {
           this.canvas.renderAll();
           const canvasState = JSON.stringify(this.getCanvasState());
           console.log('d Dispatch SaveCanvasState');
-          this.store.dispatch(StratStore.SaveCanvasState({ canvasState }));
+          this.store.dispatch(StratStore.SaveCanvas({ canvas: canvasState }));
         } else {
           throw new MapLoadingError(
             'Cannot load backgroung image for ' + floor.name
@@ -520,8 +514,8 @@ export class DrawingEditorComponent implements OnInit {
     this.canvas.renderAll();
     const canvasState = JSON.stringify(this.getCanvasState());
     this.store.dispatch(
-      StratStore.SaveCanvasState({
-        canvasState,
+      StratStore.SaveCanvas({
+        canvas: canvasState,
       })
     );
   }

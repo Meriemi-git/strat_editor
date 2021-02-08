@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { createAction, props } from '@ngrx/store';
-import { Strat } from '@strat-editor/data';
+import { Layer, Strat } from '@strat-editor/data';
 
 export const GetMyStrats = createAction('[Strats] Get My Strats');
 
@@ -84,4 +84,9 @@ export const UpdateStratLayer = createAction(
 export const UpdateStratInfos = createAction(
   '[Strats] Update Strat Infos',
   props<{ name: string; description: string; isPublic: boolean }>()
+);
+
+export const SelectLayer = createAction(
+  '[Strats] Select layer',
+  props<{ layer: Layer }>()
 );

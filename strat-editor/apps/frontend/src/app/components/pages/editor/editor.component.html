@@ -1,4 +1,4 @@
-<div class="icons-left" *ngIf="currentFloor">
+<div class="icons-left" *ngIf="selectedMap">
   <div (click)="openAgentsPanel()">
     <span
       class="first"
@@ -18,7 +18,7 @@
     </span>
   </div>
 </div>
-<div class="icons-right" *ngIf="currentFloor">
+<div class="icons-right" *ngIf="selectedMap">
   <div (click)="openDrawingPanel()">
     <span
       class="first"
@@ -37,50 +37,43 @@
   </div>
 </div>
 <div class="map-container">
-  <div class="map-selector" *ngIf="!currentFloor">
+  <div class="map-selector" *ngIf="!selectedMap">
     <strat-editor-map-grid
       [maps]="$maps | async"
       (selectMap)="onMapSelected($event)"
     ></strat-editor-map-grid>
   </div>
-  <div class="map-header">
-    <strat-editor-floor-chooser
-      *ngIf="currentFloor"
-      (mapSelected)="onMapSelected($event)"
-      (floorSelected)="onFloorSelected($event)"
-      [maps]="$maps | async"
-      [selectedMap]="currentMap"
-      [selectedFloor]="currentFloor"
+  <div class="editor-container" *ngIf="selectedMap">
+    <div class="map-header">
+      <strat-editor-floor-chooser
+        (mapSelected)="onMapSelected($event)"
+        (floorSelected)="onFloorSelected($event)"
+        [maps]="$maps | async"
+        [selectedMap]="selectedMap"
+        [selectedFloor]="selectedFloor"
+      >
+      </strat-editor-floor-chooser>
+      <strat-editor-strat-title [stratTitle]="'Example Title'">
+      </strat-editor-strat-title>
+    </div>
+    <strat-editor-drawing-editor
+      class="editor"
+      [canvasWidth]="width"
+      [canvasHeight]="height"
+    ></strat-editor-drawing-editor>
+    <strat-editor-drawing-status [drawingMode]="$drawingMode | async">
+    </strat-editor-drawing-status>
+    <strat-editor-drawing-toolbar
+      class="strat-editor-drawing-toolbar"
+      (enableSelectMode)="onSelect()"
+      (enableDrawingMode)="onDraw()"
+      (enableDraggingMode)="onDrag()"
+      (saveStrat)="onSave()"
+      (showInfos)="onShowInfos()"
+      (openStrat)="onOpenStrat()"
+      (deleteStrat)="onDeleteStrat()"
+      (wheel)="stopWheelEvent($event)"
     >
-    </strat-editor-floor-chooser>
-    <strat-editor-strat-title
-      *ngIf="currentFloor"
-      [stratTitle]="'Example Title'"
-    >
-    </strat-editor-strat-title>
+    </strat-editor-drawing-toolbar>
   </div>
-  <strat-editor-drawing-editor
-    class="editor"
-    [canvasWidth]="width"
-    [canvasHeight]="height"
-    [currentFloor]="currentFloor"
-  ></strat-editor-drawing-editor>
-  <strat-editor-drawing-status
-    *ngIf="currentFloor"
-    [drawingMode]="$drawingMode | async"
-  >
-  </strat-editor-drawing-status>
-  <strat-editor-drawing-toolbar
-    class="strat-editor-drawing-toolbar"
-    *ngIf="currentFloor"
-    (enableSelectMode)="onSelect()"
-    (enableDrawingMode)="onDraw()"
-    (enableDraggingMode)="onDrag()"
-    (saveStrat)="onSave()"
-    (showInfos)="onShowInfos()"
-    (openStrat)="onOpenStrat()"
-    (deleteStrat)="onDeleteStrat()"
-    (wheel)="stopWheelEvent($event)"
-  >
-  </strat-editor-drawing-toolbar>
 </div>

@@ -1,8 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 
-export const SaveCanvasState = createAction(
+export const SaveCanvas = createAction(
   '[Canvas] Save canvas state',
-  props<{ canvasState: string }>()
+  props<{ canvas: string }>()
 );
 
 export const UndoCanvasState = createAction('[Canvas] Undo canvas state');

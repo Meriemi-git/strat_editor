@@ -1,4 +1,4 @@
-import { Layer, Strat } from '@strat-editor/data';
+import { Layer, Strat, StratAction } from '@strat-editor/data';
 import * as actions from '../actions/strat.action';
 import { createReducer, on, Action } from '@ngrx/store';
 import { EntityAdapter, createEntityAdapter } from '@ngrx/entity';
@@ -15,8 +15,10 @@ export function sortByName(a: Strat, b: Strat): number {
 
 export const initialstate: StratState = adapter.getInitialState({
   error: null,
-  currentStrat: null,
+  strat: null,
   modified: false,
+  action: null,
+  currentLayer: null,
 });
 
 const stratReducer = createReducer(
@@ -34,10 +36,14 @@ const stratReducer = createReducer(
   on(actions.SaveStrat, (state, { strat }) => ({
     ...state,
     error: null,
-    currentStrat: strat,
   })),
   on(actions.SaveStratSuccess, (state, { strat }) => {
-    return adapter.addOne(strat, { ...state, editing: strat, error: null });
+    return adapter.addOne(strat, {
+      ...state,
+      error: null,
+      strat: strat,
+      action: StratAction.SAVE,
+    });
   }),
   on(actions.SaveStratError, (state, { error }) => ({
     ...state,
@@ -50,7 +56,8 @@ const stratReducer = createReducer(
   on(actions.UpdateStratSuccess, (state, { strat }) => {
     return adapter.addOne(strat, {
       ...state,
-      currentStrat: strat,
+      strat: strat,
+      action: StratAction.SAVE,
       error: null,
     });
   }),
@@ -64,7 +71,9 @@ const stratReducer = createReducer(
   })),
   on(actions.DeleteStratSuccess, (state) => ({
     ...state,
-    currentStrat: null,
+    strat: null,
+    action: StratAction.DELETE,
+    error: null,
   })),
   on(actions.DeleteStratError, (state, { error }) => ({
     ...state,
@@ -76,43 +85,47 @@ const stratReducer = createReducer(
   })),
   on(actions.LoadStratSuccess, (state, { strat }) => ({
     ...state,
-    currentStrat: strat,
+    strat: strat,
+    action: StratAction.LOAD,
     error: null,
   })),
   on(actions.LoadStratError, (state, { error }) => ({
     ...state,
     error: error,
-    currentStrat: null,
+    strat: null,
   })),
   on(actions.CreateStrat, (state, { strat }) => ({
     ...state,
     error: null,
-    currentStrat: strat,
+    action: StratAction.CREATE,
+    strat: strat,
+  })),
+  on(actions.SelectLayer, (state, { layer }) => ({
+    ...state,
+    error: null,
+    currentLayer: layer,
   })),
   /// Strat modifications
   on(actions.UpdateStratLayer, (state, { canvas, floorId, floorName }) => {
     return {
       ...state,
-      currentStrat: {
-        ...state.currentStrat,
-        layers: mergeLayers(
-          state.currentStrat.layers,
-          canvas,
-          floorId,
-          floorName
-        ),
+      strat: {
+        ...state.strat,
+        layers: mergeLayers(state.strat.layers, canvas, floorId, floorName),
       },
+      action: StratAction.UPDATE_LAYER,
       error: null,
     };
   }),
   on(actions.UpdateStratInfos, (state, { name, description, isPublic }) => ({
     ...state,
-    currentStrat: {
-      ...state.currentStrat,
+    strat: {
+      ...state.strat,
       name: name,
       description: description,
       isPublic: isPublic,
     },
+    action: StratAction.UPDATE_INFOS,
   }))
 );
 

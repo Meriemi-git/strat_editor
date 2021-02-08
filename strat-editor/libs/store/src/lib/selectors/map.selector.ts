@@ -1,6 +1,7 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { selectAll } from '../reducers/map.reducer';
 import { MapState } from '../states/map.state';
+import { Map } from '@strat-editor/data';
 
 const mapFeature = createFeatureSelector<MapState>('MapState');
 export const getMapState = createSelector(
@@ -19,6 +20,12 @@ export const getMapByName = createSelector(getAllMaps, (maps, name) =>
 
 export const getMapById = createSelector(getAllMaps, (maps, id) => {
   return maps.find((x) => x._id === id);
+});
+
+export const getFloorById = createSelector(getAllMaps, (maps, floorId) => {
+  return (maps as Map[])
+    .find((map) => map.floors.find((floor) => floor._id === floorId))
+    .floors.find((floor) => floor._id === floorId);
 });
 export const getSelectedMap = createSelector(
   getMapState,

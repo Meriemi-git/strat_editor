@@ -4,26 +4,26 @@ import { CanvasState } from '../states/canvas.state';
 
 export const initialstate: CanvasState = {
   history: [],
-  currentState: null,
+  canvas: null,
   historyIndex: -1,
 };
 
 const drawingActionReducer = createReducer(
   initialstate,
-  on(actions.SaveCanvasState, (state, { canvasState }) => ({
+  on(actions.SaveCanvas, (state, { canvas }) => ({
     ...state,
     historyIndex: state.historyIndex + 1,
-    history: [...state.history.slice(0, state.historyIndex + 1), canvasState],
-    currentState: canvasState,
+    history: [...state.history.slice(0, state.historyIndex + 1), canvas],
+    canvas: canvas,
   })),
   on(actions.UndoCanvasState, (state) => ({
     ...state,
     historyIndex:
       state.historyIndex > 0 ? state.historyIndex - 1 : state.historyIndex,
-    currentState:
+    canvas:
       state.historyIndex > 0 && state.history.length > 0
         ? state.history[state.historyIndex - 1]
-        : state.currentState,
+        : state.canvas,
   })),
   on(actions.RedoCanvasState, (state) => ({
     ...state,
@@ -31,10 +31,10 @@ const drawingActionReducer = createReducer(
       state.history.length > state.historyIndex + 1
         ? state.historyIndex + 1
         : state.historyIndex,
-    currentState:
+    canvas:
       state.history.length > state.historyIndex + 1 && state.history.length > 0
         ? state.history[state.historyIndex + 1]
-        : state.currentState,
+        : state.canvas,
   }))
 );
 

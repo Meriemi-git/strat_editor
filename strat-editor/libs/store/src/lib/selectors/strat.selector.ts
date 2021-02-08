@@ -9,9 +9,14 @@ export const getStratState = createSelector(
 );
 export const selectAllStrats = createSelector(stratFeature, selectAll);
 
-export const getCurrentStrat = createSelector(
+export const getStrat = createSelector(
   getStratState,
-  (state: StratState) => state.currentStrat
+  (state: StratState) => state.strat
+);
+
+export const getStratAction = createSelector(
+  getStratState,
+  (state: StratState) => state.action
 );
 
 export const getStratById = createSelector(
@@ -19,4 +24,9 @@ export const getStratById = createSelector(
   (strats, stratId) => {
     return strats.find((x) => x._id === stratId);
   }
+);
+
+export const getCurrentLayer = createSelector(
+  getStratState,
+  (state: StratState) => state.currentLayer
 );

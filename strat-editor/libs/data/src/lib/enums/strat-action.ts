@@ -1,0 +1,10 @@
+export enum StratAction {
+  CREATION = 'CREATION',
+  UPDATE = 'UPDATE',
+  SAVE = 'SAVE',
+  DELETE = 'DELETE',
+  LOAD = 'LOAD',
+  CREATE = 'CREATE',
+  UPDATE_LAYER = 'UPDATE_LAYER',
+  UPDATE_INFOS = 'UPDATE_INFOS',
+}

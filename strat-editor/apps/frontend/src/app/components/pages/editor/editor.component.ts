@@ -10,6 +10,7 @@ import {
   DrawerAction,
   PolyLineAction,
   Layer,
+  StratAction,
 } from '@strat-editor/data';
 import * as StratStore from '@strat-editor/store';
 import { Observable } from 'rxjs';
@@ -23,7 +24,12 @@ import {
   DualChoiceDialogData,
 } from '../../molecules/dual-choice-dialog/dual-choice-dialog.component';
 import { ActivatedRoute } from '@angular/router';
-import { LoadStrat, LoadStratSuccess } from '@strat-editor/store';
+import {
+  LoadStrat,
+  LoadStratSuccess,
+  SelectFloor,
+  SelectLayer,
+} from '@strat-editor/store';
 
 @Component({
   selector: 'strat-editor-editor',
@@ -32,16 +38,15 @@ import { LoadStrat, LoadStratSuccess } from '@strat-editor/store';
 })
 export class EditorComponent implements OnInit {
   public $maps: Observable<Map[]>;
+  public $drawingMode: Observable<DrawingMode>;
 
-  public currentMap: Map;
-  public currentFloor: Floor;
+  public selectedMap: Map;
+  public selectedFloor: Floor;
   public currentStrat: Strat;
   public userInfos: UserInfos;
 
   public width: number = 0;
   public height: number = 0;
-
-  public $drawingMode: Observable<DrawingMode>;
 
   constructor(
     private store: Store<StratStore.StratEditorState>,
@@ -64,131 +69,116 @@ export class EditorComponent implements OnInit {
     this.activatedRoute.params.subscribe((params) => {
       if (params.stratId) {
         this.loadStrat(params.stratId);
-      } else {
-        this.loadNewMap();
       }
     });
-    this.manageStore();
-  }
 
-  private manageStore() {
-    this.store.select(StratStore.getSelectedAction).subscribe((selected) => {
-      if (this.currentFloor) {
-        this.store.dispatch(StratStore.closeRight());
+    this.store.select(StratStore.getSelectedMap).subscribe((map) => {
+      this.selectedMap = map;
+      if (map) {
+        if (!this.currentStrat) {
+          const newStrat = this.createNewStrat(map);
+          const defaultLayer = newStrat.layers[0];
+          this.store.dispatch(StratStore.CreateStrat({ strat: newStrat }));
+          this.store
+            .select(StratStore.getFloorById, defaultLayer.floorId)
+            .subscribe((floor) => {
+              if (floor) {
+                this.store.dispatch(SelectFloor({ floor }));
+                this.store.dispatch(
+                  StratStore.SelectLayer({ layer: defaultLayer })
+                );
+              }
+            });
+        } else {
+          // TODO implement better management
+          this.openConfirmationDialog(map);
+        }
       }
-    });
-    this.store.select(StratStore.getUserInfos).subscribe((userInfos) => {
-      this.userInfos = userInfos;
     });
 
     this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
-      console.log('e getSelectedFloor', floor?.name);
-      this.currentFloor = floor;
-    });
-
-    this.store.select(StratStore.getCurrentStrat).subscribe((currentStrat) => {
-      console.log('e getCurrentStrat', currentStrat?.name);
-      this.currentStrat = currentStrat;
-      // Strat exists
-      if (currentStrat) {
-        // Strat contains layers
-        console.log('e getCurrentStrat currentMap', this.currentMap);
-        if (
-          currentStrat.layers.length > 0 &&
-          this.currentMap?._id != currentStrat.mapId
-        ) {
-          // Load the map linked to this strat
-          this.store
-            .select(StratStore.getMapById, currentStrat.mapId)
-            .subscribe((map) => {
-              console.log('e Dispatch SelectMap');
-              this.store.dispatch(StratStore.SelectMap({ map }));
-            });
-        }
+      this.selectedFloor = floor;
+      if (this.currentStrat) {
+        const layer = this.currentStrat.layers.find(
+          (layer) => layer.floorId === floor._id
+        );
+        this.store.dispatch(SelectLayer({ layer }));
+      } else {
+        // TODO what i must do ???
       }
     });
 
-    this.store.select(StratStore.getSelectedMap).subscribe((selectedMap) => {
-      console.log('e getSelectedMap', selectedMap?.name);
-      // There is a map
-      if (selectedMap) {
-        if (this.currentStrat) {
-          console.log('e There is a strat', this.currentStrat?.name);
-          if (this.currentStrat.layers.length > 0) {
-            console.log('e This strat contains a layer');
-            if (selectedMap._id != this.currentStrat.mapId) {
-              console.log('e SelectedMap and layer map doesnt match');
-              this.openConfirmationDialog(selectedMap);
-            } else {
-              console.log('e SelectedMap and layer map match');
-              console.log('e Dispatch SelectFloor');
-              this.store.dispatch(
-                StratStore.SelectFloor({
-                  floor: selectedMap
-                    ? selectedMap.floors.find(
-                        (floor) =>
-                          floor._id === this.currentStrat.layers[0]?.floorId
-                      )
-                    : null,
-                })
-              );
-            }
-            // Ther is no layers in the current srat load first floor
-          } else {
-            console.log('e This strat doesnt contains a layer');
-            console.log('e Dispatch SelectFloor');
-            this.store.dispatch(
-              StratStore.SelectFloor({
-                floor: selectedMap.floors[0],
-              })
-            );
-          }
-        }
+    this.store.select(StratStore.getStrat).subscribe((strat) => {
+      this.currentStrat = strat;
+      if (strat) {
+        this.manageStrat(strat);
       }
-      this.currentMap = selectedMap;
     });
 
-    this.store
-      .select(StratStore.getCurrentCanvas)
-      .subscribe((currentCanvas) => {
-        if (currentCanvas) {
-          console.log('e getCurrentCanvas', currentCanvas.length);
-          console.log('e Dispatch UpdateStratLayer');
-          this.store.dispatch(
-            StratStore.UpdateStratLayer({
-              canvas: currentCanvas,
-              floorId: this.currentFloor._id,
-              floorName: this.currentFloor.name,
-            })
+    this.store.select(StratStore.getCanvas).subscribe((canvas) => {
+      if (canvas) {
+        this.store.dispatch(
+          StratStore.UpdateStratLayer({
+            canvas,
+            floorId: this.selectedFloor._id,
+            floorName: this.selectedFloor.name,
+          })
+        );
+      }
+    });
+  }
+  manageStrat(strat: Strat) {
+    this.store.select(StratStore.getStratAction).subscribe((action) => {
+      switch (action) {
+        case StratAction.LOAD:
+        case StratAction.CREATE:
+          const fullFilledLayer: Layer = strat.layers.find(
+            (layer) => layer.canvasState
           );
-        }
-      });
+          this.store
+            .select(StratStore.getMapById, strat.mapId)
+            .subscribe((map) => {
+              if (map) {
+                this.store.dispatch(StratStore.SelectMap({ map }));
+                this.store.dispatch(
+                  StratStore.SelectLayer({
+                    layer: fullFilledLayer ?? strat.layers[0],
+                  })
+                );
+              }
+            });
+          break;
+        case StratAction.UPDATE:
+          break;
+        case StratAction.UPDATE_INFOS:
+          break;
+        case StratAction.UPDATE_LAYER:
+          break;
+        default:
+          break;
+      }
+    });
   }
 
+  /**
+   * Load strat by id
+   * @param stratId Strat id to be laoded
+   */
   private loadStrat(stratId: string) {
+    console.log('loadStrat');
     this.store.select(StratStore.getStratById, stratId).subscribe((strat) => {
+      console.log('loadStrat strat', strat);
       if (strat) {
-        this.store.dispatch(LoadStratSuccess(strat));
+        console.log('LoadStratSuccess LoadStratSuccess', strat);
+        this.store.dispatch(LoadStratSuccess({ strat }));
       } else {
+        console.log('dispatch LoadStrat', strat);
         this.store.dispatch(LoadStrat({ stratId }));
       }
     });
   }
 
-  private loadNewMap() {
-    const mapObserver = this.store
-      .select(StratStore.getSelectedMap)
-      .subscribe((selectedMap) => {
-        this.currentMap = selectedMap;
-        if (selectedMap) {
-          this.currentStrat = this.createNewStrat(selectedMap);
-          this.store.dispatch(
-            StratStore.CreateStrat({ strat: this.currentStrat })
-          );
-          mapObserver.unsubscribe();
-        }
-      });
-  }
+  public onCanvasUpdated(canvas: string) {}
 
   openConfirmationDialog(selectedMap: Map): void {
     const dialogRef = this.dialog.open(DualChoiceDialogComponent, {
@@ -227,7 +217,14 @@ export class EditorComponent implements OnInit {
       lastModifiedAt: new Date(),
       userId: this.userInfos?.userId,
       votes: 0,
-      layers: [],
+      layers: selectedMap.floors.map(
+        (floor) =>
+          ({
+            floorName: floor.name,
+            floorId: floor._id,
+            canvasState: null,
+          } as Layer)
+      ),
       mapId: selectedMap._id,
       mapName: selectedMap.name,
       isPublic: false,
@@ -299,7 +296,7 @@ export class EditorComponent implements OnInit {
       dialogRef.afterClosed().subscribe((stratInfos: StratInfosDialogData) => {
         if (stratInfos) {
           this.store.dispatch(StratStore.UpdateStratInfos(stratInfos));
-          this.store.select(StratStore.getCurrentStrat).subscribe((strat) => {
+          this.store.select(StratStore.getStrat).subscribe((strat) => {
             this.store.dispatch(StratStore.SaveStrat({ strat }));
           });
         }
