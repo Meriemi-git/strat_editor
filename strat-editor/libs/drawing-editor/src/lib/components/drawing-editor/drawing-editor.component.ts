@@ -251,6 +251,9 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
           });
           this.canvas.add(image);
           this.canvas.renderAll();
+          const canvasState = JSON.stringify(this.getCanvasState());
+          console.log('d drawAgent Dispatch SaveCanvasState');
+          this.store.dispatch(StratStore.SaveCanvas({ canvas: canvasState }));
         }.bind(this)
       );
     }
@@ -270,6 +273,9 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
           });
           this.canvas.add(image);
           this.canvas.renderAll();
+          const canvasState = JSON.stringify(this.getCanvasState());
+          console.log('d drawImage Dispatch SaveCanvasState');
+          this.store.dispatch(StratStore.SaveCanvas({ canvas: canvasState }));
         }.bind(this)
       );
     }
@@ -419,7 +425,7 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
           this.canvas.add(image);
           this.canvas.renderAll();
           const canvasState = JSON.stringify(this.getCanvasState());
-          console.log('d Dispatch SaveCanvasState');
+          console.log('d setFloorImage Dispatch SaveCanvasState');
           this.store.dispatch(StratStore.SaveCanvas({ canvas: canvasState }));
         } else {
           throw new MapLoadingError(
