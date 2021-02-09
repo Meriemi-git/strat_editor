@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DrawingEditorComponent } from './component/drawing-editor.component';
+import { DrawingEditorComponent } from './components/drawing-editor/drawing-editor.component';
 
 @NgModule({
   imports: [CommonModule],

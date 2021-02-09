@@ -3,6 +3,7 @@ import {
   Component,
   HostListener,
   Input,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import {
@@ -23,24 +24,25 @@ import { Store } from '@ngrx/store';
 import * as StratStore from '@strat-editor/store';
 
 import { fabric } from 'fabric';
-import { ObjectDrawer, LineDrawer, RectangleDrawer } from '../drawers';
-import { ArrowDrawer } from '../drawers/arrow-drawer';
-import { OvalDrawer } from '../drawers/oval-drawer';
-import { PolyLineDrawer } from '../drawers/polyline-drawer';
-import { SvgDrawer } from '../drawers/svg-drawer';
-import { TextDrawer } from '../drawers/text-drawer';
-import { TriangleDrawer } from '../drawers/triangle-drawer';
-import { LineArrow } from '../fabricjs/line-arrow';
-import { TriangleArrow } from '../fabricjs/triangle-arrow';
-import { ImageHelperService } from '../services/image-helper.service';
-import { skip } from 'rxjs/operators';
+import { ObjectDrawer, LineDrawer, RectangleDrawer } from '../../drawers';
+import { ArrowDrawer } from '../../drawers/arrow-drawer';
+import { OvalDrawer } from '../../drawers/oval-drawer';
+import { PolyLineDrawer } from '../../drawers/polyline-drawer';
+import { SvgDrawer } from '../../drawers/svg-drawer';
+import { TextDrawer } from '../../drawers/text-drawer';
+import { TriangleDrawer } from '../../drawers/triangle-drawer';
+import { LineArrow } from '../../fabricjs/line-arrow';
+import { TriangleArrow } from '../../fabricjs/triangle-arrow';
+import { ImageHelperService } from '../../services/image-helper.service';
+import { skip, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'strat-editor-drawing-editor',
   templateUrl: './drawing-editor.component.html',
   styleUrls: ['./drawing-editor.component.scss'],
 })
-export class DrawingEditorComponent implements OnInit {
+export class DrawingEditorComponent implements OnInit, OnDestroy {
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
 
@@ -68,6 +70,7 @@ export class DrawingEditorComponent implements OnInit {
   private draggingImage: Image;
   private CTRLPressed: boolean;
   private canvasLoading: boolean;
+  private unsubscriber = new Subject();
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -77,64 +80,100 @@ export class DrawingEditorComponent implements OnInit {
     this.addAvalaibleDrawers();
   }
 
+  ngOnDestroy(): void {
+    this.unsubscriber.next();
+    this.unsubscriber.complete();
+  }
+
   ngOnInit(): void {
     this.initCanvas();
     this.initializeCanvasEvents();
     this.resize(window.innerWidth, window.innerHeight - 60);
-    this.store.select(StratStore.getColor).subscribe((color) => {
-      this.setColor(color);
-    });
-    this.store.select(StratStore.getSelectedOption).subscribe((option) => {
-      this.setDrawerOptions(option);
-    });
-    this.store.select(StratStore.getFontFamily).subscribe((fontFamily) => {
-      this.setFontFamily(fontFamily);
-    });
-    this.store.select(StratStore.getFontSize).subscribe((fontSize) => {
-      this.setFontSize(fontSize);
-    });
+    this.store
+      .select(StratStore.getColor)
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe((color) => {
+        this.setColor(color);
+      });
+    this.store
+      .select(StratStore.getSelectedOption)
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe((option) => {
+        this.setDrawerOptions(option);
+      });
+    this.store
+      .select(StratStore.getFontFamily)
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe((fontFamily) => {
+        this.setFontFamily(fontFamily);
+      });
+    this.store
+      .select(StratStore.getFontSize)
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe((fontSize) => {
+        this.setFontSize(fontSize);
+      });
 
-    this.store.select(StratStore.getSelectedAction).subscribe((selected) => {
-      this.doAction(selected);
-    });
+    this.store
+      .select(StratStore.getSelectedAction)
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe((selected) => {
+        this.doAction(selected);
+      });
 
-    this.store.select(StratStore.getDrawingMode).subscribe((drawingMode) => {
-      this.manageDrawingMode(drawingMode);
-    });
+    this.store
+      .select(StratStore.getDrawingMode)
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe((drawingMode) => {
+        this.manageDrawingMode(drawingMode);
+      });
 
-    this.store.select(StratStore.getDraggedAgent).subscribe((agent) => {
-      if (agent) {
-        this.draggingAgent = agent;
-      }
-    });
-
-    this.store.select(StratStore.getDraggedImage).subscribe((image) => {
-      if (image) {
-        this.draggingImage = image;
-      }
-    });
-
-    this.store.select(StratStore.getCanvas).subscribe((canvas) => {
-      this.loadCanvas(canvas);
-    });
-
-    this.store.select(StratStore.getCurrentLayer).subscribe((layer) => {
-      if (layer) {
-        console.log('d getCurrentLayer clear');
-        this.clear();
-        if (layer.canvasState) {
-          console.log('d getCurrentLayer loadCanvas');
-          this.loadCanvas(layer.canvasState);
-        } else {
-          this.store
-            .select(StratStore.getFloorById, layer.floorId)
-            .subscribe((floor) => {
-              console.log('d getCurrentLayer setFloorImage');
-              this.setFloorImage(floor);
-            });
+    this.store
+      .select(StratStore.getDraggedAgent)
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe((agent) => {
+        if (agent) {
+          this.draggingAgent = agent;
         }
-      }
-    });
+      });
+
+    this.store
+      .select(StratStore.getDraggedImage)
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe((image) => {
+        if (image) {
+          this.draggingImage = image;
+        }
+      });
+
+    this.store
+      .select(StratStore.getCanvas)
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe((canvas) => {
+        this.loadCanvas(canvas);
+      });
+
+    this.store
+      .select(StratStore.getCurrentLayer)
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe((layer) => {
+        if (layer) {
+          console.log('d getCurrentLayer clear');
+          this.clear();
+          if (layer.canvasState) {
+            console.log('d getCurrentLayer loadCanvas');
+            this.loadCanvas(layer.canvasState);
+          } else {
+            this.store
+              .select(StratStore.getFloorById, layer.floorId)
+              .pipe(takeUntil(this.unsubscriber))
+              .subscribe((floor) => {
+                console.log('d getCurrentLayer setFloorImage');
+                this.setFloorImage(floor);
+              });
+          }
+        }
+      });
   }
 
   private loadCanvas(canvasState: string): void {

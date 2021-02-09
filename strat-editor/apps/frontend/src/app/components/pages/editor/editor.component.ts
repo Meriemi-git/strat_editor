@@ -13,7 +13,7 @@ import {
   StratAction,
 } from '@strat-editor/data';
 import * as StratStore from '@strat-editor/store';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import {
   StratInfosDialogData,
@@ -31,7 +31,6 @@ import {
   SetCurrentLayer,
 } from '@strat-editor/store';
 import { skip, takeUntil } from 'rxjs/operators';
-import { AutoUnsubscribe } from '../../../helpers/auto-unsubscribe';
 
 @Component({
   selector: 'strat-editor-editor',
@@ -49,7 +48,6 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   public width: number = 0;
   public height: number = 0;
-
   private unsubscriber = new Subject();
 
   constructor(

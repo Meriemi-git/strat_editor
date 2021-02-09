@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as StratStore from '@strat-editor/store';
 import { take } from 'rxjs/operators';
 import { UserInfos } from '@strat-editor/data';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'strat-editor-root',
@@ -14,7 +14,6 @@ export class AppComponent implements OnInit {
   public leftIsOpened: boolean;
   public rightIsOpened: boolean;
   public $userInfos: Observable<UserInfos>;
-
   constructor(private store: Store<StratStore.StratEditorState>) {}
 
   ngOnInit(): void {
