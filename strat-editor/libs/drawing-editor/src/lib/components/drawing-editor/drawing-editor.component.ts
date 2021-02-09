@@ -83,6 +83,7 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscriber.next();
     this.unsubscriber.complete();
+    this.store.dispatch(StratStore.ClearCanvasState());
   }
 
   ngOnInit(): void {
@@ -150,6 +151,7 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
       .select(StratStore.getCanvas)
       .pipe(takeUntil(this.unsubscriber))
       .subscribe((canvas) => {
+        console.log('d getCanvas');
         this.loadCanvas(canvas);
       });
 
@@ -157,6 +159,7 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
       .select(StratStore.getCurrentLayer)
       .pipe(takeUntil(this.unsubscriber))
       .subscribe((layer) => {
+        console.log('d getCurrentLayer');
         if (layer) {
           console.log('d getCurrentLayer clear');
           this.clear();

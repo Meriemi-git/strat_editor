@@ -90,3 +90,5 @@ export const SetCurrentLayer = createAction(
   '[Strats] Set current layer',
   props<{ layer: Layer }>()
 );
+
+export const ClearStratState = createAction('[Strats] Clear strat state');

@@ -35,6 +35,12 @@ const drawingActionReducer = createReducer(
       state.history.length > state.historyIndex + 1 && state.history.length > 0
         ? state.history[state.historyIndex + 1]
         : state.canvas,
+  })),
+  on(actions.ClearCanvasState, (state) => ({
+    ...state,
+    history: [],
+    canvas: null,
+    historyIndex: -1,
   }))
 );
 

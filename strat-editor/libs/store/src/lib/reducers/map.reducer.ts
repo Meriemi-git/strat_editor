@@ -42,6 +42,13 @@ const mapReducer = createReducer(
   on(actions.SelectFloor, (state, { floor }) => ({
     ...state,
     selectedFloor: floor,
+  })),
+  on(actions.ClearMapState, (state) => ({
+    ...state,
+    error: null,
+    loaded: false,
+    selectedMap: null,
+    selectedFloor: null,
   }))
 );
 

@@ -57,6 +57,8 @@ export class EditorComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
+    this.store.dispatch(StratStore.ClearStratState());
+    this.store.dispatch(StratStore.ClearMapState());
     this.unsubscriber.next();
     this.unsubscriber.complete();
   }
@@ -89,7 +91,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     this.store
       .select(StratStore.getSelectedMap)
-      .pipe(skip(1), takeUntil(this.unsubscriber))
+      .pipe(takeUntil(this.unsubscriber))
       .subscribe((map) => {
         this.selectedMap = map;
         this.manageMap(map);
@@ -97,7 +99,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     this.store
       .select(StratStore.getSelectedFloor)
-      .pipe(skip(1), takeUntil(this.unsubscriber))
+      .pipe(takeUntil(this.unsubscriber))
       .subscribe((floor) => {
         this.manageFloor(floor);
       });
@@ -116,7 +118,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       .select(StratStore.getCanvas)
       .pipe(takeUntil(this.unsubscriber))
       .subscribe((canvas) => {
-        if (canvas) {
+        if (canvas && this.selectedFloor) {
           this.store.dispatch(
             StratStore.UpdateStratLayer({
               canvas,
@@ -187,11 +189,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     switch (stratAndAction.action) {
       case StratAction.LOAD:
         console.log('e Manage Strat LOAD');
-        console.log('e Manage Strat Dispatch SelectMap');
         this.store
           .select(StratStore.getMapById, stratAndAction.strat.mapId)
           .subscribe((map) => {
             if (map) {
+              console.log('e Manage Strat Dispatch SelectMap');
               this.store.dispatch(StratStore.SelectMap({ map }));
             }
           });

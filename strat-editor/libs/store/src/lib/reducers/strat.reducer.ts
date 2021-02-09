@@ -126,6 +126,13 @@ const stratReducer = createReducer(
       isPublic: isPublic,
     },
     action: StratAction.UPDATE_INFOS,
+  })),
+  on(actions.ClearStratState, (state) => ({
+    ...state,
+    error: null,
+    strat: null,
+    action: null,
+    layer: null,
   }))
 );
 

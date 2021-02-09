@@ -22,3 +22,5 @@ export const SelectFloor = createAction(
   '[Map] Select Floor',
   props<{ floor: Floor }>()
 );
+
+export const ClearMapState = createAction('[Map] Clear Map state');
