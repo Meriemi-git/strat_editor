@@ -5,6 +5,6 @@ import { Layer, Strat, StratAction } from '@strat-editor/data';
 export interface StratState extends EntityState<Strat> {
   error: HttpErrorResponse;
   strat: Strat;
-  currentLayer: Layer;
+  layer: Layer;
   action: StratAction;
 }

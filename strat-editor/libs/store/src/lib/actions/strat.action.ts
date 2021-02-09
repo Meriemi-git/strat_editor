@@ -86,7 +86,7 @@ export const UpdateStratInfos = createAction(
   props<{ name: string; description: string; isPublic: boolean }>()
 );
 
-export const SelectLayer = createAction(
-  '[Strats] Select layer',
+export const SetCurrentLayer = createAction(
+  '[Strats] Set current layer',
   props<{ layer: Layer }>()
 );

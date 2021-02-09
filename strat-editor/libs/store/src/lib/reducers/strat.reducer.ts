@@ -16,15 +16,15 @@ export function sortByName(a: Strat, b: Strat): number {
 export const initialstate: StratState = adapter.getInitialState({
   error: null,
   strat: null,
-  modified: false,
   action: null,
-  currentLayer: null,
+  layer: null,
 });
 
 const stratReducer = createReducer(
   initialstate,
   on(actions.GetMyStrats, (state) => ({
     ...state,
+    action: null,
   })),
   on(actions.GetMyStratsSuccess, (state, { strats }) => {
     return adapter.addMany(strats, { ...state, error: null });
@@ -100,10 +100,10 @@ const stratReducer = createReducer(
     action: StratAction.CREATE,
     strat: strat,
   })),
-  on(actions.SelectLayer, (state, { layer }) => ({
+  on(actions.SetCurrentLayer, (state, { layer }) => ({
     ...state,
-    error: null,
-    currentLayer: layer,
+    layer: layer,
+    action: null,
   })),
   /// Strat modifications
   on(actions.UpdateStratLayer, (state, { canvas, floorId, floorName }) => {

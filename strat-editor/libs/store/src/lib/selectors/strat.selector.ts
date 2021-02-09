@@ -28,7 +28,7 @@ export const getStratById = createSelector(
 
 export const getCurrentLayer = createSelector(
   getStratState,
-  (state: StratState) => state.currentLayer
+  (state: StratState) => state.layer
 );
 
 export const getStratAndAction = createSelector(

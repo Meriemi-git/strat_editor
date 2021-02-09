@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   Floor,
@@ -13,7 +13,7 @@ import {
   StratAction,
 } from '@strat-editor/data';
 import * as StratStore from '@strat-editor/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import {
   StratInfosDialogData,
@@ -28,15 +28,17 @@ import {
   LoadStrat,
   LoadStratSuccess,
   SelectFloor,
-  SelectLayer,
+  SetCurrentLayer,
 } from '@strat-editor/store';
+import { skip, takeUntil } from 'rxjs/operators';
+import { AutoUnsubscribe } from '../../../helpers/auto-unsubscribe';
 
 @Component({
   selector: 'strat-editor-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, OnDestroy {
   public $maps: Observable<Map[]>;
   public $drawingMode: Observable<DrawingMode>;
 
@@ -48,11 +50,18 @@ export class EditorComponent implements OnInit {
   public width: number = 0;
   public height: number = 0;
 
+  private unsubscriber = new Subject();
+
   constructor(
     private store: Store<StratStore.StratEditorState>,
     private activatedRoute: ActivatedRoute,
     public dialog: MatDialog
   ) {}
+
+  ngOnDestroy(): void {
+    this.unsubscriber.next();
+    this.unsubscriber.complete();
+  }
 
   ngOnInit(): void {
     this.$maps = this.store.select(StratStore.getAllMaps);
@@ -65,75 +74,39 @@ export class EditorComponent implements OnInit {
     this.store.dispatch(
       StratStore.SetDrawerAction({ action: new PolyLineAction() })
     );
-    this.store.select(StratStore.getUserInfos).subscribe((userInfos) => {
-      this.userInfos = userInfos;
-    });
+    this.store
+      .select(StratStore.getUserInfos)
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe((userInfos) => {
+        this.userInfos = userInfos;
+      });
 
-    this.activatedRoute.params.subscribe((params) => {
-      if (params.stratId) {
-        this.loadStrat(params.stratId);
-      }
-    });
-
-    this.store.select(StratStore.getSelectedMap).subscribe((map) => {
-      this.selectedMap = map;
-      console.log('e getSelectedMap map', map?.name);
-      if (map) {
-        if (!this.currentStrat) {
-          console.log(
-            'e getSelectedMap this.currentStrat',
-            this.currentStrat?.name
-          );
-
-          const newStrat = this.createNewStrat(map);
-          const defaultLayer = newStrat.layers[0];
-          console.log('e getSelectedMap dispatch CreateStrat');
-          this.store.dispatch(StratStore.CreateStrat({ strat: newStrat }));
-
-          this.store
-            .select(StratStore.getFloorById, defaultLayer.floorId)
-            .subscribe((floor) => {
-              if (floor) {
-                console.log('e getSelectedMap dispatch SelectFloor');
-                this.store.dispatch(SelectFloor({ floor }));
-              }
-            });
-        } else if (this.selectedMap != map) {
-          // TODO implement better management
-          this.openConfirmationDialog(map);
-        } else {
-          const defaultLayer = this.currentStrat.layers[0];
-          this.store
-            .select(StratStore.getFloorById, defaultLayer.floorId)
-            .subscribe((floor) => {
-              if (floor) {
-                console.log('e getSelectedMap dispatch SelectFloor');
-                this.store.dispatch(SelectFloor({ floor }));
-              }
-            });
+    this.activatedRoute.params
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe((params) => {
+        if (params.stratId) {
+          this.loadStrat(params.stratId);
         }
-      }
-    });
+      });
 
-    this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
-      console.log('e getSelectedFloor', floor?.name);
-      this.selectedFloor = floor;
-      if (this.currentStrat) {
-        const layer = this.currentStrat.layers.find(
-          (layer) => layer.floorId === floor._id
-        );
-        console.log('e getSelectedFloor layer from floorId :', layer);
-        console.log('e getSelectedFloor dispatch SelectLayer');
-        this.store.dispatch(
-          SelectLayer({ layer: layer ?? this.currentStrat.layers[0] })
-        );
-      } else {
-        // TODO what i must do ???
-      }
-    });
+    this.store
+      .select(StratStore.getSelectedMap)
+      .pipe(skip(1), takeUntil(this.unsubscriber))
+      .subscribe((map) => {
+        this.selectedMap = map;
+        this.manageMap(map);
+      });
+
+    this.store
+      .select(StratStore.getSelectedFloor)
+      .pipe(skip(1), takeUntil(this.unsubscriber))
+      .subscribe((floor) => {
+        this.manageFloor(floor);
+      });
 
     this.store
       .select(StratStore.getStratAndAction)
+      .pipe(takeUntil(this.unsubscriber))
       .subscribe((stratAndAction) => {
         this.currentStrat = stratAndAction.strat;
         if (stratAndAction.strat) {
@@ -141,25 +114,82 @@ export class EditorComponent implements OnInit {
         }
       });
 
-    this.store.select(StratStore.getCanvas).subscribe((canvas) => {
-      if (canvas) {
-        this.store.dispatch(
-          StratStore.UpdateStratLayer({
-            canvas,
-            floorId: this.selectedFloor._id,
-            floorName: this.selectedFloor.name,
-          })
-        );
+    this.store
+      .select(StratStore.getCanvas)
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe((canvas) => {
+        if (canvas) {
+          this.store.dispatch(
+            StratStore.UpdateStratLayer({
+              canvas,
+              floorId: this.selectedFloor._id,
+              floorName: this.selectedFloor.name,
+            })
+          );
+        }
+      });
+  }
+  private manageFloor(floor: Floor) {
+    console.log('e manageFloor', floor?.name);
+    this.selectedFloor = floor;
+    if (this.currentStrat) {
+      console.log('e There is a current strat', this.currentStrat.name);
+      const layer = this.currentStrat.layers.find(
+        (layer) => layer.floorId === floor._id
+      );
+      console.log('e manageFloor dispatch SetCurrentLayer');
+      this.store.dispatch(
+        SetCurrentLayer({ layer: layer ?? this.currentStrat.layers[0] })
+      );
+    } else {
+      // TODO what i must do ???
+    }
+  }
+  private manageMap(map: Map) {
+    console.log('e manageMap map', map?.name);
+    if (map) {
+      if (!this.currentStrat) {
+        console.log('e manageMap this.currentStrat', this.currentStrat?.name);
+        const newStrat = this.createNewStrat(map);
+        const defaultLayer = newStrat.layers[0];
+        console.log('e manageMap dispatch CreateStrat');
+        this.store.dispatch(StratStore.CreateStrat({ strat: newStrat }));
+
+        this.store
+          .select(StratStore.getFloorById, defaultLayer.floorId)
+          .subscribe((floor) => {
+            if (floor) {
+              console.log('e manageMap dispatch SelectFloor');
+              this.store.dispatch(SelectFloor({ floor }));
+            }
+          });
+      } else if (this.selectedMap != map) {
+        // TODO implement better management
+        this.openConfirmationDialog(map);
+      } else {
+        console.log('e current strat exists');
+        const defaultLayer = this.currentStrat.layers[0];
+        this.store
+          .select(StratStore.getFloorById, defaultLayer.floorId)
+          .subscribe((floor) => {
+            if (floor) {
+              console.log('e manageMap dispatch SelectFloor');
+              this.store.dispatch(SelectFloor({ floor }));
+            }
+          });
       }
-    });
+    } else {
+      // TODO manage map selected is null
+    }
   }
 
-  manageStratByAction(stratAndAction: any) {
-    console.log('Manage Strat');
+  private manageStratByAction(stratAndAction: any) {
+    console.log('e Manage Strat');
 
     switch (stratAndAction.action) {
       case StratAction.LOAD:
-        console.log('Manage Strat LOAD');
+        console.log('e Manage Strat LOAD');
+        console.log('e Manage Strat Dispatch SelectMap');
         this.store
           .select(StratStore.getMapById, stratAndAction.strat.mapId)
           .subscribe((map) => {
@@ -170,11 +200,8 @@ export class EditorComponent implements OnInit {
 
         break;
       case StratAction.CREATE:
-        console.log('Manage Strat CREATE');
-        const fullFilledLayer: Layer = stratAndAction.strat.layers.find(
-          (layer) => layer.canvasState
-        );
-        console.log('Manage Strat Dispatch SelectMap');
+        console.log('e Manage Strat CREATE');
+        console.log('e Manage Strat Dispatch SelectMap');
         this.store
           .select(StratStore.getMapById, stratAndAction.strat.mapId)
           .subscribe((map) => {
@@ -184,19 +211,19 @@ export class EditorComponent implements OnInit {
           });
         break;
       case StratAction.UPDATE:
-        console.log('Manage Strat UPDATE');
+        console.log('e Manage Strat UPDATE');
         break;
       case StratAction.SAVE:
-        console.log('Manage Strat SAVE');
+        console.log('e Manage Strat SAVE');
         break;
       case StratAction.UPDATE_INFOS:
-        console.log('Manage Strat UPDATE_INFOS');
+        console.log('e Manage Strat UPDATE_INFOS');
         this.store.dispatch(
           StratStore.SaveStrat({ strat: stratAndAction.strat })
         );
         break;
       case StratAction.UPDATE_LAYER:
-        console.log('Manage Strat UPDATE_LAYER');
+        console.log('e Manage Strat UPDATE_LAYER');
         // TODO save in local storage
         break;
       default:
@@ -216,7 +243,7 @@ export class EditorComponent implements OnInit {
         console.log('dispatch LoadStratSuccess', strat);
         this.store.dispatch(LoadStratSuccess({ strat }));
       } else {
-        console.log('dispatch  (from backend)', stratId);
+        console.log('dispatch LoadStrat (from backend)', stratId);
         this.store.dispatch(LoadStrat({ stratId }));
       }
     });
@@ -276,7 +303,8 @@ export class EditorComponent implements OnInit {
   }
 
   onMapSelected(map: Map) {
-    this.store.dispatch(StratStore.SelectMap({ map: map }));
+    console.log('On Map Selected');
+    this.store.dispatch(StratStore.SelectMap({ map }));
   }
 
   onFloorSelected(floor: Floor) {
