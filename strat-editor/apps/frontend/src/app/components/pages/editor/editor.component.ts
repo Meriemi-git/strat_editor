@@ -65,6 +65,9 @@ export class EditorComponent implements OnInit {
     this.store.dispatch(
       StratStore.SetDrawerAction({ action: new PolyLineAction() })
     );
+    this.store.select(StratStore.getUserInfos).subscribe((userInfos) => {
+      this.userInfos = userInfos;
+    });
 
     this.activatedRoute.params.subscribe((params) => {
       if (params.stratId) {
@@ -74,46 +77,69 @@ export class EditorComponent implements OnInit {
 
     this.store.select(StratStore.getSelectedMap).subscribe((map) => {
       this.selectedMap = map;
+      console.log('e getSelectedMap map', map?.name);
       if (map) {
         if (!this.currentStrat) {
+          console.log(
+            'e getSelectedMap this.currentStrat',
+            this.currentStrat?.name
+          );
+
           const newStrat = this.createNewStrat(map);
           const defaultLayer = newStrat.layers[0];
+          console.log('e getSelectedMap dispatch CreateStrat');
           this.store.dispatch(StratStore.CreateStrat({ strat: newStrat }));
+
           this.store
             .select(StratStore.getFloorById, defaultLayer.floorId)
             .subscribe((floor) => {
               if (floor) {
+                console.log('e getSelectedMap dispatch SelectFloor');
                 this.store.dispatch(SelectFloor({ floor }));
-                this.store.dispatch(
-                  StratStore.SelectLayer({ layer: defaultLayer })
-                );
               }
             });
-        } else {
+        } else if (this.selectedMap != map) {
           // TODO implement better management
           this.openConfirmationDialog(map);
+        } else {
+          const defaultLayer = this.currentStrat.layers[0];
+          this.store
+            .select(StratStore.getFloorById, defaultLayer.floorId)
+            .subscribe((floor) => {
+              if (floor) {
+                console.log('e getSelectedMap dispatch SelectFloor');
+                this.store.dispatch(SelectFloor({ floor }));
+              }
+            });
         }
       }
     });
 
     this.store.select(StratStore.getSelectedFloor).subscribe((floor) => {
+      console.log('e getSelectedFloor', floor?.name);
       this.selectedFloor = floor;
       if (this.currentStrat) {
         const layer = this.currentStrat.layers.find(
           (layer) => layer.floorId === floor._id
         );
-        this.store.dispatch(SelectLayer({ layer }));
+        console.log('e getSelectedFloor layer from floorId :', layer);
+        console.log('e getSelectedFloor dispatch SelectLayer');
+        this.store.dispatch(
+          SelectLayer({ layer: layer ?? this.currentStrat.layers[0] })
+        );
       } else {
         // TODO what i must do ???
       }
     });
 
-    this.store.select(StratStore.getStrat).subscribe((strat) => {
-      this.currentStrat = strat;
-      if (strat) {
-        this.manageStrat(strat);
-      }
-    });
+    this.store
+      .select(StratStore.getStratAndAction)
+      .subscribe((stratAndAction) => {
+        this.currentStrat = stratAndAction.strat;
+        if (stratAndAction.strat) {
+          this.manageStratByAction(stratAndAction);
+        }
+      });
 
     this.store.select(StratStore.getCanvas).subscribe((canvas) => {
       if (canvas) {
@@ -127,37 +153,55 @@ export class EditorComponent implements OnInit {
       }
     });
   }
-  manageStrat(strat: Strat) {
-    this.store.select(StratStore.getStratAction).subscribe((action) => {
-      switch (action) {
-        case StratAction.LOAD:
-        case StratAction.CREATE:
-          const fullFilledLayer: Layer = strat.layers.find(
-            (layer) => layer.canvasState
-          );
-          this.store
-            .select(StratStore.getMapById, strat.mapId)
-            .subscribe((map) => {
-              if (map) {
-                this.store.dispatch(StratStore.SelectMap({ map }));
-                this.store.dispatch(
-                  StratStore.SelectLayer({
-                    layer: fullFilledLayer ?? strat.layers[0],
-                  })
-                );
-              }
-            });
-          break;
-        case StratAction.UPDATE:
-          break;
-        case StratAction.UPDATE_INFOS:
-          break;
-        case StratAction.UPDATE_LAYER:
-          break;
-        default:
-          break;
-      }
-    });
+
+  manageStratByAction(stratAndAction: any) {
+    console.log('Manage Strat');
+
+    switch (stratAndAction.action) {
+      case StratAction.LOAD:
+        console.log('Manage Strat LOAD');
+        this.store
+          .select(StratStore.getMapById, stratAndAction.strat.mapId)
+          .subscribe((map) => {
+            if (map) {
+              this.store.dispatch(StratStore.SelectMap({ map }));
+            }
+          });
+
+        break;
+      case StratAction.CREATE:
+        console.log('Manage Strat CREATE');
+        const fullFilledLayer: Layer = stratAndAction.strat.layers.find(
+          (layer) => layer.canvasState
+        );
+        console.log('Manage Strat Dispatch SelectMap');
+        this.store
+          .select(StratStore.getMapById, stratAndAction.strat.mapId)
+          .subscribe((map) => {
+            if (map) {
+              this.store.dispatch(StratStore.SelectMap({ map }));
+            }
+          });
+        break;
+      case StratAction.UPDATE:
+        console.log('Manage Strat UPDATE');
+        break;
+      case StratAction.SAVE:
+        console.log('Manage Strat SAVE');
+        break;
+      case StratAction.UPDATE_INFOS:
+        console.log('Manage Strat UPDATE_INFOS');
+        this.store.dispatch(
+          StratStore.SaveStrat({ strat: stratAndAction.strat })
+        );
+        break;
+      case StratAction.UPDATE_LAYER:
+        console.log('Manage Strat UPDATE_LAYER');
+        // TODO save in local storage
+        break;
+      default:
+        break;
+    }
   }
 
   /**
@@ -165,14 +209,14 @@ export class EditorComponent implements OnInit {
    * @param stratId Strat id to be laoded
    */
   private loadStrat(stratId: string) {
-    console.log('loadStrat');
+    console.log('Loading Strat');
     this.store.select(StratStore.getStratById, stratId).subscribe((strat) => {
-      console.log('loadStrat strat', strat);
+      console.log('getStratById (from store):', strat);
       if (strat) {
-        console.log('LoadStratSuccess LoadStratSuccess', strat);
+        console.log('dispatch LoadStratSuccess', strat);
         this.store.dispatch(LoadStratSuccess({ strat }));
       } else {
-        console.log('dispatch LoadStrat', strat);
+        console.log('dispatch  (from backend)', stratId);
         this.store.dispatch(LoadStrat({ stratId }));
       }
     });
@@ -296,9 +340,6 @@ export class EditorComponent implements OnInit {
       dialogRef.afterClosed().subscribe((stratInfos: StratInfosDialogData) => {
         if (stratInfos) {
           this.store.dispatch(StratStore.UpdateStratInfos(stratInfos));
-          this.store.select(StratStore.getStrat).subscribe((strat) => {
-            this.store.dispatch(StratStore.SaveStrat({ strat }));
-          });
         }
       });
     }

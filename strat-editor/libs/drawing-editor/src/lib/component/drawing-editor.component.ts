@@ -120,13 +120,16 @@ export class DrawingEditorComponent implements OnInit {
 
     this.store.select(StratStore.getCurrentLayer).subscribe((layer) => {
       if (layer) {
+        console.log('d getCurrentLayer clear');
         this.clear();
         if (layer.canvasState) {
+          console.log('d getCurrentLayer loadCanvas');
           this.loadCanvas(layer.canvasState);
         } else {
           this.store
             .select(StratStore.getFloorById, layer.floorId)
             .subscribe((floor) => {
+              console.log('d getCurrentLayer setFloorImage');
               this.setFloorImage(floor);
             });
         }
@@ -350,15 +353,7 @@ export class DrawingEditorComponent implements OnInit {
 
   public setCanvasState(canvasState: string): void {
     console.log('loadFromJSON', canvasState);
-    this.canvas.loadFromJSON(
-      canvasState,
-      this.canvasStateIsLoaded,
-      (o, object: fabric.Object) => {
-        if (object.name === 'map') {
-          console.log('reviver', object);
-        }
-      }
-    );
+    this.canvas.loadFromJSON(canvasState, this.canvasStateIsLoaded);
     this.canvas.renderAll();
   }
 

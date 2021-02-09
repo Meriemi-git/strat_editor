@@ -39,7 +39,6 @@ export class StratController {
   @Post()
   @UseGuards(AuthGuard('ConfirmedStrategy'))
   async addstrat(@Body() strat: Strat): Promise<Strat> {
-    console.log('post strat', strat);
     return this.stratService.addStrat(strat);
   }
 

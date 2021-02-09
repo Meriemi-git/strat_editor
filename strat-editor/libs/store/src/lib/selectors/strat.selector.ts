@@ -30,3 +30,8 @@ export const getCurrentLayer = createSelector(
   getStratState,
   (state: StratState) => state.currentLayer
 );
+
+export const getStratAndAction = createSelector(
+  getStratState,
+  (state: StratState) => ({ strat: state.strat, action: state.action })
+);

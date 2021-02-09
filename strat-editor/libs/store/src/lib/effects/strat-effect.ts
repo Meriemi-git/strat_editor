@@ -57,9 +57,9 @@ export class StratEffect {
       ofType(actions.UpdateStrat),
       mergeMap((action) =>
         this.stratService.updateStrat(action.strat).pipe(
-          map((strat) => actions.SaveStratSuccess({ strat })),
+          map((strat) => actions.UpdateStratSuccess({ strat })),
           catchError((error: HttpErrorResponse) =>
-            of(actions.SaveStratError({ error }))
+            of(actions.UpdateStratError({ error }))
           )
         )
       )

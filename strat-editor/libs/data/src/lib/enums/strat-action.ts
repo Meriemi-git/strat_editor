@@ -1,5 +1,4 @@
 export enum StratAction {
-  CREATION = 'CREATION',
   UPDATE = 'UPDATE',
   SAVE = 'SAVE',
   DELETE = 'DELETE',
