@@ -1,6 +1,7 @@
 import {
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   HostListener,
   Input,
   OnDestroy,
@@ -8,7 +9,6 @@ import {
 } from '@angular/core';
 import {
   Agent,
-  MapLoadingError,
   Image,
   Floor,
   DrawingMode,
@@ -16,9 +16,6 @@ import {
   DrawerAction,
   Map as _Map,
   KEY_CODE,
-  Strat,
-  Layer,
-  StratAction,
 } from '@strat-editor/data';
 import { Store } from '@ngrx/store';
 import * as StratStore from '@strat-editor/store';
@@ -34,7 +31,7 @@ import { TriangleDrawer } from '../../drawers/triangle-drawer';
 import { LineArrow } from '../../fabricjs/line-arrow';
 import { TriangleArrow } from '../../fabricjs/triangle-arrow';
 import { ImageHelperService } from '../../services/image-helper.service';
-import { skip, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -47,6 +44,8 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
   @Input() canvasHeight: number;
 
   public drawingMode: DrawingMode;
+
+  public mapLoadingError = new EventEmitter<void>();
 
   private canvas: fabric.Canvas;
 
@@ -90,24 +89,28 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
     this.initCanvas();
     this.initializeCanvasEvents();
     this.resize(window.innerWidth, window.innerHeight - 60);
+
     this.store
       .select(StratStore.getColor)
       .pipe(takeUntil(this.unsubscriber))
       .subscribe((color) => {
         this.setColor(color);
       });
+
     this.store
       .select(StratStore.getSelectedOption)
       .pipe(takeUntil(this.unsubscriber))
       .subscribe((option) => {
         this.setDrawerOptions(option);
       });
+
     this.store
       .select(StratStore.getFontFamily)
       .pipe(takeUntil(this.unsubscriber))
       .subscribe((fontFamily) => {
         this.setFontFamily(fontFamily);
       });
+
     this.store
       .select(StratStore.getFontSize)
       .pipe(takeUntil(this.unsubscriber))
@@ -406,7 +409,7 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
   }
 
   public setFloorImage(floor: Floor): any {
-    console.log('setFloorImage', floor);
+    console.log('d setFloorImage', floor);
     fabric.Image.fromURL(
       this.ihs.getFloorImage(floor),
       function (image) {
@@ -431,9 +434,11 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
           console.log('d setFloorImage Dispatch SaveCanvasState');
           this.store.dispatch(StratStore.SaveCanvas({ canvas: canvasState }));
         } else {
-          throw new MapLoadingError(
-            'Cannot load backgroung image for ' + floor.name
-          );
+          console.log('d Drawing Editor mapLoadingError');
+          this.mapLoadingError.emit(floor.name);
+          // throw new MapLoadingError(
+          //   'Cannot load backgroung image for ' + floor.name
+          // );
         }
       }.bind(this)
     );

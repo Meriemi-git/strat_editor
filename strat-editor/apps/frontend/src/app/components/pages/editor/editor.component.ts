@@ -11,6 +11,7 @@ import {
   PolyLineAction,
   Layer,
   StratAction,
+  NotificationType,
 } from '@strat-editor/data';
 import * as StratStore from '@strat-editor/store';
 import { Observable, Subject } from 'rxjs';
@@ -23,14 +24,16 @@ import {
   DualChoiceDialogComponent,
   DualChoiceDialogData,
 } from '../../molecules/dual-choice-dialog/dual-choice-dialog.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
+  ClearStratState,
   LoadStrat,
   LoadStratSuccess,
   SelectFloor,
   SetCurrentLayer,
 } from '@strat-editor/store';
-import { skip, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
+import { NotificationService } from '@strat-editor/services';
 
 @Component({
   selector: 'strat-editor-editor',
@@ -52,11 +55,14 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<StratStore.StratEditorState>,
+    private notificationService: NotificationService,
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     public dialog: MatDialog
   ) {}
 
   ngOnDestroy(): void {
+    console.warn('destroy editor');
     this.store.dispatch(StratStore.ClearStratState());
     this.store.dispatch(StratStore.ClearMapState());
     this.unsubscriber.next();
@@ -93,8 +99,8 @@ export class EditorComponent implements OnInit, OnDestroy {
       .select(StratStore.getSelectedMap)
       .pipe(takeUntil(this.unsubscriber))
       .subscribe((map) => {
-        this.selectedMap = map;
         this.manageMap(map);
+        this.selectedMap = map;
       });
 
     this.store
@@ -147,6 +153,8 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
   private manageMap(map: Map) {
     console.log('e manageMap map', map?.name);
+    console.log('e manageMap this.selectedMap', this.selectedMap?.name);
+
     if (map) {
       if (!this.currentStrat) {
         console.log('e manageMap this.currentStrat', this.currentStrat?.name);
@@ -154,7 +162,6 @@ export class EditorComponent implements OnInit, OnDestroy {
         const defaultLayer = newStrat.layers[0];
         console.log('e manageMap dispatch CreateStrat');
         this.store.dispatch(StratStore.CreateStrat({ strat: newStrat }));
-
         this.store
           .select(StratStore.getFloorById, defaultLayer.floorId)
           .subscribe((floor) => {
@@ -163,23 +170,29 @@ export class EditorComponent implements OnInit, OnDestroy {
               this.store.dispatch(SelectFloor({ floor }));
             }
           });
-      } else if (this.selectedMap != map) {
-        // TODO implement better management
-        this.openConfirmationDialog(map);
       } else {
         console.log('e current strat exists');
-        const defaultLayer = this.currentStrat.layers[0];
-        this.store
-          .select(StratStore.getFloorById, defaultLayer.floorId)
-          .subscribe((floor) => {
-            if (floor) {
-              console.log('e manageMap dispatch SelectFloor');
-              this.store.dispatch(SelectFloor({ floor }));
-            }
-          });
+        if (this.selectedMap && this.selectedMap._id != map._id) {
+          // TODO implement better management
+          console.log('e manageMap map different');
+          this.openConfirmationDialog(map);
+        } else {
+          const defaultLayer = this.currentStrat.layers[0];
+          this.store
+            .select(StratStore.getFloorById, defaultLayer.floorId)
+            .subscribe((floor) => {
+              if (floor) {
+                console.log('e manageMap dispatch SelectFloor');
+                this.store.dispatch(SelectFloor({ floor }));
+              }
+            });
+        }
       }
     } else {
       // TODO manage map selected is null
+      console.log('Manage map null');
+      // this.store.dispatch(StratStore.ClearStratState());
+      // this.store.dispatch(StratStore.ClearMapState());
     }
   }
 
@@ -268,11 +281,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((confirm) => {
       if (confirm) {
-        this.store.dispatch(
-          StratStore.SelectFloor({
-            floor: selectedMap ? selectedMap.floors[0] : null,
-          })
-        );
+        this.router.navigateByUrl('editor');
       }
     });
   }
@@ -382,5 +391,15 @@ export class EditorComponent implements OnInit, OnDestroy {
   public stopWheelEvent($event) {
     $event.preventDefault();
     $event.stopPropagation();
+  }
+
+  public onMapLoadingError(floorImageName: string) {
+    console.error('onMapLoadingError');
+    this.notificationService.displayNotification({
+      message: 'Error when loading floor image',
+      type: NotificationType.error,
+    });
+    this.store.dispatch(StratStore.ClearStratState());
+    this.store.dispatch(StratStore.ClearMapState());
   }
 }
