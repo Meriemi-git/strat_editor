@@ -66,6 +66,7 @@
     </strat-editor-drawing-status>
     <strat-editor-drawing-toolbar
       class="strat-editor-drawing-toolbar"
+      [isConnected]="userInfos !== null"
       (enableSelectMode)="onSelect()"
       (enableDrawingMode)="onDraw()"
       (enableDraggingMode)="onDrag()"

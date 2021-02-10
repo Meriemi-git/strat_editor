@@ -38,7 +38,7 @@
       </button>
       <mat-label>Drag</mat-label>
     </div>
-    <div class="button">
+    <div class="button" *ngIf="isConnected">
       <button
         mat-mini-fab
         color="primary"

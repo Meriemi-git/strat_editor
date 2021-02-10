@@ -2,7 +2,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  OnInit,
+  Input,
   Output,
   Renderer2,
   ViewChild,
@@ -15,9 +15,7 @@ import { DrawingMode } from '@strat-editor/data';
   styleUrls: ['./drawing-toolbar.component.scss'],
 })
 export class DrawingToolbarComponent {
-  @ViewChild('toolbar') toolbar: ElementRef;
-  @ViewChild('toolbarIcon') toolbarIcon: ElementRef;
-
+  @Input() isConnected: boolean;
   @Output() enableSelectMode = new EventEmitter<void>();
   @Output() enableDrawingMode = new EventEmitter<void>();
   @Output() enableDraggingMode = new EventEmitter<void>();
@@ -25,6 +23,9 @@ export class DrawingToolbarComponent {
   @Output() showInfos = new EventEmitter<void>();
   @Output() openStrat = new EventEmitter<void>();
   @Output() deleteStrat = new EventEmitter<void>();
+
+  @ViewChild('toolbar') toolbar: ElementRef;
+  @ViewChild('toolbarIcon') toolbarIcon: ElementRef;
   public toolbarIconName: string = 'keyboard_arrow_up';
   private toolbarOpened: boolean = false;
   public DrawingModeEnum = DrawingMode;
