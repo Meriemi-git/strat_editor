@@ -50,7 +50,7 @@
         (mapSelected)="onMapSelected($event)"
         (floorSelected)="onFloorSelected($event)"
         [maps]="$maps | async"
-        [selectedMap]="$selectedMap | async"
+        [selectedMap]="selectedMap"
         [selectedFloor]="selectedFloor"
       >
       </strat-editor-floor-chooser>

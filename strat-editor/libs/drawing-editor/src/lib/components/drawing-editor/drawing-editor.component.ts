@@ -6,6 +6,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  Output,
 } from '@angular/core';
 import {
   Agent,
@@ -42,10 +43,9 @@ import { Subject } from 'rxjs';
 export class DrawingEditorComponent implements OnInit, OnDestroy {
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
+  @Output() mapLoadingError = new EventEmitter<string>();
 
   public drawingMode: DrawingMode;
-
-  public mapLoadingError = new EventEmitter<void>();
 
   private canvas: fabric.Canvas;
 
@@ -178,6 +178,8 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
                 this.setFloorImage(floor);
               });
           }
+        } else {
+          console.log('d getCurrentLayer is null do nothing');
         }
       });
   }

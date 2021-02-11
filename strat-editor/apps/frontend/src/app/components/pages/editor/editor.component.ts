@@ -42,7 +42,6 @@ import { NotificationService } from '@strat-editor/services';
 export class EditorComponent implements OnInit, OnDestroy {
   public $maps: Observable<Map[]>;
   public $drawingMode: Observable<DrawingMode>;
-  public $selectedMap: Observable<Map>;
   public selectedMap: Map;
   public selectedFloor: Floor;
   public currentStrat: Strat;
@@ -71,7 +70,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.$maps = this.store.select(StratStore.getAllMaps);
     this.$drawingMode = this.store.select(StratStore.getDrawingMode);
-    this.$selectedMap = this.store.select(StratStore.getSelectedMap);
     this.store.dispatch(StratStore.FetchMaps());
     this.store.dispatch(StratStore.FetchAgents());
     this.store.dispatch(StratStore.FetchDrawerActions());
@@ -100,6 +98,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscriber))
       .subscribe((map) => {
         this.manageMap(map);
+        this.selectedMap = map;
       });
 
     this.store
@@ -158,18 +157,8 @@ export class EditorComponent implements OnInit, OnDestroy {
       if (!this.currentStrat) {
         console.log('e manageMap this.currentStrat', this.currentStrat?.name);
         const newStrat = this.createNewStrat(map);
-        const defaultLayer = newStrat.layers[0];
         console.log('e manageMap dispatch CreateStrat');
         this.store.dispatch(StratStore.CreateStrat({ strat: newStrat }));
-        this.store
-          .select(StratStore.getFloorById, defaultLayer.floorId)
-          .subscribe((floor) => {
-            if (floor) {
-              console.log('e manageMap dispatch SelectFloor');
-              this.store.dispatch(SelectFloor({ floor }));
-            }
-          });
-        this.selectedMap = map;
       } else {
         console.log('e current strat exists');
         if (this.selectedMap && this.selectedMap._id != map._id) {
@@ -186,7 +175,6 @@ export class EditorComponent implements OnInit, OnDestroy {
                 this.store.dispatch(SelectFloor({ floor }));
               }
             });
-          this.selectedMap = map;
         }
       }
     } else {
@@ -198,7 +186,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   private manageStratByAction(stratAndAction: any) {
     console.log('e Manage Strat');
-
+    const defaultLayer = stratAndAction.strat.layers[0];
     switch (stratAndAction.action) {
       case StratAction.LOAD:
         console.log('e Manage Strat LOAD');
@@ -216,10 +204,11 @@ export class EditorComponent implements OnInit, OnDestroy {
         console.log('e Manage Strat CREATE');
         console.log('e Manage Strat Dispatch SelectMap');
         this.store
-          .select(StratStore.getMapById, stratAndAction.strat.mapId)
-          .subscribe((map) => {
-            if (map) {
-              this.store.dispatch(StratStore.SelectMap({ map }));
+          .select(StratStore.getFloorById, defaultLayer.floorId)
+          .subscribe((floor) => {
+            if (floor) {
+              console.log('e manageMap dispatch SelectFloor');
+              this.store.dispatch(SelectFloor({ floor }));
             }
           });
         break;
@@ -262,9 +251,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  public onCanvasUpdated(canvas: string) {}
-
-  openConfirmationDialog(selectedMap: Map): void {
+  openConfirmationDialog(map: Map): void {
     const dialogRef = this.dialog.open(DualChoiceDialogComponent, {
       width: '400px',
       hasBackdrop: true,
@@ -281,8 +268,12 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((confirm) => {
       if (confirm) {
-        this.router.navigateByUrl('editor');
+        console.log('e openConfirmationDialog dispatch SelectFloor');
+        const newStrat = this.createNewStrat(map);
+        console.log('e manageMap dispatch CreateStrat');
+        this.store.dispatch(StratStore.CreateStrat({ strat: newStrat }));
       } else {
+        console.log('e openConfirmationDialog dispatch SelectMap');
         this.store.dispatch(StratStore.SelectMap({ map: this.selectedMap }));
       }
     });
@@ -395,8 +386,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     $event.stopPropagation();
   }
 
-  public onMapLoadingError(floorImageName: string) {
-    console.error('onMapLoadingError');
+  public onMapLoadingError($event) {
+    console.warn('e onMapLoadingError');
     this.notificationService.displayNotification({
       message: 'Error when loading floor image',
       type: NotificationType.error,

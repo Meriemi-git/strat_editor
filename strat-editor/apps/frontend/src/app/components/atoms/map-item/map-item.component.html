@@ -1,6 +1,7 @@
 <div class="map" (mouseover)="onHover = true" (mouseout)="onHover = false">
   <img
     mat-image
+    class="map-image"
     src="{{ 'api/map/image/' + map._id }}"
     alt="{{ map.name }} image"
     [width]="350"
