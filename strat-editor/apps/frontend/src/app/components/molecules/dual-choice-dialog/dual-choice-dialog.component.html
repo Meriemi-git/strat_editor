@@ -3,8 +3,9 @@
     <h1 class="mat-title">{{ dialogData.title }}</h1>
   </header>
   <section class="modal-body">
-    <p>
-      {{ dialogData.description }}
+    <p *ngFor="let line of dialogData.description">
+      {{ line }}
+      <br />
     </p>
   </section>
   <footer class="modal-footer">

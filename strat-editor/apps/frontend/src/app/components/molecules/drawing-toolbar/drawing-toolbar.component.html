@@ -10,7 +10,7 @@
         mat-mini-fab
         color="primary"
         matTooltip="Switch to draw mode"
-        (click)="enableDrawingMode.emit()"
+        (click)="selectedAction.emit(DrawingActions.ENABLE_DRAWING_MODE)"
       >
         <mat-icon>create</mat-icon>
       </button>
@@ -21,7 +21,7 @@
         mat-mini-fab
         color="warn"
         matTooltip="Switch to selection mode"
-        (click)="enableSelectMode.emit()"
+        (click)="selectedAction.emit(DrawingActions.ENABLE_SELECT_MODE)"
       >
         <mat-icon>select_all</mat-icon>
       </button>
@@ -32,7 +32,7 @@
         mat-mini-fab
         color="accent"
         matTooltip="Switch to dragging mode"
-        (click)="enableDraggingMode.emit()"
+        (click)="selectedAction.emit(DrawingActions.ENABLE_DRAGGING_MODE)"
       >
         <mat-icon>open_with</mat-icon>
       </button>
@@ -43,18 +43,18 @@
         mat-mini-fab
         color="primary"
         matTooltip="Save your strat"
-        (click)="saveStrat.emit()"
+        (click)="selectedAction.emit(DrawingActions.SAVE_STRAT)"
       >
         <mat-icon>save</mat-icon>
       </button>
       <mat-label>Save</mat-label>
     </div>
-    <div class="button">
+    <div class="button" *ngIf="isConnected">
       <button
         mat-mini-fab
         color="primary"
         matTooltip="Open existing strat"
-        (click)="openStrat.emit()"
+        (click)="selectedAction.emit(DrawingActions.OPEN_STRAT)"
       >
         <mat-icon>folder_open</mat-icon>
       </button>
@@ -65,18 +65,29 @@
         mat-mini-fab
         color="primary"
         matTooltip="Show strat infos"
-        (click)="showInfos.emit()"
+        (click)="selectedAction.emit(DrawingActions.SHOW_INFOS)"
       >
         <mat-icon>info</mat-icon>
       </button>
       <mat-label>Infos</mat-label>
     </div>
-    <div class="button">
+    <div class="button" *ngIf="isConnected">
+      <button
+        mat-mini-fab
+        color="warn"
+        matTooltip="Clear all draws"
+        (click)="selectedAction.emit(DrawingActions.CLEAR_STRAT)"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+      <mat-label>Clear</mat-label>
+    </div>
+    <div class="button" *ngIf="isConnected">
       <button
         mat-mini-fab
         color="warn"
         matTooltip="Delete this strat"
-        (click)="deleteStrat.emit()"
+        (click)="selectedAction.emit(DrawingActions.DELETE_STRAT)"
       >
         <mat-icon>delete</mat-icon>
       </button>

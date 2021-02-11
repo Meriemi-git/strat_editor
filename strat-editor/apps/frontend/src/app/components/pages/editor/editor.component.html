@@ -74,14 +74,7 @@
     <strat-editor-drawing-toolbar
       class="strat-editor-drawing-toolbar"
       [isConnected]="userInfos !== null"
-      (enableSelectMode)="onSelect()"
-      (enableDrawingMode)="onDraw()"
-      (enableDraggingMode)="onDrag()"
-      (saveStrat)="onSave()"
-      (showInfos)="onShowInfos()"
-      (openStrat)="onOpenStrat()"
-      (deleteStrat)="onDeleteStrat()"
-      (wheel)="stopWheelEvent($event)"
+      (selectedAction)="onSelectToolbarAction($event)"
     >
     </strat-editor-drawing-toolbar>
   </div>

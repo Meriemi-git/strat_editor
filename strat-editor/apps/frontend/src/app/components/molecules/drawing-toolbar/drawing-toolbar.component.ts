@@ -7,7 +7,7 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { DrawingMode } from '@strat-editor/data';
+import { DrawingMode, DrawingToolbarAction } from '@strat-editor/data';
 
 @Component({
   selector: 'strat-editor-drawing-toolbar',
@@ -16,19 +16,15 @@ import { DrawingMode } from '@strat-editor/data';
 })
 export class DrawingToolbarComponent {
   @Input() isConnected: boolean;
-  @Output() enableSelectMode = new EventEmitter<void>();
-  @Output() enableDrawingMode = new EventEmitter<void>();
-  @Output() enableDraggingMode = new EventEmitter<void>();
-  @Output() saveStrat = new EventEmitter<void>();
-  @Output() showInfos = new EventEmitter<void>();
-  @Output() openStrat = new EventEmitter<void>();
-  @Output() deleteStrat = new EventEmitter<void>();
+  @Output() selectedAction = new EventEmitter<DrawingToolbarAction>();
 
   @ViewChild('toolbar') toolbar: ElementRef;
   @ViewChild('toolbarIcon') toolbarIcon: ElementRef;
   public toolbarIconName: string = 'keyboard_arrow_up';
   private toolbarOpened: boolean = false;
   public DrawingModeEnum = DrawingMode;
+
+  public DrawingActions = DrawingToolbarAction;
 
   constructor(private renderer: Renderer2) {}
 

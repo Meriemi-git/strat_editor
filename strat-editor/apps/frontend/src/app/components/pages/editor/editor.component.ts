@@ -12,6 +12,7 @@ import {
   Layer,
   StratAction,
   NotificationType,
+  DrawingToolbarAction,
 } from '@strat-editor/data';
 import * as StratStore from '@strat-editor/store';
 import { Observable, Subject } from 'rxjs';
@@ -113,9 +114,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscriber))
       .subscribe((stratAndAction) => {
         this.currentStrat = stratAndAction.strat;
-        if (stratAndAction.strat) {
-          this.manageStratByAction(stratAndAction);
-        }
+        this.manageStratByAction(stratAndAction);
       });
 
     this.store
@@ -133,6 +132,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         }
       });
   }
+
   private manageFloor(floor: Floor) {
     console.log('e manageFloor', floor?.name);
     this.selectedFloor = floor;
@@ -149,6 +149,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       // TODO what i must do ???
     }
   }
+
   private manageMap(map: Map) {
     console.log('e manageMap map', map?.name);
     console.log('e manageMap this.selectedMap', this.selectedMap?.name);
@@ -164,7 +165,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         if (this.selectedMap && this.selectedMap._id != map._id) {
           // TODO implement better management
           console.log('e manageMap map different');
-          this.openConfirmationDialog(map);
+          this.askForSwitchMap(map);
         } else {
           const defaultLayer = this.currentStrat.layers[0];
           this.store
@@ -185,8 +186,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   private manageStratByAction(stratAndAction: any) {
-    console.log('e Manage Strat');
-    const defaultLayer = stratAndAction.strat.layers[0];
+    console.log('e Manage Strat action :', stratAndAction.action);
     switch (stratAndAction.action) {
       case StratAction.LOAD:
         console.log('e Manage Strat LOAD');
@@ -203,6 +203,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       case StratAction.CREATE:
         console.log('e Manage Strat CREATE');
         console.log('e Manage Strat Dispatch SelectMap');
+        const defaultLayer = stratAndAction.strat.layers[0];
         this.store
           .select(StratStore.getFloorById, defaultLayer.floorId)
           .subscribe((floor) => {
@@ -228,6 +229,14 @@ export class EditorComponent implements OnInit, OnDestroy {
         console.log('e Manage Strat UPDATE_LAYER');
         // TODO save in local storage
         break;
+      case StratAction.DELETE:
+        console.log('e Manage Strat DELETE');
+        this.store.dispatch(StratStore.ClearStratState());
+        this.store.dispatch(StratStore.ClearCanvasState());
+        this.store.dispatch(StratStore.ClearMapState());
+        this.router.navigateByUrl('editor');
+        // TODO save in local storage
+        break;
       default:
         break;
     }
@@ -251,14 +260,15 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  openConfirmationDialog(map: Map): void {
+  private askForSwitchMap(map: Map): void {
     const dialogRef = this.dialog.open(DualChoiceDialogComponent, {
       width: '400px',
       hasBackdrop: true,
       data: {
         title: 'Changing Map',
-        description:
+        description: [
           'You have unsave changes for this map, you will loose them if you continue.',
+        ],
         cancelButtonText: 'Cancel',
         confirmButtonText: 'Continue',
       } as DualChoiceDialogData,
@@ -268,16 +278,56 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((confirm) => {
       if (confirm) {
-        console.log('e openConfirmationDialog dispatch SelectFloor');
         this.router.navigateByUrl('editor');
         const newStrat = this.createNewStrat(map);
-        console.log('e manageMap dispatch CreateStrat');
         this.store.dispatch(StratStore.CreateStrat({ strat: newStrat }));
       } else {
-        console.log('e openConfirmationDialog dispatch SelectMap');
         this.store.dispatch(StratStore.SelectMap({ map: this.selectedMap }));
       }
     });
+  }
+
+  private askForDeleteStrat(strat: Strat): void {
+    const dialogRef = this.dialog.open(DualChoiceDialogComponent, {
+      width: '400px',
+      hasBackdrop: true,
+      data: {
+        title: 'Deleting strat',
+        description: ['Do you really want to delete this strat :', strat.name],
+        cancelButtonText: 'Cancel',
+        confirmButtonText: 'Delete',
+      } as DualChoiceDialogData,
+      panelClass: ['strat-saving-dialog'],
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((confirm) => {
+      if (confirm) {
+        this.store.dispatch(StratStore.DeleteStrat({ stratId: strat._id }));
+      }
+    });
+  }
+
+  private askForSaveStrat() {
+    if (this.currentStrat) {
+      const dialogRef = this.dialog.open(StratSavingDialogComponent, {
+        width: '400px',
+        hasBackdrop: true,
+        data: {
+          name: this.currentStrat.name,
+          description: this.currentStrat.description,
+          isPublic: this.currentStrat.isPublic,
+        },
+        panelClass: ['strat-saving-dialog'],
+        disableClose: true,
+      });
+
+      dialogRef.afterClosed().subscribe((stratInfos: StratInfosDialogData) => {
+        if (stratInfos) {
+          this.store.dispatch(StratStore.UpdateStratInfos(stratInfos));
+        }
+      });
+    }
   }
 
   /**
@@ -335,52 +385,41 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.store.dispatch(StratStore.showGalleryPanel());
   }
 
-  public onSelect() {
-    this.store.dispatch(
-      StratStore.SetDrawingMode({ drawingMode: DrawingMode.Selection })
-    );
-  }
-
-  public onDrag() {
-    this.store.dispatch(
-      StratStore.SetDrawingMode({ drawingMode: DrawingMode.Dragging })
-    );
-  }
-
-  public onDraw() {
-    console.log('in editor on draw');
-    this.store.dispatch(
-      StratStore.SetDrawingMode({ drawingMode: DrawingMode.Drawing })
-    );
-  }
-
-  public onSave() {
-    if (this.currentStrat) {
-      const dialogRef = this.dialog.open(StratSavingDialogComponent, {
-        width: '400px',
-        hasBackdrop: true,
-        data: {
-          name: this.currentStrat.name,
-          description: this.currentStrat.description,
-          isPublic: this.currentStrat.isPublic,
-        },
-        panelClass: ['strat-saving-dialog'],
-        disableClose: true,
-      });
-
-      dialogRef.afterClosed().subscribe((stratInfos: StratInfosDialogData) => {
-        if (stratInfos) {
-          this.store.dispatch(StratStore.UpdateStratInfos(stratInfos));
-        }
-      });
+  public onSelectToolbarAction(toolbarAction: DrawingToolbarAction) {
+    switch (toolbarAction) {
+      case DrawingToolbarAction.CENTER_MAP:
+        break;
+      case DrawingToolbarAction.CLEAR_STRAT:
+        break;
+      case DrawingToolbarAction.DELETE_STRAT:
+        this.askForDeleteStrat(this.currentStrat);
+        break;
+      case DrawingToolbarAction.ENABLE_DRAGGING_MODE:
+        this.store.dispatch(
+          StratStore.SetDrawingMode({ drawingMode: DrawingMode.Dragging })
+        );
+        break;
+      case DrawingToolbarAction.ENABLE_DRAWING_MODE:
+        this.store.dispatch(
+          StratStore.SetDrawingMode({ drawingMode: DrawingMode.Drawing })
+        );
+        break;
+      case DrawingToolbarAction.ENABLE_SELECT_MODE:
+        this.store.dispatch(
+          StratStore.SetDrawingMode({ drawingMode: DrawingMode.Selection })
+        );
+        break;
+      case DrawingToolbarAction.OPEN_STRAT:
+        break;
+      case DrawingToolbarAction.SAVE_STRAT:
+        this.askForSaveStrat();
+        break;
+      case DrawingToolbarAction.SHOW_INFOS:
+        break;
+      default:
+        break;
     }
   }
-
-  public onShowInfos() {}
-
-  public onOpenStrat() {}
-
-  public onDeleteStrat() {}
 
   public stopWheelEvent($event) {
     $event.preventDefault();

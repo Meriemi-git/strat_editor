@@ -50,7 +50,7 @@ export class StratController {
 
   @UseGuards(AuthGuard('ConfirmedStrategy'))
   @Delete(':stratId')
-  async deleteStrat(@Param() stratId: string): Promise<any> {
+  async deleteStrat(@Param('stratId') stratId: string): Promise<any> {
     return this.stratService.deleteStrat(stratId);
   }
 }

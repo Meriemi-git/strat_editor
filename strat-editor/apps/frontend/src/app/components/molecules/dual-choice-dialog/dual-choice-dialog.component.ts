@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface DualChoiceDialogData {
   title: string;
-  description: string;
+  description: string[];
   confirmButtonText: string;
   cancelButtonText: string;
 }

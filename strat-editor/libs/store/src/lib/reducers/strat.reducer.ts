@@ -67,7 +67,6 @@ const stratReducer = createReducer(
   })),
   on(actions.DeleteStrat, (state) => ({
     ...state,
-    error: null,
   })),
   on(actions.DeleteStratSuccess, (state) => ({
     ...state,
