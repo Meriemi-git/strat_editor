@@ -46,14 +46,18 @@
   <div class="editor-container" *ngIf="selectedMap">
     <div class="map-header">
       <strat-editor-floor-chooser
+        class="strat-editor-floor-chooser"
         (mapSelected)="onMapSelected($event)"
         (floorSelected)="onFloorSelected($event)"
         [maps]="$maps | async"
-        [selectedMap]="selectedMap"
+        [selectedMap]="$selectedMap | async"
         [selectedFloor]="selectedFloor"
       >
       </strat-editor-floor-chooser>
-      <strat-editor-strat-title [stratTitle]="'Example Title'">
+      <strat-editor-strat-title
+        class="strat-editor-strat-title"
+        [stratTitle]="'Example Title'"
+      >
       </strat-editor-strat-title>
     </div>
     <strat-editor-drawing-editor
@@ -62,7 +66,10 @@
       [canvasHeight]="height"
       (mapLoadingError)="onMapLoadingError($event)"
     ></strat-editor-drawing-editor>
-    <strat-editor-drawing-status [drawingMode]="$drawingMode | async">
+    <strat-editor-drawing-status
+      [drawingMode]="$drawingMode | async"
+      class="strat-editor-drawing-status"
+    >
     </strat-editor-drawing-status>
     <strat-editor-drawing-toolbar
       class="strat-editor-drawing-toolbar"

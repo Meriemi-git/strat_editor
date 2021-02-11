@@ -82,3 +82,15 @@
 .strat-saving-dialog {
   border-radius: 50%;
 }
+
+.strat-editor-drawing-status,
+.strat-editor-floor-chooser,
+.strat-editor-strat-title {
+  display: block !important;
+  position: relative !important;
+  z-index: 999 !important;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: rgba(50, 126, 255, 0.5);
+}
