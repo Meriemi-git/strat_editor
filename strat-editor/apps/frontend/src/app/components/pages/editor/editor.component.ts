@@ -269,6 +269,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((confirm) => {
       if (confirm) {
         console.log('e openConfirmationDialog dispatch SelectFloor');
+        this.router.navigateByUrl('editor');
         const newStrat = this.createNewStrat(map);
         console.log('e manageMap dispatch CreateStrat');
         this.store.dispatch(StratStore.CreateStrat({ strat: newStrat }));
