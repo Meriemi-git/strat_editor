@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { NotificationType, Strat } from '@strat-editor/data';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { NotificationService } from './notifications.service';
 
 @Injectable({
@@ -44,10 +44,11 @@ export class StratService {
       );
   }
 
-  public deleteStrat(stratId: string): Observable<void> {
+  public deleteStrat(stratId: string): Observable<string> {
     return this.http
       .delete<void>(environment.apiUrl + this.controller + '/' + stratId)
       .pipe(
+        map(() => stratId),
         catchError((err) => {
           this.notificationService.displayNotification({
             message: 'Cannot delete your strat',

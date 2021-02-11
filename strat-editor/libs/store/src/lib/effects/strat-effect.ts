@@ -71,7 +71,7 @@ export class StratEffect {
       ofType(actions.DeleteStrat),
       mergeMap((action) =>
         this.stratService.deleteStrat(action.stratId).pipe(
-          map(() => actions.DeleteStratSuccess()),
+          map((stratId) => actions.DeleteStratSuccess({ stratId })),
           catchError((error: HttpErrorResponse) =>
             of(actions.DeleteStratError({ error }))
           )

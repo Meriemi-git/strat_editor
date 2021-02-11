@@ -10,6 +10,7 @@ export class StratItemComponent {
   @Input() strat: Strat;
   @Output() upVoteStrat = new EventEmitter<void>();
   @Output() deleteStrat = new EventEmitter<void>();
+  @Output() selectStrat = new EventEmitter<void>();
 
   public onHover: boolean;
   constructor() {}

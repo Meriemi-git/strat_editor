@@ -54,7 +54,10 @@ export const DeleteStrat = createAction(
   props<{ stratId: string }>()
 );
 
-export const DeleteStratSuccess = createAction('[Strats] Delete Strat Success');
+export const DeleteStratSuccess = createAction(
+  '[Strats] Delete Strat Success',
+  props<{ stratId: string }>()
+);
 
 export const DeleteStratError = createAction(
   '[Strats] Delete Strat Error',

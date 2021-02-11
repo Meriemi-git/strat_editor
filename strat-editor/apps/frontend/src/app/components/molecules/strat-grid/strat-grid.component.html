@@ -2,7 +2,7 @@
   <div class="grid">
     <strat-editor-strat-item
       *ngFor="let strat of strats"
-      (click)="selectStrat.emit(strat)"
+      (selectStrat)="selectStrat.emit(strat)"
       [strat]="strat"
       (upVoteStrat)="upVoteStrat.emit(strat)"
       (deleteStrat)="deleteStrat.emit(strat)"

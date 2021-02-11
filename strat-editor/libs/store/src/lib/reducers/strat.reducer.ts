@@ -68,12 +68,14 @@ const stratReducer = createReducer(
   on(actions.DeleteStrat, (state) => ({
     ...state,
   })),
-  on(actions.DeleteStratSuccess, (state) => ({
-    ...state,
-    strat: null,
-    action: StratAction.DELETE,
-    error: null,
-  })),
+  on(actions.DeleteStratSuccess, (state, { stratId }) => {
+    return adapter.removeOne(stratId, {
+      ...state,
+      strat: null,
+      action: StratAction.DELETE,
+      error: null,
+    });
+  }),
   on(actions.DeleteStratError, (state, { error }) => ({
     ...state,
     error: error,

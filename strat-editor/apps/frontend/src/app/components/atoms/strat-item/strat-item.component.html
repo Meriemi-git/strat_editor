@@ -5,7 +5,7 @@
   (mouseover)="onHover = true"
   (mouseout)="onHover = false"
 >
-  <div class="content">
+  <div class="content" (click)="selectStrat.emit()">
     <img
       mat-image
       src="{{ 'api/map/image/' + strat.mapId }}"
