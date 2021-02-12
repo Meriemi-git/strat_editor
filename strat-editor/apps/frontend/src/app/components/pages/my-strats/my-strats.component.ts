@@ -48,7 +48,6 @@ export class MyStratsComponent implements OnInit {
   onUpVoteStrat(strat: Strat) {}
 
   onDeleteStrat(strat: Strat) {
-    console.log('delete strat');
     const dialogRef = this.dialog.open(DualChoiceDialogComponent, {
       width: '400px',
       hasBackdrop: true,

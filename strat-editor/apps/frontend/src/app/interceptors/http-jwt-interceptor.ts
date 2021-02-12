@@ -30,7 +30,6 @@ export class HttpJwtInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((error) => {
-        console.log('HttpJwtInterceptor request url', request.url);
         if (error instanceof HttpErrorResponse) {
           switch (error.status) {
             case 401:

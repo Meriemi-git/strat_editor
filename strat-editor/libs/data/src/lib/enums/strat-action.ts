@@ -2,9 +2,7 @@ export enum StratAction {
   CREATE = 'CREATE',
   LOAD = 'LOAD',
   SAVE = 'SAVE',
-  UPDATE = 'UPDATE',
   DELETE = 'DELETE',
   UPDATE_LAYER = 'UPDATE_LAYER',
   UPDATE_INFOS = 'UPDATE_INFOS',
-  GET_STRAT = 'GET_STRAT',
 }

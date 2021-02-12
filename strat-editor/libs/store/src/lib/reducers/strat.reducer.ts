@@ -36,7 +36,7 @@ const stratReducer = createReducer(
   on(actions.SaveStrat, (state) => ({
     ...state,
     error: null,
-    action: StratAction.SAVE,
+    action: null,
   })),
   on(actions.SaveStratSuccess, (state, { strat }) => {
     return adapter.addOne(strat, {
@@ -57,7 +57,6 @@ const stratReducer = createReducer(
     return adapter.addOne(strat, {
       ...state,
       strat: strat,
-      action: StratAction.UPDATE,
       error: null,
     });
   }),
@@ -128,6 +127,19 @@ const stratReducer = createReducer(
     },
     action: StratAction.UPDATE_INFOS,
   })),
+  on(
+    actions.UpdateStratInfosAndSave,
+    (state, { name, description, isPublic }) => ({
+      ...state,
+      strat: {
+        ...state.strat,
+        name: name,
+        description: description,
+        isPublic: isPublic,
+      },
+      action: StratAction.SAVE,
+    })
+  ),
   on(actions.ClearStratState, (state) => ({
     ...state,
     error: null,

@@ -1,6 +1,6 @@
 <div class="toolbar-wrapper">
   <div #toolbarIcon>
-    <mat-icon class="toolbar-button" (click)="toogleToolbar()">
+    <mat-icon class="toolbar-icon" (click)="toogleToolbar()">
       {{ toolbarIconName }}</mat-icon
     >
   </div>
@@ -19,7 +19,7 @@
     <div class="button">
       <button
         mat-mini-fab
-        color="warn"
+        color="primary"
         matTooltip="Switch to selection mode"
         (click)="selectedAction.emit(DrawingActions.ENABLE_SELECT_MODE)"
       >
@@ -30,7 +30,7 @@
     <div class="button">
       <button
         mat-mini-fab
-        color="accent"
+        color="primary"
         matTooltip="Switch to dragging mode"
         (click)="selectedAction.emit(DrawingActions.ENABLE_DRAGGING_MODE)"
       >
@@ -38,17 +38,18 @@
       </button>
       <mat-label>Drag</mat-label>
     </div>
-    <div class="button" *ngIf="isConnected">
+    <div class="button">
       <button
         mat-mini-fab
-        color="primary"
-        matTooltip="Save your strat"
-        (click)="selectedAction.emit(DrawingActions.SAVE_STRAT)"
+        color="warn"
+        matTooltip="Clear all draws"
+        (click)="selectedAction.emit(DrawingActions.CLEAR_STRAT)"
       >
-        <mat-icon>save</mat-icon>
+        <mat-icon>clear</mat-icon>
       </button>
-      <mat-label>Save</mat-label>
+      <mat-label>Clear</mat-label>
     </div>
+    <hr />
     <div class="button" *ngIf="isConnected">
       <button
         mat-mini-fab
@@ -74,13 +75,13 @@
     <div class="button" *ngIf="isConnected">
       <button
         mat-mini-fab
-        color="warn"
-        matTooltip="Clear all draws"
-        (click)="selectedAction.emit(DrawingActions.CLEAR_STRAT)"
+        color="primary"
+        matTooltip="Save your strat"
+        (click)="selectedAction.emit(DrawingActions.SAVE_STRAT)"
       >
-        <mat-icon>clear</mat-icon>
+        <mat-icon>save</mat-icon>
       </button>
-      <mat-label>Clear</mat-label>
+      <mat-label>Save</mat-label>
     </div>
     <div class="button" *ngIf="isConnected">
       <button

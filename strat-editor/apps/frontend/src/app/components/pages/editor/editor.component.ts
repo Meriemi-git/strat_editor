@@ -13,6 +13,7 @@ import {
   StratAction,
   NotificationType,
   DrawingToolbarAction,
+  DrawerActionType,
 } from '@strat-editor/data';
 import * as StratStore from '@strat-editor/store';
 import { Observable, Subject } from 'rxjs';
@@ -61,7 +62,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
-    console.warn('destroy editor');
     this.store.dispatch(StratStore.ClearStratState());
     this.store.dispatch(StratStore.ClearMapState());
     this.unsubscriber.next();
@@ -134,14 +134,11 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   private manageFloor(floor: Floor) {
-    console.log('e manageFloor', floor?.name);
     this.selectedFloor = floor;
     if (this.currentStrat) {
-      console.log('e There is a current strat', this.currentStrat.name);
       const layer = this.currentStrat.layers.find(
         (layer) => layer.floorId === floor._id
       );
-      console.log('e manageFloor dispatch SetCurrentLayer');
       this.store.dispatch(
         SetCurrentLayer({ layer: layer ?? this.currentStrat.layers[0] })
       );
@@ -151,20 +148,12 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   private manageMap(map: Map) {
-    console.log('e manageMap map', map?.name);
-    console.log('e manageMap this.selectedMap', this.selectedMap?.name);
-
     if (map && map != this.selectedMap) {
       if (!this.currentStrat) {
-        console.log('e manageMap this.currentStrat', this.currentStrat?.name);
         const newStrat = this.createNewStrat(map);
-        console.log('e manageMap dispatch CreateStrat');
         this.store.dispatch(StratStore.CreateStrat({ strat: newStrat }));
       } else {
-        console.log('e current strat exists');
         if (this.selectedMap && this.selectedMap._id != map._id) {
-          // TODO implement better management
-          console.log('e manageMap map different');
           this.askForSwitchMap(map);
         } else {
           const defaultLayer = this.currentStrat.layers[0];
@@ -172,58 +161,43 @@ export class EditorComponent implements OnInit, OnDestroy {
             .select(StratStore.getFloorById, defaultLayer.floorId)
             .subscribe((floor) => {
               if (floor) {
-                console.log('e manageMap dispatch SelectFloor');
                 this.store.dispatch(SelectFloor({ floor }));
               }
             });
         }
       }
-    } else {
-      console.log('Manage map null or unchanged');
-      console.log('map', map?.name);
-      console.log('selecedMAp', this.selectedMap?.name);
     }
   }
 
   private manageStratByAction(stratAndAction: any) {
-    console.log('e Manage Strat action :', stratAndAction.action);
     switch (stratAndAction.action) {
       case StratAction.LOAD:
-        console.log('e Manage Strat LOAD');
         this.store
           .select(StratStore.getMapById, stratAndAction.strat.mapId)
           .subscribe((map) => {
             if (map) {
-              console.log('e Manage Strat Dispatch SelectMap');
               this.store.dispatch(StratStore.SelectMap({ map }));
             }
           });
-
         break;
       case StratAction.CREATE:
-        console.log('e Manage Strat CREATE');
-        console.log('e Manage Strat Dispatch SelectMap');
         const defaultLayer = stratAndAction.strat.layers[0];
         this.store
           .select(StratStore.getFloorById, defaultLayer.floorId)
           .subscribe((floor) => {
             if (floor) {
-              console.log('e manageMap dispatch SelectFloor');
               this.store.dispatch(SelectFloor({ floor }));
             }
           });
         break;
-      case StratAction.UPDATE:
-        console.log('e Manage Strat UPDATE');
-        break;
       case StratAction.SAVE:
         console.log('e Manage Strat SAVE');
-        break;
-      case StratAction.UPDATE_INFOS:
-        console.log('e Manage Strat UPDATE_INFOS');
         this.store.dispatch(
           StratStore.SaveStrat({ strat: stratAndAction.strat })
         );
+        break;
+      case StratAction.UPDATE_INFOS:
+        console.log('e Manage Strat UPDATE_INFOS');
         break;
       case StratAction.UPDATE_LAYER:
         console.log('e Manage Strat UPDATE_LAYER');
@@ -247,14 +221,10 @@ export class EditorComponent implements OnInit, OnDestroy {
    * @param stratId Strat id to be laoded
    */
   private loadStrat(stratId: string) {
-    console.log('Loading Strat');
     this.store.select(StratStore.getStratById, stratId).subscribe((strat) => {
-      console.log('getStratById (from store):', strat);
       if (strat) {
-        console.log('dispatch LoadStratSuccess', strat);
         this.store.dispatch(LoadStratSuccess({ strat }));
       } else {
-        console.log('dispatch LoadStrat (from backend)', stratId);
         this.store.dispatch(LoadStrat({ stratId }));
       }
     });
@@ -324,7 +294,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
       dialogRef.afterClosed().subscribe((stratInfos: StratInfosDialogData) => {
         if (stratInfos) {
-          this.store.dispatch(StratStore.UpdateStratInfos(stratInfos));
+          this.store.dispatch(StratStore.UpdateStratInfosAndSave(stratInfos));
         }
       });
     }
@@ -356,7 +326,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   onMapSelected(map: Map) {
-    console.log('On Map Selected');
     this.store.dispatch(StratStore.SelectMap({ map }));
   }
 
@@ -390,6 +359,14 @@ export class EditorComponent implements OnInit, OnDestroy {
       case DrawingToolbarAction.CENTER_MAP:
         break;
       case DrawingToolbarAction.CLEAR_STRAT:
+        this.store.dispatch(
+          StratStore.SetDrawerAction({
+            action: {
+              type: DrawerActionType.MISC,
+              name: 'Clear',
+            } as DrawerAction,
+          })
+        );
         break;
       case DrawingToolbarAction.DELETE_STRAT:
         this.askForDeleteStrat(this.currentStrat);
@@ -410,15 +387,35 @@ export class EditorComponent implements OnInit, OnDestroy {
         );
         break;
       case DrawingToolbarAction.OPEN_STRAT:
+        this.router.navigateByUrl('my-strats');
         break;
       case DrawingToolbarAction.SAVE_STRAT:
         this.askForSaveStrat();
         break;
       case DrawingToolbarAction.SHOW_INFOS:
+        this.showInfos();
         break;
       default:
         break;
     }
+  }
+
+  private showInfos() {
+    const dialogRef = this.dialog.open(StratSavingDialogComponent, {
+      width: '400px',
+      hasBackdrop: true,
+      data: {
+        name: this.currentStrat.name,
+        description: this.currentStrat.description,
+        isPublic: this.currentStrat.isPublic,
+      },
+      panelClass: ['strat-saving-dialog'],
+    });
+    dialogRef.afterClosed().subscribe((stratInfos: StratInfosDialogData) => {
+      if (stratInfos) {
+        this.store.dispatch(StratStore.UpdateStratInfos(stratInfos));
+      }
+    });
   }
 
   public stopWheelEvent($event) {
@@ -427,7 +424,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public onMapLoadingError($event) {
-    console.warn('e onMapLoadingError');
     this.notificationService.displayNotification({
       message: 'Error when loading floor image',
       type: NotificationType.error,

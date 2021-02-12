@@ -10,7 +10,6 @@
           <input
             matInput
             type="text"
-            [(ngModel)]="stratInfos.name"
             formControlName="name"
             class="strat-input"
           />
@@ -20,21 +19,25 @@
         <div *ngIf="fc.name.errors.required">Name is required</div>
         <div *ngIf="fc.name.errors.minlength">Name is required</div>
       </div>
-      <mat-form-field>
+      <mat-form-field class="description">
         <mat-label>Description</mat-label>
         <textarea
           matInput
-          [(ngModel)]="stratInfos.description"
           formControlName="description"
+          placeholder="Describe your strat here..."
           class="strat-input"
           rows="4"
-          cols="50"
+          cols="200"
         ></textarea>
       </mat-form-field>
-      <mat-slide-toggle color="primary" [checked]="stratInfos.isPublic">
-        Make your strat public ?
-      </mat-slide-toggle>
     </form>
+    <mat-slide-toggle
+      color="primary"
+      [checked]="stratInfos.isPublic ? true : false"
+      (change)="stratInfos.isPublic = $event.checked"
+    >
+      Make your strat public ?
+    </mat-slide-toggle>
   </section>
   <footer class="modal-footer">
     <button color="warn" mat-raised-button (click)="onClose()">Cancel</button>

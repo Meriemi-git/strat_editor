@@ -9,7 +9,6 @@ export class FloorController {
   @Get('image/:imageName')
   async getFloorImage(@Param('imageName') imageName: string, @Res() res) {
     const imgPath = this.getImgPath(imageName);
-    console.log(imgPath);
     return res.sendFile(imgPath, { root: 'assets' });
   }
 

@@ -89,6 +89,11 @@ export const UpdateStratInfos = createAction(
   props<{ name: string; description: string; isPublic: boolean }>()
 );
 
+export const UpdateStratInfosAndSave = createAction(
+  '[Strats] Update Strat Infos and Save',
+  props<{ name: string; description: string; isPublic: boolean }>()
+);
+
 export const SetCurrentLayer = createAction(
   '[Strats] Set current layer',
   props<{ layer: Layer }>()

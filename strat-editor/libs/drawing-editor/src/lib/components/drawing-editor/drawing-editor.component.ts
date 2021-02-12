@@ -17,6 +17,7 @@ import {
   DrawerAction,
   Map as _Map,
   KEY_CODE,
+  DrawerActionType,
 } from '@strat-editor/data';
 import { Store } from '@ngrx/store';
 import * as StratStore from '@strat-editor/store';
@@ -154,7 +155,6 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
       .select(StratStore.getCanvas)
       .pipe(takeUntil(this.unsubscriber))
       .subscribe((canvas) => {
-        console.log('d getCanvas');
         this.loadCanvas(canvas);
       });
 
@@ -162,19 +162,15 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
       .select(StratStore.getCurrentLayer)
       .pipe(takeUntil(this.unsubscriber))
       .subscribe((layer) => {
-        console.log('d getCurrentLayer');
         if (layer) {
-          console.log('d getCurrentLayer clear');
           this.clear();
           if (layer.canvasState) {
-            console.log('d getCurrentLayer loadCanvas');
             this.loadCanvas(layer.canvasState);
           } else {
             this.store
               .select(StratStore.getFloorById, layer.floorId)
               .pipe(takeUntil(this.unsubscriber))
               .subscribe((floor) => {
-                console.log('d getCurrentLayer setFloorImage');
                 this.setFloorImage(floor);
               });
           }
@@ -259,9 +255,7 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
           });
           this.canvas.add(image);
           this.canvas.renderAll();
-          const canvasState = JSON.stringify(this.getCanvasState());
-          console.log('d drawAgent Dispatch SaveCanvasState');
-          this.store.dispatch(StratStore.SaveCanvas({ canvas: canvasState }));
+          this.updateCanvasState();
         }.bind(this)
       );
     }
@@ -281,9 +275,7 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
           });
           this.canvas.add(image);
           this.canvas.renderAll();
-          const canvasState = JSON.stringify(this.getCanvasState());
-          console.log('d drawImage Dispatch SaveCanvasState');
-          this.store.dispatch(StratStore.SaveCanvas({ canvas: canvasState }));
+          this.updateCanvasState();
         }.bind(this)
       );
     }
@@ -291,11 +283,42 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
 
   public doAction(action: DrawerAction) {
     if (action) {
-      this.drawer = this.avalaibleDrawers.get(action.name);
-      this.enableDrawingMode();
+      switch (action.type) {
+        case DrawerActionType.FORM:
+        case DrawerActionType.SHAPE:
+        case DrawerActionType.TEXT:
+          this.drawer = this.avalaibleDrawers.get(action.name);
+          this.enableDrawingMode();
+          break;
+        case DrawerActionType.MISC:
+          this.clearAllExceptForMap();
+          this.resetView();
+          break;
+        default:
+          break;
+      }
     } else {
       this.enableSelectionMode();
     }
+  }
+
+  private clearAllExceptForMap() {
+    this.canvas.forEachObject((object: fabric.Object) => {
+      if (object.name != 'map') {
+        this.canvas.remove(object);
+      }
+    });
+    this.canvas.renderAll();
+    this.updateCanvasState();
+  }
+
+  private updateCanvasState() {
+    const canvasState = JSON.stringify(this.getCanvasState());
+    this.store.dispatch(
+      StratStore.SaveCanvas({
+        canvas: canvasState,
+      })
+    );
   }
 
   private enableSelectionMode() {
@@ -377,7 +400,6 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
     this.canvas.discardActiveObject();
     this.canvas.renderAll();
     const canvas = JSON.stringify(this.getCanvasState());
-    console.log('d Dispatch SaveCanvasState');
     this.store.dispatch(StratStore.SaveCanvas({ canvas: canvas }));
   }
 
@@ -405,13 +427,11 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
   }
 
   public setCanvasState(canvasState: string): void {
-    console.log('loadFromJSON', canvasState);
     this.canvas.loadFromJSON(canvasState, this.canvasStateIsLoaded);
     this.canvas.renderAll();
   }
 
   public setFloorImage(floor: Floor): any {
-    console.log('d setFloorImage', floor);
     fabric.Image.fromURL(
       this.ihs.getFloorImage(floor),
       function (image) {
@@ -432,15 +452,9 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
           }).setCoords;
           this.canvas.add(image);
           this.canvas.renderAll();
-          const canvasState = JSON.stringify(this.getCanvasState());
-          console.log('d setFloorImage Dispatch SaveCanvasState');
-          this.store.dispatch(StratStore.SaveCanvas({ canvas: canvasState }));
+          this.updateCanvasState();
         } else {
-          console.log('d Drawing Editor mapLoadingError');
           this.mapLoadingError.emit(floor.name);
-          // throw new MapLoadingError(
-          //   'Cannot load backgroung image for ' + floor.name
-          // );
         }
       }.bind(this)
     );
@@ -500,7 +514,6 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
 
     this.canvas.on('object:modified', (event: fabric.IEvent) => {
       if (event.target instanceof fabric.Textbox) {
-        console.log('Drawwing-Editor object:modified');
         this.editingText = true;
         this.drawingMode = DrawingMode.Drawing;
         this.store.dispatch(
@@ -562,12 +575,7 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
     this.isMoving = false;
     this.canvas.setViewportTransform(this.canvas.viewportTransform);
     this.canvas.renderAll();
-    const canvasState = JSON.stringify(this.getCanvasState());
-    this.store.dispatch(
-      StratStore.SaveCanvas({
-        canvas: canvasState,
-      })
-    );
+    this.updateCanvasState();
   }
 
   private selectionCreated(event: fabric.IEvent) {

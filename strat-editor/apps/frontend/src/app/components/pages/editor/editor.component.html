@@ -1,4 +1,4 @@
-<div class="icons-left" *ngIf="selectedMap">
+<div class="icons-left" *ngIf="selectedMap" (wheel)="stopWheelEvent($event)">
   <div (click)="openAgentsPanel()">
     <span
       class="first"
@@ -18,7 +18,7 @@
     </span>
   </div>
 </div>
-<div class="icons-right" *ngIf="selectedMap">
+<div class="icons-right" *ngIf="selectedMap" (wheel)="stopWheelEvent($event)">
   <div (click)="openDrawingPanel()">
     <span
       class="first"
@@ -44,7 +44,7 @@
     ></strat-editor-map-grid>
   </div>
   <div class="editor-container" *ngIf="selectedMap">
-    <div class="map-header">
+    <div class="map-header" (wheel)="stopWheelEvent($event)">
       <strat-editor-floor-chooser
         class="strat-editor-floor-chooser"
         (mapSelected)="onMapSelected($event)"
@@ -56,7 +56,7 @@
       </strat-editor-floor-chooser>
       <strat-editor-strat-title
         class="strat-editor-strat-title"
-        [stratTitle]="'Example Title'"
+        [stratTitle]="currentStrat?.name"
       >
       </strat-editor-strat-title>
     </div>
@@ -75,6 +75,7 @@
       class="strat-editor-drawing-toolbar"
       [isConnected]="userInfos !== null"
       (selectedAction)="onSelectToolbarAction($event)"
+      (wheel)="stopWheelEvent($event)"
     >
     </strat-editor-drawing-toolbar>
   </div>

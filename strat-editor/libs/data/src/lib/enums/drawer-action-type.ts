@@ -3,4 +3,5 @@ export enum DrawerActionType {
   FORM = 'form',
   TEXT = 'text',
   SETTING = 'setting',
+  MISC = 'misc',
 }
