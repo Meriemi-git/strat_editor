@@ -30,6 +30,8 @@ export const UploadGalleryImageError = createAction(
 );
 
 export const DragImage = createAction(
-  '[Gallery] Image dragged',
+  '[Gallery] Drag image',
   props<{ image: Image }>()
 );
+
+export const DragImageSuccess = createAction('[Gallery] Drag image sucess');

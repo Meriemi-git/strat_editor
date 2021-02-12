@@ -35,6 +35,10 @@ const agentReducer = createReducer(
   on(actions.DragAgent, (state, { agent }) => ({
     ...state,
     dragged: agent,
+  })),
+  on(actions.DragAgentSuccess, (state) => ({
+    ...state,
+    dragged: null,
   }))
 );
 

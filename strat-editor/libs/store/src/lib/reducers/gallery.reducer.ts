@@ -39,7 +39,10 @@ const sidenavReducer = createReducer(
   on(actions.DragImage, (state, { image }) => ({
     ...state,
     draggedImage: image,
-    error: null,
+  })),
+  on(actions.DragImageSuccess, (state) => ({
+    ...state,
+    draggedImage: null,
   }))
 );
 

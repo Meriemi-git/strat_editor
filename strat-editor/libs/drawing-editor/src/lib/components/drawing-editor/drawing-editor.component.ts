@@ -684,10 +684,12 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
     if (this.draggingAgent) {
       this.drawAgent(this.draggingAgent, event.layerX, event.layerY);
       this.draggingAgent = null;
+      this.store.dispatch(StratStore.DragAgentSuccess());
     }
     if (this.draggingImage) {
       this.drawImage(this.draggingImage, event.layerX, event.layerY);
       this.draggingImage = null;
+      this.store.dispatch(StratStore.DragImageSuccess());
     }
   }
 

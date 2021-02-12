@@ -18,3 +18,5 @@ export const DragAgent = createAction(
   '[Agent] Drag Agent',
   props<{ agent: Agent }>()
 );
+
+export const DragAgentSuccess = createAction('[Agent] Drag Agent success');
