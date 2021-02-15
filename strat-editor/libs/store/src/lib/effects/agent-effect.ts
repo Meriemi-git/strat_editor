@@ -10,7 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class AgentEffect {
   constructor(private actions$: Actions, private agentService: AgentService) {}
 
-  fechagents$ = createEffect(() =>
+  getAllAgents$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.FetchAgents),
       mergeMap(() =>

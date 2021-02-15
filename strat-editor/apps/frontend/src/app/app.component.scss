@@ -69,16 +69,10 @@
   color: $secondaryDarkColor;
 }
 
-::ng-deep.mat-drawer-inner-container {
-  overflow-x: hidden !important;
-  direction: rtl;
-  scrollbar-width: thin;
-  scrollbar-color: $primaryColor black;
-}
-
 .mat-sidenav {
   margin: 0 auto;
   text-align: center;
+  transform: none;
 }
 
 .map-panel {

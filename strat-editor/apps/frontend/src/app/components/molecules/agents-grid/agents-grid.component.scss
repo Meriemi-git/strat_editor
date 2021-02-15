@@ -1,5 +1,13 @@
+@import '~apps/frontend/src/styles.scss';
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(80px, 1fr));
   gap: 5px;
+  height: calc(100vh - 60px);
+}
+
+::ng-deep.mat-tab-body-content {
+  scrollbar-width: thin !important;
+  scrollbar-color: $primaryColor black !important;
 }
