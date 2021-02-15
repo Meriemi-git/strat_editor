@@ -1,6 +1,6 @@
 <div class="container">
   <h2 class="mat-h1">Gallery</h2>
-  <div *ngIf="userInfos; else notConnected">
+  <div *ngIf="$userInfos | async; let userInfos; else: notConnected">
     <h2 class="mat-h3">Add image to the gallery</h2>
     <strat-editor-image-uploader
       (imageUploaded)="onImageUploaded($event)"

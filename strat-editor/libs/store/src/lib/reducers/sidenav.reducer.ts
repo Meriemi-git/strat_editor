@@ -9,8 +9,6 @@ export const initialstate: SidenavState = {
   gadgetsPanelIsOpen: false,
   drawingPanelIsOpen: false,
   galleryPanelIsOpen: false,
-  mainMenuPanelIsOpen: false,
-  accountPanelIsOpen: false,
 };
 
 const sidenavReducer = createReducer(
@@ -30,8 +28,6 @@ const sidenavReducer = createReducer(
     gadgetsPanelIsOpen: false,
     drawingPanelIsOpen: false,
     galleryPanelIsOpen: false,
-    mainMenuPanelIsOpen: false,
-    accountPanelIsOpen: false,
   })),
   on(actions.closeLeft, (state) => ({
     ...state,
@@ -40,8 +36,6 @@ const sidenavReducer = createReducer(
     gadgetsPanelIsOpen: false,
     drawingPanelIsOpen: false,
     galleryPanelIsOpen: false,
-    mainMenuPanelIsOpen: false,
-    accountPanelIsOpen: false,
   })),
   on(actions.showAgentsPanel, (state) => ({
     ...state,
@@ -51,8 +45,6 @@ const sidenavReducer = createReducer(
     gadgetsPanelIsOpen: false,
     drawingPanelIsOpen: false,
     galleryPanelIsOpen: false,
-    mainMenuPanelIsOpen: false,
-    accountPanelIsOpen: false,
   })),
 
   on(actions.showGadgetsPanel, (state) => ({
@@ -63,8 +55,6 @@ const sidenavReducer = createReducer(
     gadgetsPanelIsOpen: true,
     drawingPanelIsOpen: false,
     galleryPanelIsOpen: false,
-    mainMenuPanelIsOpen: false,
-    accountPanelIsOpen: false,
   })),
   on(actions.showDrawingPanel, (state) => ({
     ...state,
@@ -74,8 +64,6 @@ const sidenavReducer = createReducer(
     gadgetsPanelIsOpen: false,
     drawingPanelIsOpen: true,
     galleryPanelIsOpen: false,
-    mainMenuPanelIsOpen: false,
-    accountPanelIsOpen: false,
   })),
   on(actions.showGalleryPanel, (state) => ({
     ...state,
@@ -85,8 +73,6 @@ const sidenavReducer = createReducer(
     gadgetsPanelIsOpen: false,
     drawingPanelIsOpen: false,
     galleryPanelIsOpen: true,
-    mainMenuPanelIsOpen: false,
-    accountPanelIsOpen: false,
   }))
 );
 

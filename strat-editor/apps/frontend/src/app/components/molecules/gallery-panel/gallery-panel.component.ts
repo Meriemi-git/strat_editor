@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import * as StratStore from '@strat-editor/store';
@@ -11,11 +11,12 @@ import { Image, UserInfos } from '@strat-editor/data';
 })
 export class GalleryPanelComponent implements OnInit {
   public $images: Observable<Image[]>;
-  @Input() userInfos: UserInfos;
+  public $userInfos: Observable<UserInfos>;
   constructor(private store: Store<StratStore.StratEditorState>) {}
 
   ngOnInit(): void {
     this.$images = this.store.select(StratStore.getGalleryImages);
+    this.$userInfos = this.store.select(StratStore.getUserInfos);
     this.store.dispatch(StratStore.GetGalleryImages());
   }
 

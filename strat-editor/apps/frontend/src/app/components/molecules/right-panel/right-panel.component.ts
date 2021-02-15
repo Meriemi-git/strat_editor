@@ -11,7 +11,6 @@ import * as StratStore from '@strat-editor/store';
 export class RightPanelComponent implements OnInit {
   public $isDrawingPanelOpened: Observable<boolean>;
   public $isGalleryPanelOpened: Observable<boolean>;
-  public $isAccountPanelOpened: Observable<boolean>;
   public $authInfos: Observable<AuthInfos>;
   public $userInfos: Observable<UserInfos>;
   constructor(private store: Store<StratStore.StratEditorState>) {}
@@ -22,9 +21,6 @@ export class RightPanelComponent implements OnInit {
     );
     this.$isGalleryPanelOpened = this.store.select(
       StratStore.isGalleryPanelOpened
-    );
-    this.$isAccountPanelOpened = this.store.select(
-      StratStore.isAccountPanelOpened
     );
     this.$userInfos = this.store.select(StratStore.getUserInfos);
   }

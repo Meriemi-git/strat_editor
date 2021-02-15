@@ -5,6 +5,4 @@ export interface SidenavState {
   gadgetsPanelIsOpen: boolean;
   drawingPanelIsOpen: boolean;
   galleryPanelIsOpen: boolean;
-  mainMenuPanelIsOpen: boolean;
-  accountPanelIsOpen: boolean;
 }

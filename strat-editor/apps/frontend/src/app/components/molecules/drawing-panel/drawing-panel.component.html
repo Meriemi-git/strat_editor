@@ -95,19 +95,4 @@
     </p>
   </div>
   <hr />
-  <h2 class="mat-h3">Tools</h2>
-  <div class="actions">
-    <strat-editor-drawing-action
-      *ngFor="
-        let action of $drawerActions
-          | async
-          | filter: ['tool']:'type'
-          | sortBy: 'ASC':'order'
-      "
-      [action]="action"
-      (actionSelected)="onActionSelected($event)"
-      class="action"
-    ></strat-editor-drawing-action>
-  </div>
-  <hr />
 </div>

@@ -9,16 +9,3 @@ export const showAgentsPanel = createAction('[Sidenav] Show Agents Panel');
 export const showGadgetsPanel = createAction('[Sidenav] Show Gadgets Panel');
 export const showDrawingPanel = createAction('[Sidenav] Show Drawing Panel');
 export const showGalleryPanel = createAction('[Sidenav] Show Gallery Panel');
-
-const actions = union({
-  toggleLeft,
-  closeLeft,
-  toggleRight,
-  closeRight,
-  showAgentsPanel,
-  showGadgetsPanel,
-  showDrawingPanel,
-  showGalleryPanel,
-});
-
-export type SidenavActions = typeof actions;

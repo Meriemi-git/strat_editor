@@ -12,6 +12,11 @@
   text-align: center !important;
 }
 
+.mat-drawer-inner-container {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 body {
   margin: 0;
   background-color: #3a3a3a;

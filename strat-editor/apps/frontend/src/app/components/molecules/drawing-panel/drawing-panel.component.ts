@@ -20,7 +20,6 @@ export class DrawingPanelComponent implements OnInit, OnDestroy {
   public $color: Observable<DrawerColor>;
   public $drawerActions: Observable<DrawerAction[]>;
   public $fontNames: Observable<string[]>;
-
   public fontSizes: number[];
   public DrawingActionType: typeof DrawerActionType = DrawerActionType;
 
