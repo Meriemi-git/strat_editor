@@ -8,4 +8,5 @@ export enum DrawingToolbarAction {
   CLEAR_STRAT = 'CLEAR_STRAT',
   DELETE_STRAT = 'DELETE_STRAT',
   CENTER_MAP = 'CENTER_MAP',
+  DOWNLOAD_STRAT = 'DOWNLOAD_STRAT',
 }

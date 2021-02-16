@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   apiUrl: 'http://localhost:3333/api/',
   iconActionPath: 'assets/icons',
+  host: 'localhost:4200',
 };
 
 /*

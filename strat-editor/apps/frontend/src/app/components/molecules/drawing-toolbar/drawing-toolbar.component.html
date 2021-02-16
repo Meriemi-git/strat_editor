@@ -83,6 +83,17 @@
       </button>
       <mat-label>Save</mat-label>
     </div>
+    <div class="button">
+      <button
+        mat-mini-fab
+        color="primary"
+        matTooltip="Download your strat"
+        (click)="selectedAction.emit(DrawingActions.DOWNLOAD_STRAT)"
+      >
+        <mat-icon>save_alt</mat-icon>
+      </button>
+      <mat-label>Download</mat-label>
+    </div>
     <div class="button" *ngIf="isConnected">
       <button
         mat-mini-fab

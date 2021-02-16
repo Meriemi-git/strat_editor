@@ -395,6 +395,15 @@ export class EditorComponent implements OnInit, OnDestroy {
       case DrawingToolbarAction.SHOW_INFOS:
         this.showInfos();
         break;
+      case DrawingToolbarAction.DOWNLOAD_STRAT:
+        this.store.dispatch(
+          StratStore.SetDrawerAction({
+            action: {
+              type: DrawerActionType.MISC,
+              name: 'Download',
+            } as DrawerAction,
+          })
+        );
       default:
         break;
     }

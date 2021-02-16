@@ -35,6 +35,7 @@ import { TriangleArrow } from '../../fabricjs/triangle-arrow';
 import { ImageHelperService } from '../../services/image-helper.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { environment } from 'libs/drawing-editor/src/environments/environment';
 
 @Component({
   selector: 'strat-editor-drawing-editor',
@@ -241,44 +242,23 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
     this.drawerOptions.fill = DrawerColor.rgba(color);
   }
 
-  public drawAgent(agent: Agent, x, y) {
-    if (agent) {
-      fabric.Image.fromURL(
-        this.ihs.getAgentImageByName(agent.badge),
-        function (image) {
-          const div = 50 / image.width;
-          image.set({
-            left: x,
-            top: y,
-            scaleX: div,
-            scaleY: div,
-          });
-          this.canvas.add(image);
-          this.canvas.renderAll();
-          this.updateCanvasState();
-        }.bind(this)
-      );
-    }
-  }
-
-  public drawImage(draggingImage: Image, x: any, y: any) {
-    if (draggingImage) {
-      fabric.Image.fromURL(
-        this.ihs.getGalleryImageByName(draggingImage.fileName),
-        function (image) {
-          const div = 50 / image.width;
-          image.set({
-            left: x,
-            top: y,
-            scaleX: div,
-            scaleY: div,
-          });
-          this.canvas.add(image);
-          this.canvas.renderAll();
-          this.updateCanvasState();
-        }.bind(this)
-      );
-    }
+  public drawImage(imageUrl: string, x: any, y: any) {
+    fabric.Image.fromURL(
+      imageUrl,
+      function (image) {
+        const div = 50 / image.width;
+        image.set({
+          left: x,
+          top: y,
+          scaleX: div,
+          scaleY: div,
+        });
+        this.canvas.add(image);
+        this.canvas.renderAll();
+        this.updateCanvasState();
+      }.bind(this),
+      { crossOrigin: environment.host }
+    );
   }
 
   public doAction(action: DrawerAction) {
@@ -291,14 +271,27 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
           this.enableDrawingMode();
           break;
         case DrawerActionType.MISC:
-          this.clearAllExceptForMap();
-          this.resetView();
+          this.manageMiscActions(action);
           break;
         default:
           break;
       }
     } else {
       this.enableSelectionMode();
+    }
+  }
+  manageMiscActions(action: DrawerAction) {
+    switch (action.name.toLocaleLowerCase()) {
+      case 'clear':
+        this.clearAllExceptForMap();
+        this.resetView();
+        break;
+      case 'download':
+        const jpg = this.canvas.toDataURL({ format: 'jpeg' });
+        console.log('jpg', jpg);
+        break;
+      default:
+        break;
     }
   }
 
@@ -456,7 +449,8 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
         } else {
           this.mapLoadingError.emit(floor.name);
         }
-      }.bind(this)
+      }.bind(this),
+      { crossOrigin: environment.host }
     );
   }
 
@@ -682,12 +676,16 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
     event.preventDefault();
     event.stopPropagation();
     if (this.draggingAgent) {
-      this.drawAgent(this.draggingAgent, event.layerX, event.layerY);
+      const imageUrl = this.ihs.getAgentImageByName(this.draggingAgent.badge);
+      this.drawImage(imageUrl, event.layerX, event.layerY);
       this.draggingAgent = null;
       this.store.dispatch(StratStore.DragAgentSuccess());
     }
     if (this.draggingImage) {
-      this.drawImage(this.draggingImage, event.layerX, event.layerY);
+      const imageUrl = this.ihs.getGalleryImageByName(
+        this.draggingImage.fileName
+      );
+      this.drawImage(imageUrl, event.layerX, event.layerY);
       this.draggingImage = null;
       this.store.dispatch(StratStore.DragImageSuccess());
     }
