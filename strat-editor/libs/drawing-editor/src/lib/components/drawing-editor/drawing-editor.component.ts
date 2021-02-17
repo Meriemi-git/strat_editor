@@ -21,7 +21,7 @@ import {
 } from '@strat-editor/data';
 import { Store } from '@ngrx/store';
 import * as StratStore from '@strat-editor/store';
-
+import * as FileSaver from 'file-saver';
 import { fabric } from 'fabric';
 import { ObjectDrawer, LineDrawer, RectangleDrawer } from '../../drawers';
 import { ArrowDrawer } from '../../drawers/arrow-drawer';
@@ -287,8 +287,8 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
         this.resetView();
         break;
       case 'download':
-        const jpg = this.canvas.toDataURL({ format: 'jpeg' });
-        console.log('jpg', jpg);
+        const data = this.canvas.toDataURL({ format: 'jpeg', quality: 1 });
+        FileSaver.saveAs(data, 'strat.jpg');
         break;
       default:
         break;

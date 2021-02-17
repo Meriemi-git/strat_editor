@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { Agent } from '@strat-editor/data';
 import { environment } from '../../../environments/environment.prod';
 import { AgentService } from './agent.service';
-
+import { Response } from 'express';
 @Controller('agent')
 export class AgentController {
   constructor(private readonly agentService: AgentService) {}
@@ -13,7 +13,10 @@ export class AgentController {
   }
 
   @Get('badge/:imageName')
-  async getAgentBadge(@Param('imageName') imageName: string, @Res() res) {
+  async getAgentBadge(
+    @Param('imageName') imageName: string,
+    @Res() res: Response
+  ) {
     const imgPath = this.getImgPath(imageName);
     return res.sendFile(imgPath, { root: 'assets' });
   }
