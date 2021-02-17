@@ -19,9 +19,36 @@
 
 body {
   margin: 0;
-  background-color: #3a3a3a;
+  background-color: #327eff;
   font-family: 'Roboto';
   overflow-y: hidden;
+  scrollbar-width: thin !important;
+  scrollbar-color: #327eff black !important;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: black;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  height: 40px;
+  background-color: #327eff;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  outline: 2px solid #327eff;
+  outline-offset: -2px;
+  border: 2px solid #327eff;
+}
+::-webkit-scrollbar-thumb:hover {
+  height: 40px;
+  background-color: #327eff;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
 }
 
 /* Overwrite the styles of the mat-dialog-container element globally, but only for those

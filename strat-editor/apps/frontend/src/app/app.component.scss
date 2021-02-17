@@ -21,8 +21,9 @@
   scrollbar-width: none; /* Firefox */
 }
 
-.container::-webkit-scrollbar {
-  display: none;
+.mat-drawer-inner-container::-webkit-scrollbar {
+  display: none !important;
+  width: 0px !important;
 }
 
 .double-sidenav {

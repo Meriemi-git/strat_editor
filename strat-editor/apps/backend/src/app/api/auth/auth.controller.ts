@@ -67,14 +67,15 @@ export class AuthController {
     return response.status(HttpStatus.OK).send();
   }
 
+  // TODO For prod set cookies Secure True
   private setAuthCookies(authInfos: AuthInfos, response: Response) {
     response.cookie('X-AUTH-TOKEN', authInfos.authToken, {
       httpOnly: true,
-      secure: true,
+      secure: false,
     });
     response.cookie('X-REFRESH-TOKEN', authInfos.refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: false,
     });
   }
 }
