@@ -104,12 +104,11 @@ export class UserController {
   @Post('register')
   public async register(
     @Body() userDto: UserDto,
-    @Req() req: Request,
     @Res() response: Response
   ): Promise<UserInfos> {
     return this.userService.addUser(userDto).then((createdUser) => {
       this.userService.sendConfirmationMail(createdUser);
-      return this.authService.login(userDto, req).then((authInfos) => {
+      return this.authService.login(userDto).then((authInfos) => {
         this.setAuthCookies(authInfos, response);
         response.status(HttpStatus.OK).send(authInfos.userInfos);
         return Promise.resolve(authInfos.userInfos);

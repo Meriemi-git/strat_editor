@@ -117,7 +117,6 @@ export class AuthService {
   }
 
   isRefreshTokenValid(refreshToken: RefreshToken): Promise<boolean> {
-    this.logger.debug('refreshToken._id', refreshToken._id);
     return this.refreshTokenModel
       .findOne({ _id: refreshToken._id })
       .exec()
@@ -156,7 +155,9 @@ export class AuthService {
   }
   private revokeRefreshToken(refreshTokenId: string): Promise<any> {
     this.logger.debug('Revokation of refrehToken');
-    return this.refreshTokenModel.remove({ _id: refreshTokenId }).exec();
+    return this.refreshTokenModel
+      .findOneAndRemove({ _id: refreshTokenId })
+      .exec();
   }
 
   private createAuthInfos(

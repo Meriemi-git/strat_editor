@@ -2,14 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { catchError } from 'rxjs/operators';
-import { Image } from '@strat-editor/data';
+import { catchError, map } from 'rxjs/operators';
+import { Image, NotificationType } from '@strat-editor/data';
+import { NotificationService } from './notifications.service';
 @Injectable({
   providedIn: 'root',
 })
 export class GalleryService {
   private controller = 'gallery';
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notificationService: NotificationService
+  ) {}
 
   getImages(): Observable<Image[]> {
     return this.http
@@ -27,6 +31,13 @@ export class GalleryService {
     return this.http
       .post<Image>(environment.apiUrl + this.controller + '/upload', formData)
       .pipe(
+        map((image) => {
+          this.notificationService.displayNotification({
+            message: 'Image uploaded !',
+            type: NotificationType.success,
+          });
+          return image;
+        }),
         catchError((err) => {
           return throwError(err);
         })

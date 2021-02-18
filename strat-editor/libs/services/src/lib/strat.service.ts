@@ -34,6 +34,13 @@ export class StratService {
     return this.http
       .post<Strat>(environment.apiUrl + this.controller, strat)
       .pipe(
+        map((strat) => {
+          this.notificationService.displayNotification({
+            message: 'Strat saved !',
+            type: NotificationType.success,
+          });
+          return strat;
+        }),
         catchError((err) => {
           this.notificationService.displayNotification({
             message: 'Cannot save your strat',
@@ -48,7 +55,13 @@ export class StratService {
     return this.http
       .delete<void>(environment.apiUrl + this.controller + '/' + stratId)
       .pipe(
-        map(() => stratId),
+        map(() => {
+          this.notificationService.displayNotification({
+            message: 'Strat deleted !',
+            type: NotificationType.success,
+          });
+          return stratId;
+        }),
         catchError((err) => {
           this.notificationService.displayNotification({
             message: 'Cannot delete your strat',
@@ -63,6 +76,13 @@ export class StratService {
     return this.http
       .patch<Strat>(environment.apiUrl + this.controller + '/', strat)
       .pipe(
+        map((strat) => {
+          this.notificationService.displayNotification({
+            message: 'Strat updated !',
+            type: NotificationType.success,
+          });
+          return strat;
+        }),
         catchError((err) => {
           this.notificationService.displayNotification({
             message: 'Cannot update your strat',

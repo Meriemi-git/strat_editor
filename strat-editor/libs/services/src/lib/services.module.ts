@@ -6,7 +6,6 @@ import { DrawerActionService } from './drawer-action.service';
 import { FontService } from './font.service';
 import { GalleryService } from './gallery.service';
 import { NotificationService } from './notifications.service';
-import { StratSchema } from '@strat-editor/data';
 import { StratService } from './strat.service';
 import { UserService } from './user.service';
 import { MapService } from './map.service';
