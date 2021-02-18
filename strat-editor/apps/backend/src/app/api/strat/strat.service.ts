@@ -40,7 +40,7 @@ export class StratService {
 
   public updateStrat(strat: Strat): Promise<Strat> {
     return this.stratModel
-      .updateOne(strat)
+      .updateOne({ _id: strat._id }, strat)
       .exec()
       .then(() => strat);
   }
