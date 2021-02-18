@@ -2,14 +2,14 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "target": "es2017",
+    "target": "es2019",
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
     "types": [],
     "lib": [
       "dom",
-      "es2017"
+      "es2019"
     ]
   },
   "exclude": [

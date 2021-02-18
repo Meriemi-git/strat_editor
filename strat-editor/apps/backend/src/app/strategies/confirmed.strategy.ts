@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { jwtConstants } from './constants';
 import { UserService } from '../api/user/user.service';
-import { JwtInfos, User } from '@strat-editor/data';
+import { AuthToken, User } from '@strat-editor/data';
 import { Request } from 'express';
 
 @Injectable()
@@ -24,13 +24,15 @@ export class ConfirmedStrategy extends PassportStrategy(
       jwtFromRequest: ConfirmedStrategy.cookieExtractor,
       ignoreExpiration: false,
       secretOrKey: jwtConstants.secret,
+      passReqToCallback: true,
     });
   }
 
-  async validate(payload: JwtInfos): Promise<User> {
+  async validate(req: Request, payload: AuthToken): Promise<User> {
     this.logger.debug('User token validation');
+    const refreshToken = req.cookies['X-REFRESH-TOKEN'];
     return this.userService
-      .verifyToken(payload)
+      .getUserFromToken(payload, refreshToken)
       .then((user) => {
         if (user) {
           if (user.confirmed) {

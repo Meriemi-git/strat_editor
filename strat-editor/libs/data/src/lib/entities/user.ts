@@ -11,7 +11,6 @@ export class User extends mongoose.Document {
   mail: string;
   confirmed: boolean;
   uid: string;
-  refreshToken: string;
   role: UserRole;
   cguAgreement: boolean;
   cguAgreementDate: Date;
@@ -29,7 +28,6 @@ export const UserSchema = new mongoose.Schema({
   mail: String,
   confirmed: Boolean,
   uid: String,
-  refreshToken: String,
   cguAgreement: {
     type: Boolean,
     required: true,

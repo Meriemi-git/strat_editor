@@ -29,7 +29,7 @@
       "args": [
         "${workspaceFolder}/apps/backend/src/main.ts",
         "--lib",
-        "es2017"
+        "es2019"
       ],
       "runtimeArgs": [
         "--nolazy",

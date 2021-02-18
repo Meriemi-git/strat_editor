@@ -175,8 +175,6 @@ export class DrawingEditorComponent implements OnInit, OnDestroy {
                 this.setFloorImage(floor);
               });
           }
-        } else {
-          console.log('d getCurrentLayer is null do nothing');
         }
       });
   }

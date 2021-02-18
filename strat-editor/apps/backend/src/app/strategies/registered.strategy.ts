@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, Logger, Req, UnauthorizedException } from '@nestjs/common';
 import { jwtConstants } from './constants';
 import { UserService } from '../api/user/user.service';
-import { JwtInfos, User } from '@strat-editor/data';
+import { AuthToken, User } from '@strat-editor/data';
 import { Request } from 'express';
 
 @Injectable()
@@ -18,13 +18,15 @@ export class RegisteredStrategy extends PassportStrategy(
       jwtFromRequest: RegisteredStrategy.cookieExtractor,
       ignoreExpiration: false,
       secretOrKey: jwtConstants.secret,
+      passReqToCallback: true,
     });
   }
 
-  async validate(payload: JwtInfos): Promise<User> {
+  async validate(req: Request, payload: AuthToken): Promise<User> {
     this.logger.debug('User token validation');
+    const refreshToken = req.cookies['X-REFRESH-TOKEN'];
     return this.userService
-      .verifyToken(payload)
+      .getUserFromToken(payload, refreshToken)
       .then((user) => {
         if (user) {
           this.logger.debug('User pass RegisteredStrategy');

@@ -1,4 +1,4 @@
-export interface JwtInfos {
+export interface AuthToken {
   userId: string;
   userMail: string;
 }

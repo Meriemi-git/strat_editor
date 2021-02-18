@@ -48,7 +48,6 @@ export class StratSavingDialogComponent implements OnInit {
       this.isSubmitted = false;
       this.stratInfos.name = this.stratForm.get('name').value;
       this.stratInfos.description = this.stratForm.get('description').value;
-      console.log('onSubmit', this.stratInfos);
       this.dialogRef.close(this.stratInfos);
     }
   }

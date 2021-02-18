@@ -191,20 +191,16 @@ export class EditorComponent implements OnInit, OnDestroy {
           });
         break;
       case StratAction.SAVE:
-        console.log('e Manage Strat SAVE');
         this.store.dispatch(
           StratStore.SaveStrat({ strat: stratAndAction.strat })
         );
         break;
       case StratAction.UPDATE_INFOS:
-        console.log('e Manage Strat UPDATE_INFOS');
         break;
       case StratAction.UPDATE_LAYER:
-        console.log('e Manage Strat UPDATE_LAYER');
         // TODO save in local storage
         break;
       case StratAction.DELETE:
-        console.log('e Manage Strat DELETE');
         this.store.dispatch(StratStore.ClearStratState());
         this.store.dispatch(StratStore.ClearCanvasState());
         this.store.dispatch(StratStore.ClearMapState());

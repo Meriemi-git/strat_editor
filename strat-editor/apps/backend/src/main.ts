@@ -35,7 +35,6 @@ async function bootstrap() {
 
   app.use(function (err, req: Request, res: Response, next) {
     if (err.code !== 'EBADCSRFTOKEN') return next(err);
-    console.log('XSRF Error cookies:', req.cookies);
     res.status(403);
     res.send('XSRF Error');
   });

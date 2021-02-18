@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchema } from '@strat-editor/data';
+import { RefreshTokenSchema, UserSchema } from '@strat-editor/data';
 import { AuthService } from '../auth/auth.service';
 import { jwtConstants } from '../../strategies/constants';
 import { ConfirmedStrategy } from '../../strategies/confirmed.strategy';
@@ -14,6 +14,9 @@ import { RateLimiterModule } from 'nestjs-rate-limiter';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: 'RefreshToken', schema: RefreshTokenSchema },
+    ]),
     JwtModule.register({
       secret: jwtConstants.secret,
     }),

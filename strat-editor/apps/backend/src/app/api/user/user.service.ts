@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import {
-  JwtInfos,
+  AuthToken,
   PasswordChangeWrapper,
   User,
   UserDocument,
@@ -18,7 +18,7 @@ import {
   UserInfos,
 } from '@strat-editor/data';
 import { Model } from 'mongoose';
-import { JwtService, JwtSignOptions, JwtVerifyOptions } from '@nestjs/jwt';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { v4 } from 'uuid';
 import * as bcrypt from 'bcryptjs';
 import { environment } from '../../../environments/environment.prod';
@@ -191,7 +191,14 @@ export class UserService {
     }
   }
 
-  public async verifyToken(payload: JwtInfos): Promise<User> {
+  public async getUserFromToken(
+    payload: AuthToken,
+    refreshToken: string
+  ): Promise<User> {
+    if (!refreshToken) {
+      this.logger.debug('RefreshToken is null');
+      throw new UnauthorizedException();
+    }
     return this.userModel
       .findOne({ mail: payload.userMail, _id: payload.userId })
       .exec();
