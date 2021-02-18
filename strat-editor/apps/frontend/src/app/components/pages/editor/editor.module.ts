@@ -11,6 +11,7 @@ import { StratTitleModule } from '../../atoms/strat-title/strat-title.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FloorChooserModule } from '../../molecules/floor-chooser/floor-chooser.module';
 import { StratSavingDialogModule } from '../../molecules/strat-saving-dialog/strat-saving-dialog.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [EditorComponent],
@@ -26,6 +27,7 @@ import { StratSavingDialogModule } from '../../molecules/strat-saving-dialog/str
     MatDialogModule,
     FloorChooserModule,
     StratSavingDialogModule,
+    MatTooltipModule,
   ],
   providers: [ImageHelperService],
   exports: [EditorComponent],

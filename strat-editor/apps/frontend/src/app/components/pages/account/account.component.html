@@ -53,7 +53,7 @@
               If you have not received the mail you can click on the button
               below to re-send the email.
             </p>
-            <div *ngIf="httpError" class="error-block">
+            <div *ngIf="$httpError | async; let httpError" class="error-block">
               {{ httpError.error.message }}
             </div>
             <button

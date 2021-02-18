@@ -26,7 +26,7 @@ export class DrawingPanelComponent implements OnInit, OnDestroy {
   @ViewChild(Ngx.NgxMatColorPickerInput)
   pickerInput: Ngx.NgxMatColorPickerInput;
 
-  public colorCtr: AbstractControl = new FormControl('');
+  public colorCtr: FormControl = new FormControl('');
   public selectedSize: number;
   public selectedFont: string;
   private unsubscriber = new Subject();

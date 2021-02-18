@@ -12,7 +12,8 @@ export class ImageUploaderComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onFileChange(fileList: FileList) {
+  onFileChange(event: any) {
+    const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       if (fileList[0].size / 1024 <= 5120) {
         this.fileName = fileList[0].name;

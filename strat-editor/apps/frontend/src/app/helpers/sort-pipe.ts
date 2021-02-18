@@ -2,8 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { orderBy } from 'lodash-es';
 
 @Pipe({ name: 'sortBy' })
-export class SortPipe implements PipeTransform {
-  transform(value: unknown[], order = '', column = ''): unknown[] {
+export class SortPipe<T> implements PipeTransform {
+  transform(value: T[], order = '', column = ''): T[] {
     if (!value || order === '' || !order) {
       return value;
     } // no array

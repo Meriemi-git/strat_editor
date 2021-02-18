@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./password-changer.component.scss'],
 })
 export class PasswordChangerComponent implements OnInit {
-  @Input() httpError: Observable<HttpErrorResponse>;
+  @Input() httpError: HttpErrorResponse;
   @Output() passwordChanged = new EventEmitter<PasswordChangeWrapper>();
 
   private readonly passwordRegex: string =
