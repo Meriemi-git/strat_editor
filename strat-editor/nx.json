@@ -32,7 +32,7 @@
     "data": {
       "tags": ["scope:shared"]
     },
-    "drawing-editor": {
+    "drawer": {
       "tags": ["scope:front"]
     },
     "store": {

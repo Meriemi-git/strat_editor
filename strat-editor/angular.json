@@ -29,12 +29,8 @@
               "apps/frontend/src/styles.scss",
               "node_modules/ngx-toastr/toastr.css"
             ],
-            "scripts": [
-              "node_modules/jquery/dist/jquery.min.js"
-            ],
-            "allowedCommonJsDependencies": [
-              "fabric"
-            ]
+            "scripts": ["node_modules/jquery/dist/jquery.min.js"],
+            "allowedCommonJsDependencies": ["fabric"]
           },
           "configurations": {
             "production": {
@@ -65,9 +61,7 @@
               ]
             }
           },
-          "outputs": [
-            "{options.outputPath}"
-          ]
+          "outputs": ["{options.outputPath}"]
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -102,9 +96,7 @@
             "jestConfig": "apps/frontend/jest.config.js",
             "passWithNoTests": true
           },
-          "outputs": [
-            "coverage/apps/frontend"
-          ]
+          "outputs": ["coverage/apps/frontend"]
         }
       }
     },
@@ -135,9 +127,7 @@
               ]
             }
           },
-          "outputs": [
-            "{options.outputPath}"
-          ]
+          "outputs": ["{options.outputPath}"]
         },
         "serve": {
           "builder": "@nrwl/node:execute",
@@ -148,9 +138,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/backend/**/*.ts"
-            ]
+            "lintFilePatterns": ["apps/backend/**/*.ts"]
           }
         },
         "test": {
@@ -159,9 +147,7 @@
             "jestConfig": "apps/backend/jest.config.js",
             "passWithNoTests": true
           },
-          "outputs": [
-            "coverage/apps/backend"
-          ]
+          "outputs": ["coverage/apps/backend"]
         }
       }
     },
@@ -174,37 +160,33 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "libs/data/**/*.ts"
-            ]
+            "lintFilePatterns": ["libs/data/**/*.ts"]
           }
         }
       }
     },
-    "drawing-editor": {
+    "drawer": {
       "projectType": "library",
-      "root": "libs/drawing-editor",
-      "sourceRoot": "libs/drawing-editor/src",
+      "root": "libs/drawer",
+      "sourceRoot": "libs/drawer/src",
       "prefix": "strat-editor",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/drawing-editor/src/**/*.ts",
-              "libs/drawing-editor/src/**/*.html"
+              "libs/drawer/src/**/*.ts",
+              "libs/drawer/src/**/*.html"
             ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/drawing-editor/jest.config.js",
+            "jestConfig": "libs/drawer/jest.config.js",
             "passWithNoTests": true
           },
-          "outputs": [
-            "coverage/libs/drawing-editor"
-          ]
+          "outputs": ["coverage/libs/drawer"]
         }
       },
       "schematics": {
@@ -234,9 +216,7 @@
             "jestConfig": "libs/store/jest.config.js",
             "passWithNoTests": true
           },
-          "outputs": [
-            "coverage/libs/store"
-          ]
+          "outputs": ["coverage/libs/store"]
         }
       }
     },
@@ -261,9 +241,7 @@
             "jestConfig": "libs/services/jest.config.js",
             "passWithNoTests": true
           },
-          "outputs": [
-            "coverage/libs/services"
-          ]
+          "outputs": ["coverage/libs/services"]
         }
       },
       "schematics": {

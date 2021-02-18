@@ -35,14 +35,14 @@ import { TriangleArrow } from '../../fabricjs/triangle-arrow';
 import { ImageHelperService } from '../../services/image-helper.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { environment } from 'libs/drawing-editor/src/environments/environment';
+import { environment } from 'libs/drawer/src/environments/environment';
 
 @Component({
-  selector: 'strat-editor-drawing-editor',
-  templateUrl: './drawing-editor.component.html',
-  styleUrls: ['./drawing-editor.component.scss'],
+  selector: 'strat-editor-drawer',
+  templateUrl: './drawer.component.html',
+  styleUrls: ['./drawer.component.scss'],
 })
-export class DrawingEditorComponent implements OnInit, OnDestroy {
+export class DrawerComponent implements OnInit, OnDestroy {
   @Input() canvasWidth: number;
   @Input() canvasHeight: number;
   @Output() mapLoadingError = new EventEmitter<string>();
