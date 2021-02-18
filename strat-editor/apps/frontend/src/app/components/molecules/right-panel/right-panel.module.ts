@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RightPanelComponent } from './right-panel.component';
 import { DrawingPanelModule } from '../drawing-panel/drawing-panel.module';
 import { GalleryPanelModule } from '../gallery-panel/gallery-panel.module';
-import { ImageHelperService } from '@strat-editor/drawing-editor';
+import { ImageHelperService } from '@strat-editor/drawer';
 
 @NgModule({
   declarations: [RightPanelComponent],

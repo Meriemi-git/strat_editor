@@ -60,12 +60,12 @@
       >
       </strat-editor-strat-title>
     </div>
-    <strat-editor-drawing-editor
+    <strat-editor-drawer
       class="editor"
       [canvasWidth]="width"
       [canvasHeight]="height"
       (mapLoadingError)="onMapLoadingError($event)"
-    ></strat-editor-drawing-editor>
+    ></strat-editor-drawer>
     <strat-editor-drawing-status
       [drawingMode]="$drawingMode | async"
       class="strat-editor-drawing-status"

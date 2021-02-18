@@ -403,6 +403,7 @@ export class EditorComponent implements OnInit, OnDestroy {
             action: {
               type: DrawerActionType.MISC,
               name: 'Download',
+              label: this.currentStrat.name,
             } as DrawerAction,
           })
         );

@@ -285,8 +285,9 @@ export class DrawerComponent implements OnInit, OnDestroy {
         this.resetView();
         break;
       case 'download':
-        const data = this.canvas.toDataURL({ format: 'jpeg', quality: 1 });
-        FileSaver.saveAs(data, 'strat.jpg');
+        this.resetView();
+        const data = this.canvas.toDataURL({ format: 'png', quality: 1 });
+        FileSaver.saveAs(data, action.label + '.png');
         break;
       default:
         break;
