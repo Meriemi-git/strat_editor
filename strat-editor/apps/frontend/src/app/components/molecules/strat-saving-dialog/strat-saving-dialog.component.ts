@@ -38,7 +38,7 @@ export class StratSavingDialogComponent implements OnInit {
         Validators.required,
         Validators.minLength(3),
       ]),
-      description: new FormControl(),
+      description: new FormControl(this.stratInfos.description),
     });
   }
 

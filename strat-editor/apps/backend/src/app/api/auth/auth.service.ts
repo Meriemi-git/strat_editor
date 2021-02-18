@@ -31,7 +31,7 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  public async login(userDto: UserDto, request: Request): Promise<AuthInfos> {
+  public async login(userDto: UserDto): Promise<AuthInfos> {
     return this.validateUser(userDto).then((user) => {
       if (!user) {
         this.logger.debug('User was not validated');

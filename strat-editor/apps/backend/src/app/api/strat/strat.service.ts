@@ -39,7 +39,10 @@ export class StratService {
   }
 
   public updateStrat(strat: Strat): Promise<Strat> {
-    return this.stratModel.updateOne(strat).exec();
+    return this.stratModel
+      .updateOne(strat)
+      .exec()
+      .then(() => strat);
   }
 
   public deleteStrat(stratId: string): any {

@@ -191,9 +191,15 @@ export class EditorComponent implements OnInit, OnDestroy {
           });
         break;
       case StratAction.SAVE:
-        this.store.dispatch(
-          StratStore.SaveStrat({ strat: stratAndAction.strat })
-        );
+        if (stratAndAction.strat._id) {
+          this.store.dispatch(
+            StratStore.UpdateStrat({ strat: stratAndAction.strat })
+          );
+        } else {
+          this.store.dispatch(
+            StratStore.SaveStrat({ strat: stratAndAction.strat })
+          );
+        }
         break;
       case StratAction.UPDATE_INFOS:
         break;
