@@ -9,3 +9,4 @@ export * from './drawing';
 export * from './paired-tokens';
 export * from './page-options';
 export * from './page-metadata';
+export * from './strat-filter';

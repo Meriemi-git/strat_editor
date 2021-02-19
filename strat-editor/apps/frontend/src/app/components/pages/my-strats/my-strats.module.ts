@@ -6,6 +6,7 @@ import { MyStratsComponent } from './my-strats.component';
 import { StratFiltersModule } from '../../molecules/strat-filters/strat-filters.module';
 import { StratGridModule } from '../../molecules/strat-grid/strat-grid.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [MyStratsComponent],
@@ -15,6 +16,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     StratFiltersModule,
     StratGridModule,
     MatPaginatorModule,
+    MatExpansionModule,
   ],
   exports: [MyStratsComponent],
 })

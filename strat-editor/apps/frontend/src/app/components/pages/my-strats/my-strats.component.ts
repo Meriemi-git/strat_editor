@@ -11,6 +11,7 @@ import {
 } from '../../molecules/dual-choice-dialog/dual-choice-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
+import { Map } from '@strat-editor/data';
 
 @Component({
   selector: 'strat-editor-my-strats',
@@ -20,10 +21,11 @@ import { PageEvent } from '@angular/material/paginator';
 export class MyStratsComponent implements OnInit {
   public $strats: Observable<Strat[]>;
   public $userInfos: Observable<UserInfos>;
-
+  public $maps: Observable<Map[]>;
   public length: number;
   public pageSize: number = 5;
   public pageSizeOptions: number[] = [5, 10, 25, 100];
+
   constructor(
     private store: Store<StratStore.StratEditorState>,
     private router: Router,
@@ -33,6 +35,8 @@ export class MyStratsComponent implements OnInit {
   ngOnInit(): void {
     this.$strats = this.store.select(StratStore.selectAllStrats);
     this.$userInfos = this.store.select(StratStore.getUserInfos);
+    this.$maps = this.store.select(StratStore.getAllMaps);
+    this.store.dispatch(StratStore.FetchMaps());
     this.store
       .select(StratStore.getStratPageMetadata)
       .subscribe((pageMetadata) => {

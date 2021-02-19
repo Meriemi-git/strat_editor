@@ -1,12 +1,16 @@
 <div *ngIf="$userInfos | async; else notConnected" class="strat-container">
-  <strat-editor-strat-filters (filter)="onFilterStrat($event)">
-  </strat-editor-strat-filters>
-  <strat-editor-strat-grid
-    [strats]="$strats | async"
-    (selectStrat)="onSelectStrat($event)"
-    (upVoteStrat)="onUpVoteStrat($event)"
-    (deleteStrat)="onDeleteStrat($event)"
-  ></strat-editor-strat-grid>
+  <mat-accordion class="headers-align" multi>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> Filters </mat-panel-title>
+      </mat-expansion-panel-header>
+      <strat-editor-strat-filters
+        [maps]="$maps | async"
+        (filter)="onFilterStrat($event)"
+      >
+      </strat-editor-strat-filters>
+    </mat-expansion-panel>
+  </mat-accordion>
   <mat-paginator
     [length]="length"
     [pageSize]="pageSize"
@@ -14,6 +18,12 @@
     (page)="changePage($event)"
   >
   </mat-paginator>
+  <strat-editor-strat-grid
+    [strats]="$strats | async"
+    (selectStrat)="onSelectStrat($event)"
+    (upVoteStrat)="onUpVoteStrat($event)"
+    (deleteStrat)="onDeleteStrat($event)"
+  ></strat-editor-strat-grid>
 </div>
 <ng-template #notConnected>
   <div class="not-connected">

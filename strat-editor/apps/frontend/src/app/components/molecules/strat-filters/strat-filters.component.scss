@@ -1,0 +1,14 @@
+.strat-filter-container {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  margin: 0 auto;
+}
+
+.line {
+  margin: 10px;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}
