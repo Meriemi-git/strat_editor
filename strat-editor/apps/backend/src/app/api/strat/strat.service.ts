@@ -1,16 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
-import { Strat, StratDocument } from '@strat-editor/data';
+import { PageOptions, Strat, StratDocument } from '@strat-editor/data';
 import { Request } from 'express';
-import { Model } from 'mongoose';
+import { PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
 
 @Injectable()
 export class StratService {
   private readonly logger = new Logger(StratService.name);
 
   constructor(
-    @InjectModel('Strat') private stratModel: Model<StratDocument>,
+    @InjectModel('Strat') private stratModel: PaginateModel<StratDocument>,
     private readonly jwtService: JwtService
   ) {}
 
@@ -19,8 +19,30 @@ export class StratService {
     return createdStrat.save();
   }
 
-  async findAllStrats(userId: string): Promise<Strat[]> {
-    return this.stratModel.find({ userId: userId }).exec();
+  async findAllMyStratsPaginated(
+    userId: string,
+    limit: number,
+    page: number,
+    sortedBy: string,
+    order: 'asc' | 'desc'
+  ): Promise<PaginateResult<Strat>> {
+    const options: PaginateOptions = {
+      limit: limit,
+      page: page,
+      sort: { [sortedBy]: order },
+    };
+    return this.stratModel.paginate({ userId: userId }, options);
+  }
+
+  async findAllPublicPaginated(
+    pageOptions: PageOptions
+  ): Promise<PaginateResult<Strat>> {
+    const options: PaginateOptions = {
+      limit: pageOptions.limit,
+      page: pageOptions.page,
+      sort: { [pageOptions.sortedBy]: pageOptions.order },
+    };
+    return this.stratModel.paginate({ isPublic: true }, options);
   }
 
   findStratById(userId: string, stratId: string): Promise<Strat> {

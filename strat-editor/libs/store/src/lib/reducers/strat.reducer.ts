@@ -18,21 +18,43 @@ export const initialstate: StratState = adapter.getInitialState({
   strat: null,
   action: null,
   layer: null,
+  pageMetadata: null,
+  pageOptions: {
+    limit: 10,
+    page: 1,
+    sortedBy: 'name',
+    order: 'asc',
+  },
 });
 
 const stratReducer = createReducer(
   initialstate,
-  on(actions.GetMyStrats, (state) => ({
+  on(actions.GetStratPage, (state) => ({
     ...state,
     action: null,
   })),
-  on(actions.GetMyStratsSuccess, (state, { strats }) => {
-    return adapter.addMany(strats, { ...state, error: null });
+  on(actions.GetStratPageSuccess, (state, { pageResults }) => {
+    return adapter.setAll(pageResults.docs, {
+      ...state,
+      pageMetadata: {
+        totalDocs: pageResults.totalDocs,
+        limit: pageResults.limit,
+        totalPages: pageResults.totalPages,
+        page: pageResults.page,
+        pagingCounter: pageResults.pagingCounter,
+        hasPrevPage: pageResults.hasPrevPage,
+        hasNextPage: pageResults.hasNextPage,
+        prevPage: pageResults.prevPage,
+        nextPage: pageResults.nextPage,
+      },
+      error: null,
+    });
   }),
-  on(actions.GetMyStratsError, (state, { error }) => ({
+  on(actions.GetStratPageError, (state, { error }) => ({
     ...state,
     error: error,
   })),
+
   on(actions.SaveStrat, (state) => ({
     ...state,
     error: null,

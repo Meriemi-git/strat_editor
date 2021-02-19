@@ -1,10 +1,18 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { EntityState } from '@ngrx/entity';
-import { Layer, Strat, StratAction } from '@strat-editor/data';
+import {
+  Layer,
+  PageMetadata,
+  PageOptions,
+  Strat,
+  StratAction,
+} from '@strat-editor/data';
 
 export interface StratState extends EntityState<Strat> {
   error: HttpErrorResponse;
   strat: Strat;
   layer: Layer;
   action: StratAction;
+  pageMetadata: PageMetadata;
+  pageOptions: PageOptions;
 }

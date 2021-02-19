@@ -7,3 +7,5 @@ export * from './notification-type';
 export * from './user-role';
 export * from './drawing';
 export * from './paired-tokens';
+export * from './page-options';
+export * from './page-metadata';

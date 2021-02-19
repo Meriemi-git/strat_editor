@@ -12,12 +12,12 @@ export class StratEffect {
 
   getStrats$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(actions.GetMyStrats),
-      mergeMap(() =>
-        this.stratService.getAllStrats().pipe(
-          map((strats) => actions.GetMyStratsSuccess({ strats })),
+      ofType(actions.GetStratPage),
+      mergeMap((action) =>
+        this.stratService.getAllStratsPaginated(action.pageOptions).pipe(
+          map((pageResults) => actions.GetStratPageSuccess({ pageResults })),
           catchError((error: HttpErrorResponse) =>
-            of(actions.GetMyStratsError({ error }))
+            of(actions.GetStratPageError({ error }))
           )
         )
       )

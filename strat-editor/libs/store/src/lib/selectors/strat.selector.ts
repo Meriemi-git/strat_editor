@@ -35,3 +35,8 @@ export const getStratAndAction = createSelector(
   getStratState,
   (state: StratState) => ({ strat: state.strat, action: state.action })
 );
+
+export const getStratPageMetadata = createSelector(
+  getStratState,
+  (state: StratState) => state.pageMetadata
+);

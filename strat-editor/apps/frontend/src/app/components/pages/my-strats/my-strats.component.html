@@ -7,6 +7,13 @@
     (upVoteStrat)="onUpVoteStrat($event)"
     (deleteStrat)="onDeleteStrat($event)"
   ></strat-editor-strat-grid>
+  <mat-paginator
+    [length]="length"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="changePage($event)"
+  >
+  </mat-paginator>
 </div>
 <ng-template #notConnected>
   <div class="not-connected">

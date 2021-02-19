@@ -10,6 +10,7 @@ import {
   DualChoiceDialogData,
 } from '../../molecules/dual-choice-dialog/dual-choice-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'strat-editor-my-strats',
@@ -20,6 +21,9 @@ export class MyStratsComponent implements OnInit {
   public $strats: Observable<Strat[]>;
   public $userInfos: Observable<UserInfos>;
 
+  public length: number;
+  public pageSize: number = 5;
+  public pageSizeOptions: number[] = [5, 10, 25, 100];
   constructor(
     private store: Store<StratStore.StratEditorState>,
     private router: Router,
@@ -29,7 +33,23 @@ export class MyStratsComponent implements OnInit {
   ngOnInit(): void {
     this.$strats = this.store.select(StratStore.selectAllStrats);
     this.$userInfos = this.store.select(StratStore.getUserInfos);
-    this.store.dispatch(StratStore.GetMyStrats());
+    this.store
+      .select(StratStore.getStratPageMetadata)
+      .subscribe((pageMetadata) => {
+        if (pageMetadata) {
+          this.length = pageMetadata.totalDocs;
+        }
+      });
+    this.store.dispatch(
+      StratStore.GetStratPage({
+        pageOptions: {
+          limit: this.pageSize,
+          order: 'asc',
+          page: 1,
+          sortedBy: 'name',
+        },
+      })
+    );
   }
 
   onFilterStrat(filters: any) {
@@ -66,5 +86,18 @@ export class MyStratsComponent implements OnInit {
         this.store.dispatch(StratStore.DeleteStrat({ stratId: strat._id }));
       }
     });
+  }
+
+  public changePage(pageEvent: PageEvent) {
+    this.store.dispatch(
+      StratStore.GetStratPage({
+        pageOptions: {
+          limit: pageEvent.pageSize,
+          order: 'asc',
+          page: pageEvent.pageIndex + 1,
+          sortedBy: 'name',
+        },
+      })
+    );
   }
 }

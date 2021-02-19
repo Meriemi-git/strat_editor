@@ -21,17 +21,17 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3333;
 
-  const csrfProtection = csurf({
-    cookie: true,
-  });
+  // const csrfProtection = csurf({
+  //   cookie: true,
+  // });
 
-  app.use(csrfProtection, (req, res, next): void => {
-    res.cookie('XSRF-TOKEN', req.csrfToken(), {
-      httpOnly: false,
-      ignoreMethods: ['GET', 'HEAD', 'OPTIONS'],
-    });
-    next();
-  });
+  // app.use(csrfProtection, (req, res, next): void => {
+  //   res.cookie('XSRF-TOKEN', req.csrfToken(), {
+  //     httpOnly: false,
+  //     ignoreMethods: ['GET', 'HEAD', 'OPTIONS'],
+  //   });
+  //   next();
+  // });
 
   app.use(function (err, req: Request, res: Response, next) {
     if (err.code !== 'EBADCSRFTOKEN') return next(err);

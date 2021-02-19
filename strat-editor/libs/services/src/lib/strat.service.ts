@@ -1,24 +1,42 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NotificationType, Strat } from '@strat-editor/data';
+import { NotificationType, PageOptions, Strat } from '@strat-editor/data';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { catchError, map } from 'rxjs/operators';
 import { NotificationService } from './notifications.service';
+import { PaginateResult } from 'mongoose';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StratService {
-  private controller = 'strat';
+  private controller = 'strats';
   constructor(
     private http: HttpClient,
     private notificationService: NotificationService
   ) {}
 
   public getAllStrats(): Observable<Strat[]> {
+    return this.http.get<Strat[]>(environment.apiUrl + this.controller).pipe(
+      catchError((err) => {
+        this.notificationService.displayNotification({
+          message: 'Cannot retreive strats',
+          type: NotificationType.error,
+        });
+        return throwError(err);
+      })
+    );
+  }
+
+  getAllStratsPaginated(pageOptions: PageOptions) {
+    console.log('getAllStratsPaginated', pageOptions);
     return this.http
-      .get<Strat[]>(environment.apiUrl + this.controller + '/all')
+      .get<PaginateResult<Strat>>(
+        environment.apiUrl +
+          this.controller +
+          `?limit=${pageOptions.limit}&page=${pageOptions.page},&sortedBy=${pageOptions.sortedBy}&order=${pageOptions.order}`
+      )
       .pipe(
         catchError((err) => {
           this.notificationService.displayNotification({

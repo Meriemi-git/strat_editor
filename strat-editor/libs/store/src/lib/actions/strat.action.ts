@@ -1,16 +1,20 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { createAction, props } from '@ngrx/store';
-import { Layer, Strat } from '@strat-editor/data';
+import { Layer, PageOptions, Strat } from '@strat-editor/data';
+import { PaginateResult } from 'mongoose';
 
-export const GetMyStrats = createAction('[Strats] Get My Strats');
-
-export const GetMyStratsSuccess = createAction(
-  '[Strats] Get My Strats Success',
-  props<{ strats: Strat[] }>()
+export const GetStratPage = createAction(
+  '[Strats] Get First Strat page',
+  props<{ pageOptions: PageOptions }>()
 );
 
-export const GetMyStratsError = createAction(
-  '[Strats] Get My Strats Error',
+export const GetStratPageSuccess = createAction(
+  '[Strats] Get Strat page result Success',
+  props<{ pageResults: PaginateResult<Strat> }>()
+);
+
+export const GetStratPageError = createAction(
+  '[Strats] Get Strat page result Error',
   props<{ error: HttpErrorResponse }>()
 );
 

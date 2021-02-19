@@ -1,5 +1,6 @@
 import { Layer, LayerSchema } from './layer';
 import * as mongoose from 'mongoose';
+import * as mongoosePaginate from 'mongoose-paginate-v2';
 
 export type StratDocument = Strat & mongoose.Document;
 
@@ -39,3 +40,5 @@ export const StratSchema = new mongoose.Schema({
   mapName: String,
   isPublic: Boolean,
 });
+
+StratSchema.plugin(mongoosePaginate);

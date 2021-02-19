@@ -1,0 +1,9 @@
+POST http://localhost:3333/api/strats/public HTTP/1.1
+content-type: application/json
+
+{
+  "limit": 2,
+  "page": 2,
+  "sortedBy": "name",
+  "order": "asc"
+}

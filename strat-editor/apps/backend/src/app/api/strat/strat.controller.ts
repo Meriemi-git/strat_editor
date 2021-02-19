@@ -6,23 +6,50 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { Strat } from '@strat-editor/data';
+import { PageOptions, Strat } from '@strat-editor/data';
 import { StratService } from './strat.service';
 import { Request } from 'express';
 import { AuthGuard } from '@nestjs/passport';
+import { PaginateResult } from 'mongoose';
 
-@Controller('strat')
+@Controller('strats')
 export class StratController {
   constructor(private readonly stratService: StratService) {}
 
-  @Get('all')
+  @Get()
   @UseGuards(AuthGuard('ConfirmedStrategy'))
-  async findAll(@Req() request: Request): Promise<Strat[]> {
+  async getMyStratPaginated(
+    @Query('limit') limit: number,
+    @Query('page') page: number,
+    @Query('sortedBy') sortedBy: string,
+    @Query('order') order: 'asc' | 'desc',
+    @Req() request: Request
+  ): Promise<PaginateResult<Strat>> {
+    console.log('getMyStratPaginated limit', limit);
+    console.log('getMyStratPaginated page', page);
+    console.log('getMyStratPaginated sortedBy', sortedBy);
+    console.log('getMyStratPaginated order', order);
+
     const userIdFromCookies = this.stratService.getUserIdFromCookies(request);
-    return this.stratService.findAllStrats(userIdFromCookies);
+    return this.stratService.findAllMyStratsPaginated(
+      userIdFromCookies,
+      limit,
+      page,
+      sortedBy,
+      order
+    );
+  }
+
+  @Post('public')
+  //@UseGuards(AuthGuard('ConfirmedStrategy'))
+  async findAllPublicStratPaginate(
+    @Body() pageOption: PageOptions
+  ): Promise<PaginateResult<Strat>> {
+    return this.stratService.findAllPublicPaginated(pageOption);
   }
 
   @Get(':stratId')

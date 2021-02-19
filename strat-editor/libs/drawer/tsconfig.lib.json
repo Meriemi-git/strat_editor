@@ -12,6 +12,9 @@
       "es2019"
     ]
   },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+  },
   "exclude": [
     "**/*.spec.ts"
   ],

@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import { Floor, FloorSchema } from './floor';
+import * as mongoosePaginate from 'mongoose-paginate-v2';
 
 export type MapDocument = Map & mongoose.Document;
 
@@ -25,3 +26,5 @@ export const MapSchema = new mongoose.Schema({
     },
   ],
 });
+
+MapSchema.plugin(mongoosePaginate);
