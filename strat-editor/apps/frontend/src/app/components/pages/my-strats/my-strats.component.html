@@ -1,4 +1,4 @@
-<div *ngIf="$userInfos | async; else notConnected">
+<div *ngIf="$userInfos | async; else notConnected" class="strat-container">
   <strat-editor-strat-filters (filter)="onFilterStrat($event)">
   </strat-editor-strat-filters>
   <strat-editor-strat-grid

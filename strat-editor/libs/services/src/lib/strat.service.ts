@@ -30,7 +30,6 @@ export class StratService {
   }
 
   getAllStratsPaginated(pageOptions: PageOptions) {
-    console.log('getAllStratsPaginated', pageOptions);
     return this.http
       .get<PaginateResult<Strat>>(
         environment.apiUrl +
