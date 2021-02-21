@@ -5,10 +5,17 @@
   margin: 0 auto;
 }
 
-.line {
+.line,
+.radio {
   margin: 10px;
 }
 
 .mat-radio-button ~ .mat-radio-button {
   margin-left: 16px;
+}
+
+.radio {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }

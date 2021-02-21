@@ -19,17 +19,23 @@ export class StratFiltersComponent implements OnInit {
   @Input() maps: Map[];
   @Output() filter = new EventEmitter<StratFilter>();
   @ViewChild('mapSelector') mapSelector: MatSelect;
-  public favorite: boolean;
+  public favorite: boolean = false;
   public allSelected = false;
   public stratName: string;
   public selectedMapIds: string[];
+  public orderingBy: string = 'name';
+  public order: string = 'asc';
 
   constructor() {}
 
   ngOnInit(): void {}
 
-  public onMapsSelected(event: any) {
-    console.log('onMapsSelected', event);
+  public onMapsSelected(selectedMaps: Map[]) {
+    this.selectedMapIds = selectedMaps
+      .filter((map) => map)
+      .map((map) => {
+        return map._id;
+      });
   }
 
   public toggleAllSelection() {
@@ -47,10 +53,15 @@ export class StratFiltersComponent implements OnInit {
   public onFilter() {
     this.filter.emit({
       favorites: this.favorite,
-      mapIds: this.selectedMapIds,
+      mapIds:
+        this.selectedMapIds == null || this.selectedMapIds.length == 0
+          ? this.maps.map((map) => {
+              return map._id;
+            })
+          : this.selectedMapIds,
       name: this.stratName,
-      order: 'asc',
-      orderBy: 'likes',
+      order: this.order,
+      orderBy: this.orderingBy,
     } as StratFilter);
   }
 }

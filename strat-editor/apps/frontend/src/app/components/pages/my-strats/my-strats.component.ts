@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Strat, UserInfos } from '@strat-editor/data';
+import { Strat, StratFilter, UserInfos } from '@strat-editor/data';
 import { Observable } from 'rxjs';
 import * as StratStore from '@strat-editor/store';
 import { map } from 'rxjs/operators';
@@ -25,7 +25,6 @@ export class MyStratsComponent implements OnInit {
   public length: number;
   public pageSize: number = 5;
   public pageSizeOptions: number[] = [5, 10, 25, 100];
-
   constructor(
     private store: Store<StratStore.StratEditorState>,
     private router: Router,
@@ -56,12 +55,8 @@ export class MyStratsComponent implements OnInit {
     );
   }
 
-  onFilterStrat(filters: any) {
-    this.$strats.pipe(map((strats) => this.filter(strats, filters)));
-  }
-
-  private filter(strats: Strat[], filters: any): Strat[] {
-    return strats;
+  onFilterStrat(filter: StratFilter) {
+    console.log('onFilterStrat', filter);
   }
 
   onSelectStrat(strat: Strat) {
