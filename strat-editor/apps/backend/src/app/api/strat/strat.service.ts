@@ -1,8 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
-import { PageOptions, Strat, StratDocument } from '@strat-editor/data';
+import {
+  PageOptions,
+  Strat,
+  StratDocument,
+  StratFilter,
+} from '@strat-editor/data';
 import { Request } from 'express';
+import { FilterQuery } from 'mongoose';
 import { PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
 
 @Injectable()
@@ -20,18 +26,28 @@ export class StratService {
   }
 
   async findAllMyStratsPaginated(
-    userId: string,
     limit: number,
     page: number,
-    sortedBy: string,
-    order: 'asc' | 'desc'
+    stratFilter: StratFilter
   ): Promise<PaginateResult<Strat>> {
     const options: PaginateOptions = {
       limit: limit,
       page: page,
-      sort: { [sortedBy]: order },
+      sort: { [stratFilter.sortedBy]: stratFilter.order },
     };
-    return this.stratModel.paginate({ userId: userId }, options);
+    let query: FilterQuery<StratDocument> = {};
+    query.mapId;
+    if (stratFilter.mapIds?.length > 0) {
+      query.mapId = { $in: stratFilter.mapIds };
+    }
+    if (stratFilter.userId) {
+      query.userId = stratFilter.userId;
+    }
+    if (stratFilter.name) {
+      query.name = `/.*${stratFilter.name}.*/`;
+    }
+
+    return this.stratModel.paginate(query, options);
   }
 
   async findAllPublicPaginated(
@@ -40,7 +56,6 @@ export class StratService {
     const options: PaginateOptions = {
       limit: pageOptions.limit,
       page: pageOptions.page,
-      sort: { [pageOptions.sortedBy]: pageOptions.order },
     };
     return this.stratModel.paginate({ isPublic: true }, options);
   }

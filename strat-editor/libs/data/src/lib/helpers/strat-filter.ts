@@ -1,7 +1,8 @@
 export interface StratFilter {
+  userId: string;
   mapIds: string[];
   favorites: boolean;
   name: string;
-  orderBy: string;
+  sortedBy: string;
   order: 'asc' | 'desc';
 }

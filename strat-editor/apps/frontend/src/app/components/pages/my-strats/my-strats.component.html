@@ -1,4 +1,4 @@
-<div *ngIf="$userInfos | async; else notConnected" class="strat-container">
+<div *ngIf="userInfos; else notConnected" class="strat-container">
   <mat-accordion class="headers-align" multi>
     <mat-expansion-panel>
       <mat-expansion-panel-header>

@@ -25,11 +25,12 @@ export const initialstate: StratState = adapter.getInitialState({
     sortedBy: 'name',
     order: 'asc',
   },
+  stratFilter: null,
 });
 
 const stratReducer = createReducer(
   initialstate,
-  on(actions.GetStratPage, (state) => ({
+  on(actions.GetStratPage, (state, { pageOptions, stratFilter }) => ({
     ...state,
     action: null,
   })),

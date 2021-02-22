@@ -1,11 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { createAction, props } from '@ngrx/store';
-import { Layer, PageOptions, Strat } from '@strat-editor/data';
+import { Layer, PageOptions, Strat, StratFilter } from '@strat-editor/data';
 import { PaginateResult } from 'mongoose';
 
 export const GetStratPage = createAction(
-  '[Strats] Get First Strat page',
-  props<{ pageOptions: PageOptions }>()
+  '[Strats] Get Strat page',
+  props<{ pageOptions: PageOptions; stratFilter: StratFilter }>()
 );
 
 export const GetStratPageSuccess = createAction(

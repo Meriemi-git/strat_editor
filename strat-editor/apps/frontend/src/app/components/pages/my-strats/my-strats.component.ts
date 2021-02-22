@@ -20,11 +20,12 @@ import { Map } from '@strat-editor/data';
 })
 export class MyStratsComponent implements OnInit {
   public $strats: Observable<Strat[]>;
-  public $userInfos: Observable<UserInfos>;
+  public userInfos: UserInfos;
   public $maps: Observable<Map[]>;
   public length: number;
   public pageSize: number = 5;
   public pageSizeOptions: number[] = [5, 10, 25, 100];
+  public stratFilter: StratFilter;
   constructor(
     private store: Store<StratStore.StratEditorState>,
     private router: Router,
@@ -33,7 +34,27 @@ export class MyStratsComponent implements OnInit {
 
   ngOnInit(): void {
     this.$strats = this.store.select(StratStore.selectAllStrats);
-    this.$userInfos = this.store.select(StratStore.getUserInfos);
+    this.store.select(StratStore.getUserInfos).subscribe((userInfos) => {
+      this.userInfos = userInfos;
+      if (this.userInfos) {
+        this.store.dispatch(
+          StratStore.GetStratPage({
+            pageOptions: {
+              limit: this.pageSize,
+              page: 1,
+            },
+            stratFilter: {
+              favorites: false,
+              userId: this.userInfos.userId,
+              mapIds: [],
+              order: 'asc',
+              name: '',
+              sortedBy: 'name',
+            },
+          })
+        );
+      }
+    });
     this.$maps = this.store.select(StratStore.getAllMaps);
     this.store.dispatch(StratStore.FetchMaps());
     this.store
@@ -43,20 +64,22 @@ export class MyStratsComponent implements OnInit {
           this.length = pageMetadata.totalDocs;
         }
       });
+  }
+
+  onFilterStrat(filter: StratFilter) {
+    this.stratFilter = filter;
     this.store.dispatch(
       StratStore.GetStratPage({
         pageOptions: {
           limit: this.pageSize,
-          order: 'asc',
           page: 1,
-          sortedBy: 'name',
+        },
+        stratFilter: {
+          ...this.stratFilter,
+          userId: this.userInfos.userId,
         },
       })
     );
-  }
-
-  onFilterStrat(filter: StratFilter) {
-    console.log('onFilterStrat', filter);
   }
 
   onSelectStrat(strat: Strat) {
@@ -92,10 +115,9 @@ export class MyStratsComponent implements OnInit {
       StratStore.GetStratPage({
         pageOptions: {
           limit: pageEvent.pageSize,
-          order: 'asc',
           page: pageEvent.pageIndex + 1,
-          sortedBy: 'name',
         },
+        stratFilter: this.stratFilter,
       })
     );
   }

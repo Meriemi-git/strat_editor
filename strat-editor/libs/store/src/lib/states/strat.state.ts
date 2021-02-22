@@ -6,6 +6,7 @@ import {
   PageOptions,
   Strat,
   StratAction,
+  StratFilter,
 } from '@strat-editor/data';
 
 export interface StratState extends EntityState<Strat> {
@@ -15,4 +16,5 @@ export interface StratState extends EntityState<Strat> {
   action: StratAction;
   pageMetadata: PageMetadata;
   pageOptions: PageOptions;
+  stratFilter: StratFilter;
 }

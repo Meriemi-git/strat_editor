@@ -13,7 +13,4 @@ export class StratGridComponent implements OnInit {
   @Output() deleteStrat = new EventEmitter<Strat>();
 
   ngOnInit(): void {}
-  onSelectMap(strat: Strat) {
-    this;
-  }
 }

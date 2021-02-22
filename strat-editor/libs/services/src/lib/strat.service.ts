@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NotificationType, PageOptions, Strat } from '@strat-editor/data';
+import {
+  NotificationType,
+  PageOptions,
+  Strat,
+  StratFilter,
+} from '@strat-editor/data';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { catchError, map } from 'rxjs/operators';
@@ -29,12 +34,14 @@ export class StratService {
     );
   }
 
-  getAllStratsPaginated(pageOptions: PageOptions) {
+  getAllStratsPaginated(pageOptions: PageOptions, stratFilter: StratFilter) {
     return this.http
-      .get<PaginateResult<Strat>>(
+      .post<PaginateResult<Strat>>(
         environment.apiUrl +
           this.controller +
-          `?limit=${pageOptions.limit}&page=${pageOptions.page},&sortedBy=${pageOptions.sortedBy}&order=${pageOptions.order}`
+          '/all' +
+          `?limit=${pageOptions.limit}&page=${pageOptions.page}`,
+        stratFilter
       )
       .pipe(
         catchError((err) => {

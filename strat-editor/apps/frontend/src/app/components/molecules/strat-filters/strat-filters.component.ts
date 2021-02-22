@@ -23,7 +23,7 @@ export class StratFiltersComponent implements OnInit {
   public allSelected = false;
   public stratName: string;
   public selectedMapIds: string[];
-  public orderingBy: string = 'name';
+  public sortedBy: string = 'name';
   public order: string = 'asc';
 
   constructor() {}
@@ -61,7 +61,7 @@ export class StratFiltersComponent implements OnInit {
           : this.selectedMapIds,
       name: this.stratName,
       order: this.order,
-      orderBy: this.orderingBy,
+      sortedBy: this.sortedBy,
     } as StratFilter);
   }
 }

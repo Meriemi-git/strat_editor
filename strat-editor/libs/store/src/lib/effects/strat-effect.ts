@@ -14,12 +14,14 @@ export class StratEffect {
     this.actions$.pipe(
       ofType(actions.GetStratPage),
       mergeMap((action) =>
-        this.stratService.getAllStratsPaginated(action.pageOptions).pipe(
-          map((pageResults) => actions.GetStratPageSuccess({ pageResults })),
-          catchError((error: HttpErrorResponse) =>
-            of(actions.GetStratPageError({ error }))
+        this.stratService
+          .getAllStratsPaginated(action.pageOptions, action.stratFilter)
+          .pipe(
+            map((pageResults) => actions.GetStratPageSuccess({ pageResults })),
+            catchError((error: HttpErrorResponse) =>
+              of(actions.GetStratPageError({ error }))
+            )
           )
-        )
       )
     )
   );
